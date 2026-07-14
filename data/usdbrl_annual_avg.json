@@ -1,0 +1,57 @@
+{
+  "2015": {
+    "avg_usd_brl": 3.338696,
+    "n_obs": 250,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2016": {
+    "avg_usd_brl": 3.483327091633466,
+    "n_obs": 251,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2017": {
+    "avg_usd_brl": 3.1925453815261045,
+    "n_obs": 249,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2018": {
+    "avg_usd_brl": 3.6557844,
+    "n_obs": 250,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2019": {
+    "avg_usd_brl": 3.946118577075099,
+    "n_obs": 253,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2020": {
+    "avg_usd_brl": 5.157772908366534,
+    "n_obs": 251,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2021": {
+    "avg_usd_brl": 5.395560557768924,
+    "n_obs": 251,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2022": {
+    "avg_usd_brl": 5.165482470119522,
+    "n_obs": 251,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2023": {
+    "avg_usd_brl": 4.995348192771084,
+    "n_obs": 249,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2024": {
+    "avg_usd_brl": 5.392016205533597,
+    "n_obs": 253,
+    "source": "BCB SGS 1 (USD venda)"
+  },
+  "2025": {
+    "avg_usd_brl": 5.585500000000001,
+    "n_obs": 252,
+    "source": "BCB SGS 1 (USD venda)"
+  }
+}
