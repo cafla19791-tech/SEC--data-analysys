@@ -165,7 +165,7 @@ def gerar_fluxos_chunk(df: pd.DataFrame) -> pd.DataFrame:
     out_sub: list[np.ndarray] = []
     out_imp: list[np.ndarray] = []
 
-    datas = pd.to_datetime(df["Data da contratação"], dayfirst=True, errors="coerce")
+    datas = pd.to_datetime(df["Data da contratação"], format="mixed", dayfirst=True, errors="coerce")
     valores = pd.to_numeric(df["Valor Desembolsado R$ (*)"], errors="coerce").to_numpy()
     juros = (pd.to_numeric(df["Juros"], errors="coerce") / 100.0).to_numpy()
     carencias = pd.to_numeric(df["Prazo - Carência (meses)"], errors="coerce").to_numpy()
@@ -266,7 +266,12 @@ def processar_em_lotes(
             print(f"  lote {start:,}-{start + len(chunk):,}: 0 fluxos", flush=True)
             continue
 
-        n_contratos_ok += fluxos["Contrato"].nunique()
+        # Conta contratos de entrada que geraram ao menos uma parcela
+        ids_ok = set(fluxos["Contrato"].unique())
+        if "_id" in chunk.columns:
+            n_contratos_ok += int(chunk["_id"].isin(ids_ok).sum())
+        else:
+            n_contratos_ok += len(ids_ok)
         n_parcelas += len(fluxos)
         total_impacto += float(fluxos["Impacto_Fiscal_2026"].sum())
         total_subsidio += float(fluxos["Subsídio"].sum())

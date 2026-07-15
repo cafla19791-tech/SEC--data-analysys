@@ -39,6 +39,18 @@ python scripts/gerar_fluxos.py --discover-offsets
 | `output/fluxos_gerados.xlsx` | Resumo + agregação mensal do impacto + amostra de parcelas |
 | `data/operacoes_2009_2010.parquet` | Cache local das operações baixadas |
 
+### Resultado da execução (2009–2010, SELIC 14,5%)
+
+| Indicador | Valor |
+|-----------|-------|
+| Contratos na entrada | 349.587 |
+| Contratos processados | 348.862 |
+| Parcelas geradas | 19.857.665 |
+| Soma Subsídio (nominal) | R$ 19,57 bilhões |
+| Soma Impacto Fiscal 2026 | R$ 144,26 bilhões |
+
+O CSV detalhado (~1 GB) é gerado localmente e não versionado; o Excel de resumo está em `output/fluxos_gerados.xlsx`.
+
 ## Metodologia (igual ao script de referência)
 
 Para cada parcela `p = 1..n` após a carência:
