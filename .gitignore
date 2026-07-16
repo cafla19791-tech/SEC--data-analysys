@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+# Dados brutos e saídas grandes
+data/raw/
+data/*.csv
+data/*.parquet
+data/*.xlsx
+!data/.gitkeep
+!data/sample_contratos.csv
+
+output/*.csv
+output/*.parquet
+output/*.xlsx
+!output/.gitkeep
+!output/README.md
