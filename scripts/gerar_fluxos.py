@@ -121,6 +121,71 @@ def meses_ate_impacto(data_fluxo: datetime, data_impacto: datetime = DATA_IMPACT
     return (data_impacto.year - data_fluxo.year) * 12 + (data_impacto.month - data_fluxo.month)
 
 
+def _stream_download(url: str, dest: Path, retries: int = 4) -> Path:
+    """Baixa arquivo grande via HTTP streaming com retries (pandas URL buffer falha em ~1GB)."""
+    import time
+
+    import requests
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dest.with_suffix(dest.suffix + ".part")
+    last_err: Exception | None = None
+
+    for attempt in range(1, retries + 1):
+        try:
+            # Retoma download parcial se o .part já existir
+            resume_from = tmp.stat().st_size if tmp.exists() else 0
+            headers = {"Range": f"bytes={resume_from}-"} if resume_from else {}
+            mode = "ab" if resume_from else "wb"
+
+            print(
+                f"Download tentativa {attempt}/{retries}"
+                + (f" (retomando de {resume_from:,} bytes)" if resume_from else "")
+                + "..."
+            )
+            with requests.get(url, stream=True, timeout=120, headers=headers) as resp:
+                # 200 = full body; 206 = partial content (resume)
+                if resp.status_code not in (200, 206):
+                    resp.raise_for_status()
+                if resp.status_code == 200 and resume_from:
+                    # Servidor ignorou Range — recomeça do zero
+                    mode = "wb"
+                    resume_from = 0
+
+                total = resp.headers.get("Content-Length")
+                expected = (
+                    int(total) + resume_from
+                    if total and resp.status_code == 206
+                    else (int(total) if total else None)
+                )
+
+                downloaded = resume_from
+                with tmp.open(mode) as f:
+                    for chunk in resp.iter_content(chunk_size=8 * 1024 * 1024):
+                        if not chunk:
+                            continue
+                        f.write(chunk)
+                        downloaded += len(chunk)
+                        if expected and downloaded % (64 * 1024 * 1024) < 8 * 1024 * 1024:
+                            pct = 100.0 * downloaded / expected
+                            print(f"  baixados {downloaded:,}/{expected:,} ({pct:.1f}%)")
+
+            if expected is not None and tmp.stat().st_size < expected:
+                raise IOError(
+                    f"Download incompleto: {tmp.stat().st_size:,} < {expected:,} bytes"
+                )
+
+            tmp.replace(dest)
+            print(f"CSV bruto salvo: {dest} ({dest.stat().st_size:,} bytes)")
+            return dest
+        except Exception as exc:  # noqa: BLE001 — retries em rede
+            last_err = exc
+            print(f"  falha: {exc}")
+            time.sleep(min(2**attempt, 32))
+
+    raise RuntimeError(f"Falha ao baixar {url}: {last_err}")
+
+
 def download_and_filter_csv(
     url: str = BNDES_CSV_URL,
     start: str = "2009-01-01",
@@ -134,10 +199,24 @@ def download_and_filter_csv(
     print(f"Baixando e filtrando {start} .. {end} ...")
     print(f"URL: {url}")
 
+    raw_path = RAW_DIR / "operacoes-indiretas-automaticas.csv"
+    if not raw_path.exists() or raw_path.stat().st_size < 100_000_000:
+        _stream_download(url, raw_path)
+    else:
+        print(f"Usando cache local: {raw_path} ({raw_path.stat().st_size:,} bytes)")
+
+    # Encoding: arquivo atual é UTF-8 com BOM às vezes; fallback cp1252
+    encoding = "utf-8"
+    try:
+        with raw_path.open("r", encoding="utf-8") as f:
+            f.read(2048)
+    except UnicodeDecodeError:
+        encoding = "cp1252"
+
     reader = pd.read_csv(
-        url,
+        raw_path,
         sep=";",
-        encoding="cp1252",
+        encoding=encoding,
         dtype=str,
         chunksize=100_000,
         low_memory=False,
