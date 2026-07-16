@@ -22,3 +22,4 @@ output/*_stats.json
 
 *.log
 .DS_Store
+amostra_fluxos.xlsx
