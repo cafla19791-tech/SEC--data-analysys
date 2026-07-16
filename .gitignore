@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dados brutos / intermediários (grandes)
+data/raw/
+data/*.csv
+data/*.parquet
+data/*.xlsx
+!data/.gitkeep
+
+# Saídas detalhadas (CSV pode passar de 1 GB)
+output/*.csv
+output/*.parquet
+output/*_stats.json
+!output/.gitkeep
+!output/README.md
+!output/*.xlsx
+
+*.log
+.DS_Store
