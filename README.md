@@ -1,7 +1,8 @@
 # SEC--data-analysys
-#
-# Gera fluxos mensais completos (carência + amortização SAC) e impacto fiscal
-# a valor de 30/06/2026 das operações indiretas automáticas do BNDES (2009–2010).
+
+Gera fluxos mensais completos (carência + amortização SAC) e impacto fiscal
+a valor de 30/06/2026 das operações indiretas automáticas do BNDES (2009–2010),
+com **resumo por agente financeiro** e interface web.
 
 ## Setup
 
@@ -14,27 +15,41 @@ pip install -r requirements.txt
 ## Uso
 
 ```bash
-# Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos
+# Amostra rápida (com agentes) — recomendado para validar
+python scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --stem fluxos_amostra
+
+# Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos + resumo por agente
 python scripts/gerar_fluxos.py --download
 
 # Excel local do portal de transparência (header=5)
 python scripts/gerar_fluxos.py --excel caminho/operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx
 
-# Teste rápido
-python scripts/gerar_fluxos.py --download --max-contratos 500
+# Só o ranking (CLI)
+python scripts/resumo_por_agente.py --from-output
 ```
+
+## Versão Web
+
+```bash
+# Gere o resumo antes (amostra ou download completo)
+python scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv
+
+streamlit run app.py
+```
+
+A UI mostra ranking por Instituição Financeira Credenciada, totais de
+subsídio e impacto fiscal 2026, busca e download do CSV.
 
 ## Saídas
 
 | Arquivo | Conteúdo |
 |---------|----------|
-| `output/fluxos_completos_corrigido.csv` | Uma linha por parcela (saldo, amortização, subsídio, impacto, em_carencia) |
-| `output/fluxos_completos_corrigido.xlsx` | Resumo + impacto mensal + amostra de parcelas |
-| `output/fluxos_completos_corrigido_stats.json` | Totais da execução |
+| `output/fluxos_completos_corrigido.csv` | Uma linha por parcela |
+| `output/fluxos_completos_corrigido.xlsx` | Resumo + **Por_Agente** + impacto mensal + amostra |
+| `output/resumo_por_agente.csv` | Ranking: Qtd Contratos, Total Subsídio, Impacto Fiscal 2026 |
+| `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
 
-O CSV detalhado (~1+ GB no período completo) não é versionado; o Excel de resumo cabe no git.
-
-## Metodologia (script corrigido)
+## Metodologia
 
 Para cada mês `p = 1 .. (carência + amortização)`:
 
@@ -46,29 +61,9 @@ Para cada mês `p = 1 .. (carência + amortização)`:
 
 SELIC anual: **14,5%**.
 
-### Correção de carência
-
-O script original misturava dois esquemas:
-
-1. `data = contratação + (carência + p)` com loop `p = 1..n` (pula a carência nas datas)
-2. `em_carencia = p <= carência` (zera amortização nas primeiras parcelas do loop)
-
-Isso deixava saldo residual. A versão corrigida gera o cronograma completo
-(`carência + n` meses) e só amortiza depois da carência.
-
-
-### Resultado da execução (2009–2010, SELIC 14,5%)
-
-| Indicador | Valor |
-|-----------|-------|
-| Contratos processados | 348.864 |
-| Parcelas geradas | 22.151.051 |
-| Parcelas em carência | 2.291.518 |
-| Soma Amortização | R$ 98,72 bilhões |
-| Soma Subsídio (nominal) | R$ 25,56 bilhões |
-| Soma Impacto Fiscal 2026 | R$ 201,18 bilhões |
-
-O CSV detalhado (~1,4 GB) é gerado localmente e não versionado; o Excel de resumo está em `output/fluxos_completos_corrigido.xlsx`.
+**Agente** = coluna `Instituição Financeira Credenciada` (Excel) /
+`instituicao_financeira_credenciada` (CSV aberto). O vínculo é
+`contrato → agente` — não use merge por índice no CSV de parcelas.
 
 ## Testes
 

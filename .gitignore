@@ -11,6 +11,7 @@ data/*.csv
 data/*.parquet
 data/*.xlsx
 !data/.gitkeep
+!data/sample_operacoes_com_agente.csv
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
 output/*.csv
@@ -19,6 +20,7 @@ output/*_stats.json
 !output/.gitkeep
 !output/README.md
 !output/*.xlsx
+!output/resumo_por_agente.csv
 
 *.log
 .DS_Store

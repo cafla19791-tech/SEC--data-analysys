@@ -15,7 +15,8 @@ Entrada:
 
 Saídas:
   - output/fluxos_completos_corrigido.csv     (detalhe por parcela)
-  - output/fluxos_completos_corrigido.xlsx    (resumo + amostra)
+  - output/fluxos_completos_corrigido.xlsx    (resumo + por agente + amostra)
+  - output/resumo_por_agente.csv|.xlsx       (agregado por instituição financeira)
   - output/fluxos_completos_corrigido.parquet (opcional, se pyarrow ok)
 """
 
@@ -24,6 +25,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
@@ -35,6 +38,7 @@ from dateutil.relativedelta import relativedelta
 TAXA_SELIC_ANUAL = 0.145  # 14,5% a.a.
 DATA_IMPACTO = datetime(2026, 6, 30)
 SELIC_MENSAL = TAXA_SELIC_ANUAL / 12.0
+AGENTE_NAO_INFORMADO = "Não informado"
 
 BNDES_CSV_URL = (
     "https://dadosabertos.bndes.gov.br/dataset/"
@@ -55,6 +59,8 @@ EXCEL_COLUMNS = {
     "Juros": "juros",
     "Prazo - Carência (meses)": "prazo_carencia",
     "Prazo - Amortização (meses)": "prazo_amortizacao",
+    "Instituição Financeira Credenciada": "agente",
+    "Instituicao Financeira Credenciada": "agente",
 }
 
 CSV_COLUMNS = {
@@ -63,6 +69,7 @@ CSV_COLUMNS = {
     "juros": "juros",
     "prazo_carencia_meses": "prazo_carencia",
     "prazo_amortizacao_meses": "prazo_amortizacao",
+    "instituicao_financeira_credenciada": "agente",
 }
 
 
@@ -121,6 +128,66 @@ def meses_ate_impacto(data_fluxo: datetime, data_impacto: datetime = DATA_IMPACT
     return (data_impacto.year - data_fluxo.year) * 12 + (data_impacto.month - data_fluxo.month)
 
 
+def _stream_download(url: str, dest: Path, retries: int = 4) -> Path:
+    """Baixa arquivo grande via HTTP streaming com retries (pandas URL buffer falha em ~1GB)."""
+    import requests
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dest.with_suffix(dest.suffix + ".part")
+    last_err: Exception | None = None
+
+    for attempt in range(1, retries + 1):
+        try:
+            resume_from = tmp.stat().st_size if tmp.exists() else 0
+            headers = {"Range": f"bytes={resume_from}-"} if resume_from else {}
+            mode = "ab" if resume_from else "wb"
+
+            print(
+                f"Download tentativa {attempt}/{retries}"
+                + (f" (retomando de {resume_from:,} bytes)" if resume_from else "")
+                + "..."
+            )
+            with requests.get(url, stream=True, timeout=120, headers=headers) as resp:
+                if resp.status_code not in (200, 206):
+                    resp.raise_for_status()
+                if resp.status_code == 200 and resume_from:
+                    mode = "wb"
+                    resume_from = 0
+
+                total = resp.headers.get("Content-Length")
+                expected = (
+                    int(total) + resume_from
+                    if total and resp.status_code == 206
+                    else (int(total) if total else None)
+                )
+
+                downloaded = resume_from
+                with tmp.open(mode) as f:
+                    for chunk in resp.iter_content(chunk_size=8 * 1024 * 1024):
+                        if not chunk:
+                            continue
+                        f.write(chunk)
+                        downloaded += len(chunk)
+                        if expected and downloaded % (64 * 1024 * 1024) < 8 * 1024 * 1024:
+                            pct = 100.0 * downloaded / expected
+                            print(f"  baixados {downloaded:,}/{expected:,} ({pct:.1f}%)")
+
+            if expected is not None and tmp.stat().st_size < expected:
+                raise IOError(
+                    f"Download incompleto: {tmp.stat().st_size:,} < {expected:,} bytes"
+                )
+
+            tmp.replace(dest)
+            print(f"CSV bruto salvo: {dest} ({dest.stat().st_size:,} bytes)")
+            return dest
+        except Exception as exc:  # noqa: BLE001 — retries em rede
+            last_err = exc
+            print(f"  falha: {exc}")
+            time.sleep(min(2**attempt, 32))
+
+    raise RuntimeError(f"Falha ao baixar {url}: {last_err}")
+
+
 def download_and_filter_csv(
     url: str = BNDES_CSV_URL,
     start: str = "2009-01-01",
@@ -134,10 +201,23 @@ def download_and_filter_csv(
     print(f"Baixando e filtrando {start} .. {end} ...")
     print(f"URL: {url}")
 
+    raw_path = RAW_DIR / "operacoes-indiretas-automaticas.csv"
+    if not raw_path.exists() or raw_path.stat().st_size < 100_000_000:
+        _stream_download(url, raw_path)
+    else:
+        print(f"Usando cache local: {raw_path} ({raw_path.stat().st_size:,} bytes)")
+
+    encoding = "utf-8"
+    try:
+        with raw_path.open("r", encoding="utf-8") as f:
+            f.read(2048)
+    except UnicodeDecodeError:
+        encoding = "cp1252"
+
     reader = pd.read_csv(
-        url,
+        raw_path,
         sep=";",
-        encoding="cp1252",
+        encoding=encoding,
         dtype=str,
         chunksize=100_000,
         low_memory=False,
@@ -189,6 +269,19 @@ def load_from_csv(path: Path) -> pd.DataFrame:
     return _prepare_contracts(df)
 
 
+def _normalizar_agente(series: pd.Series) -> pd.Series:
+    s = series.astype(str).str.strip()
+    s = s.replace(
+        {
+            "": AGENTE_NAO_INFORMADO,
+            "nan": AGENTE_NAO_INFORMADO,
+            "None": AGENTE_NAO_INFORMADO,
+            "NaT": AGENTE_NAO_INFORMADO,
+        }
+    )
+    return s.fillna(AGENTE_NAO_INFORMADO)
+
+
 def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
     required = [
         "data_contratacao",
@@ -201,6 +294,11 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Colunas ausentes: {missing}. Disponíveis: {list(df.columns)}")
 
+    if "agente" in df.columns:
+        agente = _normalizar_agente(df["agente"])
+    else:
+        agente = pd.Series([AGENTE_NAO_INFORMADO] * len(df), index=df.index)
+
     out = pd.DataFrame(
         {
             "data_contratacao": parse_datas(df["data_contratacao"]),
@@ -208,6 +306,7 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
             "juros": limpar_valor(df["juros"]),
             "prazo_carencia": limpar_valor(df["prazo_carencia"]).fillna(0),
             "prazo_amortizacao": limpar_valor(df["prazo_amortizacao"]),
+            "agente": agente.values,
         }
     )
 
@@ -221,7 +320,62 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
 
     print(f"Contratos na entrada: {before:,}")
     print(f"Contratos válidos: {len(out):,}")
+    print(f"Agentes distintos: {out['agente'].nunique():,}")
     return out
+
+
+def agregar_por_agente(df_fluxos: pd.DataFrame, contratos: pd.DataFrame) -> pd.DataFrame:
+    """
+    Resume fluxos por Agente Financeiro (Instituição Financeira Credenciada).
+
+    Correção vs script com merge por índice: o CSV de fluxos é por parcela;
+    o vínculo correto é contrato → agente (não left_index/right_index).
+    """
+    if "agente" not in contratos.columns:
+        raise ValueError("contratos precisa da coluna 'agente'")
+
+    mapa = contratos.set_index("contrato")["agente"]
+    df = df_fluxos.copy()
+    df["Agente"] = df["contrato"].map(mapa).fillna(AGENTE_NAO_INFORMADO)
+
+    resumo = (
+        df.groupby("Agente", dropna=False)
+        .agg(qtd_contratos=("contrato", "nunique"), subsidio=("subsidio", "sum"), impacto=("impacto", "sum"))
+        .round(2)
+        .reset_index()
+    )
+    resumo.columns = [
+        "Agente",
+        "Qtd Contratos",
+        "Total Subsídio (R$)",
+        "Impacto Fiscal 2026 (R$)",
+    ]
+    return resumo.sort_values("Total Subsídio (R$)", ascending=False).reset_index(drop=True)
+
+
+def resumo_from_agent_agg(agent_agg: dict) -> pd.DataFrame:
+    """Converte acumulador interno {agente: {contratos, subsidio, impacto}} em DataFrame."""
+    if not agent_agg:
+        return pd.DataFrame(
+            columns=[
+                "Agente",
+                "Qtd Contratos",
+                "Total Subsídio (R$)",
+                "Impacto Fiscal 2026 (R$)",
+            ]
+        )
+
+    rows = [
+        {
+            "Agente": agente,
+            "Qtd Contratos": vals["contratos"],
+            "Total Subsídio (R$)": round(vals["subsidio"], 2),
+            "Impacto Fiscal 2026 (R$)": round(vals["impacto"], 2),
+        }
+        for agente, vals in agent_agg.items()
+    ]
+    resumo = pd.DataFrame(rows)
+    return resumo.sort_values("Total Subsídio (R$)", ascending=False).reset_index(drop=True)
 
 
 def gerar_fluxos_contrato(
@@ -325,12 +479,15 @@ def processar_em_lotes(
     selic_aa: float = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
 ) -> dict:
-    """Processa em lotes, grava CSV detalhado e acumula estatísticas."""
+    """Processa em lotes, grava CSV detalhado e acumula estatísticas (+ por agente)."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     if csv_path.exists():
         csv_path.unlink()
 
     monthly: dict[str, float] = {}
+    agent_agg: dict[str, dict[str, float]] = defaultdict(
+        lambda: {"contratos": 0, "subsidio": 0.0, "impacto": 0.0}
+    )
     total_impacto = 0.0
     total_subsidio = 0.0
     total_amort = 0.0
@@ -364,6 +521,10 @@ def processar_em_lotes(
                 if fluxos:
                     n_contratos_ok += 1
                     records.extend(fluxos)
+                    agente = str(getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO)
+                    agent_agg[agente]["contratos"] += 1
+                    agent_agg[agente]["subsidio"] += float(sum(f["subsidio"] for f in fluxos))
+                    agent_agg[agente]["impacto"] += float(sum(f["impacto"] for f in fluxos))
             except (TypeError, ValueError, OverflowError):
                 continue
 
@@ -397,8 +558,20 @@ def processar_em_lotes(
         "total_amortizacao": round(total_amort, 2),
         "total_subsidio": round(total_subsidio, 2),
         "total_impacto_fiscal_2026": round(total_impacto, 2),
+        "n_agentes": len(agent_agg),
         "monthly": monthly,
+        "por_agente": dict(agent_agg),
     }
+
+
+def salvar_resumo_por_agente(resumo: pd.DataFrame, stem: str = "resumo_por_agente") -> tuple[Path, Path]:
+    """Grava CSV + Excel do ranking por agente financeiro."""
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    csv_path = OUTPUT_DIR / f"{stem}.csv"
+    xlsx_path = OUTPUT_DIR / f"{stem}.xlsx"
+    resumo.to_csv(csv_path, index=False)
+    resumo.to_excel(xlsx_path, index=False, sheet_name="Por_Agente")
+    return csv_path, xlsx_path
 
 
 def salvar_excel_resumo(
@@ -406,8 +579,9 @@ def salvar_excel_resumo(
     xlsx_path: Path,
     sample_csv: Path | None = None,
     sample_rows: int = 50_000,
+    resumo_agente: pd.DataFrame | None = None,
 ) -> None:
-    """Excel legível: resumo + impacto mensal + amostra de parcelas."""
+    """Excel legível: resumo + por agente + impacto mensal + amostra de parcelas."""
     xlsx_path.parent.mkdir(parents=True, exist_ok=True)
 
     resumo = pd.DataFrame(
@@ -427,6 +601,7 @@ def salvar_excel_resumo(
                 "Indicador": "Soma Impacto Fiscal 2026",
                 "Valor": stats["total_impacto_fiscal_2026"],
             },
+            {"Indicador": "Agentes financeiros", "Valor": stats.get("n_agentes", 0)},
             {
                 "Indicador": "Arquivo detalhado",
                 "Valor": "output/fluxos_completos_corrigido.csv",
@@ -447,6 +622,8 @@ def salvar_excel_resumo(
 
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         resumo.to_excel(writer, sheet_name="Resumo", index=False)
+        if resumo_agente is not None and not resumo_agente.empty:
+            resumo_agente.to_excel(writer, sheet_name="Por_Agente", index=False)
         mensal.to_excel(writer, sheet_name="Impacto_Mensal", index=False)
         if sample_csv and sample_csv.exists():
             sample = pd.read_csv(sample_csv, nrows=sample_rows)
@@ -515,14 +692,26 @@ def main(argv: list[str] | None = None) -> int:
     stats_path = OUTPUT_DIR / f"{args.stem}_stats.json"
 
     stats = processar_em_lotes(df, csv_path, lote=args.lote)
-    print(json.dumps({k: v for k, v in stats.items() if k != "monthly"}, indent=2))
+    resumo_agente = resumo_from_agent_agg(stats.get("por_agente", {}))
+    agente_csv, agente_xlsx = salvar_resumo_por_agente(resumo_agente)
 
-    salvar_excel_resumo(stats, xlsx_path, sample_csv=csv_path)
+    printable = {
+        k: v for k, v in stats.items() if k not in {"monthly", "por_agente"}
+    }
+    print(json.dumps(printable, indent=2))
+    print("\nResumo por Agente Financeiro (top 20):")
+    print(resumo_agente.head(20).to_string(index=False))
+
+    salvar_excel_resumo(
+        stats, xlsx_path, sample_csv=csv_path, resumo_agente=resumo_agente
+    )
     with stats_path.open("w", encoding="utf-8") as f:
-        json.dump({k: v for k, v in stats.items() if k != "monthly"}, f, indent=2)
+        json.dump(printable, f, indent=2)
 
     print(f"✅ CSV detalhado: {csv_path}")
     print(f"✅ Excel resumo:  {xlsx_path}")
+    print(f"✅ Resumo agente: {agente_csv}")
+    print(f"✅ Resumo agente: {agente_xlsx}")
     print(f"✅ Stats JSON:    {stats_path}")
     return 0
 
