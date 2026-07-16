@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+
+# Large local data (download via script)
+data/raw/
+*.csv
+!requirements.txt
+
+# Keep small sample outputs tracked if needed; ignore large artifacts
+output/*.xlsx
+output/*.parquet
+output/*.csv
+!output/.gitkeep
