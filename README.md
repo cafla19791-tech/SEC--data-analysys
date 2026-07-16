@@ -14,7 +14,7 @@ pip install -r requirements.txt
 ## Uso
 
 ```bash
-# Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos
+# Baixa contratos 2009–2010 (CSV aberto BNDES ~1.2GB, streaming com resume) e gera fluxos
 python scripts/gerar_fluxos.py --download
 
 # Excel local do portal de transparência (header=5)
