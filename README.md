@@ -56,6 +56,20 @@ O script original misturava dois esquemas:
 Isso deixava saldo residual. A versão corrigida gera o cronograma completo
 (`carência + n` meses) e só amortiza depois da carência.
 
+
+### Resultado da execução (2009–2010, SELIC 14,5%)
+
+| Indicador | Valor |
+|-----------|-------|
+| Contratos processados | 348.864 |
+| Parcelas geradas | 22.151.051 |
+| Parcelas em carência | 2.291.518 |
+| Soma Amortização | R$ 98,72 bilhões |
+| Soma Subsídio (nominal) | R$ 25,56 bilhões |
+| Soma Impacto Fiscal 2026 | R$ 201,18 bilhões |
+
+O CSV detalhado (~1,4 GB) é gerado localmente e não versionado; o Excel de resumo está em `output/fluxos_completos_corrigido.xlsx`.
+
 ## Testes
 
 ```bash
