@@ -80,18 +80,54 @@ class SelicSerie:
 # FUNÇÕES AUXILIARES
 # =========================================
 def limpar_valor(series: pd.Series) -> pd.Series:
-    """Converte valores BR (R$ 1.234,56) ou já numéricos."""
+    """Converte valores BR (R$ 1.234,56), US (1234.56) ou já numéricos."""
     if pd.api.types.is_numeric_dtype(series):
         return pd.to_numeric(series, errors="coerce")
-    cleaned = (
+
+    s = (
         series.astype(str)
         .str.replace("R$", "", regex=False)
-        .str.replace(".", "", regex=False)
-        .str.replace(",", ".", regex=False)
         .str.strip()
         .replace({"": np.nan, "nan": np.nan, "None": np.nan})
     )
-    return pd.to_numeric(cleaned, errors="coerce")
+
+    def _one(v: str):
+        if v is None or (isinstance(v, float) and np.isnan(v)):
+            return np.nan
+        text = str(v).strip()
+        if not text or text.lower() in {"nan", "none"}:
+            return np.nan
+        # BR: 1.234.567,89  |  US/ISO: 1234567.89 ou 5.0
+        if "," in text and "." in text:
+            text = text.replace(".", "").replace(",", ".")
+        elif "," in text:
+            text = text.replace(",", ".")
+        # se só há ponto, assume decimal US (não remove)
+        try:
+            return float(text)
+        except ValueError:
+            return np.nan
+
+    return pd.to_numeric(s.map(_one), errors="coerce")
+
+
+def parse_datas(series: pd.Series) -> pd.Series:
+    """Parseia datas ISO (YYYY-MM-DD) ou BR (DD/MM/YYYY) sem misturar."""
+    if pd.api.types.is_datetime64_any_dtype(series):
+        return pd.to_datetime(series, errors="coerce")
+
+    s = series.astype(str).str.strip()
+    iso_mask = s.str.match(r"^\d{4}-\d{2}-\d{2}", na=False).fillna(False)
+
+    out = pd.Series(pd.NaT, index=series.index, dtype="datetime64[ns]")
+    if iso_mask.any():
+        # format=ISO8601 evita falha quando misturam 'YYYY-MM-DD' e '...T00:00:00'
+        iso_parsed = pd.to_datetime(s[iso_mask], errors="coerce", format="ISO8601")
+        out.loc[iso_mask] = iso_parsed.values
+    if (~iso_mask).any():
+        br_parsed = pd.to_datetime(s[~iso_mask], dayfirst=True, errors="coerce")
+        out.loc[~iso_mask] = br_parsed.values
+    return out
 
 
 def _find_col(columns, *needles: str) -> str | None:
@@ -194,7 +230,7 @@ def load_contracts_excel(path: Path, header: int = 5) -> pd.DataFrame:
 
     out = pd.DataFrame(
         {
-            "data_contratacao": pd.to_datetime(df[col_data], dayfirst=True, errors="coerce"),
+            "data_contratacao": parse_datas(df[col_data]),
             "valor_desembolsado": limpar_valor(df[col_valor]),
             "juros": limpar_valor(df[col_juros]) if col_juros else 0.0,
             "prazo_carencia": limpar_valor(df[col_carencia]).fillna(0) if col_carencia else 0,
@@ -229,7 +265,7 @@ def load_contracts_csv(path: Path) -> pd.DataFrame:
 
     out = pd.DataFrame(
         {
-            "data_contratacao": pd.to_datetime(df["data_contratacao"], dayfirst=True, errors="coerce"),
+            "data_contratacao": parse_datas(df["data_contratacao"]),
             "valor_desembolsado": limpar_valor(df["valor_desembolsado"]),
             "juros": limpar_valor(df["juros"]) if "juros" in df.columns else 0.0,
             "prazo_carencia": limpar_valor(df["prazo_carencia"]).fillna(0)
