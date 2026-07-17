@@ -111,7 +111,10 @@ class SelicSerie:
         fim: str | None = None,
         cache_path: Path | None = None,
     ) -> "SelicSerie":
-        """Baixa SELIC diária (SGS 11) e gera fatores acumulados no formato ContAgil."""
+        """Baixa SELIC diária (SGS 11) e gera fatores acumulados no formato ContAgil.
+
+        A API do Bacen rejeita intervalos muito longos (HTTP 406); baixamos ano a ano.
+        """
         import requests
 
         if fim is None:
@@ -120,18 +123,39 @@ class SelicSerie:
             print(f"Usando cache SELIC: {cache_path}")
             return cls.from_excel(cache_path)
 
-        url = BCB_SELIC_DIARIA_URL.format(inicio=inicio, fim=fim)
-        print(f"Baixando SELIC diária Bacen (SGS 11): {inicio} .. {fim}")
-        resp = requests.get(url, timeout=120, headers={"Accept": "application/json"})
-        resp.raise_for_status()
-        rows = resp.json()
-        if not rows:
+        start_ts = pd.to_datetime(inicio, dayfirst=True)
+        end_ts = pd.to_datetime(fim, dayfirst=True)
+        print(f"Baixando SELIC diária Bacen (SGS 11): {inicio} .. {fim} (por ano)")
+
+        parts: list[pd.DataFrame] = []
+        for year in range(start_ts.year, end_ts.year + 1):
+            y0 = max(start_ts, pd.Timestamp(year=year, month=1, day=1))
+            y1 = min(end_ts, pd.Timestamp(year=year, month=12, day=31))
+            url = BCB_SELIC_DIARIA_URL.format(
+                inicio=y0.strftime("%d/%m/%Y"),
+                fim=y1.strftime("%d/%m/%Y"),
+            )
+            resp = requests.get(url, timeout=120, headers={"Accept": "application/json"})
+            resp.raise_for_status()
+            rows = resp.json()
+            if not rows:
+                continue
+            chunk = pd.DataFrame(rows)
+            parts.append(chunk)
+            print(f"  {year}: {len(chunk):,} dias")
+
+        if not parts:
             raise RuntimeError("Bacen retornou série SELIC vazia.")
 
-        df = pd.DataFrame(rows)
+        df = pd.concat(parts, ignore_index=True)
         df["data"] = pd.to_datetime(df["data"], dayfirst=True, errors="coerce")
         df["taxa_pct_a_d"] = pd.to_numeric(df["valor"], errors="coerce")
-        df = df.dropna(subset=["data", "taxa_pct_a_d"]).sort_values("data")
+        df = (
+            df.dropna(subset=["data", "taxa_pct_a_d"])
+            .drop_duplicates(subset=["data"], keep="last")
+            .sort_values("data")
+            .reset_index(drop=True)
+        )
 
         serie = cls.from_taxas_diarias(
             df["data"].values.astype("datetime64[ns]"),
