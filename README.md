@@ -80,6 +80,26 @@ Fatores ContAgil: coluna A = data, coluna C = fator acumulado.
 `p = 1..n`, o que zerava amortização indevidamente. Aqui o cronograma
 cobre `carência + n` meses.
 
+## Resultado do run completo (2009–2010)
+
+Com fatores SELIC Bacen (SGS 11) no layout ContAgil (col C = fator), na ausência do
+arquivo STP local `STP-20260716182715078 (1).xlsx`:
+
+| Indicador | Valor |
+|-----------|-------|
+| Contratos | 348.864 |
+| Parcelas | 22.151.051 |
+| Subsídio nominal | R$ 23,45 bi |
+| Impacto fiscal 30/06/2026 | R$ 90,17 bi |
+| Agentes | 72 |
+
+Para usar o STP ContAgil da RFB (capitalização oficial da tabela):
+
+```bash
+python3 scripts/gerar_fluxos.py --download \
+  --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
+```
+
 ## Testes
 
 ```bash
