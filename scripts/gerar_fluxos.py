@@ -10,7 +10,8 @@ Metodologia ContAgil (taxas compostas) + carência corrigida:
   - spread = (1 + (SELIC_m − taxa_contrato_m))^n
   - subsídio = saldo × (SELIC_m − taxa_contrato_m)
   - impacto_fiscal (calcular_impacto_fiscal_real):
-      * com fatores STP/Bacen: subsídio × fator(nearest 30/06/2026) / fator(nearest data_fluxo)
+      * com fatores STP/Bacen: subsídio × fator(nearest 30/06/2026)
+        / fator(nearest data_fluxo + 1 dia)  — col E do STP ContAgil
       * sem fatores: subsídio × (1 + SELIC_m)^(meses até 30/06/2026)
 
 Entrada:
@@ -31,7 +32,7 @@ import os
 import sys
 import time
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import numpy as np
@@ -78,11 +79,11 @@ class SelicSerie:
 
     @classmethod
     def from_excel(cls, path: Path) -> "SelicSerie":
-        """Lê STP ContAgil: col A = data, col C = fator acumulado.
+        """Lê STP ContAgil: col A = data, col E = fator acumulado.
 
         Preferência:
           1) coluna nomeada 'fator_acumulado' (cache Bacen)
-          2) coluna C (índice 2) — layout ContAgil
+          2) coluna E (índice 4) — layout ContAgil / script RFB
           3) última coluna numérica com valores > 0
         """
         selic = pd.read_excel(path)
@@ -96,9 +97,9 @@ class SelicSerie:
             fatores = pd.to_numeric(
                 selic[cols_lower["fator_acumulado"]], errors="coerce"
             ).values
-        elif selic.shape[1] >= 3:
-            fatores = pd.to_numeric(selic.iloc[:, 2], errors="coerce").values
-            # Se a col C não for fator (ex.: NaNs / ≤0), tenta a última coluna
+        elif selic.shape[1] >= 5:
+            fatores = pd.to_numeric(selic.iloc[:, 4], errors="coerce").values
+            # Se a col E não for fator (ex.: NaNs / ≤0), tenta a última coluna
             if not np.any((~pd.isna(fatores)) & (fatores > 0)):
                 fatores = pd.to_numeric(selic.iloc[:, -1], errors="coerce").values
         else:
@@ -188,11 +189,13 @@ class SelicSerie:
 
         if cache_path is not None:
             cache_path.parent.mkdir(parents=True, exist_ok=True)
-            # Layout ContAgil: col A=data, col B=taxa, col C=fator acumulado
+            # Layout ContAgil: col A=data … col E=fator (nomeado para o loader)
             out = pd.DataFrame(
                 {
                     "data": pd.to_datetime(serie.datas),
-                    "taxa_pct_a_d": df["taxa_pct_a_d"].values,
+                    "col_b": np.nan,
+                    "col_c": np.nan,
+                    "col_d": df["taxa_pct_a_d"].values,
                     "fator_acumulado": serie.fatores,
                 }
             )
@@ -246,13 +249,15 @@ def calcular_impacto_fiscal_real(
     """
     ContAgil: capitaliza o subsídio até data_impacto via fatores acumulados SELIC.
 
-      idx_inicio = nearest(data_parcela)
-      idx_fim    = nearest(data_impacto)
+      data_proxima = data_parcela + 1 dia   # regra: dia seguinte à parcela
+      idx_inicio = nearest(data_proxima)
+      idx_fim    = nearest(data_impacto)   # 30/06/2026
       se idx_fim > idx_inicio: retorno subsidio * fator_fim / fator_inicio
     """
     if subsidio <= 0:
         return 0.0
-    idx_inicio = selic_serie.idx_proximo(data_parcela)
+    data_proxima = pd.Timestamp(data_parcela) + timedelta(days=1)
+    idx_inicio = selic_serie.idx_proximo(data_proxima)
     idx_fim = selic_serie.idx_proximo(data_impacto)
     if idx_fim > idx_inicio:
         fator = selic_serie.fatores[idx_fim] / selic_serie.fatores[idx_inicio]
@@ -989,7 +994,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=None,
         help=(
-            "Excel STP ContAgil/Bacen (col A=data, col C=fator acumulado). "
+            "Excel STP ContAgil/Bacen (col A=data, col E=fator acumulado). "
             "Se omitido, tenta auto-descobrir (ContAgil path, data/STP*.xlsx, "
             "data/selic_fatores_bacen.xlsx)."
         ),

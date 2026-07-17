@@ -69,11 +69,13 @@ Para cada mês `p = 1 .. (carência + amortização)`:
 - `spread = (1 + (SELIC_m − taxa_contrato_m))^n`
 - `subsídio = saldo × (SELIC_m − taxa_contrato_m)`
 - `impacto_fiscal` (`calcular_impacto_fiscal_real`):
-  - com fatores (STP ContAgil ou Bacen): `subsídio × fator(nearest 30/06/2026) / fator(nearest data_fluxo)`
+  - com fatores (STP ContAgil ou Bacen):
+    `subsídio × fator(nearest 30/06/2026) / fator(nearest data_fluxo + 1 dia)`
   - sem fatores: `subsídio × (1 + SELIC_m)^(meses até 30/06/2026)`
 
 SELIC anual de referência (taxas mensais / fallback): **14,5%**.
-Fatores ContAgil: coluna A = data, coluna C = fator acumulado.
+Fatores ContAgil: coluna A = data, coluna E = fator acumulado.
+Início da capitalização: **dia seguinte** à data da parcela.
 
 **Correção de carência:** o script ContAgil original misturava
 `data = contr + (carência + p)` com `em_carencia = p <= carência` no loop
@@ -82,8 +84,8 @@ cobre `carência + n` meses.
 
 ## Resultado do run completo (2009–2010)
 
-Com fatores SELIC Bacen (SGS 11) no layout ContAgil (col C = fator), na ausência do
-arquivo STP local `STP-20260716182715078 (1).xlsx`:
+Com fatores SELIC Bacen (SGS 11) no layout ContAgil (col E = fator; +1 dia),
+na ausência do arquivo STP local `STP-20260716182715078 (1).xlsx`:
 
 | Indicador | Valor |
 |-----------|-------|

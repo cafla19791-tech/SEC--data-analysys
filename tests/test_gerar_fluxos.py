@@ -158,11 +158,16 @@ def test_impacto_via_fator_selic_stp():
 
 def test_calcular_impacto_fiscal_real_contagil():
     datas = np.array(
-        [np.datetime64("2020-01-15"), np.datetime64("2026-06-30")],
+        [
+            np.datetime64("2020-01-15"),
+            np.datetime64("2020-01-16"),
+            np.datetime64("2026-06-30"),
+        ],
         dtype="datetime64[ns]",
     )
-    fatores = np.array([1.0, 1.5], dtype=float)
+    fatores = np.array([1.0, 1.1, 1.65], dtype=float)
     serie = SelicSerie(datas, fatores)
+    # Regra ContAgil: usa dia seguinte à parcela (16/01 → fator 1.1)
     assert calcular_impacto_fiscal_real(100.0, datetime(2020, 1, 15), serie) == 150.0
     assert calcular_impacto_fiscal_real(0.0, datetime(2020, 1, 15), serie) == 0.0
     # data_impacto anterior/igual → sem capitalização
@@ -172,6 +177,24 @@ def test_calcular_impacto_fiscal_real_contagil():
         )
         == 100.0
     )
+
+
+def test_impacto_usa_dia_seguinte_da_parcela():
+    """idx_inicio = nearest(data_parcela + 1 dia), não a própria data da parcela."""
+    datas = np.array(
+        [
+            np.datetime64("2009-02-15"),
+            np.datetime64("2009-02-16"),
+            np.datetime64("2026-06-30"),
+        ],
+        dtype="datetime64[ns]",
+    )
+    fatores = np.array([1.0, 2.0, 4.0], dtype=float)
+    serie = SelicSerie(datas, fatores)
+    # 15/02 → início em 16/02 (fator 2) → 4/2 = 2×
+    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), serie) == 200.0
+    # Se usasse a própria parcela (fator 1) daria 400 — garante a regra +1 dia
+    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), serie) != 400.0
 
 
 def test_fator_from_taxas_diarias():
@@ -186,19 +209,22 @@ def test_fator_from_taxas_diarias():
     assert serie.idx_proximo(datetime(2024, 1, 2, 12)) in (0, 1)
 
 
-def test_from_excel_le_fator_coluna_c(tmp_path):
-    """ContAgil: col A = data, col C = fator acumulado."""
+def test_from_excel_le_fator_coluna_e(tmp_path):
+    """ContAgil: col A = data, col E (índice 4) = fator acumulado."""
     path = tmp_path / "STP-20260716182715078 (1).xlsx"
     pd.DataFrame(
         {
-            "data": ["15/01/2020", "30/06/2026"],
-            "taxa": [0.01, 0.02],
-            "fator": [1.0, 1.8],
+            "data": ["15/01/2020", "16/01/2020", "30/06/2026"],
+            "b": [0.0, 0.0, 0.0],
+            "c": [0.0, 0.0, 0.0],
+            "d": [0.01, 0.01, 0.02],
+            "fator": [1.0, 1.0, 1.8],
         }
     ).to_excel(path, index=False)
 
     serie = SelicSerie.from_excel(path)
-    assert len(serie.fatores) == 2
+    assert len(serie.fatores) == 3
     assert abs(serie.fatores[0] - 1.0) < 1e-12
-    assert abs(serie.fatores[1] - 1.8) < 1e-12
+    assert abs(serie.fatores[-1] - 1.8) < 1e-12
+    # 15/01 + 1 dia → 16/01 (fator 1.0) → 1.8/1.0
     assert calcular_impacto_fiscal_real(100.0, datetime(2020, 1, 15), serie) == 180.0
