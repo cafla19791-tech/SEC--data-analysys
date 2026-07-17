@@ -1,8 +1,8 @@
 # SEC--data-analysys
 
-Gera fluxos mensais completos (carência + amortização SAC) e impacto fiscal
+Gera **fluxos financeiros detalhados** (carência + amortização SAC) e impacto fiscal
 a valor de 30/06/2026 das operações indiretas automáticas do BNDES (2009–2010),
-com **resumo por agente financeiro** e interface web.
+com colunas ContAgil (instituição, taxas compostas, spread) e resumo por agente.
 
 ## Setup
 
@@ -16,57 +16,64 @@ pip install -r requirements.txt
 
 ```bash
 # Amostra rápida (com agentes) — recomendado para validar
-python scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --stem fluxos_amostra
+python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --stem fluxos_amostra
 
-# Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos + resumo por agente
-python scripts/gerar_fluxos.py --download
+# Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos detalhados
+python3 scripts/gerar_fluxos.py --download
 
 # Excel local do portal de transparência (header=5)
-python scripts/gerar_fluxos.py --excel caminho/operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx
+python3 scripts/gerar_fluxos.py --excel caminho/operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx
+
+# Com fatores SELIC ContAgil (STP-*.xlsx)
+python3 scripts/gerar_fluxos.py --download --arquivo-selic caminho/STP-....xlsx
 
 # Só o ranking (CLI)
-python scripts/resumo_por_agente.py --from-output
+python3 scripts/resumo_por_agente.py --from-output
 ```
 
 ## Versão Web
 
 ```bash
-# Gere o resumo antes (amostra ou download completo)
-python scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv
-
+python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv
 streamlit run app.py
 ```
-
-A UI mostra ranking por Instituição Financeira Credenciada, totais de
-subsídio e impacto fiscal 2026, busca e download do CSV.
 
 ## Saídas
 
 | Arquivo | Conteúdo |
 |---------|----------|
-| `output/fluxos_completos_corrigido.csv` | Uma linha por parcela |
-| `output/fluxos_completos_corrigido.xlsx` | Resumo + **Por_Agente** + impacto mensal + amostra |
+| `output/fluxos_completos_final.csv` | Uma linha por parcela (colunas detalhadas) |
+| `output/fluxos_completos_final.xlsx` | Resumo + **Por_Agente** + impacto mensal + amostra |
 | `output/resumo_por_agente.csv` | Ranking: Qtd Contratos, Total Subsídio, Impacto Fiscal 2026 |
 | `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
+
+Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
+`data_fluxo`, `saldo`, `amortizacao`, `taxa_selic_mensal`,
+`taxa_contrato_mensal`, `spread`, `subsidio`, `impacto_fiscal`, `em_carencia`.
 
 ## Metodologia
 
 Para cada mês `p = 1 .. (carência + amortização)`:
 
-- `data_fluxo = contratação + p meses`
+- `data_fluxo` = dia 15 da contratação + `(p − 1)` meses (ContAgil)
 - `em_carencia = p <= carência` → amortização = 0
 - após a carência: `amortização = valor / n` (SAC)
-- `subsídio = saldo × (SELIC/12 − juros/12)`
-- `impacto = subsídio × (1 + SELIC/12)^(meses até 30/06/2026)`
+- `taxa_*_mensal = (1 + taxa_aa)^(1/12) − 1`
+- `spread = (1 + (SELIC_m − taxa_contrato_m))^n`
+- `subsídio = saldo × (SELIC_m − taxa_contrato_m)`
+- `impacto_fiscal`:
+  - sem STP: `subsídio × (1 + SELIC_m)^(meses até 30/06/2026)`
+  - com Excel STP: `subsídio × fator(30/06/2026) / fator(data_fluxo)`
 
-SELIC anual: **14,5%**.
+SELIC anual de referência: **14,5%**.
 
-**Agente** = coluna `Instituição Financeira Credenciada` (Excel) /
-`instituicao_financeira_credenciada` (CSV aberto). O vínculo é
-`contrato → agente` — não use merge por índice no CSV de parcelas.
+**Correção de carência:** o script ContAgil original misturava
+`data = contr + (carência + p)` com `em_carencia = p <= carência` no loop
+`p = 1..n`, o que zerava amortização indevidamente. Aqui o cronograma
+cobre `carência + n` meses.
 
 ## Testes
 
 ```bash
-PYTHONPATH=. python -m pytest tests/ -q
+PYTHONPATH=. python3 -m pytest tests/ -q
 ```

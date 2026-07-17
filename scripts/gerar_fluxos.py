@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 """
-Gera fluxos mensais completos (carência + amortização SAC) e impacto fiscal
+Gera fluxos mensais detalhados (carência + amortização SAC) e impacto fiscal
 a valor de 30/06/2026, a partir de operações indiretas automáticas do BNDES.
 
-Baseado no script de referência (SELIC 14,5% a.a.), com carência corrigida:
+Metodologia ContAgil (taxas compostas) + carência corrigida:
+  - taxa_mensal = (1 + taxa_aa)^(1/12) - 1
   - Fluxos em TODOS os meses (carência + amortização)
   - Amortização constante só após a carência
-  - subsídio = saldo × (SELIC/12 − juros/12)
-  - impacto = subsídio × (1 + SELIC/12)^(meses até 30/06/2026)
+  - spread = (1 + (SELIC_m − taxa_contrato_m))^n
+  - subsídio = saldo × (SELIC_m − taxa_contrato_m)
+  - impacto_fiscal:
+      * com Excel STP ContAgil: subsídio × fator(30/06/2026) / fator(data_fluxo)
+      * sem STP: subsídio × (1 + SELIC_m)^(meses até 30/06/2026)
 
 Entrada:
   - Excel do portal (header=5), ou
   - CSV aberto do BNDES (download automático 2009–2010)
+  - (opcional) Excel SELIC ContAgil STP-*.xlsx
 
 Saídas:
-  - output/fluxos_completos_corrigido.csv     (detalhe por parcela)
-  - output/fluxos_completos_corrigido.xlsx    (resumo + por agente + amostra)
+  - output/fluxos_completos_final.csv/.xlsx   (detalhe por parcela + colunas extras)
   - output/resumo_por_agente.csv|.xlsx       (agregado por instituição financeira)
-  - output/fluxos_completos_corrigido.parquet (opcional, se pyarrow ok)
 """
 
 from __future__ import annotations
@@ -37,8 +40,61 @@ from dateutil.relativedelta import relativedelta
 # ===================== CONFIGURAÇÕES =====================
 TAXA_SELIC_ANUAL = 0.145  # 14,5% a.a.
 DATA_IMPACTO = datetime(2026, 6, 30)
-SELIC_MENSAL = TAXA_SELIC_ANUAL / 12.0
 AGENTE_NAO_INFORMADO = "Não informado"
+
+
+def taxa_mensal_composta(taxa_aa: float) -> float:
+    """Converte taxa anual em taxa mensal composta: (1+r)^(1/12)-1."""
+    return (1.0 + float(taxa_aa)) ** (1.0 / 12.0) - 1.0
+
+
+TAXA_SELIC_MENSAL = taxa_mensal_composta(TAXA_SELIC_ANUAL)
+
+
+class SelicSerie:
+    """Lookup de fatores Selic acumulados (Excel STP ContAgil / Bacen)."""
+
+    def __init__(self, datas: np.ndarray, fatores: np.ndarray):
+        self.datas = datas
+        self.fatores = fatores
+
+    @classmethod
+    def from_excel(cls, path: Path) -> "SelicSerie":
+        selic = pd.read_excel(path)
+        datas = pd.to_datetime(selic.iloc[:, 0], dayfirst=True, errors="coerce").values.astype(
+            "datetime64[ns]"
+        )
+        col_fator = min(3, selic.shape[1] - 1)
+        fatores = pd.to_numeric(selic.iloc[:, col_fator], errors="coerce").values
+        mask = ~pd.isna(datas) & ~pd.isna(fatores) & (fatores > 0)
+        return cls(datas[mask], fatores[mask].astype(float))
+
+    def fator_rapido(self, datas) -> np.ndarray:
+        datas_arr = np.array(datas, dtype="datetime64[ns]")
+        idx = np.searchsorted(self.datas, datas_arr, side="right") - 1
+        idx = np.clip(idx, 0, len(self.fatores) - 1)
+        return self.fatores[idx]
+
+    def capitalizar(
+        self,
+        valor: float,
+        data_fluxo: datetime,
+        data_impacto: datetime = DATA_IMPACTO,
+    ) -> float:
+        """impacto = valor × fator(impacto) / fator(fluxo), como no ContAgil."""
+        if valor <= 0:
+            return 0.0
+        f_fluxo = float(
+            self.fator_rapido([np.datetime64(pd.Timestamp(data_fluxo), "ns")])[0]
+        )
+        f_fim = float(
+            self.fator_rapido([np.datetime64(pd.Timestamp(data_impacto), "ns")])[0]
+        )
+        if f_fluxo <= 0 or np.isnan(f_fluxo) or np.isnan(f_fim):
+            return float(valor)
+        if f_fim > f_fluxo:
+            return round(valor * (f_fim / f_fluxo), 2)
+        return round(valor, 2)
 
 BNDES_CSV_URL = (
     "https://dadosabertos.bndes.gov.br/dataset/"
@@ -324,6 +380,14 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _coluna_impacto(df: pd.DataFrame) -> str:
+    if "impacto_fiscal" in df.columns:
+        return "impacto_fiscal"
+    if "impacto" in df.columns:
+        return "impacto"
+    raise ValueError("fluxos precisam de 'impacto_fiscal' ou 'impacto'")
+
+
 def agregar_por_agente(df_fluxos: pd.DataFrame, contratos: pd.DataFrame) -> pd.DataFrame:
     """
     Resume fluxos por Agente Financeiro (Instituição Financeira Credenciada).
@@ -331,16 +395,24 @@ def agregar_por_agente(df_fluxos: pd.DataFrame, contratos: pd.DataFrame) -> pd.D
     Correção vs script com merge por índice: o CSV de fluxos é por parcela;
     o vínculo correto é contrato → agente (não left_index/right_index).
     """
-    if "agente" not in contratos.columns:
-        raise ValueError("contratos precisa da coluna 'agente'")
-
-    mapa = contratos.set_index("contrato")["agente"]
     df = df_fluxos.copy()
-    df["Agente"] = df["contrato"].map(mapa).fillna(AGENTE_NAO_INFORMADO)
+    impacto_col = _coluna_impacto(df)
+
+    if "Instituição Financeira" in df.columns:
+        df["Agente"] = df["Instituição Financeira"].fillna(AGENTE_NAO_INFORMADO)
+    elif "agente" in contratos.columns:
+        mapa = contratos.set_index("contrato")["agente"]
+        df["Agente"] = df["contrato"].map(mapa).fillna(AGENTE_NAO_INFORMADO)
+    else:
+        raise ValueError("contratos precisa da coluna 'agente' ou fluxos de 'Instituição Financeira'")
 
     resumo = (
         df.groupby("Agente", dropna=False)
-        .agg(qtd_contratos=("contrato", "nunique"), subsidio=("subsidio", "sum"), impacto=("impacto", "sum"))
+        .agg(
+            qtd_contratos=("contrato", "nunique"),
+            subsidio=("subsidio", "sum"),
+            impacto=(impacto_col, "sum"),
+        )
         .round(2)
         .reset_index()
     )
@@ -385,46 +457,67 @@ def gerar_fluxos_contrato(
     carencia: int,
     n: int,
     contrato_id: int,
+    instituicao: str = AGENTE_NAO_INFORMADO,
     selic_aa: float = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
 ) -> list[dict]:
     """
-    Gera fluxos de UM contrato (carência + amortização).
+    Gera fluxos detalhados de UM contrato (carência + amortização).
 
-    Correção vs script com bug:
-      O original fazia `data = contr + (carencia+p)` E `em_carencia = p <= carencia`
+    Correção vs script ContAgil com bug:
+      O original fazia `data = contr+(carencia+p)` E `em_carencia = p <= carencia`
       no loop `p=1..n`, o que zera amortização nas primeiras parcelas pós-carência
       e deixa saldo residual. Aqui o cronograma cobre carência+n meses.
+
+    Colunas extras (pedido ContAgil): Instituição Financeira, taxas compostas,
+    spread e impacto_fiscal.
     """
     if n <= 0 or valor <= 0:
         return []
 
     amort_mensal = valor / n
     saldo = valor
-    taxa_mensal = taxa_juros_aa / 12.0
-    selic_mensal = selic_aa / 12.0
+    taxa_contrato_mensal = taxa_mensal_composta(taxa_juros_aa)
+    taxa_selic_mensal = taxa_mensal_composta(selic_aa)
+    spread = (1.0 + (taxa_selic_mensal - taxa_contrato_mensal)) ** n
     fluxos: list[dict] = []
+
+    # Dia 15 como no ContAgil (evita deslocamento de fim de mês)
+    try:
+        data_base = data_contr.replace(day=15)
+    except ValueError:
+        data_base = data_contr
 
     total_meses = carencia + n
     for p in range(1, total_meses + 1):
-        data_fluxo = data_contr + relativedelta(months=p)
+        data_fluxo = data_base + relativedelta(months=p - 1)
         em_carencia = p <= carencia
         amort = 0.0 if em_carencia else amort_mensal
-        subsidio = saldo * (selic_mensal - taxa_mensal)
-        meses = meses_ate_impacto(data_fluxo.to_pydatetime(), data_impacto)
-        impacto = subsidio * ((1.0 + selic_mensal) ** meses)
+        subsidio = saldo * (taxa_selic_mensal - taxa_contrato_mensal)
+
+        if selic_serie is not None:
+            impacto = selic_serie.capitalizar(
+                subsidio, data_fluxo.to_pydatetime(), data_impacto
+            )
+        else:
+            meses = meses_ate_impacto(data_fluxo.to_pydatetime(), data_impacto)
+            impacto = round(subsidio * ((1.0 + taxa_selic_mensal) ** meses), 2)
 
         fluxos.append(
             {
                 "contrato": contrato_id,
+                "Instituição Financeira": instituicao,
                 "mes": p,
                 "data_fluxo": data_fluxo.date(),
                 "saldo": round(saldo, 2),
                 "amortizacao": round(amort, 2),
-                "taxa_mensal": round(taxa_mensal, 8),
+                "taxa_selic_mensal": round(taxa_selic_mensal, 8),
+                "taxa_contrato_mensal": round(taxa_contrato_mensal, 8),
+                "spread": round(spread, 6),
                 "subsidio": round(subsidio, 2),
+                "impacto_fiscal": impacto,
                 "em_carencia": em_carencia,
-                "impacto": round(impacto, 2),
             }
         )
 
@@ -440,6 +533,7 @@ def gerar_fluxos(
     df: pd.DataFrame,
     selic_aa: float = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
 ) -> pd.DataFrame:
     """Gera DataFrame completo de fluxos (adequado para volumes menores / testes)."""
     records: list[dict] = []
@@ -451,6 +545,9 @@ def gerar_fluxos(
             if pd.isna(data_contr):
                 skipped += 1
                 continue
+            instituicao = str(
+                getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
+            )
             records.extend(
                 gerar_fluxos_contrato(
                     data_contr=data_contr,
@@ -459,8 +556,10 @@ def gerar_fluxos(
                     carencia=int(float(row.prazo_carencia or 0)),
                     n=int(float(row.prazo_amortizacao)),
                     contrato_id=int(row.contrato),
+                    instituicao=instituicao,
                     selic_aa=selic_aa,
                     data_impacto=data_impacto,
+                    selic_serie=selic_serie,
                 )
             )
         except (TypeError, ValueError, OverflowError):
@@ -478,6 +577,7 @@ def processar_em_lotes(
     lote: int = 2000,
     selic_aa: float = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
 ) -> dict:
     """Processa em lotes, grava CSV detalhado e acumula estatísticas (+ por agente)."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
@@ -497,7 +597,8 @@ def processar_em_lotes(
     wrote_header = False
 
     n = len(df)
-    print(f"Processando {n:,} contratos (lote={lote:,})...")
+    modo = "fator STP ContAgil" if selic_serie is not None else "SELIC composta constante"
+    print(f"Processando {n:,} contratos (lote={lote:,}, impacto={modo})...")
 
     for start in range(0, n, lote):
         chunk = df.iloc[start : start + lote]
@@ -508,6 +609,9 @@ def processar_em_lotes(
                 data_contr = pd.Timestamp(row.data_contratacao)
                 if pd.isna(data_contr):
                     continue
+                instituicao = str(
+                    getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
+                )
                 fluxos = gerar_fluxos_contrato(
                     data_contr=data_contr,
                     valor=float(row.valor_desembolsado),
@@ -515,16 +619,21 @@ def processar_em_lotes(
                     carencia=int(float(row.prazo_carencia or 0)),
                     n=int(float(row.prazo_amortizacao)),
                     contrato_id=int(row.contrato),
+                    instituicao=instituicao,
                     selic_aa=selic_aa,
                     data_impacto=data_impacto,
+                    selic_serie=selic_serie,
                 )
                 if fluxos:
                     n_contratos_ok += 1
                     records.extend(fluxos)
-                    agente = str(getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO)
-                    agent_agg[agente]["contratos"] += 1
-                    agent_agg[agente]["subsidio"] += float(sum(f["subsidio"] for f in fluxos))
-                    agent_agg[agente]["impacto"] += float(sum(f["impacto"] for f in fluxos))
+                    agent_agg[instituicao]["contratos"] += 1
+                    agent_agg[instituicao]["subsidio"] += float(
+                        sum(f["subsidio"] for f in fluxos)
+                    )
+                    agent_agg[instituicao]["impacto"] += float(
+                        sum(f["impacto_fiscal"] for f in fluxos)
+                    )
             except (TypeError, ValueError, OverflowError):
                 continue
 
@@ -534,13 +643,13 @@ def processar_em_lotes(
 
         fluxos_df = pd.DataFrame(records)
         n_parcelas += len(fluxos_df)
-        total_impacto += float(fluxos_df["impacto"].sum())
+        total_impacto += float(fluxos_df["impacto_fiscal"].sum())
         total_subsidio += float(fluxos_df["subsidio"].sum())
         total_amort += float(fluxos_df["amortizacao"].sum())
         n_em_carencia += int(fluxos_df["em_carencia"].sum())
 
         keys = pd.to_datetime(fluxos_df["data_fluxo"]).dt.to_period("M").astype(str)
-        for k, v in fluxos_df.groupby(keys, sort=False)["impacto"].sum().items():
+        for k, v in fluxos_df.groupby(keys, sort=False)["impacto_fiscal"].sum().items():
             monthly[k] = monthly.get(k, 0.0) + float(v)
 
         fluxos_df.to_csv(csv_path, mode="a", index=False, header=not wrote_header)
@@ -559,6 +668,9 @@ def processar_em_lotes(
         "total_subsidio": round(total_subsidio, 2),
         "total_impacto_fiscal_2026": round(total_impacto, 2),
         "n_agentes": len(agent_agg),
+        "metodologia_impacto": modo,
+        "taxa_selic_anual": selic_aa,
+        "taxa_selic_mensal_composta": round(taxa_mensal_composta(selic_aa), 8),
         "monthly": monthly,
         "por_agente": dict(agent_agg),
     }
@@ -603,8 +715,12 @@ def salvar_excel_resumo(
             },
             {"Indicador": "Agentes financeiros", "Valor": stats.get("n_agentes", 0)},
             {
+                "Indicador": "Metodologia impacto",
+                "Valor": stats.get("metodologia_impacto", "SELIC composta constante"),
+            },
+            {
                 "Indicador": "Arquivo detalhado",
-                "Valor": "output/fluxos_completos_corrigido.csv",
+                "Valor": str(xlsx_path.with_suffix(".csv").name),
             },
         ]
     )
@@ -658,8 +774,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument(
         "--stem",
-        default="fluxos_completos_corrigido",
+        default="fluxos_completos_final",
         help="Prefixo dos arquivos de saída.",
+    )
+    p.add_argument(
+        "--arquivo-selic",
+        type=Path,
+        default=None,
+        help="Excel STP ContAgil/Bacen (fatores acumulados). Se omitido, usa SELIC composta constante.",
     )
     return p.parse_args(argv)
 
@@ -668,6 +790,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    selic_serie: SelicSerie | None = None
+    if args.arquivo_selic is not None:
+        print(f"Lendo SELIC STP: {args.arquivo_selic}")
+        selic_serie = SelicSerie.from_excel(args.arquivo_selic)
+        print(f"  {len(selic_serie.datas):,} pontos de fator Selic carregados")
 
     if args.excel:
         print(f"Lendo Excel: {args.excel}")
@@ -691,7 +819,9 @@ def main(argv: list[str] | None = None) -> int:
     xlsx_path = OUTPUT_DIR / f"{args.stem}.xlsx"
     stats_path = OUTPUT_DIR / f"{args.stem}_stats.json"
 
-    stats = processar_em_lotes(df, csv_path, lote=args.lote)
+    stats = processar_em_lotes(
+        df, csv_path, lote=args.lote, selic_serie=selic_serie
+    )
     resumo_agente = resumo_from_agent_agg(stats.get("por_agente", {}))
     agente_csv, agente_xlsx = salvar_resumo_por_agente(resumo_agente)
 

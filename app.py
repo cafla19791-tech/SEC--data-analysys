@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT / "output"
 RESUMO_CSV = OUTPUT / "resumo_por_agente.csv"
 RESUMO_XLSX = OUTPUT / "resumo_por_agente.xlsx"
-FLUXOS_XLSX = OUTPUT / "fluxos_completos_corrigido.xlsx"
+FLUXOS_XLSX = OUTPUT / "fluxos_completos_final.xlsx"
 
 st.set_page_config(
     page_title="Resumo por Agente Financeiro",
@@ -161,8 +161,10 @@ def main() -> None:
         st.markdown(
             """
             - **Agente** = Instituição Financeira Credenciada  
-            - **Subsídio** mensal = saldo × (SELIC/12 − juros/12)  
-            - **Impacto fiscal 2026** = subsídio × (1 + SELIC/12)^(meses até 30/06/2026)  
+            - Taxas mensais compostas: `(1 + taxa_aa)^(1/12) − 1`  
+            - **Subsídio** mensal = saldo × (SELIC_m − taxa_contrato_m)  
+            - **Impacto fiscal 2026** = subsídio × (1 + SELIC_m)^(meses até 30/06/2026)  
+              (ou fator STP ContAgil, se `--arquivo-selic` for informado)  
             - Agregação por contrato → agente (não por índice de linha do CSV de parcelas)
             """
         )

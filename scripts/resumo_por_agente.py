@@ -54,8 +54,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--fluxos",
         type=Path,
-        default=OUTPUT_DIR / "fluxos_completos_corrigido.csv",
-        help="CSV detalhado de parcelas (default: output/fluxos_completos_corrigido.csv).",
+        default=OUTPUT_DIR / "fluxos_completos_final.csv",
+        help="CSV detalhado de parcelas (default: output/fluxos_completos_final.csv).",
     )
     p.add_argument("--top", type=int, default=20, help="Linhas a imprimir (default 20).")
     return p.parse_args(argv)
@@ -90,8 +90,15 @@ def main(argv: list[str] | None = None) -> int:
     # Leitura em chunks se o CSV for enorme
     parts: list[pd.DataFrame] = []
     for chunk in pd.read_csv(args.fluxos, chunksize=500_000):
-        needed = chunk[["contrato", "subsidio", "impacto"]]
-        parts.append(needed)
+        impacto_col = (
+            "impacto_fiscal"
+            if "impacto_fiscal" in chunk.columns
+            else "impacto"
+        )
+        cols = ["contrato", "subsidio", impacto_col]
+        if "Instituição Financeira" in chunk.columns:
+            cols.append("Instituição Financeira")
+        parts.append(chunk[cols])
     fluxos = pd.concat(parts, ignore_index=True)
 
     resumo = agregar_por_agente(fluxos, contratos)
