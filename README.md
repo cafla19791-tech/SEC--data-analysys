@@ -92,7 +92,7 @@ na ausência do arquivo STP local `STP-20260716182715078 (1).xlsx`:
 | Contratos | 348.864 |
 | Parcelas | 22.151.051 |
 | Subsídio nominal | R$ 23,45 bi |
-| Impacto fiscal 30/06/2026 | R$ 90,17 bi |
+| Impacto fiscal 30/06/2026 | R$ 90,14 bi |
 | Agentes | 72 |
 
 Para usar o STP ContAgil da RFB (capitalização oficial da tabela):
