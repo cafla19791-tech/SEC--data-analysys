@@ -22,6 +22,13 @@ python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --s
 python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv \
   --fluxo-diario --sem-selic-fatores --max-contratos 5
 
+# Script ContAgil (raiz): SAC + SELIC diário exato (fatores col E) + --fluxo-diario
+python3 gerar_fluxos.py --excel data/sample_operacoes_com_agente.csv \
+  --fluxo-diario --output-dir output --max-contratos 5
+# Pasta ContAgil WinPython:
+python3 gerar_fluxos.py --excel "C:\\...\\winpython\\dados" \
+  --arquivo-selic "C:\\...\\STP-....xlsx" --fluxo-diario --output-dir saida
+
 # Entrypoint ContAgil (mesmo fluxo do script RFB: col E + dia seguinte)
 python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
 python3 scripts/contagil_fluxos.py --teste-contrato0
