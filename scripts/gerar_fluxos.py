@@ -78,15 +78,14 @@ class SelicSerie:
         self.origem = origem
 
     @classmethod
-    def from_excel(cls, path: Path) -> "SelicSerie":
-        """Lê STP ContAgil: col A = data, col E = fator acumulado.
+    def from_dataframe(cls, selic: pd.DataFrame, origem: str = "dataframe") -> "SelicSerie":
+        """Monta série a partir de DataFrame ContAgil (col A=data, col E=fator).
 
         Preferência:
           1) coluna nomeada 'fator_acumulado' (cache Bacen)
           2) coluna E (índice 4) — layout ContAgil / script RFB
           3) última coluna numérica com valores > 0
         """
-        selic = pd.read_excel(path)
         datas = pd.to_datetime(selic.iloc[:, 0], dayfirst=True, errors="coerce").values.astype(
             "datetime64[ns]"
         )
@@ -106,7 +105,12 @@ class SelicSerie:
             fatores = pd.to_numeric(selic.iloc[:, -1], errors="coerce").values
 
         mask = ~pd.isna(datas) & ~pd.isna(fatores) & (fatores > 0)
-        return cls(datas[mask], fatores[mask].astype(float), origem=f"stp:{path}")
+        return cls(datas[mask], fatores[mask].astype(float), origem=origem)
+
+    @classmethod
+    def from_excel(cls, path: Path) -> "SelicSerie":
+        """Lê STP ContAgil: col A = data, col E = fator acumulado."""
+        return cls.from_dataframe(pd.read_excel(path), origem=f"stp:{path}")
 
     @classmethod
     def from_taxas_diarias(
@@ -288,6 +292,18 @@ def candidatos_arquivo_selic(explicit: Path | None = None) -> list[Path]:
     _add(DATA_DIR / "STP-20260716182715078 (1).xlsx")
     _add(DATA_DIR / "STP-20260716182715078.xlsx")
     _add(DATA_DIR / "selic_fatores_bacen.xlsx")
+    # Anexos de cloud agents / ContAgil exportados localmente
+    for base in (
+        Path("/home/workdir/attachments"),
+        Path.cwd() / "attachments",
+        ROOT / "attachments",
+    ):
+        _add(base / "STP-20260716182715078 (1).xlsx")
+        _add(base / "STP-20260716182715078.xlsx")
+        for pattern in ("STP-*.xlsx", "STP*.xlsx", "*selic*.xlsx"):
+            if base.is_dir():
+                for p in sorted(base.glob(pattern)):
+                    _add(p)
     for pattern in ("STP-*.xlsx", "STP*.xlsx", "*selic*.xlsx"):
         for p in sorted(DATA_DIR.glob(pattern)):
             _add(p)
@@ -299,6 +315,47 @@ def candidatos_arquivo_selic(explicit: Path | None = None) -> list[Path]:
 def resolver_arquivo_selic(explicit: Path | None = None) -> Path | None:
     """Retorna o primeiro STP/cache existente na lista de candidatos."""
     for path in candidatos_arquivo_selic(explicit):
+        if path.exists() and path.is_file():
+            return path
+    return None
+
+
+def candidatos_excel_operacoes(explicit: Path | None = None) -> list[Path]:
+    """Ordem de busca do Excel de operações indiretas automáticas."""
+    found: list[Path] = []
+    seen: set[str] = set()
+
+    def _add(p: Path | None) -> None:
+        if p is None:
+            return
+        key = str(p)
+        if key in seen:
+            return
+        seen.add(key)
+        found.append(p)
+
+    _add(explicit)
+    env = os.environ.get("BNDES_OPERACOES_XLSX") or os.environ.get("OPERACOES_XLSX")
+    if env:
+        _add(Path(env))
+    nome = "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx"
+    for base in (
+        Path("/home/workdir/attachments"),
+        Path.cwd() / "attachments",
+        ROOT / "attachments",
+        DATA_DIR,
+        Path.cwd(),
+    ):
+        _add(base / nome)
+        if base.is_dir():
+            for p in sorted(base.glob("operacoes_indiretas_automaticas*.xlsx")):
+                _add(p)
+    return found
+
+
+def resolver_excel_operacoes(explicit: Path | None = None) -> Path | None:
+    """Retorna o primeiro Excel de operações existente."""
+    for path in candidatos_excel_operacoes(explicit):
         if path.exists() and path.is_file():
             return path
     return None
@@ -738,13 +795,31 @@ def gerar_fluxos_contrato(
     return fluxos
 
 
+def _resolver_selic_arg(
+    selic_aa: float | SelicSerie | pd.DataFrame,
+    selic_serie: SelicSerie | None,
+) -> tuple[float, SelicSerie | None]:
+    """Compat ContAgil: gerar_fluxos(df, selic_df) ou gerar_fluxos(df, serie)."""
+    if isinstance(selic_aa, SelicSerie):
+        return TAXA_SELIC_ANUAL, selic_aa
+    if isinstance(selic_aa, pd.DataFrame):
+        # Script ContAgil: gerar_fluxos(df, df) / gerar_fluxos(contratos, selic)
+        return TAXA_SELIC_ANUAL, SelicSerie.from_dataframe(selic_aa, origem="dataframe")
+    return float(selic_aa), selic_serie
+
+
 def gerar_fluxos(
     df: pd.DataFrame,
-    selic_aa: float = TAXA_SELIC_ANUAL,
+    selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
     selic_serie: SelicSerie | None = None,
 ) -> pd.DataFrame:
-    """Gera DataFrame completo de fluxos (adequado para volumes menores / testes)."""
+    """Gera DataFrame completo de fluxos (adequado para volumes menores / testes).
+
+    Compatível com o script ContAgil:
+      df_fluxos = gerar_fluxos(df, selic)   # selic = DataFrame STP ou SelicSerie
+    """
+    selic_aa, selic_serie = _resolver_selic_arg(selic_aa, selic_serie)
     records: list[dict] = []
     skipped = 0
 
@@ -1016,7 +1091,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def carregar_selic_serie(args: argparse.Namespace) -> SelicSerie | None:
-    """Resolve série de fatores: STP explícito → auto-descoberta → Bacen opcional."""
+    """Resolve série de fatores: STP → cache → Bacen (padrão ContAgil)."""
     if args.sem_selic_fatores:
         print("Impacto fiscal: SELIC composta constante (14,5% a.a.)")
         return None
@@ -1031,17 +1106,17 @@ def carregar_selic_serie(args: argparse.Namespace) -> SelicSerie | None:
     if args.arquivo_selic is not None:
         raise FileNotFoundError(f"Arquivo SELIC não encontrado: {args.arquivo_selic}")
 
-    if args.baixar_selic:
-        serie = SelicSerie.from_bacen(cache_path=SELIC_BACEN_CACHE)
-        print(f"  {len(serie.datas):,} pontos ({serie.origem})")
-        return serie
-
-    print(
-        "⚠️  Nenhum STP ContAgil encontrado "
-        f"(procurado em ContAgil/data). Use --arquivo-selic ou --baixar-selic. "
-        "Caindo para SELIC composta constante 14,5% a.a."
+    # ContAgil exige fatores acumulados: baixa Bacen se não houver STP local.
+    # --baixar-selic permanece como alias explícito (comportamento padrão).
+    motivo = (
+        "flag --baixar-selic"
+        if args.baixar_selic
+        else "nenhum STP ContAgil encontrado (auto Bacen)"
     )
-    return None
+    print(f"Baixando fatores SELIC via Bacen SGS 11 ({motivo})...")
+    serie = SelicSerie.from_bacen(cache_path=SELIC_BACEN_CACHE)
+    print(f"  {len(serie.datas):,} pontos ({serie.origem})")
+    return serie
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1057,12 +1132,17 @@ def main(argv: list[str] | None = None) -> int:
     elif args.input:
         print(f"Lendo CSV: {args.input}")
         df = load_from_csv(args.input)
-    elif FILTERED_CSV.exists() and not args.download:
-        print(f"Lendo cache: {FILTERED_CSV}")
-        df = load_from_csv(FILTERED_CSV)
     else:
-        path = download_and_filter_csv(start=args.start, end=args.end)
-        df = load_from_csv(path)
+        excel_auto = resolver_excel_operacoes()
+        if excel_auto is not None and not args.download:
+            print(f"Lendo Excel (auto): {excel_auto}")
+            df = load_from_excel(excel_auto)
+        elif FILTERED_CSV.exists() and not args.download:
+            print(f"Lendo cache: {FILTERED_CSV}")
+            df = load_from_csv(FILTERED_CSV)
+        else:
+            path = download_and_filter_csv(start=args.start, end=args.end)
+            df = load_from_csv(path)
 
     if args.max_contratos is not None:
         df = df.head(args.max_contratos).copy()

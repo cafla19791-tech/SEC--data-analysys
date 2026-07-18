@@ -15,19 +15,23 @@ pip install -r requirements.txt
 ## Uso
 
 ```bash
-# Amostra rápida (com agentes) — recomendado para validar
+# Amostra rápida (com agentes) — fatores ContAgil via Bacen se não houver STP
 python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --stem fluxos_amostra
+
+# Entrypoint ContAgil (mesmo fluxo do script RFB: col E + dia seguinte)
+python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
+python3 scripts/contagil_fluxos.py --teste-contrato0
 
 # Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos detalhados
 python3 scripts/gerar_fluxos.py --download
 
-# Excel local do portal de transparência (header=5)
+# Excel local do portal / attachments (header=5)
 python3 scripts/gerar_fluxos.py --excel caminho/operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx
 
 # Com fatores SELIC ContAgil (STP-*.xlsx exportado da RFB/ContAgil)
 python3 scripts/gerar_fluxos.py --download --arquivo-selic "caminho/STP-20260716182715078 (1).xlsx"
 
-# Sem STP local: baixa SELIC diária do Bacen (SGS 11) e monta fatores acumulados
+# Força download Bacen (já é o padrão quando não há STP)
 python3 scripts/gerar_fluxos.py --download --baixar-selic
 
 # Só o ranking (CLI)
@@ -44,8 +48,11 @@ python3 scripts/impacto_fiscal_por_ano.py --modo coluna --fluxos output/fluxos_c
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
-`CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `data/STP*.xlsx`,
-`data/selic_fatores_bacen.xlsx`.
+`CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
+`data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen
+SGS 11 é baixado automaticamente (use `--sem-selic-fatores` para o fallback
+14,5% composto). Excel de operações também é procurado em
+`/home/workdir/attachments/` e `attachments/`.
 
 ## Versão Web
 

@@ -8,6 +8,7 @@ import pandas as pd
 from scripts.gerar_fluxos import (
     SelicSerie,
     calcular_impacto_fiscal_real,
+    gerar_fluxos,
     gerar_fluxos_contrato,
     limpar_valor,
     meses_ate_impacto,
@@ -228,3 +229,45 @@ def test_from_excel_le_fator_coluna_e(tmp_path):
     assert abs(serie.fatores[-1] - 1.8) < 1e-12
     # 15/01 + 1 dia → 16/01 (fator 1.0) → 1.8/1.0
     assert calcular_impacto_fiscal_real(100.0, datetime(2020, 1, 15), serie) == 180.0
+
+
+def test_gerar_fluxos_aceita_dataframe_selic_contagil():
+    """Compat ContAgil: gerar_fluxos(df, selic_df) com col E = fator."""
+    contratos = pd.DataFrame(
+        {
+            "data_contratacao": [pd.Timestamp("2009-02-15")],
+            "valor_desembolsado": [1200.0],
+            "juros": [6.0],  # % a.a. como no CSV BNDES
+            "prazo_carencia": [0],
+            "prazo_amortizacao": [1],
+            "agente": ["Banco Teste"],
+            "contrato": [0],
+        }
+    )
+    selic_df = pd.DataFrame(
+        {
+            "data": ["15/02/2009", "16/02/2009", "30/06/2026"],
+            "b": [0.0, 0.0, 0.0],
+            "c": [0.0, 0.0, 0.0],
+            "d": [0.01, 0.01, 0.02],
+            "fator": [1.0, 2.0, 4.0],
+        }
+    )
+    fluxos = gerar_fluxos(contratos, selic_df)
+    assert len(fluxos) == 1
+    # 15/02 + 1d → fator 2; fim fator 4 → ×2
+    assert abs(fluxos.iloc[0]["impacto_fiscal"] - round(fluxos.iloc[0]["subsidio"] * 2.0, 2)) < 0.02
+
+
+def test_from_dataframe_coluna_e():
+    selic_df = pd.DataFrame(
+        {
+            "data": ["01/01/2020", "30/06/2026"],
+            "b": [0, 0],
+            "c": [0, 0],
+            "d": [0.01, 0.01],
+            "fator": [1.0, 1.5],
+        }
+    )
+    serie = SelicSerie.from_dataframe(selic_df)
+    assert abs(serie.fatores[-1] - 1.5) < 1e-12
