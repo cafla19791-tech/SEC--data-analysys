@@ -143,3 +143,46 @@ def test_main_massa_dados_cli(tmp_path: Path):
     df = pd.read_excel(out)
     assert len(df) == 5
     assert "impacto_fiscal" in df.columns
+
+
+def test_massa_dados_inexistente_erro_claro(tmp_path: Path):
+    missing = tmp_path / "dados_inexistente"
+    try:
+        processar_pasta_dados(missing, tmp_path / "saida", _serie_sintetica())
+        assert False, "deveria falhar"
+    except FileNotFoundError as exc:
+        assert "Massa de dados não encontrada" in str(exc)
+
+
+def test_main_massa_dados_com_fluxo_diario(tmp_path: Path):
+    dados = tmp_path / "dados"
+    saida = tmp_path / "saida"
+    dados.mkdir()
+    _excel_contratos(dados / "lote_diario.xlsx")
+    selic = tmp_path / "STP-demo.xlsx"
+    pd.DataFrame(
+        {
+            "data": ["01/01/2009", "16/02/2009", "30/06/2026"],
+            "b": [0, 0, 0],
+            "c": [0, 0, 0],
+            "d": [0.01, 0.01, 0.01],
+            "fator": [1.0, 1.5, 3.0],
+        }
+    ).to_excel(selic, index=False)
+
+    rc = contagil_main(
+        [
+            "--massa-dados",
+            str(dados),
+            "--pasta-saida",
+            str(saida),
+            "--arquivo-selic",
+            str(selic),
+            "--excel-header",
+            "0",
+            "--fluxo-diario",
+        ]
+    )
+    assert rc == 0
+    assert (saida / "fluxos_lote_diario.xlsx").exists()
+    assert (saida / "fluxos_diarios_lote_diario.xlsx").exists()

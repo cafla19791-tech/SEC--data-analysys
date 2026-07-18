@@ -93,10 +93,15 @@ def teste_contrato0(serie: SelicSerie) -> float:
 def carregar_selic(arquivo_selic: Path | None, baixar: bool) -> SelicSerie | None:
     """Carrega STP ContAgil (col E) ou Bacen; espelha o script RFB."""
     # Preferência: caminho explícito → auto ContAgil/data → Bacen se baixar
-    if arquivo_selic is not None and Path(arquivo_selic).exists():
-        serie = SelicSerie.from_excel(Path(arquivo_selic))
-        print(f"SELIC ContAgil: {arquivo_selic} ({len(serie.datas):,} pontos)")
-        return serie
+    if arquivo_selic is not None:
+        caminho = Path(arquivo_selic)
+        if caminho.exists():
+            serie = SelicSerie.from_excel(caminho)
+            print(f"SELIC ContAgil: {caminho} ({len(serie.datas):,} pontos)")
+            return serie
+        # Caminho ContAgil explícito ausente: tenta auto-descoberta antes de falhar
+        print(f"⚠️ Arquivo SELIC não encontrado: {caminho}")
+        print("   Tentando auto-descoberta ContAgil/data/Bacen...")
 
     resolvido = resolver_arquivo_selic(None)
     if resolvido is not None:
@@ -104,8 +109,12 @@ def carregar_selic(arquivo_selic: Path | None, baixar: bool) -> SelicSerie | Non
         print(f"SELIC ContAgil: {resolvido} ({len(serie.datas):,} pontos)")
         return serie
 
-    if arquivo_selic is not None:
-        raise FileNotFoundError(f"Arquivo SELIC não encontrado: {arquivo_selic}")
+    if arquivo_selic is not None and not baixar:
+        raise FileNotFoundError(
+            f"Arquivo SELIC não encontrado: {arquivo_selic}\n"
+            "Coloque o STP ContAgil (coluna E = fator) no caminho indicado "
+            "ou use --baixar-selic para Bacen SGS 11."
+        )
 
     return carregar_selic_serie(
         argparse.Namespace(
@@ -121,17 +130,29 @@ def processar_arquivo(
     pasta_saida: Path,
     selic_serie: SelicSerie | None,
     header: int | None = None,
+    fluxo_diario: bool = False,
 ) -> Path:
     """Gera fluxos de um Excel e grava fluxos_<basename>.xlsx (script ContAgil)."""
     print(f"Processando: {arquivo}")
     df = load_from_excel(arquivo, header=header)
-    df_fluxos = gerar_fluxos(df, selic_serie if selic_serie is not None else 0.145)
     pasta_saida.mkdir(parents=True, exist_ok=True)
     nome_saida = pasta_saida / f"fluxos_{arquivo.name}"
     if nome_saida.suffix.lower() != ".xlsx":
         nome_saida = nome_saida.with_suffix(".xlsx")
+    saida_diario = (
+        pasta_saida / f"fluxos_diarios_{arquivo.stem}.xlsx" if fluxo_diario else None
+    )
+    selic_arg = selic_serie if selic_serie is not None else 0.145
+    df_fluxos = gerar_fluxos(
+        df,
+        selic_arg,
+        fluxo_diario=fluxo_diario,
+        saida_diario=saida_diario,
+    )
     df_fluxos.to_excel(nome_saida, index=False)
     print(f"  → Salvo: {nome_saida} ({len(df_fluxos):,} parcelas)")
+    if saida_diario is not None and Path(saida_diario).exists():
+        print(f"  → Diário: {saida_diario}")
     return nome_saida
 
 
@@ -140,8 +161,18 @@ def processar_pasta_dados(
     pasta_saida: Path,
     selic_serie: SelicSerie | None,
     header: int | None = None,
+    fluxo_diario: bool = False,
 ) -> list[Path]:
     """Processa todos os *.xlsx do diretório de dados (loop ContAgil)."""
+    pasta_dados = Path(pasta_dados)
+    if not pasta_dados.exists():
+        raise FileNotFoundError(
+            f"Massa de dados não encontrada: {pasta_dados}\n"
+            "Use --massa-dados apontando para a pasta WinPython/dados do ContAgil."
+        )
+    if not pasta_dados.is_dir():
+        raise NotADirectoryError(f"--massa-dados deve ser uma pasta: {pasta_dados}")
+
     arquivos = listar_excels(pasta_dados)
     if not arquivos:
         raise FileNotFoundError(f"Nenhum .xlsx em {pasta_dados}")
@@ -154,7 +185,15 @@ def processar_pasta_dados(
             print(f"Ignorando série SELIC: {arquivo.name}")
             continue
         try:
-            saidas.append(processar_arquivo(arquivo, pasta_saida, selic_serie, header))
+            saidas.append(
+                processar_arquivo(
+                    arquivo,
+                    pasta_saida,
+                    selic_serie,
+                    header=header,
+                    fluxo_diario=fluxo_diario,
+                )
+            )
         except Exception as exc:  # noqa: BLE001 — continua lote ContAgil
             print(f"  Ignorado ({exc})")
     return saidas
@@ -285,8 +324,14 @@ def main(argv: list[str] | None = None) -> int:
 
     # Modo ContAgil: todos os arquivos do diretório de dados
     if pasta_dados is not None and args.excel is None and args.input is None:
+        print(f"Massa de dados: {pasta_dados}")
+        print(f"Pasta de saída: {pasta_saida}")
         saidas = processar_pasta_dados(
-            pasta_dados, pasta_saida, serie, header=args.excel_header
+            pasta_dados,
+            pasta_saida,
+            serie,
+            header=args.excel_header,
+            fluxo_diario=args.fluxo_diario,
         )
         if not saidas:
             print("Nenhum arquivo processado.", file=sys.stderr)

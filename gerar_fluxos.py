@@ -387,21 +387,52 @@ def _ler_operacoes(path: Path) -> pd.DataFrame:
             return pd.read_excel(path)
 
 
+CONTAGIL_WINPYTHON = Path(
+    r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
+)
+CONTAGIL_PASTA_DADOS = CONTAGIL_WINPYTHON / "dados"
+CONTAGIL_PASTA_SAIDA = CONTAGIL_WINPYTHON / "saida"
+CONTAGIL_SELIC_DEFAULT = CONTAGIL_WINPYTHON / "STP-20260716182715078 (1).xlsx"
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="ContAgil Fluxos with SELIC")
     parser.add_argument(
         "--excel",
         type=str,
-        required=True,
+        default=None,
         help="Arquivo .xlsx, pasta com .xlsx, ou glob",
     )
-    parser.add_argument("--arquivo-selic", type=str, help="SELIC STP (col A=data, col E=fator)")
+    parser.add_argument(
+        "--massa-dados",
+        "--pasta-dados",
+        dest="massa_dados",
+        type=str,
+        default=None,
+        help=(
+            "Massa ContAgil (pasta com vários .xlsx). "
+            "Equivalente a --excel apontando para a pasta."
+        ),
+    )
+    parser.add_argument(
+        "--arquivo-selic",
+        type=str,
+        default=None,
+        help="SELIC STP (col A=data, col E=fator)",
+    )
     parser.add_argument(
         "--fluxo-diario",
         action="store_true",
         help="Gera tabela detalhada dia a dia (fluxos_diarios_detalhados.xlsx)",
     )
-    parser.add_argument("--output-dir", type=str, default=".")
+    parser.add_argument(
+        "--pasta-saida",
+        "--output-dir",
+        dest="output_dir",
+        type=str,
+        default=None,
+        help="Pasta de saída ContAgil (alias: --output-dir).",
+    )
     parser.add_argument("--max-contratos", type=int, default=None)
     parser.add_argument(
         "--skip-existing",
@@ -412,14 +443,41 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _resolver_entrada_e_saida(args: argparse.Namespace) -> tuple[str, str]:
+    """Resolve massa ContAgil / excel e pasta de saída com defaults WinPython."""
+    entrada = args.excel or args.massa_dados
+    if entrada is None and CONTAGIL_PASTA_DADOS.exists():
+        entrada = str(CONTAGIL_PASTA_DADOS)
+    if entrada is None:
+        raise SystemExit(
+            "Informe --massa-dados/--excel (pasta ou arquivo ContAgil)."
+        )
+
+    saida = args.output_dir
+    if saida is None:
+        if CONTAGIL_PASTA_SAIDA.exists():
+            saida = str(CONTAGIL_PASTA_SAIDA)
+        else:
+            saida = "saida"
+    return entrada, saida
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    selic_df = load_selic(args.arquivo_selic)
-    os.makedirs(args.output_dir, exist_ok=True)
+    entrada, pasta_saida = _resolver_entrada_e_saida(args)
 
-    arquivos = _listar_entradas(args.excel)
+    arquivo_selic = args.arquivo_selic
+    if arquivo_selic is None and CONTAGIL_SELIC_DEFAULT.exists():
+        arquivo_selic = str(CONTAGIL_SELIC_DEFAULT)
+
+    selic_df = load_selic(arquivo_selic)
+    os.makedirs(pasta_saida, exist_ok=True)
+    print(f"Massa/entrada: {entrada}")
+    print(f"Pasta de saída: {pasta_saida}")
+
+    arquivos = _listar_entradas(entrada)
     if not arquivos:
-        print(f"⚠️ Nenhum .xlsx/.csv em: {args.excel}")
+        print(f"⚠️ Nenhum .xlsx/.csv em: {entrada}")
         return 1
 
     saidas: list[Path] = []
@@ -430,7 +488,7 @@ def main(argv: list[str] | None = None) -> int:
             continue
 
         out_name = f"{args.prefix}fluxos_{entrada.stem}.xlsx"
-        out_path = Path(args.output_dir) / out_name
+        out_path = Path(pasta_saida) / out_name
         if args.skip_existing and out_path.exists():
             print(f"⏭️  Já existe, pulando: {out_path}")
             continue
@@ -443,7 +501,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  Erro carregando arquivo: {exc}")
             continue
 
-        diario_path = Path(args.output_dir) / (
+        diario_path = Path(pasta_saida) / (
             f"{args.prefix}{FLUXOS_DIARIOS_NOME}"
             if len(arquivos) == 1
             else f"{args.prefix}fluxos_diarios_{entrada.stem}.xlsx"
@@ -464,7 +522,7 @@ def main(argv: list[str] | None = None) -> int:
         print("Nenhum arquivo processado.")
         return 1
 
-    print(f"✅ Concluído! {len(saidas)} arquivo(s) em {args.output_dir}")
+    print(f"✅ Concluído! {len(saidas)} arquivo(s) em {pasta_saida}")
     return 0
 
 

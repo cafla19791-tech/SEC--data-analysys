@@ -25,9 +25,11 @@ python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv \
 # Script ContAgil (raiz): SAC + SELIC diário exato (fatores col E) + --fluxo-diario
 python3 gerar_fluxos.py --excel data/sample_operacoes_com_agente.csv \
   --fluxo-diario --output-dir output --max-contratos 5
-# Pasta ContAgil WinPython:
-python3 gerar_fluxos.py --excel "C:\\...\\winpython\\dados" \
-  --arquivo-selic "C:\\...\\STP-....xlsx" --fluxo-diario --output-dir saida
+# Mesmo CLI ContAgil WinPython (--massa-dados / --pasta-saida):
+python3 gerar_fluxos.py \
+  --massa-dados "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados" \
+  --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
+  --arquivo-selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\STP-20260716182715078 (1).xlsx"
 
 # Entrypoint ContAgil (mesmo fluxo do script RFB: col E + dia seguinte)
 python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
@@ -38,6 +40,9 @@ python3 scripts/contagil_fluxos.py --massa-dados "C:\Arquivos de Programas RFB\C
   --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
   --arquivo-selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\STP-20260716182715078 (1).xlsx"
 # (--massa-dados e --pasta-dados são equivalentes; sem args: usa esses caminhos se existirem)
+# Com tabela dia a dia por arquivo da massa:
+python3 scripts/contagil_fluxos.py --massa-dados "...\dados" --pasta-saida "...\saida" \
+  --arquivo-selic "...\STP-....xlsx" --fluxo-diario
 
 # Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos detalhados
 python3 scripts/gerar_fluxos.py --download

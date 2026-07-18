@@ -30,6 +30,24 @@ def test_parse_fluxo_diario_flag():
     assert args.output_dir == "out"
 
 
+def test_parse_massa_dados_contagil_cli():
+    """CLI ContAgil WinPython: --massa-dados / --pasta-saida / --arquivo-selic."""
+    args = parse_args(
+        [
+            "--massa-dados",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados",
+            "--pasta-saida",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
+            "--arquivo-selic",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\STP-20260716182715078 (1).xlsx",
+        ]
+    )
+    assert args.massa_dados.endswith("dados")
+    assert args.output_dir.endswith("saida")
+    assert args.arquivo_selic.endswith("STP-20260716182715078 (1).xlsx")
+    assert args.excel is None
+
+
 def test_calcular_impacto_usa_dia_seguinte():
     selic = pd.DataFrame(
         {
