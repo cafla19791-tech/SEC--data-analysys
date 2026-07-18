@@ -217,6 +217,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Força download Bacen SGS 11 se não houver STP local.",
     )
+    p.add_argument(
+        "--fluxo-diario",
+        action="store_true",
+        help="Gera tabela detalhada dia a dia (fluxos_diarios_detalhados.xlsx).",
+    )
     return p.parse_args(argv)
 
 
@@ -257,6 +262,8 @@ def main(argv: list[str] | None = None) -> int:
         print("✅ Concluído!")
         return 0
 
+    pasta_dados, pasta_saida = _resolver_pastas(args)
+
     # Pipeline completo (lotes + resumo) via gerar_fluxos.main
     if args.download:
         cli = ["--stem", args.stem, "--download"]
@@ -268,9 +275,13 @@ def main(argv: list[str] | None = None) -> int:
             cli.append("--baixar-selic")
         if args.max_contratos is not None:
             cli += ["--max-contratos", str(args.max_contratos)]
+        if args.fluxo_diario:
+            cli.append("--fluxo-diario")
+            cli += [
+                "--saida-diario",
+                str(pasta_saida / "fluxos_diarios_detalhados.xlsx"),
+            ]
         return gerar_fluxos_main(cli)
-
-    pasta_dados, pasta_saida = _resolver_pastas(args)
 
     # Modo ContAgil: todos os arquivos do diretório de dados
     if pasta_dados is not None and args.excel is None and args.input is None:
@@ -315,12 +326,22 @@ def main(argv: list[str] | None = None) -> int:
         df["contrato"] = df.index
 
     # Equivalente ContAgil corrigido: df_fluxos = gerar_fluxos(df, selic)
-    if serie is not None:
-        df_fluxos = gerar_fluxos(df, serie)
-    else:
-        df_fluxos = gerar_fluxos(df)
-
     pasta_saida.mkdir(parents=True, exist_ok=True)
+    saida_diario = pasta_saida / "fluxos_diarios_detalhados.xlsx"
+    if serie is not None:
+        df_fluxos = gerar_fluxos(
+            df,
+            serie,
+            fluxo_diario=args.fluxo_diario,
+            saida_diario=saida_diario if args.fluxo_diario else None,
+        )
+    else:
+        df_fluxos = gerar_fluxos(
+            df,
+            fluxo_diario=args.fluxo_diario,
+            saida_diario=saida_diario if args.fluxo_diario else None,
+        )
+
     if out.suffix.lower() != ".xlsx":
         out = out.with_suffix(".xlsx")
     df_fluxos.to_excel(out, index=False)

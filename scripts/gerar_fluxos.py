@@ -22,6 +22,7 @@ Entrada:
 Saídas:
   - output/fluxos_completos_final.csv/.xlsx   (detalhe por parcela + colunas extras)
   - output/resumo_por_agente.csv|.xlsx       (agregado por instituição financeira)
+  - output/fluxos_diarios_detalhados.xlsx    (opcional: --fluxo-diario, dia a dia)
 """
 
 from __future__ import annotations
@@ -63,6 +64,11 @@ BCB_SELIC_DIARIA_URL = (
 def taxa_mensal_composta(taxa_aa: float) -> float:
     """Converte taxa anual em taxa mensal composta: (1+r)^(1/12)-1."""
     return (1.0 + float(taxa_aa)) ** (1.0 / 12.0) - 1.0
+
+
+def taxa_diaria_composta(taxa_aa: float) -> float:
+    """Converte taxa anual em taxa diária composta (calendário): (1+r)^(1/365)-1."""
+    return (1.0 + float(taxa_aa)) ** (1.0 / 365.0) - 1.0
 
 
 def taxa_contrato_anual(custo_financeiro: str | None, juros_pct: float) -> float:
@@ -867,6 +873,123 @@ def gerar_fluxos_contrato(
     return fluxos
 
 
+def gerar_fluxos_diarios_contrato(
+    data_contr: pd.Timestamp,
+    valor: float,
+    taxa_juros_aa: float,
+    carencia: int,
+    n: int,
+    contrato_id: int,
+    instituicao: str = AGENTE_NAO_INFORMADO,
+    selic_aa: float = TAXA_SELIC_ANUAL,
+    data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
+) -> list[dict]:
+    """Expande o cronograma mensal em linhas dia a dia (entre parcelas ContAgil).
+
+    Em cada período mensal (data da parcela → véspera da próxima):
+      - saldo fiscal constante (SAC ContAgil)
+      - amortização só no dia da parcela
+      - subsídio diário = saldo × (SELIC_d − taxa_contrato_d)
+      - impacto_fiscal capitalizado a partir do dia (+1 dia / fatores)
+    """
+    mensais = gerar_fluxos_contrato(
+        data_contr=data_contr,
+        valor=valor,
+        taxa_juros_aa=taxa_juros_aa,
+        carencia=carencia,
+        n=n,
+        contrato_id=contrato_id,
+        instituicao=instituicao,
+        selic_aa=selic_aa,
+        data_impacto=data_impacto,
+        selic_serie=selic_serie,
+    )
+    if not mensais:
+        return []
+
+    taxa_contrato_diaria = taxa_diaria_composta(taxa_juros_aa)
+    taxa_selic_diaria = taxa_diaria_composta(selic_aa)
+    taxa_contrato_mensal = taxa_mensal_composta(taxa_juros_aa)
+    taxa_selic_mensal = taxa_mensal_composta(selic_aa)
+    diarios: list[dict] = []
+
+    for i, parcela in enumerate(mensais):
+        data_ini = pd.Timestamp(parcela["data_fluxo"])
+        if i + 1 < len(mensais):
+            data_fim = pd.Timestamp(mensais[i + 1]["data_fluxo"]) - timedelta(days=1)
+        else:
+            data_fim = data_ini + relativedelta(months=1) - timedelta(days=1)
+
+        saldo = float(parcela["saldo"])
+        em_carencia = bool(parcela["em_carencia"])
+        amort_parcela = float(parcela["amortizacao"])
+        spread = float(parcela["spread"])
+        mes = int(parcela["mes"])
+
+        dia = data_ini
+        while dia <= data_fim:
+            amort = amort_parcela if dia == data_ini else 0.0
+            subsidio = saldo * (taxa_selic_diaria - taxa_contrato_diaria)
+
+            if selic_serie is not None:
+                impacto = selic_serie.capitalizar(
+                    subsidio, dia.to_pydatetime(), data_impacto
+                )
+            else:
+                meses = meses_ate_impacto(dia.to_pydatetime(), data_impacto)
+                impacto = round(subsidio * ((1.0 + taxa_selic_mensal) ** meses), 2)
+
+            diarios.append(
+                {
+                    "contrato": contrato_id,
+                    "Instituição Financeira": instituicao,
+                    "mes": mes,
+                    "data_fluxo": dia.date(),
+                    "saldo": round(saldo, 2),
+                    "amortizacao": round(amort, 2),
+                    "taxa_selic_diaria": round(taxa_selic_diaria, 10),
+                    "taxa_contrato_diaria": round(taxa_contrato_diaria, 10),
+                    "taxa_selic_mensal": round(taxa_selic_mensal, 8),
+                    "taxa_contrato_mensal": round(taxa_contrato_mensal, 8),
+                    "spread": round(spread, 6),
+                    "subsidio": round(subsidio, 4),
+                    "impacto_fiscal": impacto,
+                    "em_carencia": em_carencia,
+                    "dia_parcela": dia == data_ini,
+                }
+            )
+            dia += timedelta(days=1)
+
+    return diarios
+
+
+def salvar_fluxos_diarios(
+    fluxos_diarios: list[dict],
+    path: Path | None = None,
+) -> Path:
+    """Grava a tabela dia a dia em Excel (e CSV espelho se muito grande)."""
+    out = Path(path) if path is not None else OUTPUT_DIR / "fluxos_diarios_detalhados.xlsx"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    df = pd.DataFrame(fluxos_diarios)
+
+    # Limite prático do Excel (~1.048.576 linhas)
+    excel_limit = 1_000_000
+    if len(df) > excel_limit:
+        csv_path = out.with_suffix(".csv")
+        df.to_csv(csv_path, index=False)
+        amostra = df.head(excel_limit)
+        amostra.to_excel(out, index=False)
+        print(
+            f"⚠️  Fluxos diários: {len(df):,} linhas > limite Excel; "
+            f"CSV completo em {csv_path} e amostra Excel em {out}"
+        )
+    else:
+        df.to_excel(out, index=False)
+        print(f"✅ Fluxos diários: {out} ({len(df):,} linhas)")
+    return out
+
+
 def _resolver_selic_arg(
     selic_aa: float | SelicSerie | pd.DataFrame,
     selic_serie: SelicSerie | None,
@@ -885,14 +1008,20 @@ def gerar_fluxos(
     selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
     selic_serie: SelicSerie | None = None,
+    fluxo_diario: bool = False,
+    saida_diario: Path | str | None = None,
 ) -> pd.DataFrame:
     """Gera DataFrame completo de fluxos (adequado para volumes menores / testes).
 
     Compatível com o script ContAgil:
       df_fluxos = gerar_fluxos(df, selic)   # selic = DataFrame STP ou SelicSerie
+
+    Com fluxo_diario=True, também gera a tabela dia a dia em
+    output/fluxos_diarios_detalhados.xlsx (ou saida_diario).
     """
     selic_aa, selic_serie = _resolver_selic_arg(selic_aa, selic_serie)
     records: list[dict] = []
+    fluxos_diarios: list[dict] = []
     skipped = 0
 
     for row in df.itertuples(index=False):
@@ -905,26 +1034,32 @@ def gerar_fluxos(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
             )
             custo = getattr(row, "custo_financeiro", "")
-            records.extend(
-                gerar_fluxos_contrato(
-                    data_contr=data_contr,
-                    valor=float(row.valor_desembolsado),
-                    taxa_juros_aa=taxa_contrato_anual(custo, float(row.juros)),
-                    carencia=int(float(row.prazo_carencia or 0)),
-                    n=int(float(row.prazo_amortizacao)),
-                    contrato_id=int(row.contrato),
-                    instituicao=instituicao,
-                    selic_aa=selic_aa,
-                    data_impacto=data_impacto,
-                    selic_serie=selic_serie,
-                )
+            kwargs = dict(
+                data_contr=data_contr,
+                valor=float(row.valor_desembolsado),
+                taxa_juros_aa=taxa_contrato_anual(custo, float(row.juros)),
+                carencia=int(float(row.prazo_carencia or 0)),
+                n=int(float(row.prazo_amortizacao)),
+                contrato_id=int(row.contrato),
+                instituicao=instituicao,
+                selic_aa=selic_aa,
+                data_impacto=data_impacto,
+                selic_serie=selic_serie,
             )
+            records.extend(gerar_fluxos_contrato(**kwargs))
+            if fluxo_diario:
+                fluxos_diarios.extend(gerar_fluxos_diarios_contrato(**kwargs))
         except (TypeError, ValueError, OverflowError):
             skipped += 1
             continue
 
     if skipped:
         print(f"Contratos ignorados por erro: {skipped:,}")
+
+    if fluxo_diario:
+        path = Path(saida_diario) if saida_diario is not None else None
+        salvar_fluxos_diarios(fluxos_diarios, path)
+
     return pd.DataFrame(records)
 
 
@@ -935,11 +1070,26 @@ def processar_em_lotes(
     selic_aa: float = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
     selic_serie: SelicSerie | None = None,
+    fluxo_diario: bool = False,
+    saida_diario: Path | None = None,
 ) -> dict:
     """Processa em lotes, grava CSV detalhado e acumula estatísticas (+ por agente)."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     if csv_path.exists():
         csv_path.unlink()
+
+    diario_xlsx = (
+        Path(saida_diario)
+        if saida_diario is not None
+        else OUTPUT_DIR / "fluxos_diarios_detalhados.xlsx"
+    )
+    diario_csv = diario_xlsx.with_suffix(".csv")
+    if fluxo_diario:
+        diario_csv.parent.mkdir(parents=True, exist_ok=True)
+        if diario_csv.exists():
+            diario_csv.unlink()
+        if diario_xlsx.exists():
+            diario_xlsx.unlink()
 
     monthly: dict[str, float] = {}
     agent_agg: dict[str, dict[str, float]] = defaultdict(
@@ -951,7 +1101,9 @@ def processar_em_lotes(
     n_parcelas = 0
     n_contratos_ok = 0
     n_em_carencia = 0
+    n_dias = 0
     wrote_header = False
+    wrote_diario_header = False
 
     n = len(df)
     if selic_serie is not None:
@@ -963,6 +1115,7 @@ def processar_em_lotes(
     for start in range(0, n, lote):
         chunk = df.iloc[start : start + lote]
         records: list[dict] = []
+        diarios_lote: list[dict] = []
 
         for row in chunk.itertuples(index=False):
             try:
@@ -973,7 +1126,7 @@ def processar_em_lotes(
                     getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
                 )
                 custo = getattr(row, "custo_financeiro", "")
-                fluxos = gerar_fluxos_contrato(
+                kwargs = dict(
                     data_contr=data_contr,
                     valor=float(row.valor_desembolsado),
                     taxa_juros_aa=taxa_contrato_anual(custo, float(row.juros)),
@@ -985,6 +1138,7 @@ def processar_em_lotes(
                     data_impacto=data_impacto,
                     selic_serie=selic_serie,
                 )
+                fluxos = gerar_fluxos_contrato(**kwargs)
                 if fluxos:
                     n_contratos_ok += 1
                     records.extend(fluxos)
@@ -995,8 +1149,17 @@ def processar_em_lotes(
                     agent_agg[instituicao]["impacto"] += float(
                         sum(f["impacto_fiscal"] for f in fluxos)
                     )
+                    if fluxo_diario:
+                        diarios_lote.extend(gerar_fluxos_diarios_contrato(**kwargs))
             except (TypeError, ValueError, OverflowError):
                 continue
+
+        if fluxo_diario and diarios_lote:
+            pd.DataFrame(diarios_lote).to_csv(
+                diario_csv, mode="a", index=False, header=not wrote_diario_header
+            )
+            wrote_diario_header = True
+            n_dias += len(diarios_lote)
 
         if not records:
             print(f"  lote {start:,}-{start + len(chunk):,}: 0 fluxos")
@@ -1020,11 +1183,19 @@ def processar_em_lotes(
             f"(acum {n_parcelas:,})"
         )
 
+    diario_path: str | None = None
+    if fluxo_diario and wrote_diario_header and diario_csv.exists():
+        # Monta o Excel a partir do CSV acumulado (lista de dicts → DataFrame)
+        df_diario = pd.read_csv(diario_csv)
+        salvar_fluxos_diarios(df_diario.to_dict(orient="records"), diario_xlsx)
+        diario_path = str(diario_xlsx)
+
     return {
         "n_contratos_entrada": n,
         "n_contratos_ok": n_contratos_ok,
         "n_parcelas": n_parcelas,
         "n_parcelas_em_carencia": n_em_carencia,
+        "n_dias": n_dias,
         "total_amortizacao": round(total_amort, 2),
         "total_subsidio": round(total_subsidio, 2),
         "total_impacto_fiscal_2026": round(total_impacto, 2),
@@ -1032,6 +1203,7 @@ def processar_em_lotes(
         "metodologia_impacto": modo,
         "taxa_selic_anual": selic_aa,
         "taxa_selic_mensal_composta": round(taxa_mensal_composta(selic_aa), 8),
+        "fluxos_diarios": diario_path,
         "monthly": monthly,
         "por_agente": dict(agent_agg),
     }
@@ -1161,6 +1333,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Força impacto por SELIC composta constante (ignora STP/Bacen).",
     )
+    p.add_argument(
+        "--fluxo-diario",
+        action="store_true",
+        help="Gera tabela detalhada dia a dia (output/fluxos_diarios_detalhados.xlsx).",
+    )
+    p.add_argument(
+        "--saida-diario",
+        type=Path,
+        default=None,
+        help="Caminho do Excel dia a dia (default: output/fluxos_diarios_detalhados.xlsx).",
+    )
     return p.parse_args(argv)
 
 
@@ -1226,9 +1409,15 @@ def main(argv: list[str] | None = None) -> int:
     csv_path = OUTPUT_DIR / f"{args.stem}.csv"
     xlsx_path = OUTPUT_DIR / f"{args.stem}.xlsx"
     stats_path = OUTPUT_DIR / f"{args.stem}_stats.json"
+    saida_diario = args.saida_diario or (OUTPUT_DIR / "fluxos_diarios_detalhados.xlsx")
 
     stats = processar_em_lotes(
-        df, csv_path, lote=args.lote, selic_serie=selic_serie
+        df,
+        csv_path,
+        lote=args.lote,
+        selic_serie=selic_serie,
+        fluxo_diario=args.fluxo_diario,
+        saida_diario=saida_diario if args.fluxo_diario else None,
     )
     resumo_agente = resumo_from_agent_agg(stats.get("por_agente", {}))
     agente_csv, agente_xlsx = salvar_resumo_por_agente(resumo_agente)
@@ -1251,6 +1440,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"✅ Resumo agente: {agente_csv}")
     print(f"✅ Resumo agente: {agente_xlsx}")
     print(f"✅ Stats JSON:    {stats_path}")
+    if args.fluxo_diario and stats.get("fluxos_diarios"):
+        print(f"✅ Fluxos diários: {stats['fluxos_diarios']}")
     return 0
 
 

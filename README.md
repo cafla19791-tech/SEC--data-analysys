@@ -18,6 +18,10 @@ pip install -r requirements.txt
 # Amostra rápida (com agentes) — fatores ContAgil via Bacen se não houver STP
 python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --stem fluxos_amostra
 
+# Tabela detalhada dia a dia (além das parcelas mensais)
+python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv \
+  --fluxo-diario --sem-selic-fatores --max-contratos 5
+
 # Entrypoint ContAgil (mesmo fluxo do script RFB: col E + dia seguinte)
 python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
 python3 scripts/contagil_fluxos.py --teste-contrato0
@@ -76,10 +80,14 @@ streamlit run app.py
 | `output/resumo_por_agente.csv` | Ranking: Qtd Contratos, Total Subsídio, Impacto Fiscal 2026 |
 | `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
 | `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto ContAgil agregados por ano de pagamento |
+| `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
 `data_fluxo`, `saldo`, `amortizacao`, `taxa_selic_mensal`,
 `taxa_contrato_mensal`, `spread`, `subsidio`, `impacto_fiscal`, `em_carencia`.
+
+Colunas do Excel diário: as mesmas + `taxa_selic_diaria`,
+`taxa_contrato_diaria`, `dia_parcela` (amortização só nesse dia).
 
 ## Metodologia
 

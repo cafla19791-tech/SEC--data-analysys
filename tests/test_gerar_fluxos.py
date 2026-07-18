@@ -10,10 +10,13 @@ from scripts.gerar_fluxos import (
     calcular_impacto_fiscal_real,
     gerar_fluxos,
     gerar_fluxos_contrato,
+    gerar_fluxos_diarios_contrato,
     limpar_valor,
     meses_ate_impacto,
+    parse_args,
     parse_datas,
     taxa_contrato_anual,
+    taxa_diaria_composta,
     taxa_mensal_composta,
 )
 
@@ -297,3 +300,65 @@ def test_gerar_fluxos_aplica_tjlp():
     fluxos = gerar_fluxos(contratos)
     esperado = taxa_mensal_composta(0.08)
     assert abs(fluxos.iloc[0]["taxa_contrato_mensal"] - esperado) < 1e-8
+
+
+def test_taxa_diaria_composta():
+    d = taxa_diaria_composta(0.145)
+    assert abs(d - ((1.145) ** (1 / 365) - 1)) < 1e-15
+    assert d < taxa_mensal_composta(0.145)
+
+
+def test_fluxo_diario_flag_no_parser():
+    args = parse_args(["--fluxo-diario", "--sem-selic-fatores", "--input", "x.csv"])
+    assert args.fluxo_diario is True
+    args_off = parse_args(["--sem-selic-fatores", "--input", "x.csv"])
+    assert args_off.fluxo_diario is False
+
+
+def test_gerar_fluxos_diarios_contrato_dia_a_dia():
+    """Entre parcelas ContAgil (dia 15): uma linha por dia; amort só no dia da parcela."""
+    diarios = gerar_fluxos_diarios_contrato(
+        data_contr=pd.Timestamp("2009-01-31"),
+        valor=300.0,
+        taxa_juros_aa=0.06,
+        carencia=1,
+        n=2,
+        contrato_id=7,
+        instituicao="BANCO DIARIO",
+    )
+    # 3 meses (1 carência + 2 amort) ≈ ~90 dias
+    assert len(diarios) >= 89
+    assert len(diarios) <= 93
+    assert diarios[0]["data_fluxo"].isoformat() == "2009-01-15"
+    assert diarios[0]["dia_parcela"] is True
+    assert diarios[0]["amortizacao"] == 0.0  # carência
+    assert diarios[1]["dia_parcela"] is False
+    assert diarios[1]["amortizacao"] == 0.0
+    # 2ª parcela (mês 2) — dia 15/02 — sai da carência
+    dia_parcela2 = [d for d in diarios if d["mes"] == 2 and d["dia_parcela"]]
+    assert len(dia_parcela2) == 1
+    assert dia_parcela2[0]["amortizacao"] == 150.0
+    assert all("taxa_selic_diaria" in d for d in diarios)
+    assert all(d["Instituição Financeira"] == "BANCO DIARIO" for d in diarios)
+
+
+def test_gerar_fluxos_escreve_excel_diario(tmp_path):
+    contratos = pd.DataFrame(
+        {
+            "data_contratacao": [pd.Timestamp("2010-01-15")],
+            "valor_desembolsado": [1200.0],
+            "juros": [6.0],
+            "prazo_carencia": [0],
+            "prazo_amortizacao": [2],
+            "agente": ["Banco X"],
+            "contrato": [0],
+        }
+    )
+    out = tmp_path / "fluxos_diarios_detalhados.xlsx"
+    mensal = gerar_fluxos(contratos, fluxo_diario=True, saida_diario=out)
+    assert len(mensal) == 2
+    assert out.exists()
+    diarios = pd.read_excel(out)
+    assert len(diarios) >= 59  # ~2 meses
+    assert "taxa_selic_diaria" in diarios.columns
+    assert "subsidio" in diarios.columns
