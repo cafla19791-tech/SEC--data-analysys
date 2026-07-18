@@ -41,18 +41,18 @@ from dateutil.relativedelta import relativedelta
 
 # ===================== CONFIGURAÇÕES =====================
 TAXA_SELIC_ANUAL = 0.145  # 14,5% a.a.
+TJLP_TLP_BASE = 0.06  # ContAgil: TJLP/TLP = 6% + juros do contrato
 DATA_IMPACTO = datetime(2026, 6, 30)
 AGENTE_NAO_INFORMADO = "Não informado"
 
-# Caminho ContAgil Windows (quando o STP local foi exportado pela RFB)
-CONTAGIL_SELIC_DEFAULT = Path(
+# Caminhos ContAgil Windows (WinPython / RFB)
+CONTAGIL_WINPYTHON = Path(
     r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
-    r"\STP-20260716182715078 (1).xlsx"
 )
-CONTAGIL_SELIC_ALT = Path(
-    r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
-    r"\STP-20260716182715078.xlsx"
-)
+CONTAGIL_SELIC_DEFAULT = CONTAGIL_WINPYTHON / "STP-20260716182715078 (1).xlsx"
+CONTAGIL_SELIC_ALT = CONTAGIL_WINPYTHON / "STP-20260716182715078.xlsx"
+CONTAGIL_PASTA_DADOS = CONTAGIL_WINPYTHON / "dados"
+CONTAGIL_PASTA_SAIDA = CONTAGIL_WINPYTHON / "saida"
 
 BCB_SELIC_DIARIA_URL = (
     "https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados"
@@ -63,6 +63,19 @@ BCB_SELIC_DIARIA_URL = (
 def taxa_mensal_composta(taxa_aa: float) -> float:
     """Converte taxa anual em taxa mensal composta: (1+r)^(1/12)-1."""
     return (1.0 + float(taxa_aa)) ** (1.0 / 12.0) - 1.0
+
+
+def taxa_contrato_anual(custo_financeiro: str | None, juros_pct: float) -> float:
+    """Taxa anual do contrato (ContAgil).
+
+    - TJLP / TLP: 6% + juros (%) do contrato
+    - demais (ex.: TAXA FIXA): só o juros do contrato
+    """
+    juros = float(juros_pct) / 100.0
+    custo = str(custo_financeiro or "").upper()
+    if "TJLP" in custo or "TLP" in custo:
+        return TJLP_TLP_BASE + juros
+    return juros
 
 
 TAXA_SELIC_MENSAL = taxa_mensal_composta(TAXA_SELIC_ANUAL)
@@ -397,6 +410,8 @@ EXCEL_COLUMNS = {
     "Prazo - Amortização (meses)": "prazo_amortizacao",
     "Instituição Financeira Credenciada": "agente",
     "Instituicao Financeira Credenciada": "agente",
+    "Custo financeiro": "custo_financeiro",
+    "Custo Financeiro": "custo_financeiro",
 }
 
 CSV_COLUMNS = {
@@ -406,6 +421,7 @@ CSV_COLUMNS = {
     "prazo_carencia_meses": "prazo_carencia",
     "prazo_amortizacao_meses": "prazo_amortizacao",
     "instituicao_financeira_credenciada": "agente",
+    "custo_financeiro": "custo_financeiro",
 }
 
 
@@ -586,12 +602,48 @@ def download_and_filter_csv(
     return dest
 
 
-def load_from_excel(path: Path, sheet_name: str | int = "operacoes_indiretas_automaticas") -> pd.DataFrame:
-    """Carrega planilha do portal de transparência (header=5)."""
-    try:
-        df = pd.read_excel(path, sheet_name=sheet_name, header=5)
-    except ValueError:
-        df = pd.read_excel(path, sheet_name=0, header=5)
+def _excel_tem_colunas_contratos(df: pd.DataFrame) -> bool:
+    """True se o DataFrame já tem as colunas ContAgil / portal (header na 1ª linha)."""
+    cols = set(df.columns.astype(str))
+    rename_hits = sum(1 for k in EXCEL_COLUMNS if k in cols)
+    prepared_hits = sum(
+        1
+        for k in (
+            "data_contratacao",
+            "valor_desembolsado",
+            "juros",
+            "prazo_amortizacao",
+        )
+        if k in cols
+    )
+    return rename_hits >= 3 or prepared_hits >= 3
+
+
+def load_from_excel(
+    path: Path,
+    sheet_name: str | int = "operacoes_indiretas_automaticas",
+    header: int | None = None,
+) -> pd.DataFrame:
+    """Carrega Excel ContAgil / portal.
+
+    - header=None (default): tenta header=0 (pasta ContAgil/dados) e, se falhar,
+      header=5 (portal de transparência).
+    - header explícito: usa só esse valor.
+    """
+
+    def _read(h: int) -> pd.DataFrame:
+        try:
+            return pd.read_excel(path, sheet_name=sheet_name, header=h)
+        except ValueError:
+            return pd.read_excel(path, sheet_name=0, header=h)
+
+    if header is not None:
+        df = _read(header)
+    else:
+        df = _read(0)
+        if not _excel_tem_colunas_contratos(df):
+            df = _read(5)
+
     rename = {k: v for k, v in EXCEL_COLUMNS.items() if k in df.columns}
     df = df.rename(columns=rename)
     return _prepare_contracts(df)
@@ -635,6 +687,11 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
     else:
         agente = pd.Series([AGENTE_NAO_INFORMADO] * len(df), index=df.index)
 
+    if "custo_financeiro" in df.columns:
+        custo = df["custo_financeiro"].astype(str).fillna("")
+    else:
+        custo = pd.Series([""] * len(df), index=df.index)
+
     out = pd.DataFrame(
         {
             "data_contratacao": parse_datas(df["data_contratacao"]),
@@ -643,6 +700,7 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
             "prazo_carencia": limpar_valor(df["prazo_carencia"]).fillna(0),
             "prazo_amortizacao": limpar_valor(df["prazo_amortizacao"]),
             "agente": agente.values,
+            "custo_financeiro": custo.values,
         }
     )
 
@@ -846,11 +904,12 @@ def gerar_fluxos(
             instituicao = str(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
             )
+            custo = getattr(row, "custo_financeiro", "")
             records.extend(
                 gerar_fluxos_contrato(
                     data_contr=data_contr,
                     valor=float(row.valor_desembolsado),
-                    taxa_juros_aa=float(row.juros) / 100.0,
+                    taxa_juros_aa=taxa_contrato_anual(custo, float(row.juros)),
                     carencia=int(float(row.prazo_carencia or 0)),
                     n=int(float(row.prazo_amortizacao)),
                     contrato_id=int(row.contrato),
@@ -913,10 +972,11 @@ def processar_em_lotes(
                 instituicao = str(
                     getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
                 )
+                custo = getattr(row, "custo_financeiro", "")
                 fluxos = gerar_fluxos_contrato(
                     data_contr=data_contr,
                     valor=float(row.valor_desembolsado),
-                    taxa_juros_aa=float(row.juros) / 100.0,
+                    taxa_juros_aa=taxa_contrato_anual(custo, float(row.juros)),
                     carencia=int(float(row.prazo_carencia or 0)),
                     n=int(float(row.prazo_amortizacao)),
                     contrato_id=int(row.contrato),

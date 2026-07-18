@@ -13,6 +13,7 @@ from scripts.gerar_fluxos import (
     limpar_valor,
     meses_ate_impacto,
     parse_datas,
+    taxa_contrato_anual,
     taxa_mensal_composta,
 )
 
@@ -271,3 +272,28 @@ def test_from_dataframe_coluna_e():
     )
     serie = SelicSerie.from_dataframe(selic_df)
     assert abs(serie.fatores[-1] - 1.5) < 1e-12
+
+
+def test_taxa_contrato_anual_tjlp_tlp():
+    """ContAgil: TJLP/TLP = 6% + juros; TAXA FIXA = só juros."""
+    assert abs(taxa_contrato_anual("TAXA FIXA", 5.5) - 0.055) < 1e-12
+    assert abs(taxa_contrato_anual("TJLP", 2.0) - 0.08) < 1e-12
+    assert abs(taxa_contrato_anual("TLP + TAXA FIXA", 1.5) - 0.075) < 1e-12
+
+
+def test_gerar_fluxos_aplica_tjlp():
+    contratos = pd.DataFrame(
+        {
+            "data_contratacao": [pd.Timestamp("2010-01-15")],
+            "valor_desembolsado": [1200.0],
+            "juros": [2.0],  # spread %; TJLP → 8% a.a.
+            "prazo_carencia": [0],
+            "prazo_amortizacao": [12],
+            "agente": ["Banco TJLP"],
+            "custo_financeiro": ["TJLP"],
+            "contrato": [0],
+        }
+    )
+    fluxos = gerar_fluxos(contratos)
+    esperado = taxa_mensal_composta(0.08)
+    assert abs(fluxos.iloc[0]["taxa_contrato_mensal"] - esperado) < 1e-8

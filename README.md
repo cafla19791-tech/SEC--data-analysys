@@ -22,6 +22,12 @@ python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --s
 python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
 python3 scripts/contagil_fluxos.py --teste-contrato0
 
+# ContAgil WinPython: processa todos os .xlsx de pasta_dados → fluxos_*.xlsx
+python3 scripts/contagil_fluxos.py --pasta-dados "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/dados" \
+  --pasta-saida "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/saida" \
+  --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
+# (sem args: usa esses caminhos se existirem no Windows ContAgil)
+
 # Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos detalhados
 python3 scripts/gerar_fluxos.py --download
 
@@ -82,6 +88,7 @@ Para cada mês `p = 1 .. (carência + amortização)`:
 - `data_fluxo` = dia 15 da contratação + `(p − 1)` meses (ContAgil)
 - `em_carencia = p <= carência` → amortização = 0
 - após a carência: `amortização = valor / n` (SAC)
+- `taxa_contrato_aa` = juros; se `Custo financeiro` contém TJLP/TLP → `6% + juros`
 - `taxa_*_mensal = (1 + taxa_aa)^(1/12) − 1`
 - `spread = (1 + (SELIC_m − taxa_contrato_m))^n`
 - `subsídio = saldo × (SELIC_m − taxa_contrato_m)`
