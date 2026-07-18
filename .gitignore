@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+fluxos_completos_final.xlsx
+*.xlsx
+!requirements.txt
