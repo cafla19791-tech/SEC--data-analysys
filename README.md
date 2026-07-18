@@ -33,8 +33,12 @@ python3 scripts/gerar_fluxos.py --download --baixar-selic
 # Só o ranking (CLI)
 python3 scripts/resumo_por_agente.py --from-output
 
-# Impacto fiscal por ano de pagamento (até 30/06/2026)
-python3 scripts/impacto_fiscal_por_ano.py --fluxos output/fluxos_completos_corrigido.csv
+# Impacto fiscal por ano de pagamento (ContAgil: col E, +1 dia → 30/06/2026)
+python3 scripts/impacto_fiscal_por_ano.py --baixar-selic --fluxos output/fluxos_amostra.csv
+# Com STP ContAgil local (Windows RFB):
+python3 scripts/impacto_fiscal_por_ano.py \
+  --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx" \
+  --fluxos output/fluxos_completos_final.csv
 # Com impacto ContAgil já gravado no CSV:
 python3 scripts/impacto_fiscal_por_ano.py --modo coluna --fluxos output/fluxos_completos_final.csv
 ```
@@ -58,7 +62,7 @@ streamlit run app.py
 | `output/fluxos_completos_final.xlsx` | Resumo + **Por_Agente** + impacto mensal + amostra |
 | `output/resumo_por_agente.csv` | Ranking: Qtd Contratos, Total Subsídio, Impacto Fiscal 2026 |
 | `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
-| `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto fiscal agregados por ano de pagamento |
+| `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto ContAgil agregados por ano de pagamento |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
 `data_fluxo`, `saldo`, `amortizacao`, `taxa_selic_mensal`,

@@ -17,7 +17,13 @@ Arquivos principais:
 - `fluxos_amostra.xlsx` — amostra rápida (20 contratos de exemplo)
 
 ```bash
-python3 scripts/impacto_fiscal_por_ano.py --fluxos output/fluxos_completos_corrigido.csv
+# ContAgil (fatores Bacen se não houver STP local)
+python3 scripts/impacto_fiscal_por_ano.py --baixar-selic --fluxos output/fluxos_amostra.csv
+
+# STP ContAgil da RFB (coluna E)
+python3 scripts/impacto_fiscal_por_ano.py \
+  --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx" \
+  --fluxos output/fluxos_completos_final.csv
 ```
 
 Colunas detalhadas: Instituição Financeira, taxa_selic_mensal, taxa_contrato_mensal,

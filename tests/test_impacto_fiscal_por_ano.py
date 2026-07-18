@@ -2,9 +2,11 @@
 
 from datetime import datetime
 
+import numpy as np
 import pandas as pd
 import pytest
 
+from scripts.gerar_fluxos import SelicSerie, calcular_impacto_fiscal_real
 from scripts.impacto_fiscal_por_ano import (
     DATA_REFERENCIA,
     agregar_impacto_por_ano,
@@ -78,3 +80,45 @@ def test_modo_coluna_sem_coluna_falha():
     df = pd.DataFrame({"data_fluxo": ["2009-04-15"], "subsidio": [1.0]})
     with pytest.raises(ValueError, match="impacto"):
         agregar_impacto_por_ano(df, modo="coluna")
+
+
+def test_agregar_modo_contagil_mais_um_dia():
+    """Paridade com calcular_impacto_fiscal_real (col E, capitaliza do dia seguinte)."""
+    df = pd.DataFrame(
+        {
+            "data_fluxo": [datetime(2009, 2, 15), datetime(2010, 1, 15)],
+            "subsidio": [100.0, 50.0],
+            "mes": [1, 2],
+        }
+    )
+    datas = np.array(
+        [
+            np.datetime64("2009-02-15"),
+            np.datetime64("2009-02-16"),  # dia seguinte à parcela 15/02
+            np.datetime64("2010-01-16"),
+            np.datetime64("2026-06-30"),
+        ],
+        dtype="datetime64[ns]",
+    )
+    fatores = np.array([1.0, 2.0, 2.5, 4.0], dtype=float)
+    serie = SelicSerie(datas, fatores, origem="test")
+
+    resumo = agregar_impacto_por_ano(df, modo="contagil", selic_serie=serie)
+
+    esperado_2009 = calcular_impacto_fiscal_real(
+        100.0, datetime(2009, 2, 15), serie, DATA_REFERENCIA
+    )
+    esperado_2010 = calcular_impacto_fiscal_real(
+        50.0, datetime(2010, 1, 15), serie, DATA_REFERENCIA
+    )
+    # 100 * 4/2 = 200 ; 50 * 4/2.5 = 80
+    assert esperado_2009 == 200.0
+    assert esperado_2010 == 80.0
+    assert resumo.loc[resumo["Ano"] == 2009, "Impacto Fiscal 2026 (R$)"].iloc[0] == 200.0
+    assert resumo.loc[resumo["Ano"] == 2010, "Impacto Fiscal 2026 (R$)"].iloc[0] == 80.0
+
+
+def test_modo_contagil_exige_serie():
+    df = pd.DataFrame({"data_fluxo": ["2009-04-15"], "subsidio": [1.0]})
+    with pytest.raises(ValueError, match="série SELIC"):
+        agregar_impacto_por_ano(df, modo="contagil", selic_serie=None)
