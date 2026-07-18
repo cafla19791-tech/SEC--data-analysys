@@ -93,3 +93,53 @@ def test_load_selic_placeholder_sem_arquivo():
     df = load_selic(None)
     assert len(df) > 1000
     assert {"data", "fator"} <= set(df.columns)
+
+
+def test_gerar_fluxos_colunas_contagil_portugues(tmp_path: Path):
+    """Excel ContAgil com headers PT (R$, parênteses, hífens)."""
+    from gerar_fluxos import main as root_main
+
+    dados = tmp_path / "dados"
+    saida = tmp_path / "saida"
+    dados.mkdir()
+    pd.DataFrame(
+        {
+            "Data da contratação": ["15/03/2009"],
+            "Valor Desembolsado R$ (*)": [90000.0],
+            "Juros": [6.0],
+            "Prazo - Carência (meses)": [0],
+            "Prazo - Amortização (meses)": [3],
+            "Instituição Financeira Credenciada": ["BANCO X"],
+            "Custo financeiro": ["TAXA FIXA"],
+        }
+    ).to_excel(dados / "ops.xlsx", index=False)
+    selic = tmp_path / "STP.xlsx"
+    # Fatores diários crescentes → SELIC mensal > taxa do contrato
+    dates = pd.date_range("2009-01-01", "2026-06-30", freq="D")
+    fator = np.cumprod(np.full(len(dates), 1.0004))
+    pd.DataFrame(
+        {
+            "data": dates,
+            "b": 0,
+            "c": 0,
+            "d": 0.01,
+            "fator": fator,
+        }
+    ).to_excel(selic, index=False)
+
+    rc = root_main(
+        [
+            "--massa-dados",
+            str(dados),
+            "--pasta-saida",
+            str(saida),
+            "--arquivo-selic",
+            str(selic),
+        ]
+    )
+    assert rc == 0
+    out = pd.read_excel(saida / "fluxos_ops.xlsx")
+    assert len(out) == 1
+    assert float(out.iloc[0]["amortizacao_mensal"]) == 30000.0
+    assert float(out.iloc[0]["subsidio_acumulado"]) > 0
+    assert float(out.iloc[0]["impacto_fiscal_real"]) > 0

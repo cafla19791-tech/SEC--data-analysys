@@ -21,11 +21,21 @@ FLUXOS_DIARIOS_NOME = "fluxos_diarios_detalhados.xlsx"
 
 
 def _normalize_col(name: str) -> str:
-    """Normaliza nome de coluna: minúsculas, sem acentos, espaços → underscore."""
-    text = str(name).strip().lower().replace(" ", "_")
+    """Normaliza nome de coluna ContAgil: minúsculas, sem acentos/símbolos."""
+    text = str(name).strip().lower()
     text = unicodedata.normalize("NFKD", text)
     text = "".join(ch for ch in text if not unicodedata.combining(ch))
-    return text
+    # ContAgil: "Valor Desembolsado R$ (*)", "Prazo - Carência (meses)"
+    cleaned: list[str] = []
+    for ch in text:
+        if ch.isalnum():
+            cleaned.append(ch)
+        else:
+            cleaned.append("_")
+    text = "".join(cleaned)
+    while "__" in text:
+        text = text.replace("__", "_")
+    return text.strip("_")
 
 
 def load_selic(selic_file: str | None = None) -> pd.DataFrame:
@@ -143,6 +153,7 @@ def gerar_fluxos(
             for c in [
                 "valor_da_operacao_em_reais",
                 "valor_desembolsado_reais",
+                "valor_desembolsado_r",
                 "valor_principal",
                 "valor",
             ]
@@ -150,6 +161,12 @@ def gerar_fluxos(
         ),
         None,
     )
+    if col_valor is None:
+        # ContAgil: valor_desembolsado_r_* após normalizar "R$ (*)"
+        for c in df_fluxos.columns:
+            if "valor_desembolsado" in c or c.startswith("valor_da_operacao"):
+                col_valor = c
+                break
     col_taxa = next(
         (
             c
@@ -157,7 +174,6 @@ def gerar_fluxos(
                 "juros",
                 "taxa_juros",
                 "taxa_contrato",
-                "custo_financeiro",
             ]
             if c in df_fluxos.columns
         ),
@@ -166,7 +182,12 @@ def gerar_fluxos(
     col_carencia = next(
         (
             c
-            for c in ["prazo_carencia_meses", "carencia_meses"]
+            for c in [
+                "prazo_carencia_meses",
+                "prazo_carencia",
+                "carencia_meses",
+                "carencia",
+            ]
             if c in df_fluxos.columns
         ),
         None,
@@ -176,6 +197,7 @@ def gerar_fluxos(
             c
             for c in [
                 "prazo_amortizacao_meses",
+                "prazo_amortizacao",
                 "amortizacao_meses",
                 "prazo",
             ]
