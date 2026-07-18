@@ -22,11 +22,11 @@ python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --s
 python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
 python3 scripts/contagil_fluxos.py --teste-contrato0
 
-# ContAgil WinPython: processa todos os .xlsx de pasta_dados → fluxos_*.xlsx
-python3 scripts/contagil_fluxos.py --pasta-dados "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/dados" \
-  --pasta-saida "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/saida" \
-  --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
-# (sem args: usa esses caminhos se existirem no Windows ContAgil)
+# ContAgil WinPython: massa de dados → pasta_saida/fluxos_*.xlsx
+python3 scripts/contagil_fluxos.py --massa-dados "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados" \
+  --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
+  --arquivo-selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\STP-20260716182715078 (1).xlsx"
+# (--massa-dados e --pasta-dados são equivalentes; sem args: usa esses caminhos se existirem)
 
 # Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos detalhados
 python3 scripts/gerar_fluxos.py --download

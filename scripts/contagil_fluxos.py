@@ -2,11 +2,11 @@
 """
 Entrypoint no estilo do script ContAgil/RFB (WinPython):
 
-  pasta_dados  = .../python_jep/winpython/dados
-  pasta_saida  = .../python_jep/winpython/saida
-  arquivo_selic = .../STP-20260716182715078 (1).xlsx
+  massa_dados / pasta_dados = .../python_jep/winpython/dados
+  pasta_saida               = .../python_jep/winpython/saida
+  arquivo_selic             = .../STP-20260716182715078 (1).xlsx
 
-Processa todos os .xlsx de pasta_dados, gera fluxos (SAC + carência corrigida)
+Processa todos os .xlsx da massa de dados, gera fluxos (SAC + carência corrigida)
 e impacto fiscal ContAgil (col E, capitalização a partir do dia seguinte → 30/06/2026).
 
 Correções vs script ContAgil original (colado/corrompido):
@@ -16,8 +16,13 @@ Correções vs script ContAgil original (colado/corrompido):
   - TJLP/TLP: taxa_aa = 6% + juros do contrato
   - fator SELIC na coluna E; idx_inicio = nearest(data_parcela + 1 dia)
 
-Uso:
-  # ContAgil Windows (defaults de pasta_dados / STP / saida)
+Uso (ContAgil / WinPython):
+  python3 scripts/contagil_fluxos.py \\
+    --massa-dados "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\dados" \\
+    --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
+    --arquivo-selic "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\STP-20260716182715078 (1).xlsx"
+
+  # Sem args: usa defaults WinPython se existirem
   python3 scripts/contagil_fluxos.py
 
   # Repo local: pasta data/ → output/
@@ -159,11 +164,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
         "--pasta-dados",
+        "--massa-dados",
+        dest="pasta_dados",
         type=Path,
         default=None,
+        metavar="DIR",
         help=(
-            "Pasta com vários .xlsx ContAgil (default: caminho WinPython/dados "
-            "se existir, senão processa --input/--excel)."
+            "Massa de dados ContAgil: pasta com vários .xlsx "
+            "(alias: --massa-dados). Default: WinPython/dados se existir, "
+            "senão processa --input/--excel."
         ),
     )
     p.add_argument(
@@ -293,7 +302,8 @@ def main(argv: list[str] | None = None) -> int:
                 out = pasta_saida / f"{args.stem}.xlsx"
             else:
                 raise FileNotFoundError(
-                    "Nada para processar. Use --pasta-dados, --excel, --input ou --download."
+                    "Nada para processar. Use --massa-dados/--pasta-dados, "
+                    "--excel, --input ou --download."
                 )
         else:
             print(f"Lendo Excel: {excel}")
