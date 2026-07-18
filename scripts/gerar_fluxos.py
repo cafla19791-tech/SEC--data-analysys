@@ -163,9 +163,23 @@ class SelicSerie:
                 inicio=y0.strftime("%d/%m/%Y"),
                 fim=y1.strftime("%d/%m/%Y"),
             )
-            resp = requests.get(url, timeout=120, headers={"Accept": "application/json"})
-            resp.raise_for_status()
-            rows = resp.json()
+            last_err: Exception | None = None
+            rows = None
+            for attempt in range(1, 6):
+                try:
+                    resp = requests.get(
+                        url, timeout=120, headers={"Accept": "application/json"}
+                    )
+                    resp.raise_for_status()
+                    rows = resp.json()
+                    break
+                except Exception as exc:  # noqa: BLE001 — retries em rede/Bacen
+                    last_err = exc
+                    wait = min(2**attempt, 32)
+                    print(f"  {year}: falha tentativa {attempt}/5 ({exc}); retry {wait}s")
+                    time.sleep(wait)
+            if rows is None:
+                raise RuntimeError(f"Falha ao baixar SELIC {year}: {last_err}")
             if not rows:
                 continue
             chunk = pd.DataFrame(rows)
