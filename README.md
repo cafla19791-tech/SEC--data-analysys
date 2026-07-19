@@ -136,15 +136,16 @@ cobre `carência + n` meses.
 
 ## Resultado do run completo (2009–2010)
 
-Com fatores SELIC Bacen (SGS 11) no layout ContAgil (col E = fator; +1 dia),
-na ausência do arquivo STP local `STP-20260716182715078 (1).xlsx`:
+Com lógica corrigida (dual balance + `taxa_contrato_efetiva`) e fatores SELIC
+Bacen (SGS 11) no layout ContAgil (col E = fator; +1 dia), via
+`scripts/contagil_fluxos.py ... --full`:
 
 | Indicador | Valor |
 |-----------|-------|
 | Contratos | 348.864 |
 | Parcelas | 22.151.051 |
-| Subsídio nominal | R$ 23,45 bi |
-| Impacto fiscal 30/06/2026 | R$ 90,14 bi |
+| Subsídio nominal | R$ 21,41 bi |
+| Impacto fiscal 30/06/2026 | R$ 81,59 bi |
 | Agentes | 72 |
 
 Para usar o STP ContAgil da RFB (capitalização oficial da tabela):
