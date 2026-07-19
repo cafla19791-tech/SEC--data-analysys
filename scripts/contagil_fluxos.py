@@ -13,7 +13,8 @@ Correções vs script ContAgil original (colado/corrompido):
   - sintaxe Python válida (True/values/method='nearest'/etc.)
   - gerar_fluxos(df, selic) — não gerar_fluxos(df, df)
   - carência: cronograma cobre (carência + n) meses
-  - TJLP/TLP: taxa_aa = 6% + juros do contrato
+  - taxa_contrato_efetiva: TAXA FIXA / TJLP/TLP com composição mensal
+  - dual balance: saldo_fiscal (principal) + saldo_contrato (com juros)
   - fator SELIC na coluna E; idx_inicio = nearest(data_parcela + 1 dia)
 
 Uso (ContAgil / WinPython):

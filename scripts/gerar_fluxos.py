@@ -3,12 +3,15 @@
 Gera fluxos mensais detalhados (carência + amortização SAC) e impacto fiscal
 a valor de 30/06/2026, a partir de operações indiretas automáticas do BNDES.
 
-Metodologia ContAgil (taxas compostas) + carência corrigida:
-  - taxa_mensal = (1 + taxa_aa)^(1/12) - 1
+Metodologia ContAgil (lógica corrigida) + carência corrigida:
+  - taxa_contrato_efetiva (mensal):
+      * TAXA FIXA / demais: (1 + juros)^(1/12) − 1
+      * TJLP / TLP: (1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1
   - Fluxos em TODOS os meses (carência + amortização)
   - Amortização constante só após a carência
+  - Dual balance: saldo_fiscal (principal) e saldo_contrato (com juros)
   - spread = (1 + (SELIC_m − taxa_contrato_m))^n
-  - subsídio = saldo × (SELIC_m − taxa_contrato_m)
+  - subsídio = saldo_fiscal × (SELIC_m − taxa_contrato_m)  [antes da amortização]
   - impacto_fiscal (calcular_impacto_fiscal_real):
       * com fatores STP/Bacen: subsídio × fator(nearest 30/06/2026)
         / fator(nearest data_fluxo + 1 dia)  — col E do STP ContAgil
@@ -72,16 +75,43 @@ def taxa_diaria_composta(taxa_aa: float) -> float:
 
 
 def taxa_contrato_anual(custo_financeiro: str | None, juros_pct: float) -> float:
-    """Taxa anual do contrato (ContAgil).
+    """Taxa anual aproximada do contrato (legado / resumos).
 
     - TJLP / TLP: 6% + juros (%) do contrato
     - demais (ex.: TAXA FIXA): só o juros do contrato
+
+    Para o cronograma mensal use ``taxa_contrato_efetiva``.
     """
     juros = float(juros_pct) / 100.0
     custo = str(custo_financeiro or "").upper()
     if "TJLP" in custo or "TLP" in custo:
         return TJLP_TLP_BASE + juros
     return juros
+
+
+def taxa_contrato_efetiva(custo_financeiro: str | None, juros_pct: float) -> float:
+    """Taxa mensal efetiva do contrato (lógica corrigida ContAgil).
+
+    ``juros_pct`` vem da coluna Juros em % a.a. (ex.: 6.0 → 6%).
+
+    - TAXA FIXA / demais: ``(1 + juros)^(1/12) − 1``
+    - TJLP / TLP: ``(1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1``
+
+    Nota: o rascunho ContAgil às vezes omite o ``^(1/12)`` do juros em TJLP/TLP;
+    aqui ambos os fatores anuais são convertidos para mensal (juros em % a.a.).
+    """
+    try:
+        juros = float(juros_pct) / 100.0
+    except (TypeError, ValueError):
+        juros = 0.0
+
+    custo = str(custo_financeiro or "").upper()
+    # TJLP/TLP antes de TAXA FIXA (ex.: "TLP + TAXA FIXA")
+    if "TJLP" in custo:
+        return (1.0 + TJLP_TLP_BASE) ** (1.0 / 12.0) * (1.0 + juros) ** (1.0 / 12.0) - 1.0
+    if "TLP" in custo:
+        return (1.0 + TJLP_TLP_BASE) ** (1.0 / 12.0) * (1.0 + juros) ** (1.0 / 12.0) - 1.0
+    return (1.0 + juros) ** (1.0 / 12.0) - 1.0
 
 
 TAXA_SELIC_MENSAL = taxa_mensal_composta(TAXA_SELIC_ANUAL)
@@ -805,6 +835,8 @@ def gerar_fluxos_contrato(
     selic_aa: float = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
     selic_serie: SelicSerie | None = None,
+    custo_financeiro: str | None = None,
+    juros_pct: float | None = None,
 ) -> list[dict]:
     """
     Gera fluxos detalhados de UM contrato (carência + amortização).
@@ -814,15 +846,25 @@ def gerar_fluxos_contrato(
       no loop `p=1..n`, o que zera amortização nas primeiras parcelas pós-carência
       e deixa saldo residual. Aqui o cronograma cobre carência+n meses.
 
-    Colunas extras (pedido ContAgil): Instituição Financeira, taxas compostas,
-    spread e impacto_fiscal.
+    Lógica corrigida (dual balance):
+      - saldo_fiscal: só principal (base do subsídio)
+      - saldo_contrato: principal + juros do contrato
+      - taxa via ``taxa_contrato_efetiva`` (TJLP/TLP / TAXA FIXA)
     """
     if n <= 0 or valor <= 0:
         return []
 
     amort_mensal = valor / n
-    saldo = valor
-    taxa_contrato_mensal = taxa_mensal_composta(taxa_juros_aa)
+    saldo_fiscal = valor
+    saldo_contrato = valor
+
+    if juros_pct is not None or custo_financeiro:
+        pct = float(juros_pct) if juros_pct is not None else float(taxa_juros_aa) * 100.0
+        taxa_contrato_mensal = taxa_contrato_efetiva(custo_financeiro, pct)
+    else:
+        # Compat testes: taxa_juros_aa já em decimal a.a. (TAXA FIXA)
+        taxa_contrato_mensal = taxa_mensal_composta(taxa_juros_aa)
+
     taxa_selic_mensal = taxa_mensal_composta(selic_aa)
     spread = (1.0 + (taxa_selic_mensal - taxa_contrato_mensal)) ** n
     fluxos: list[dict] = []
@@ -838,7 +880,9 @@ def gerar_fluxos_contrato(
         data_fluxo = data_base + relativedelta(months=p - 1)
         em_carencia = p <= carencia
         amort = 0.0 if em_carencia else amort_mensal
-        subsidio = saldo * (taxa_selic_mensal - taxa_contrato_mensal)
+
+        # Subsídio sobre saldo fiscal ANTES da amortização do mês
+        subsidio = saldo_fiscal * (taxa_selic_mensal - taxa_contrato_mensal)
 
         if selic_serie is not None:
             impacto = selic_serie.capitalizar(
@@ -854,10 +898,15 @@ def gerar_fluxos_contrato(
                 "Instituição Financeira": instituicao,
                 "mes": p,
                 "data_fluxo": data_fluxo.date(),
-                "saldo": round(saldo, 2),
+                "saldo_fiscal": round(saldo_fiscal, 2),
+                "saldo_contrato": round(saldo_contrato, 2),
+                "saldo": round(saldo_fiscal, 2),  # alias compat
                 "amortizacao": round(amort, 2),
                 "taxa_selic_mensal": round(taxa_selic_mensal, 8),
-                "taxa_contrato_mensal": round(taxa_contrato_mensal, 8),
+                # ContAgil: taxa do contrato só na 1ª parcela do cronograma
+                "taxa_contrato_mensal": (
+                    round(taxa_contrato_mensal, 8) if p == 1 else None
+                ),
                 "spread": round(spread, 6),
                 "subsidio": round(subsidio, 2),
                 "impacto_fiscal": impacto,
@@ -865,9 +914,14 @@ def gerar_fluxos_contrato(
             }
         )
 
+        # Atualização dos saldos
         if not em_carencia:
-            saldo -= amort_mensal
-        if saldo <= 1e-9:
+            saldo_fiscal -= amort
+            saldo_contrato = (saldo_contrato - amort) * (1.0 + taxa_contrato_mensal)
+        else:
+            saldo_contrato = saldo_contrato * (1.0 + taxa_contrato_mensal)
+
+        if saldo_fiscal <= 1e-9:
             break
 
     return fluxos
@@ -884,13 +938,15 @@ def gerar_fluxos_diarios_contrato(
     selic_aa: float = TAXA_SELIC_ANUAL,
     data_impacto: datetime = DATA_IMPACTO,
     selic_serie: SelicSerie | None = None,
+    custo_financeiro: str | None = None,
+    juros_pct: float | None = None,
 ) -> list[dict]:
     """Expande o cronograma mensal em linhas dia a dia (entre parcelas ContAgil).
 
     Em cada período mensal (data da parcela → véspera da próxima):
       - saldo fiscal constante (SAC ContAgil)
       - amortização só no dia da parcela
-      - subsídio diário = saldo × (SELIC_d − taxa_contrato_d)
+      - subsídio diário = saldo_fiscal × (SELIC_d − taxa_contrato_d)
       - impacto_fiscal capitalizado a partir do dia (+1 dia / fatores)
     """
     mensais = gerar_fluxos_contrato(
@@ -904,14 +960,17 @@ def gerar_fluxos_diarios_contrato(
         selic_aa=selic_aa,
         data_impacto=data_impacto,
         selic_serie=selic_serie,
+        custo_financeiro=custo_financeiro,
+        juros_pct=juros_pct,
     )
     if not mensais:
         return []
 
-    taxa_contrato_diaria = taxa_diaria_composta(taxa_juros_aa)
-    taxa_selic_diaria = taxa_diaria_composta(selic_aa)
-    taxa_contrato_mensal = taxa_mensal_composta(taxa_juros_aa)
+    # Taxa mensal efetiva (1ª parcela); diária equivalente composta em 30 dias
+    taxa_contrato_mensal = float(mensais[0]["taxa_contrato_mensal"] or 0.0)
+    taxa_contrato_diaria = (1.0 + taxa_contrato_mensal) ** (1.0 / 30.0) - 1.0
     taxa_selic_mensal = taxa_mensal_composta(selic_aa)
+    taxa_selic_diaria = taxa_diaria_composta(selic_aa)
     diarios: list[dict] = []
 
     for i, parcela in enumerate(mensais):
@@ -921,7 +980,7 @@ def gerar_fluxos_diarios_contrato(
         else:
             data_fim = data_ini + relativedelta(months=1) - timedelta(days=1)
 
-        saldo = float(parcela["saldo"])
+        saldo_fiscal = float(parcela["saldo_fiscal"])
         em_carencia = bool(parcela["em_carencia"])
         amort_parcela = float(parcela["amortizacao"])
         spread = float(parcela["spread"])
@@ -930,7 +989,7 @@ def gerar_fluxos_diarios_contrato(
         dia = data_ini
         while dia <= data_fim:
             amort = amort_parcela if dia == data_ini else 0.0
-            subsidio = saldo * (taxa_selic_diaria - taxa_contrato_diaria)
+            subsidio = saldo_fiscal * (taxa_selic_diaria - taxa_contrato_diaria)
 
             if selic_serie is not None:
                 impacto = selic_serie.capitalizar(
@@ -946,7 +1005,8 @@ def gerar_fluxos_diarios_contrato(
                     "Instituição Financeira": instituicao,
                     "mes": mes,
                     "data_fluxo": dia.date(),
-                    "saldo": round(saldo, 2),
+                    "saldo_fiscal": round(saldo_fiscal, 2),
+                    "saldo": round(saldo_fiscal, 2),  # alias compat
                     "amortizacao": round(amort, 2),
                     "taxa_selic_diaria": round(taxa_selic_diaria, 10),
                     "taxa_contrato_diaria": round(taxa_contrato_diaria, 10),
@@ -1034,10 +1094,11 @@ def gerar_fluxos(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
             )
             custo = getattr(row, "custo_financeiro", "")
+            juros_pct = float(row.juros)
             kwargs = dict(
                 data_contr=data_contr,
                 valor=float(row.valor_desembolsado),
-                taxa_juros_aa=taxa_contrato_anual(custo, float(row.juros)),
+                taxa_juros_aa=juros_pct / 100.0,
                 carencia=int(float(row.prazo_carencia or 0)),
                 n=int(float(row.prazo_amortizacao)),
                 contrato_id=int(row.contrato),
@@ -1045,6 +1106,8 @@ def gerar_fluxos(
                 selic_aa=selic_aa,
                 data_impacto=data_impacto,
                 selic_serie=selic_serie,
+                custo_financeiro=custo,
+                juros_pct=juros_pct,
             )
             records.extend(gerar_fluxos_contrato(**kwargs))
             if fluxo_diario:
@@ -1126,10 +1189,11 @@ def processar_em_lotes(
                     getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
                 )
                 custo = getattr(row, "custo_financeiro", "")
+                juros_pct = float(row.juros)
                 kwargs = dict(
                     data_contr=data_contr,
                     valor=float(row.valor_desembolsado),
-                    taxa_juros_aa=taxa_contrato_anual(custo, float(row.juros)),
+                    taxa_juros_aa=juros_pct / 100.0,
                     carencia=int(float(row.prazo_carencia or 0)),
                     n=int(float(row.prazo_amortizacao)),
                     contrato_id=int(row.contrato),
@@ -1137,6 +1201,8 @@ def processar_em_lotes(
                     selic_aa=selic_aa,
                     data_impacto=data_impacto,
                     selic_serie=selic_serie,
+                    custo_financeiro=custo,
+                    juros_pct=juros_pct,
                 )
                 fluxos = gerar_fluxos_contrato(**kwargs)
                 if fluxos:

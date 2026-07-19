@@ -95,8 +95,9 @@ streamlit run app.py
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
-`data_fluxo`, `saldo`, `amortizacao`, `taxa_selic_mensal`,
-`taxa_contrato_mensal`, `spread`, `subsidio`, `impacto_fiscal`, `em_carencia`.
+`data_fluxo`, `saldo_fiscal`, `saldo_contrato`, `amortizacao`,
+`taxa_selic_mensal`, `taxa_contrato_mensal` (só na 1ª parcela), `spread`,
+`subsidio`, `impacto_fiscal`, `em_carencia`.
 
 Colunas do Excel diário: as mesmas + `taxa_selic_diaria`,
 `taxa_contrato_diaria`, `dia_parcela` (amortização só nesse dia).
@@ -108,10 +109,14 @@ Para cada mês `p = 1 .. (carência + amortização)`:
 - `data_fluxo` = dia 15 da contratação + `(p − 1)` meses (ContAgil)
 - `em_carencia = p <= carência` → amortização = 0
 - após a carência: `amortização = valor / n` (SAC)
-- `taxa_contrato_aa` = juros; se `Custo financeiro` contém TJLP/TLP → `6% + juros`
-- `taxa_*_mensal = (1 + taxa_aa)^(1/12) − 1`
+- `taxa_contrato_efetiva` (mensal):
+  - TAXA FIXA / demais: `(1 + juros)^(1/12) − 1`
+  - TJLP / TLP: `(1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1`
+- Dual balance:
+  - `saldo_fiscal`: só principal (base do subsídio)
+  - `saldo_contrato`: principal + juros do contrato
 - `spread = (1 + (SELIC_m − taxa_contrato_m))^n`
-- `subsídio = saldo × (SELIC_m − taxa_contrato_m)`
+- `subsídio = saldo_fiscal × (SELIC_m − taxa_contrato_m)` (antes da amortização)
 - `impacto_fiscal` (`calcular_impacto_fiscal_real`):
   - com fatores (STP ContAgil ou Bacen):
     `subsídio × fator(nearest 30/06/2026) / fator(nearest data_fluxo + 1 dia)`

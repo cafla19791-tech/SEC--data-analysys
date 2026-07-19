@@ -14,10 +14,31 @@ import numpy as np
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
-print("🚀 Gerando fluxos...")
+print("🚀 Gerando fluxos com lógica corrigida...")
 
 DATA_CORTE = datetime(2026, 6, 30)
 FLUXOS_DIARIOS_NOME = "fluxos_diarios_detalhados.xlsx"
+TJLP_TLP_BASE = 0.06
+TAXA_SELIC_ANUAL = 0.145
+
+
+def taxa_contrato_efetiva(custo_financeiro: str | None, juros_pct: float) -> float:
+    """Taxa mensal efetiva do contrato (lógica corrigida ContAgil).
+
+    - TAXA FIXA / demais: ``(1 + juros)^(1/12) − 1``
+    - TJLP / TLP: ``(1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1``
+    """
+    try:
+        juros = float(juros_pct) / 100.0
+    except (TypeError, ValueError):
+        juros = 0.0
+
+    custo = str(custo_financeiro or "").upper()
+    if "TJLP" in custo:
+        return (1.0 + TJLP_TLP_BASE) ** (1.0 / 12.0) * (1.0 + juros) ** (1.0 / 12.0) - 1.0
+    if "TLP" in custo:
+        return (1.0 + TJLP_TLP_BASE) ** (1.0 / 12.0) * (1.0 + juros) ** (1.0 / 12.0) - 1.0
+    return (1.0 + juros) ** (1.0 / 12.0) - 1.0
 
 
 def _normalize_col(name: str) -> str:
@@ -217,6 +238,18 @@ def gerar_fluxos(
         ),
         None,
     )
+    col_custo = next(
+        (
+            c
+            for c in [
+                "custo_financeiro",
+                "custo_financeiro_da_operacao",
+                "custo",
+            ]
+            if c in df_fluxos.columns
+        ),
+        None,
+    )
 
     if not (col_data and col_valor):
         print("⚠️ Colunas essenciais não encontradas.")
@@ -241,9 +274,16 @@ def gerar_fluxos(
     taxa_src = _col_or_default(df_fluxos, col_taxa, 0)
     if not isinstance(taxa_src, (int, float)):
         taxa_src = taxa_src.map(_to_float)
-    df_fluxos["taxa_mensal_contrato"] = (
-        pd.to_numeric(taxa_src, errors="coerce").fillna(0) / 100 / 12
-    )
+    juros_pct = pd.to_numeric(taxa_src, errors="coerce").fillna(0.0)
+    if col_custo is not None:
+        custos = df_fluxos[col_custo].astype(str)
+        df_fluxos["taxa_mensal_contrato"] = [
+            taxa_contrato_efetiva(c, j) for c, j in zip(custos, juros_pct)
+        ]
+    else:
+        df_fluxos["taxa_mensal_contrato"] = [
+            taxa_contrato_efetiva(None, j) for j in juros_pct
+        ]
     carencia_src = _col_or_default(df_fluxos, col_carencia, 0)
     if not isinstance(carencia_src, (int, float)):
         carencia_src = carencia_src.map(_to_float)
@@ -295,21 +335,16 @@ def gerar_fluxos(
             em_carencia = mes <= int(row["meses_carencia"])
             amort = 0.0 if em_carencia else amort_mensal
 
-            # Saldo Contrato (com juros)
-            saldo_contrato = (saldo_contrato - amort) * (1 + taxa_contrato_m)
-
-            # Saldo Fiscal (apenas amortização) — ContAgil: amort primeiro
-            saldo_fiscal = saldo_fiscal - amort
-
-            # SELIC mensal exata via fatores diários ContAgil (col E)
+            # SELIC mensal via fatores ContAgil (col E); fallback 14,5% a.a. composta
             fator_inicio = get_selic_daily_factor(data_atual, selic_df)
             data_fim_mes = data_atual + relativedelta(months=1)
             fator_fim = get_selic_daily_factor(data_fim_mes, selic_df)
             if fator_inicio > 0:
                 selic_mensal_aprox = (fator_fim / fator_inicio) - 1.0
             else:
-                selic_mensal_aprox = 0.0095
+                selic_mensal_aprox = (1.0 + TAXA_SELIC_ANUAL) ** (1.0 / 12.0) - 1.0
 
+            # Subsídio sobre saldo fiscal ANTES da amortização (lógica corrigida)
             subsidio_mes = saldo_fiscal * (selic_mensal_aprox - taxa_contrato_m)
             subsidio_acumulado += subsidio_mes
 
@@ -331,6 +366,8 @@ def gerar_fluxos(
                             "Instituição Financeira": agente,
                             "mes": mes,
                             "data_fluxo": dia.date(),
+                            "saldo_fiscal": round(saldo_fiscal, 2),
+                            "saldo_contrato": round(saldo_contrato, 2),
                             "saldo": round(saldo_fiscal, 2),
                             "amortizacao": round(
                                 amort if dia == pd.Timestamp(data_atual) else 0.0, 2
@@ -338,7 +375,9 @@ def gerar_fluxos(
                             "taxa_selic_diaria": round(selic_d, 10),
                             "taxa_contrato_diaria": round(taxa_contrato_d, 10),
                             "selic_mensal_periodo": round(selic_mensal_aprox, 8),
-                            "taxa_contrato_mensal": round(taxa_contrato_m, 8),
+                            "taxa_contrato_mensal": (
+                                round(taxa_contrato_m, 8) if mes == 1 else None
+                            ),
                             "subsidio": round(subsidio_d, 4),
                             "impacto_fiscal": impacto_d,
                             "em_carencia": em_carencia,
@@ -346,6 +385,16 @@ def gerar_fluxos(
                         }
                     )
                     dia += timedelta(days=1)
+
+            # Atualização dos saldos (dual balance)
+            if not em_carencia:
+                saldo_fiscal -= amort
+                saldo_contrato = (saldo_contrato - amort) * (1.0 + taxa_contrato_m)
+            else:
+                saldo_contrato = saldo_contrato * (1.0 + taxa_contrato_m)
+
+            if saldo_fiscal <= 1e-9:
+                break
 
             data_atual += relativedelta(months=1)
 

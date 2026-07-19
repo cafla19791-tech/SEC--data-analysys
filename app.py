@@ -161,8 +161,10 @@ def main() -> None:
         st.markdown(
             """
             - **Agente** = Instituição Financeira Credenciada  
-            - Taxas mensais compostas: `(1 + taxa_aa)^(1/12) − 1`  
-            - **Subsídio** mensal = saldo × (SELIC_m − taxa_contrato_m)  
+            - **Taxa contrato** (`taxa_contrato_efetiva`): TAXA FIXA → `(1+juros)^(1/12)−1`;
+              TJLP/TLP → `(1,06)^(1/12)×(1+juros)^(1/12)−1`  
+            - Dual balance: `saldo_fiscal` (principal) e `saldo_contrato` (com juros)  
+            - **Subsídio** mensal = saldo_fiscal × (SELIC_m − taxa_contrato_m)  
             - **Impacto fiscal 2026** = subsídio × (1 + SELIC_m)^(meses até 30/06/2026)  
               (ou fator STP ContAgil, se `--arquivo-selic` for informado)  
             - Agregação por contrato → agente (não por índice de linha do CSV de parcelas)

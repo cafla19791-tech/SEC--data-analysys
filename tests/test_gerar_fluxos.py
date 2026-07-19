@@ -16,6 +16,7 @@ from scripts.gerar_fluxos import (
     parse_args,
     parse_datas,
     taxa_contrato_anual,
+    taxa_contrato_efetiva,
     taxa_diaria_composta,
     taxa_mensal_composta,
 )
@@ -68,16 +69,20 @@ def test_carencia_nao_consome_amortizacao():
     assert len(fluxos) == 5  # 2 carência + 3 amort
     assert [f["em_carencia"] for f in fluxos] == [True, True, False, False, False]
     assert [f["amortizacao"] for f in fluxos] == [0.0, 0.0, 100.0, 100.0, 100.0]
-    assert fluxos[0]["saldo"] == 300.0
-    assert fluxos[2]["saldo"] == 300.0  # ainda cheio ao sair da carência
-    assert fluxos[-1]["saldo"] == 100.0
+    assert fluxos[0]["saldo_fiscal"] == 300.0
+    assert fluxos[2]["saldo_fiscal"] == 300.0  # ainda cheio ao sair da carência
+    assert fluxos[-1]["saldo_fiscal"] == 100.0
+    # Dual balance: contrato cresce na carência; fiscal fica no principal
+    assert fluxos[1]["saldo_contrato"] > fluxos[0]["saldo_contrato"]
+    assert fluxos[1]["saldo_fiscal"] == fluxos[0]["saldo_fiscal"]
     # ContAgil: base no dia 15
     assert str(fluxos[0]["data_fluxo"]) == "2009-01-15"
     assert str(fluxos[1]["data_fluxo"]) == "2009-02-15"
     assert str(fluxos[2]["data_fluxo"]) == "2009-03-15"
     assert fluxos[0]["Instituição Financeira"] == "BANCO TESTE SA"
     assert "taxa_selic_mensal" in fluxos[0]
-    assert "taxa_contrato_mensal" in fluxos[0]
+    assert fluxos[0]["taxa_contrato_mensal"] is not None
+    assert all(f["taxa_contrato_mensal"] is None for f in fluxos[1:])
     assert "spread" in fluxos[0]
     assert "impacto_fiscal" in fluxos[0]
 
@@ -97,9 +102,10 @@ def test_spread_e_taxas_compostas_constantes_no_contrato():
     expected_spread = (1.0 + (selic_m - contrato_m)) ** 12
 
     assert all(abs(f["taxa_selic_mensal"] - selic_m) < 1e-8 for f in fluxos)
-    assert all(abs(f["taxa_contrato_mensal"] - contrato_m) < 1e-8 for f in fluxos)
+    assert abs(fluxos[0]["taxa_contrato_mensal"] - contrato_m) < 1e-8
+    assert all(f["taxa_contrato_mensal"] is None for f in fluxos[1:])
     assert all(abs(f["spread"] - expected_spread) < 1e-6 for f in fluxos)
-    # subsídio = saldo × (selic_m − contrato_m)
+    # subsídio = saldo_fiscal × (selic_m − contrato_m) antes da amortização
     assert abs(fluxos[0]["subsidio"] - round(1200.0 * (selic_m - contrato_m), 2)) < 0.011
 
 
@@ -278,10 +284,22 @@ def test_from_dataframe_coluna_e():
 
 
 def test_taxa_contrato_anual_tjlp_tlp():
-    """ContAgil: TJLP/TLP = 6% + juros; TAXA FIXA = só juros."""
+    """Legado anual: TJLP/TLP = 6% + juros; TAXA FIXA = só juros."""
     assert abs(taxa_contrato_anual("TAXA FIXA", 5.5) - 0.055) < 1e-12
     assert abs(taxa_contrato_anual("TJLP", 2.0) - 0.08) < 1e-12
     assert abs(taxa_contrato_anual("TLP + TAXA FIXA", 1.5) - 0.075) < 1e-12
+
+
+def test_taxa_contrato_efetiva_tjlp_tlp():
+    """Lógica corrigida: TJLP/TLP mensal = (1,06)^(1/12)×(1+juros)^(1/12)−1."""
+    juros = 2.0 / 100.0
+    esperado_tjlp = (1.06) ** (1 / 12) * (1 + juros) ** (1 / 12) - 1
+    assert abs(taxa_contrato_efetiva("TAXA FIXA", 5.5) - ((1.055) ** (1 / 12) - 1)) < 1e-12
+    assert abs(taxa_contrato_efetiva("TJLP", 2.0) - esperado_tjlp) < 1e-12
+    assert abs(
+        taxa_contrato_efetiva("TLP + TAXA FIXA", 1.5)
+        - ((1.06) ** (1 / 12) * (1.015) ** (1 / 12) - 1)
+    ) < 1e-12
 
 
 def test_gerar_fluxos_aplica_tjlp():
@@ -289,7 +307,7 @@ def test_gerar_fluxos_aplica_tjlp():
         {
             "data_contratacao": [pd.Timestamp("2010-01-15")],
             "valor_desembolsado": [1200.0],
-            "juros": [2.0],  # spread %; TJLP → 8% a.a.
+            "juros": [2.0],  # spread %; fórmula TJLP corrigida
             "prazo_carencia": [0],
             "prazo_amortizacao": [12],
             "agente": ["Banco TJLP"],
@@ -298,7 +316,7 @@ def test_gerar_fluxos_aplica_tjlp():
         }
     )
     fluxos = gerar_fluxos(contratos)
-    esperado = taxa_mensal_composta(0.08)
+    esperado = taxa_contrato_efetiva("TJLP", 2.0)
     assert abs(fluxos.iloc[0]["taxa_contrato_mensal"] - esperado) < 1e-8
 
 
