@@ -14,12 +14,15 @@ import numpy as np
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
-print("🚀 Gerando fluxos com lógica corrigida...")
-
 DATA_CORTE = datetime(2026, 6, 30)
 FLUXOS_DIARIOS_NOME = "fluxos_diarios_detalhados.xlsx"
 TJLP_TLP_BASE = 0.06
 TAXA_SELIC_ANUAL = 0.145
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+SELIC_BACEN_CACHE = DATA_DIR / "selic_fatores_bacen.xlsx"
+LOCAL_CONTAGIL_DADOS = DATA_DIR / "contagil_winpython" / "dados"
+LOCAL_CONTAGIL_SAIDA = DATA_DIR / "contagil_winpython" / "saida"
 
 
 def taxa_contrato_efetiva(custo_financeiro: str | None, juros_pct: float) -> float:
@@ -60,11 +63,22 @@ def _normalize_col(name: str) -> str:
 
 
 def load_selic(selic_file: str | None = None) -> pd.DataFrame:
-    """Load SELIC data, prefer local file, fallback placeholder."""
-    if selic_file and os.path.exists(selic_file):
-        selic = pd.read_excel(selic_file)
+    """Load SELIC ContAgil (col A=data, col E=fator); cache Bacen; placeholder."""
+    candidatos: list[str | Path] = []
+    if selic_file:
+        candidatos.append(selic_file)
+    if SELIC_BACEN_CACHE.exists():
+        candidatos.append(SELIC_BACEN_CACHE)
+    for candidato in candidatos:
+        path = Path(candidato)
+        if not path.exists():
+            if selic_file and str(path) == str(selic_file):
+                print(f"⚠️ Arquivo SELIC não encontrado: {path}")
+            continue
+        selic = pd.read_excel(path)
         datas_selic = pd.to_datetime(selic.iloc[:, 0], dayfirst=True)
         fatores_selic = selic.iloc[:, 4].values  # Coluna E
+        print(f"SELIC ContAgil: {path} ({len(datas_selic):,} pontos)")
         return pd.DataFrame({"data": datas_selic, "fator": fatores_selic})
 
     print("⚠️ No SELIC file, using placeholder. In production fetch SGS 11")
@@ -73,6 +87,40 @@ def load_selic(selic_file: str | None = None) -> pd.DataFrame:
     # Fator acumulado dummy (diário)
     df["fator"] = (1 + 0.0001) ** (df.index + 1)
     return df
+
+
+def _parece_caminho_contagil(path: str | Path | None) -> bool:
+    if path is None:
+        return False
+    texto = str(path).replace("/", "\\").upper()
+    return "CONTAGIL" in texto or "WINPYTHON" in texto or texto.startswith("C:\\ARQUIVOS")
+
+
+def _preparar_massa_local() -> Path:
+    """Espelho ContAgil local a partir da amostra do repo (sem WinPython RFB)."""
+    LOCAL_CONTAGIL_DADOS.mkdir(parents=True, exist_ok=True)
+    destino = LOCAL_CONTAGIL_DADOS / "sample_operacoes_com_agente.xlsx"
+    sample_csv = DATA_DIR / "sample_operacoes_com_agente.csv"
+    if not destino.exists():
+        if not sample_csv.exists():
+            raise FileNotFoundError(
+                f"Massa ContAgil ausente e amostra não encontrada ({sample_csv})."
+            )
+        df = pd.read_csv(sample_csv, sep=";", dtype=str)
+        # Normaliza colunas CSV BNDES → headers ContAgil PT
+        rename = {
+            "data_da_contratacao": "Data da contratação",
+            "valor_desembolsado_reais": "Valor Desembolsado R$ (*)",
+            "juros": "Juros",
+            "prazo_carencia_meses": "Prazo - Carência (meses)",
+            "prazo_amortizacao_meses": "Prazo - Amortização (meses)",
+            "instituicao_financeira_credenciada": "Instituição Financeira Credenciada",
+            "custo_financeiro": "Custo financeiro",
+        }
+        out = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
+        out.to_excel(destino, index=False)
+        print(f"Massa local gerada: {destino}")
+    return LOCAL_CONTAGIL_DADOS
 
 
 def get_selic_daily_factor(date, selic_df: pd.DataFrame) -> float:
@@ -437,25 +485,50 @@ def _listar_entradas(caminho: str | Path) -> list[Path]:
     return sorted(Path(x) for x in glob.glob(str(caminho)))
 
 
+def _excel_tem_colunas_ops(df: pd.DataFrame) -> bool:
+    """True se já parece planilha ContAgil/portal com colunas de contrato."""
+    cols = {_normalize_col(c) for c in df.columns}
+    hits = sum(
+        1
+        for key in (
+            "data_da_contratacao",
+            "data_contratacao",
+            "valor_desembolsado_reais",
+            "valor_desembolsado_r",
+            "juros",
+            "prazo_amortizacao_meses",
+            "prazo_amortizacao",
+        )
+        if key in cols or any(key in c for c in cols)
+    )
+    return hits >= 3
+
+
 def _ler_operacoes(path: Path) -> pd.DataFrame:
-    """Lê CSV (sep=;) ou Excel ContAgil (sheet/header=5) / padrão."""
+    """Lê CSV (sep=;) ou Excel ContAgil (header=0) / portal (header=5)."""
     if path.suffix.lower() == ".csv":
         try:
             return pd.read_csv(path, sep=";", dtype=str)
         except Exception:
             return pd.read_csv(path, dtype=str)
 
-    try:
-        return pd.read_excel(
-            path,
-            sheet_name="operacoes_indiretas_automaticas",
-            header=5,
-        )
-    except Exception:
+    # ContAgil/WinPython: header na 1ª linha; portal transparência: header=5
+    for header in (0, 5):
         try:
-            return pd.read_excel(path, header=5)
+            df = pd.read_excel(
+                path,
+                sheet_name="operacoes_indiretas_automaticas",
+                header=header,
+            )
         except Exception:
-            return pd.read_excel(path)
+            try:
+                df = pd.read_excel(path, header=header)
+            except Exception:
+                continue
+        if _excel_tem_colunas_ops(df):
+            return df
+
+    return pd.read_excel(path)
 
 
 CONTAGIL_WINPYTHON = Path(
@@ -515,10 +588,21 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def _resolver_entrada_e_saida(args: argparse.Namespace) -> tuple[str, str]:
-    """Resolve massa ContAgil / excel e pasta de saída com defaults WinPython."""
+    """Resolve massa ContAgil / excel e pasta de saída com defaults WinPython.
+
+    Sem WinPython RFB local: usa ``data/contagil_winpython/{dados,saida}``.
+    """
     entrada = args.excel or args.massa_dados
     if entrada is None and CONTAGIL_PASTA_DADOS.exists():
         entrada = str(CONTAGIL_PASTA_DADOS)
+    if entrada is not None and not Path(entrada).exists() and _parece_caminho_contagil(
+        entrada
+    ):
+        print(
+            f"⚠️ Massa ContAgil não encontrada: {entrada}\n"
+            "   Ambiente sem WinPython RFB — usando espelho local da amostra."
+        )
+        entrada = str(_preparar_massa_local())
     if entrada is None:
         raise SystemExit(
             "Informe --massa-dados/--excel (pasta ou arquivo ContAgil)."
@@ -529,11 +613,16 @@ def _resolver_entrada_e_saida(args: argparse.Namespace) -> tuple[str, str]:
         if CONTAGIL_PASTA_SAIDA.exists():
             saida = str(CONTAGIL_PASTA_SAIDA)
         else:
-            saida = "saida"
+            saida = str(LOCAL_CONTAGIL_SAIDA)
+    elif not Path(saida).exists() and _parece_caminho_contagil(saida):
+        saida = str(LOCAL_CONTAGIL_SAIDA)
+        print(f"⚠️ Pasta ContAgil de saída ausente — usando: {saida}")
     return entrada, saida
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Processamento em lotes ContAgil (um .xlsx por vez → fluxos_*.xlsx)."""
+    print("🚀 Processamento em lotes...")
     args = parse_args(argv)
     entrada, pasta_saida = _resolver_entrada_e_saida(args)
 
@@ -541,6 +630,7 @@ def main(argv: list[str] | None = None) -> int:
     if arquivo_selic is None and CONTAGIL_SELIC_DEFAULT.exists():
         arquivo_selic = str(CONTAGIL_SELIC_DEFAULT)
 
+    # ContAgil: col A = data, col E = fator (não passar df de operações como SELIC)
     selic_df = load_selic(arquivo_selic)
     os.makedirs(pasta_saida, exist_ok=True)
     print(f"Massa/entrada: {entrada}")
@@ -552,21 +642,24 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     saidas: list[Path] = []
-    for entrada in arquivos:
-        nome = entrada.name.upper()
+    for arquivo in arquivos:
+        nome = arquivo.name.upper()
         if nome.startswith("STP") or "SELIC" in nome:
-            print(f"Ignorando série SELIC: {entrada.name}")
+            print(f"Ignorando série SELIC: {arquivo.name}")
             continue
 
-        out_name = f"{args.prefix}fluxos_{entrada.stem}.xlsx"
+        # Igual ao script ContAgil: fluxos_<basename>
+        out_name = f"{args.prefix}fluxos_{arquivo.name}"
+        if not out_name.lower().endswith(".xlsx"):
+            out_name = f"{out_name}.xlsx"
         out_path = Path(pasta_saida) / out_name
         if args.skip_existing and out_path.exists():
             print(f"⏭️  Já existe, pulando: {out_path}")
             continue
 
-        print(f"Processando: {entrada}")
+        print(f"Processando: {os.path.basename(arquivo)}")
         try:
-            df = _ler_operacoes(entrada)
+            df = _ler_operacoes(arquivo)
             print(f"  Carreguei {len(df):,} operações")
         except Exception as exc:  # noqa: BLE001
             print(f"  Erro carregando arquivo: {exc}")
@@ -575,9 +668,10 @@ def main(argv: list[str] | None = None) -> int:
         diario_path = Path(pasta_saida) / (
             f"{args.prefix}{FLUXOS_DIARIOS_NOME}"
             if len(arquivos) == 1
-            else f"{args.prefix}fluxos_diarios_{entrada.stem}.xlsx"
+            else f"{args.prefix}fluxos_diarios_{arquivo.stem}.xlsx"
         )
 
+        # Correção vs rascunho ContAgil: gerar_fluxos(df, selic) — não (df, df)
         df_fluxos = gerar_fluxos(
             df,
             selic_df,
@@ -593,7 +687,8 @@ def main(argv: list[str] | None = None) -> int:
         print("Nenhum arquivo processado.")
         return 1
 
-    print(f"✅ Concluído! {len(saidas)} arquivo(s) em {pasta_saida}")
+    print("✅ Processamento em lotes concluído!")
+    print(f"   {len(saidas)} arquivo(s) em {pasta_saida}")
     return 0
 
 
