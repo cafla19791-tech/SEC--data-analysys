@@ -47,6 +47,14 @@ python3 scripts/contagil_fluxos.py --massa-dados "...\dados" --pasta-saida "...\
 python3 scripts/contagil_fluxos.py --massa-dados "...\dados" --pasta-saida "...\saida" \
   --arquivo-selic "...\STP-....xlsx" --full
 
+# ContAgil SAC (Excel/CSV → fluxos_completos_corrigido.csv + resumo_por_agente.xlsx)
+python3 scripts/gerar_fluxo_sac.py \
+  --excel "C:\caminho\para\operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
+  --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
+  --arquivo-selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\STP-20260716182715078 (1).xlsx" \
+  --corrigir-contrato0
+# (sem Excel local: usa cache/download BNDES 2009–2010; --corrigir-contrato0 → R$ 485.000)
+
 # Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos detalhados
 python3 scripts/gerar_fluxos.py --download
 
