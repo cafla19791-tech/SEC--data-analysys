@@ -8,9 +8,11 @@ import numpy as np
 import pandas as pd
 
 from scripts.contagil_fluxos import (
+    _parece_caminho_contagil,
     listar_excels,
     main as contagil_main,
     parse_args,
+    preparar_massa_local_fallback,
     processar_arquivo,
     processar_pasta_dados,
 )
@@ -152,6 +154,72 @@ def test_massa_dados_inexistente_erro_claro(tmp_path: Path):
         assert False, "deveria falhar"
     except FileNotFoundError as exc:
         assert "Massa de dados não encontrada" in str(exc)
+
+
+def test_parece_caminho_contagil():
+    assert _parece_caminho_contagil(
+        Path(r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados")
+    )
+    assert _parece_caminho_contagil(Path("/tmp/winpython/dados"))
+    assert not _parece_caminho_contagil(Path("/tmp/outra_pasta/dados"))
+
+
+def test_main_fallback_massa_contagil_ausente(tmp_path: Path, monkeypatch):
+    """CLI ContAgil WinPython ausente → massa local da amostra + Bacen/STP."""
+    import scripts.contagil_fluxos as cf
+
+    massa_local = tmp_path / "contagil_winpython" / "dados"
+    saida_local = tmp_path / "contagil_winpython" / "saida"
+    monkeypatch.setattr(cf, "DATA_DIR", tmp_path)
+    # Amostra do repo permanece acessível via path real
+    sample_src = Path(__file__).resolve().parents[1] / "data" / "sample_operacoes_com_agente.csv"
+    (tmp_path / "sample_operacoes_com_agente.csv").write_text(
+        sample_src.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+
+    selic = tmp_path / "STP-demo.xlsx"
+    pd.DataFrame(
+        {
+            "data": ["01/01/2009", "16/02/2009", "30/06/2026"],
+            "b": [0, 0, 0],
+            "c": [0, 0, 0],
+            "d": [0.01, 0.01, 0.01],
+            "fator": [1.0, 1.5, 3.0],
+        }
+    ).to_excel(selic, index=False)
+
+    rc = contagil_main(
+        [
+            "--massa-dados",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados",
+            "--pasta-saida",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
+            "--arquivo-selic",
+            str(selic),
+            "--excel-header",
+            "0",
+        ]
+    )
+    assert rc == 0
+    assert massa_local.exists()
+    outs = list(saida_local.glob("fluxos_*.xlsx"))
+    assert outs, "deveria gravar fluxos_*.xlsx na saida local"
+    df = pd.read_excel(outs[0])
+    assert "impacto_fiscal" in df.columns
+    assert len(df) > 0
+
+
+def test_preparar_massa_local_fallback(tmp_path: Path, monkeypatch):
+    import scripts.contagil_fluxos as cf
+
+    monkeypatch.setattr(cf, "DATA_DIR", tmp_path)
+    sample_src = Path(__file__).resolve().parents[1] / "data" / "sample_operacoes_com_agente.csv"
+    (tmp_path / "sample_operacoes_com_agente.csv").write_text(
+        sample_src.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    pasta = preparar_massa_local_fallback()
+    assert pasta == tmp_path / "contagil_winpython" / "dados"
+    assert (pasta / "sample_operacoes_com_agente.xlsx").exists()
 
 
 def test_main_massa_dados_com_fluxo_diario(tmp_path: Path):

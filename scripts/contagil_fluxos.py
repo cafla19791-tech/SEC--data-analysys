@@ -25,6 +25,9 @@ Uso (ContAgil / WinPython):
   # Sem args: usa defaults WinPython se existirem
   python3 scripts/contagil_fluxos.py
 
+  # Mesmo comando ContAgil sem WinPython local (Linux/cloud):
+  # cai para data/contagil_winpython/{dados,saida} + SELIC Bacen
+
   # Repo local: pasta data/ → output/
   python3 scripts/contagil_fluxos.py --pasta-dados data --pasta-saida output \\
       --input data/sample_operacoes_com_agente.csv
@@ -156,6 +159,48 @@ def processar_arquivo(
     return nome_saida
 
 
+def _parece_caminho_contagil(path: Path | None) -> bool:
+    """True se o caminho parece o WinPython ContAgil/RFB (Windows)."""
+    if path is None:
+        return False
+    texto = str(path).replace("/", "\\").upper()
+    return "CONTAGIL" in texto or "WINPYTHON" in texto or texto.startswith("C:\\ARQUIVOS")
+
+
+def preparar_massa_local_fallback() -> Path:
+    """
+    Monta massa local em data/contagil_winpython/dados a partir da amostra do repo.
+
+    Usado quando --massa-dados aponta para o WinPython ContAgil e a pasta
+    não existe neste ambiente (Linux/cloud sem instalação RFB).
+    """
+    pasta = DATA_DIR / "contagil_winpython" / "dados"
+    pasta.mkdir(parents=True, exist_ok=True)
+    destino = pasta / "sample_operacoes_com_agente.xlsx"
+    sample_csv = DATA_DIR / "sample_operacoes_com_agente.csv"
+    if not destino.exists():
+        if not sample_csv.exists():
+            raise FileNotFoundError(
+                "Massa ContAgil ausente e amostra local não encontrada "
+                f"({sample_csv}). Envie os .xlsx para --massa-dados ou use --download."
+            )
+        df = load_from_csv(sample_csv)
+        # Layout ContAgil (header PT na 1ª linha) para load_from_excel
+        pd.DataFrame(
+            {
+                "Data da contratação": df["data_contratacao"].dt.strftime("%d/%m/%Y"),
+                "Valor Desembolsado R$ (*)": df["valor_desembolsado"].astype(float),
+                "Juros": df["juros"].astype(float),
+                "Prazo - Carência (meses)": df["prazo_carencia"].astype(int),
+                "Prazo - Amortização (meses)": df["prazo_amortizacao"].astype(int),
+                "Instituição Financeira Credenciada": df["agente"],
+                "Custo financeiro": df["custo_financeiro"],
+            }
+        ).to_excel(destino, index=False)
+        print(f"Massa local gerada a partir da amostra: {destino}")
+    return pasta
+
+
 def processar_pasta_dados(
     pasta_dados: Path,
     pasta_saida: Path,
@@ -265,13 +310,25 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def _resolver_pastas(args: argparse.Namespace) -> tuple[Path | None, Path]:
-    """Resolve pasta_dados / pasta_saida com defaults ContAgil → repo."""
+    """Resolve pasta_dados / pasta_saida com defaults ContAgil → repo.
+
+    Se --massa-dados/--pasta-saida apontarem para o WinPython ContAgil e as
+    pastas não existirem (ambiente Linux/cloud), usa espelho local:
+      data/contagil_winpython/dados  → amostra do repo
+      data/contagil_winpython/saida  → saída dos fluxos
+    """
     pasta_saida = args.pasta_saida
     if pasta_saida is None:
         if CONTAGIL_PASTA_SAIDA.exists():
             pasta_saida = CONTAGIL_PASTA_SAIDA
         else:
             pasta_saida = OUTPUT_DIR
+    elif not pasta_saida.exists() and _parece_caminho_contagil(pasta_saida):
+        pasta_saida = DATA_DIR / "contagil_winpython" / "saida"
+        print(
+            "⚠️ Pasta ContAgil de saída ausente neste ambiente.\n"
+            f"   Usando espelho local: {pasta_saida}"
+        )
 
     pasta_dados = args.pasta_dados
     if pasta_dados is None and args.excel is None and args.input is None:
@@ -279,6 +336,28 @@ def _resolver_pastas(args: argparse.Namespace) -> tuple[Path | None, Path]:
             pasta_dados = CONTAGIL_PASTA_DADOS
         elif (DATA_DIR / "dados").exists():
             pasta_dados = DATA_DIR / "dados"
+    elif (
+        pasta_dados is not None
+        and not pasta_dados.exists()
+        and _parece_caminho_contagil(pasta_dados)
+        and args.excel is None
+        and args.input is None
+    ):
+        print(
+            f"⚠️ Massa ContAgil não encontrada: {pasta_dados}\n"
+            "   Ambiente sem WinPython RFB — gerando massa local da amostra do repo."
+        )
+        pasta_dados = preparar_massa_local_fallback()
+        if args.pasta_saida is not None and not _parece_caminho_contagil(
+            Path(args.pasta_saida)
+        ):
+            # Usuário pediu saida ContAgil ausente já redirecionada acima;
+            # se pediu outra pasta existente, mantém.
+            pass
+        elif not pasta_saida.exists() or _parece_caminho_contagil(pasta_saida):
+            pasta_saida = DATA_DIR / "contagil_winpython" / "saida"
+            print(f"   Pasta de saída local: {pasta_saida}")
+
     return pasta_dados, pasta_saida
 
 
