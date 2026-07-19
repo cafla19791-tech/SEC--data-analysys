@@ -166,8 +166,10 @@ def main() -> None:
             - **API ContAgil**: `gerar_fluxos(df, df)` (df_original) ou `gerar_fluxos(df, selic)`  
             - Dual balance: `saldo_fiscal` (principal) e `saldo_contrato` (com juros)  
             - **Subsídio** mensal = saldo_fiscal × (SELIC_m − taxa_contrato_m)  
-            - **Impacto fiscal 2026** = subsídio × (1 + SELIC_m)^(meses até 30/06/2026)  
-              (ou fator STP ContAgil, se `--arquivo-selic` for informado)  
+            - **Impacto fiscal 2026** (STP ContAgil col D):  
+              `subsídio × FATOR_30_06_2026 / fator(nearest data_parcela)`  
+              (`FATOR_30_06_2026 = 82.84819`); sem STP: SELIC composta mensal  
+
             - Agregação por contrato → agente (não por índice de linha do CSV de parcelas)
             """
         )

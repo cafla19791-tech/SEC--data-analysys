@@ -82,8 +82,8 @@ def test_modo_coluna_sem_coluna_falha():
         agregar_impacto_por_ano(df, modo="coluna")
 
 
-def test_agregar_modo_contagil_mais_um_dia():
-    """Paridade com calcular_impacto_fiscal_real (col E, capitaliza do dia seguinte)."""
+def test_agregar_modo_contagil_data_parcela():
+    """Paridade com calcular_impacto_fiscal_real (col D, nearest na data da parcela)."""
     df = pd.DataFrame(
         {
             "data_fluxo": [datetime(2009, 2, 15), datetime(2010, 1, 15)],
@@ -94,8 +94,8 @@ def test_agregar_modo_contagil_mais_um_dia():
     datas = np.array(
         [
             np.datetime64("2009-02-15"),
-            np.datetime64("2009-02-16"),  # dia seguinte à parcela 15/02
-            np.datetime64("2010-01-16"),
+            np.datetime64("2009-02-16"),
+            np.datetime64("2010-01-15"),
             np.datetime64("2026-06-30"),
         ],
         dtype="datetime64[ns]",
@@ -111,10 +111,10 @@ def test_agregar_modo_contagil_mais_um_dia():
     esperado_2010 = calcular_impacto_fiscal_real(
         50.0, datetime(2010, 1, 15), serie, DATA_REFERENCIA
     )
-    # 100 * 4/2 = 200 ; 50 * 4/2.5 = 80
-    assert esperado_2009 == 200.0
+    # 100 * 4/1 = 400 ; 50 * 4/2.5 = 80
+    assert esperado_2009 == 400.0
     assert esperado_2010 == 80.0
-    assert resumo.loc[resumo["Ano"] == 2009, "Impacto Fiscal 2026 (R$)"].iloc[0] == 200.0
+    assert resumo.loc[resumo["Ano"] == 2009, "Impacto Fiscal 2026 (R$)"].iloc[0] == 400.0
     assert resumo.loc[resumo["Ano"] == 2010, "Impacto Fiscal 2026 (R$)"].iloc[0] == 80.0
 
 

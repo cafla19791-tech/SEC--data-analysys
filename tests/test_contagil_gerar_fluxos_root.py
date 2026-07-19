@@ -48,15 +48,15 @@ def test_parse_massa_dados_contagil_cli():
     assert args.excel is None
 
 
-def test_calcular_impacto_usa_dia_seguinte():
+def test_calcular_impacto_usa_data_da_parcela():
     selic = pd.DataFrame(
         {
             "data": pd.to_datetime(["2009-02-15", "2009-02-16", "2026-06-30"]),
             "fator": [1.0, 2.0, 4.0],
         }
     )
-    # 15/02 → início 16/02 (fator 2) → 4/2 = 2×
-    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), selic) == 200.0
+    # ContAgil col D: nearest na própria parcela (15/02 → fator 1) → 4/1 = 4×
+    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), selic) == 400.0
 
 
 def test_gerar_fluxos_resumo_e_diario(tmp_path: Path):
@@ -114,7 +114,7 @@ def test_gerar_fluxos_colunas_contagil_portugues(tmp_path: Path):
         }
     ).to_excel(dados / "ops.xlsx", index=False)
     selic = tmp_path / "STP.xlsx"
-    # Fatores diários crescentes → SELIC mensal > taxa do contrato
+    # Fatores diários crescentes na col D → SELIC mensal > taxa do contrato
     dates = pd.date_range("2009-01-01", "2026-06-30", freq="D")
     fator = np.cumprod(np.full(len(dates), 1.0004))
     pd.DataFrame(
@@ -122,8 +122,8 @@ def test_gerar_fluxos_colunas_contagil_portugues(tmp_path: Path):
             "data": dates,
             "b": 0,
             "c": 0,
-            "d": 0.01,
-            "fator": fator,
+            "d": fator,  # ContAgil: coluna D
+            "e": 0,
         }
     ).to_excel(selic, index=False)
 

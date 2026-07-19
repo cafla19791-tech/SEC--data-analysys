@@ -6,9 +6,9 @@ Lê o CSV de parcelas (`fluxos_completos_*.csv`), calcula o impacto individual
 de cada parcela e agrega por ano de `data_fluxo`.
 
 Metodologia ContAgil (modo padrão quando há STP/Bacen):
-  data_proxima = data_parcela + 1 dia
-  impacto = subsídio × fator(nearest 30/06/2026) / fator(nearest data_proxima)
-  Fatores: coluna E do STP ContAgil, ou Bacen SGS 11 (--baixar-selic).
+  impacto = subsídio × FATOR_30_06_2026 / fator(nearest data_parcela)  # STP col D
+  ou (Bacen): subsídio × fator(nearest 30/06/2026) / fator(nearest data_parcela)
+  Fatores: coluna D do STP ContAgil, ou Bacen SGS 11 (--baixar-selic).
 
 Outros modos:
   - coluna: usa `impacto_fiscal` / `impacto` já gravado no CSV
@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import argparse
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -96,20 +96,26 @@ def _impacto_contagil(
     data_fluxo: pd.Series,
     selic_serie: SelicSerie,
 ) -> pd.Series:
-    """ContAgil: capitaliza a partir do dia seguinte à parcela (coluna E / Bacen)."""
-    datas_proxima = pd.to_datetime(data_fluxo) + timedelta(days=1)
+    """ContAgil: capitaliza na data da parcela (coluna D / Bacen)."""
+    from scripts.gerar_fluxos import FATOR_30_06_2026
+
+    datas = pd.to_datetime(data_fluxo)
     idx_inicio = np.fromiter(
-        (selic_serie.idx_proximo(d) for d in datas_proxima),
+        (selic_serie.idx_proximo(d) for d in datas),
         dtype=np.int64,
-        count=len(datas_proxima),
+        count=len(datas),
     )
-    idx_fim = selic_serie.idx_proximo(DATA_REFERENCIA)
     fator_inicio = selic_serie.fatores[idx_inicio]
-    fator_fim = float(selic_serie.fatores[idx_fim])
+    if selic_serie.fator_referencia is not None:
+        fator_fim = float(selic_serie.fator_referencia)
+    else:
+        fator_fim = float(selic_serie.fatores[selic_serie.idx_proximo(DATA_REFERENCIA)])
+    if fator_fim <= 0:
+        fator_fim = float(FATOR_30_06_2026)
     subs = subsidio.to_numpy(dtype=float, copy=False)
 
     out = np.where(subs <= 0, 0.0, subs)
-    mask = (subs > 0) & (idx_fim > idx_inicio) & (fator_inicio > 0)
+    mask = (subs > 0) & (fator_inicio > 0) & (fator_fim > 0)
     out = out.astype(float, copy=True)
     out[mask] = np.round(subs[mask] * (fator_fim / fator_inicio[mask]), 2)
     out[~mask & (subs > 0)] = np.round(subs[~mask & (subs > 0)], 2)
@@ -122,7 +128,7 @@ def carregar_serie_selic(
 ) -> SelicSerie | None:
     path = resolver_arquivo_selic(arquivo_selic)
     if path is not None:
-        print(f"Lendo SELIC ContAgil (col E / fator_acumulado): {path}")
+        print(f"Lendo SELIC ContAgil (col D / fator_acumulado): {path}")
         serie = SelicSerie.from_excel(path)
         print(f"  {len(serie.datas):,} pontos ({serie.origem})")
         return serie
@@ -256,7 +262,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         choices=MODOS,
         default="contagil",
         help=(
-            "contagil = fatores STP/Bacen col E, +1 dia (padrão); "
+            "contagil = fatores STP/Bacen col D, FATOR_30_06_2026 (padrão); "
             "coluna = impacto já no CSV; "
             "recalcular = (1+SELIC/12)^meses; "
             "composta = (1+SELIC_m)^meses"
@@ -267,7 +273,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=None,
         help=(
-            "Excel STP ContAgil (col A=data, col E=fator). "
+            "Excel STP ContAgil (col A=data, col D=fator). "
             "Default: auto-descoberta (caminho ContAgil Windows / data/STP*.xlsx)."
         ),
     )

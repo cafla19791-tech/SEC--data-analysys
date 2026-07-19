@@ -20,7 +20,7 @@ Arquivos principais:
 # ContAgil (fatores Bacen se não houver STP local)
 python3 scripts/impacto_fiscal_por_ano.py --baixar-selic --fluxos output/fluxos_amostra.csv
 
-# STP ContAgil da RFB (coluna E)
+# STP ContAgil da RFB (coluna D)
 python3 scripts/impacto_fiscal_por_ano.py \
   --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx" \
   --fluxos output/fluxos_completos_final.csv

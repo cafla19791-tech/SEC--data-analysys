@@ -178,20 +178,20 @@ def test_calcular_impacto_fiscal_real_contagil():
     )
     fatores = np.array([1.0, 1.1, 1.65], dtype=float)
     serie = SelicSerie(datas, fatores)
-    # Regra ContAgil: usa dia seguinte à parcela (16/01 → fator 1.1)
-    assert calcular_impacto_fiscal_real(100.0, datetime(2020, 1, 15), serie) == 150.0
+    # ContAgil corrigido: nearest na própria parcela (15/01 → fator 1.0) → 1.65/1.0
+    assert calcular_impacto_fiscal_real(100.0, datetime(2020, 1, 15), serie) == 165.0
     assert calcular_impacto_fiscal_real(0.0, datetime(2020, 1, 15), serie) == 0.0
-    # data_impacto anterior/igual → sem capitalização
+    # parcela no fim → fator_fim/fator_parcela = 1
     assert (
         calcular_impacto_fiscal_real(
-            100.0, datetime(2026, 6, 30), serie, data_impacto=datetime(2020, 1, 15)
+            100.0, datetime(2026, 6, 30), serie, data_impacto=datetime(2026, 6, 30)
         )
         == 100.0
     )
 
 
-def test_impacto_usa_dia_seguinte_da_parcela():
-    """idx_inicio = nearest(data_parcela + 1 dia), não a própria data da parcela."""
+def test_impacto_usa_data_da_parcela_nao_dia_seguinte():
+    """idx = nearest(data_parcela), não data_parcela + 1 dia."""
     datas = np.array(
         [
             np.datetime64("2009-02-15"),
@@ -202,10 +202,21 @@ def test_impacto_usa_dia_seguinte_da_parcela():
     )
     fatores = np.array([1.0, 2.0, 4.0], dtype=float)
     serie = SelicSerie(datas, fatores)
-    # 15/02 → início em 16/02 (fator 2) → 4/2 = 2×
-    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), serie) == 200.0
-    # Se usasse a própria parcela (fator 1) daria 400 — garante a regra +1 dia
-    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), serie) != 400.0
+    # 15/02 → fator 1.0; fim 4.0 → ×4
+    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), serie) == 400.0
+    # Se usasse +1 dia (fator 2) daria 200 — garante a regra ContAgil col D
+    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), serie) != 200.0
+
+
+def test_impacto_stp_usa_fator_referencia_30_06_2026():
+    """STP ContAgil: impacto = subsidio × FATOR_30_06_2026 / fator_parcela."""
+    from scripts.gerar_fluxos import FATOR_30_06_2026
+
+    datas = np.array([np.datetime64("2009-02-15")], dtype="datetime64[ns]")
+    fatores = np.array([10.0], dtype=float)
+    serie = SelicSerie(datas, fatores, fator_referencia=FATOR_30_06_2026)
+    esperado = round(100.0 * (FATOR_30_06_2026 / 10.0), 2)
+    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), serie) == esperado
 
 
 def test_fator_from_taxas_diarias():
@@ -220,16 +231,18 @@ def test_fator_from_taxas_diarias():
     assert serie.idx_proximo(datetime(2024, 1, 2, 12)) in (0, 1)
 
 
-def test_from_excel_le_fator_coluna_e(tmp_path):
-    """ContAgil: col A = data, col E (índice 4) = fator acumulado."""
+def test_from_excel_le_fator_coluna_d(tmp_path):
+    """ContAgil: col A = data, col D (índice 3) = fator acumulado."""
+    from scripts.gerar_fluxos import FATOR_30_06_2026
+
     path = tmp_path / "STP-20260716182715078 (1).xlsx"
     pd.DataFrame(
         {
             "data": ["15/01/2020", "16/01/2020", "30/06/2026"],
             "b": [0.0, 0.0, 0.0],
             "c": [0.0, 0.0, 0.0],
-            "d": [0.01, 0.01, 0.02],
-            "fator": [1.0, 1.0, 1.8],
+            "d": [1.0, 1.2, 1.8],
+            "e": [9.0, 9.0, 9.0],  # col E ignorada
         }
     ).to_excel(path, index=False)
 
@@ -237,12 +250,16 @@ def test_from_excel_le_fator_coluna_e(tmp_path):
     assert len(serie.fatores) == 3
     assert abs(serie.fatores[0] - 1.0) < 1e-12
     assert abs(serie.fatores[-1] - 1.8) < 1e-12
-    # 15/01 + 1 dia → 16/01 (fator 1.0) → 1.8/1.0
-    assert calcular_impacto_fiscal_real(100.0, datetime(2020, 1, 15), serie) == 180.0
+    assert serie.fator_referencia == FATOR_30_06_2026
+    # 15/01 → fator 1.0; fim = FATOR_30_06_2026
+    esperado = round(100.0 * (FATOR_30_06_2026 / 1.0), 2)
+    assert calcular_impacto_fiscal_real(100.0, datetime(2020, 1, 15), serie) == esperado
 
 
 def test_gerar_fluxos_aceita_dataframe_selic_contagil():
-    """Compat ContAgil: gerar_fluxos(df, selic_df) com col E = fator."""
+    """Compat ContAgil: gerar_fluxos(df, selic_df) com col D = fator."""
+    from scripts.gerar_fluxos import FATOR_30_06_2026
+
     contratos = pd.DataFrame(
         {
             "data_contratacao": [pd.Timestamp("2009-02-15")],
@@ -259,28 +276,35 @@ def test_gerar_fluxos_aceita_dataframe_selic_contagil():
             "data": ["15/02/2009", "16/02/2009", "30/06/2026"],
             "b": [0.0, 0.0, 0.0],
             "c": [0.0, 0.0, 0.0],
-            "d": [0.01, 0.01, 0.02],
-            "fator": [1.0, 2.0, 4.0],
+            "d": [2.0, 2.5, 4.0],
+            "e": [99.0, 99.0, 99.0],
         }
     )
     fluxos = gerar_fluxos(contratos, selic_df)
     assert len(fluxos) == 1
-    # 15/02 + 1d → fator 2; fim fator 4 → ×2
-    assert abs(fluxos.iloc[0]["impacto_fiscal"] - round(fluxos.iloc[0]["subsidio"] * 2.0, 2)) < 0.02
+    # 15/02 → fator 2.0; fim = FATOR_30_06_2026 (impacto arredonda o produto bruto)
+    mult = FATOR_30_06_2026 / 2.0
+    assert fluxos.iloc[0]["impacto_fiscal"] > fluxos.iloc[0]["subsidio"]
+    assert abs(
+        fluxos.iloc[0]["impacto_fiscal"] / max(fluxos.iloc[0]["subsidio"], 1e-9) - mult
+    ) < 0.05
 
 
-def test_from_dataframe_coluna_e():
+def test_from_dataframe_coluna_d():
+    from scripts.gerar_fluxos import FATOR_30_06_2026
+
     selic_df = pd.DataFrame(
         {
             "data": ["01/01/2020", "30/06/2026"],
             "b": [0, 0],
             "c": [0, 0],
-            "d": [0.01, 0.01],
-            "fator": [1.0, 1.5],
+            "d": [1.0, 1.5],
+            "e": [9.0, 9.0],
         }
     )
     serie = SelicSerie.from_dataframe(selic_df)
     assert abs(serie.fatores[-1] - 1.5) < 1e-12
+    assert serie.fator_referencia == FATOR_30_06_2026
 
 
 def test_taxa_contrato_anual_tjlp_tlp():

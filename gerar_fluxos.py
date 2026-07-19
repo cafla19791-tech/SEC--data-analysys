@@ -14,12 +14,14 @@ import numpy as np
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
-print("🚀 Gerando fluxos com lógica corrigida...")
+print("🚀 Gerando fluxos com fator Selic correto (Coluna D)...")
 
 DATA_CORTE = datetime(2026, 6, 30)
 FLUXOS_DIARIOS_NOME = "fluxos_diarios_detalhados.xlsx"
 TJLP_TLP_BASE = 0.06
 TAXA_SELIC_ANUAL = 0.145
+# Fator ContAgil de referência em 30/06/2026 (coluna D do STP)
+FATOR_30_06_2026 = 82.84819
 
 
 def taxa_contrato_efetiva(custo_financeiro: str | None, juros_pct: float) -> float:
@@ -60,17 +62,34 @@ def _normalize_col(name: str) -> str:
 
 
 def load_selic(selic_file: str | None = None) -> pd.DataFrame:
-    """Load SELIC data, prefer local file, fallback placeholder."""
+    """Load SELIC data, prefer local file, fallback placeholder.
+
+    ContAgil corrigido: fatores na coluna D (índice 3).
+    Preferência: fator_acumulado / fator nomeado → col D → última coluna.
+    """
     if selic_file and os.path.exists(selic_file):
         selic = pd.read_excel(selic_file)
         datas_selic = pd.to_datetime(selic.iloc[:, 0], dayfirst=True)
-        fatores_selic = selic.iloc[:, 4].values  # Coluna E
-        return pd.DataFrame({"data": datas_selic, "fator": fatores_selic})
+        cols_lower = {str(c).strip().lower(): c for c in selic.columns}
+        fator_ref = None
+        if "fator_acumulado" in cols_lower:
+            fatores_selic = selic[cols_lower["fator_acumulado"]].values
+        elif "fator" in cols_lower:
+            fatores_selic = selic[cols_lower["fator"]].values
+        elif selic.shape[1] >= 4:
+            fatores_selic = selic.iloc[:, 3].values  # Coluna D
+            fator_ref = FATOR_30_06_2026
+        else:
+            fatores_selic = selic.iloc[:, -1].values
+        out = pd.DataFrame({"data": datas_selic, "fator": fatores_selic})
+        if fator_ref is not None:
+            out.attrs["fator_referencia"] = fator_ref
+        return out
 
     print("⚠️ No SELIC file, using placeholder. In production fetch SGS 11")
     dates = pd.date_range(start="2009-01-01", end="2026-06-30", freq="D")
     df = pd.DataFrame({"data": dates})
-    # Fator acumulado dummy (diário)
+    # Fator acumulado dummy (diário) — sem fator de referência ContAgil
     df["fator"] = (1 + 0.0001) ** (df.index + 1)
     return df
 
@@ -84,17 +103,27 @@ def get_selic_daily_factor(date, selic_df: pd.DataFrame) -> float:
 
 
 def calcular_impacto_fiscal_real(subsidio, data_parcela, selic_df: pd.DataFrame) -> float:
-    """Capitaliza o subsídio com SELIC até 30/06/2026."""
+    """Capitaliza o subsídio com SELIC até 30/06/2026 (fator coluna D).
+
+    ContAgil:
+      idx = nearest(data_parcela)
+      impacto = subsidio * FATOR_30_06_2026 / fator_parcela
+    """
     if subsidio <= 0:
         return 0.0
-    data_proxima = pd.Timestamp(data_parcela) + timedelta(days=1)
-    idx_inicio = selic_df["data"].sub(data_proxima).abs().idxmin()
-    data_fim = DATA_CORTE
-    idx_fim = selic_df["data"].sub(data_fim).abs().idxmin()
-    if idx_fim > idx_inicio:
-        fator = selic_df["fator"].iloc[idx_fim] / selic_df["fator"].iloc[idx_inicio]
-        return round(float(subsidio) * float(fator), 2)
-    return round(float(subsidio), 2)
+    idx = selic_df["data"].sub(pd.to_datetime(data_parcela)).abs().idxmin()
+    fator_parcela = float(selic_df["fator"].iloc[idx])
+    if fator_parcela <= 0:
+        return 0.0
+    fator_ref = selic_df.attrs.get("fator_referencia")
+    if fator_ref is not None:
+        fator_fim = float(fator_ref)
+    else:
+        idx_fim = selic_df["data"].sub(pd.to_datetime(DATA_CORTE)).abs().idxmin()
+        fator_fim = float(selic_df["fator"].iloc[idx_fim])
+    if fator_fim <= 0:
+        return round(float(subsidio), 2)
+    return round(float(subsidio) * (fator_fim / fator_parcela), 2)
 
 
 def _col_or_default(df: pd.DataFrame, col_name: str | None, default=0):
@@ -335,7 +364,7 @@ def gerar_fluxos(
             em_carencia = mes <= int(row["meses_carencia"])
             amort = 0.0 if em_carencia else amort_mensal
 
-            # SELIC mensal via fatores ContAgil (col E); fallback 14,5% a.a. composta
+            # SELIC mensal via fatores ContAgil (col D); fallback 14,5% a.a. composta
             fator_inicio = get_selic_daily_factor(data_atual, selic_df)
             data_fim_mes = data_atual + relativedelta(months=1)
             fator_fim = get_selic_daily_factor(data_fim_mes, selic_df)
@@ -489,7 +518,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--arquivo-selic",
         type=str,
         default=None,
-        help="SELIC STP (col A=data, col E=fator)",
+        help="SELIC STP (col A=data, col D=fator)",
     )
     parser.add_argument(
         "--fluxo-diario",

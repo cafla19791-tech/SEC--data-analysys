@@ -7,7 +7,7 @@ Entrypoint no estilo do script ContAgil/RFB (WinPython):
   arquivo_selic             = .../STP-20260716182715078 (1).xlsx
 
 Processa todos os .xlsx da massa de dados, gera fluxos (SAC + carência corrigida)
-e impacto fiscal ContAgil (col E, capitalização a partir do dia seguinte → 30/06/2026).
+e impacto fiscal ContAgil (col D, FATOR_30_06_2026 / fator_parcela).
 
 Correções vs script ContAgil original (colado/corrompido):
   - sintaxe Python válida (True/values/method='nearest'/etc.)
@@ -15,7 +15,7 @@ Correções vs script ContAgil original (colado/corrompido):
   - carência: cronograma cobre (carência + n) meses
   - taxa_contrato_efetiva: TAXA FIXA / TJLP/TLP com composição mensal
   - dual balance: saldo_fiscal (principal) + saldo_contrato (com juros)
-  - fator SELIC na coluna E; idx_inicio = nearest(data_parcela + 1 dia)
+  - fator SELIC na coluna D; idx = nearest(data_parcela); fim = FATOR_30_06_2026
 
 Uso (ContAgil / WinPython):
   python3 scripts/contagil_fluxos.py \\
@@ -45,7 +45,7 @@ import argparse
 import glob
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -80,28 +80,37 @@ def listar_excels(pasta: Path) -> list[Path]:
 
 def teste_contrato0(serie: SelicSerie) -> float:
     """Validação ContAgil: subsidio=1886.11 em 15/02/2009."""
+    from scripts.gerar_fluxos import FATOR_30_06_2026
+
     subsidio = 1886.11
     data_parcela = datetime(2009, 2, 15)
     impacto = calcular_impacto_fiscal_real(subsidio, data_parcela, serie)
     print(f"Contrato 0 — subsidio={subsidio} data={data_parcela.date()}")
-    print(f"Impacto Fiscal (fatores ContAgil): R$ {impacto:,.2f}")
-    data_proxima = data_parcela + timedelta(days=1)
-    idx_inicio = serie.idx_proximo(data_proxima)
-    idx_fim = serie.idx_proximo(DATA_IMPACTO)
-    if idx_fim > idx_inicio:
-        fator = serie.fatores[idx_fim] / serie.fatores[idx_inicio]
-        print(f"  fator = {fator:.6f}  (idx {idx_inicio} → {idx_fim})")
+    print(f"Impacto Fiscal (fatores ContAgil col D): R$ {impacto:,.2f}")
+    idx = serie.idx_proximo(data_parcela)
+    fator_parcela = float(serie.fatores[idx])
+    fator_fim = (
+        float(serie.fator_referencia)
+        if serie.fator_referencia is not None
+        else float(serie.fatores[serie.idx_proximo(DATA_IMPACTO)])
+    )
+    if fator_parcela > 0:
+        fator = fator_fim / fator_parcela
+        print(
+            f"  fator = {fator:.6f}  (parcela={fator_parcela:.5f} → "
+            f"ref={fator_fim:.5f}; FATOR_30_06_2026={FATOR_30_06_2026})"
+        )
     return impacto
 
 
 def carregar_selic(arquivo_selic: Path | None, baixar: bool) -> SelicSerie | None:
-    """Carrega STP ContAgil (col E) ou Bacen; espelha o script RFB."""
+    """Carrega STP ContAgil (col D) ou Bacen; espelha o script RFB."""
     # Preferência: caminho explícito → auto ContAgil/data → Bacen se baixar
     if arquivo_selic is not None:
         caminho = Path(arquivo_selic)
         if caminho.exists():
             serie = SelicSerie.from_excel(caminho)
-            print(f"SELIC ContAgil: {caminho} ({len(serie.datas):,} pontos)")
+            print(f"SELIC ContAgil (col D): {caminho} ({len(serie.datas):,} pontos)")
             return serie
         # Caminho ContAgil explícito ausente: tenta auto-descoberta antes de falhar
         print(f"⚠️ Arquivo SELIC não encontrado: {caminho}")
@@ -110,13 +119,13 @@ def carregar_selic(arquivo_selic: Path | None, baixar: bool) -> SelicSerie | Non
     resolvido = resolver_arquivo_selic(None)
     if resolvido is not None:
         serie = SelicSerie.from_excel(resolvido)
-        print(f"SELIC ContAgil: {resolvido} ({len(serie.datas):,} pontos)")
+        print(f"SELIC ContAgil (col D): {resolvido} ({len(serie.datas):,} pontos)")
         return serie
 
     if arquivo_selic is not None and not baixar:
         raise FileNotFoundError(
             f"Arquivo SELIC não encontrado: {arquivo_selic}\n"
-            "Coloque o STP ContAgil (coluna E = fator) no caminho indicado "
+            "Coloque o STP ContAgil (coluna D = fator) no caminho indicado "
             "ou use --baixar-selic para Bacen SGS 11."
         )
 

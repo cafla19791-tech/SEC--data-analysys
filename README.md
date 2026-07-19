@@ -22,7 +22,7 @@ python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv --s
 python3 scripts/gerar_fluxos.py --input data/sample_operacoes_com_agente.csv \
   --fluxo-diario --sem-selic-fatores --max-contratos 5
 
-# Script ContAgil (raiz): SAC + SELIC diário exato (fatores col E) + --fluxo-diario
+# Script ContAgil (raiz): SAC + SELIC diário exato (fatores col D) + --fluxo-diario
 python3 gerar_fluxos.py --excel data/sample_operacoes_com_agente.csv \
   --fluxo-diario --output-dir output --max-contratos 5
 # Mesmo CLI ContAgil WinPython (--massa-dados / --pasta-saida):
@@ -31,7 +31,7 @@ python3 gerar_fluxos.py \
   --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
   --arquivo-selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\STP-20260716182715078 (1).xlsx"
 
-# Entrypoint ContAgil (mesmo fluxo do script RFB: col E + dia seguinte)
+# Entrypoint ContAgil (mesmo fluxo do script RFB: col D + FATOR_30_06_2026)
 python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
 python3 scripts/contagil_fluxos.py --teste-contrato0
 
@@ -59,7 +59,7 @@ python3 scripts/gerar_fluxos.py --download --baixar-selic
 # Só o ranking (CLI)
 python3 scripts/resumo_por_agente.py --from-output
 
-# Impacto fiscal por ano de pagamento (ContAgil: col E, +1 dia → 30/06/2026)
+# Impacto fiscal por ano de pagamento (ContAgil: col D, FATOR_30_06_2026)
 python3 scripts/impacto_fiscal_por_ano.py --baixar-selic --fluxos output/fluxos_amostra.csv
 # Com STP ContAgil local (Windows RFB):
 python3 scripts/impacto_fiscal_por_ano.py \
@@ -118,13 +118,15 @@ Para cada mês `p = 1 .. (carência + amortização)`:
 - `spread = (1 + (SELIC_m − taxa_contrato_m))^n`
 - `subsídio = saldo_fiscal × (SELIC_m − taxa_contrato_m)` (antes da amortização)
 - `impacto_fiscal` (`calcular_impacto_fiscal_real`):
-  - com fatores (STP ContAgil ou Bacen):
-    `subsídio × fator(nearest 30/06/2026) / fator(nearest data_fluxo + 1 dia)`
+  - STP ContAgil (coluna D):
+    `subsídio × FATOR_30_06_2026 / fator(nearest data_parcela)`
+    com `FATOR_30_06_2026 = 82.84819`
+  - Bacen/outros: `subsídio × fator(nearest 30/06/2026) / fator(nearest data_parcela)`
   - sem fatores: `subsídio × (1 + SELIC_m)^(meses até 30/06/2026)`
 
 SELIC anual de referência (taxas mensais / fallback): **14,5%**.
-Fatores ContAgil: coluna A = data, coluna E = fator acumulado.
-Início da capitalização: **dia seguinte** à data da parcela.
+Fatores ContAgil: coluna A = data, **coluna D** = fator acumulado.
+Capitalização: **na data da parcela** (nearest), até o fator de 30/06/2026.
 
 **Correção de carência:** o script ContAgil original misturava
 `data = contr + (carência + p)` com `em_carencia = p <= carência` no loop
@@ -145,7 +147,7 @@ automaticamente.
 
 ## Resultado do run completo (2009–2010)
 
-Com fatores SELIC Bacen (SGS 11) no layout ContAgil (col E = fator; +1 dia),
+Com fatores SELIC Bacen (SGS 11) no layout ContAgil (fator nomeado; data da parcela),
 na ausência do arquivo STP local `STP-20260716182715078 (1).xlsx`:
 
 | Indicador | Valor |
