@@ -7,7 +7,9 @@ Metodologia ContAgil (lógica corrigida) + carência corrigida:
   - taxa_contrato_efetiva (mensal):
       * TAXA FIXA / demais: (1 + juros)^(1/12) − 1
       * TJLP / TLP: (1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1
-  - Fluxos em TODOS os meses (carência + amortização)
+  - gerar_fluxos(df, df) → df_original (Instituição); gerar_fluxos(df, selic) → fatores
+  - Aceita planilha bruta ContAgil (header=5, colunas em português)
+  - Fluxos em TODOS os meses (carência + amortização) — corrige bug p=1..n
   - Amortização constante só após a carência
   - Dual balance: saldo_fiscal (principal) e saldo_contrato (com juros)
   - spread = (1 + (SELIC_m − taxa_contrato_m))^n
@@ -89,19 +91,43 @@ def taxa_contrato_anual(custo_financeiro: str | None, juros_pct: float) -> float
     return juros
 
 
-def taxa_contrato_efetiva(custo_financeiro: str | None, juros_pct: float) -> float:
+def taxa_contrato_efetiva(
+    custo_financeiro: str | None | pd.Series | dict = None,
+    juros_pct: float | None = None,
+) -> float:
     """Taxa mensal efetiva do contrato (lógica corrigida ContAgil).
+
+    Aceita ``taxa_contrato_efetiva(custo, juros_pct)`` ou o rascunho
+    ContAgil ``taxa_contrato_efetiva(row)`` (Series/dict com
+    ``Custo financeiro`` / ``Juros``).
 
     ``juros_pct`` vem da coluna Juros em % a.a. (ex.: 6.0 → 6%).
 
     - TAXA FIXA / demais: ``(1 + juros)^(1/12) − 1``
     - TJLP / TLP: ``(1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1``
 
-    Nota: o rascunho ContAgil às vezes omite o ``^(1/12)`` do juros em TJLP/TLP;
-    aqui ambos os fatores anuais são convertidos para mensal (juros em % a.a.).
+    Nota: o rascunho ContAgil às vezes escreve
+    ``(1,06)^(1/12)×(1+juros)−1`` (juros anual sem mensalizar). Aqui ambos
+    os fatores anuais são compostos mensalmente — caso contrário a taxa
+    mensal fica ~2–3%/mês e o subsídio vira fortemente negativo.
     """
+    # ContAgil paste: taxa_contrato_efetiva(row)
+    if juros_pct is None and custo_financeiro is not None and not isinstance(
+        custo_financeiro, str
+    ):
+        row = custo_financeiro
+        get = row.get if hasattr(row, "get") else lambda k, d=None: (
+            row[k] if k in getattr(row, "index", ()) else d
+        )
+        custo_financeiro = get("Custo financeiro") or get("custo_financeiro") or ""
+        raw_juros = get("Juros", get("juros", 0))
+        try:
+            juros_pct = float(str(raw_juros).replace("%", "").replace(",", "."))
+        except (TypeError, ValueError):
+            juros_pct = 0.0
+
     try:
-        juros = float(juros_pct) / 100.0
+        juros = float(juros_pct or 0.0) / 100.0
     except (TypeError, ValueError):
         juros = 0.0
 
@@ -1050,17 +1076,175 @@ def salvar_fluxos_diarios(
     return out
 
 
-def _resolver_selic_arg(
-    selic_aa: float | SelicSerie | pd.DataFrame,
+_OPS_COL_MARKERS = {
+    "data_contratacao",
+    "valor_desembolsado",
+    "juros",
+    "prazo_amortizacao",
+    "data_da_contratacao",
+    "valor_desembolsado_reais",
+    "prazo_amortizacao_meses",
+    "Data da contratação",
+    "Valor Desembolsado R$ (*)",
+    "Juros",
+    "Prazo - Amortização (meses)",
+    "Custo financeiro",
+    "Instituição Financeira Credenciada",
+}
+
+
+def _parece_dataframe_operacoes(df: pd.DataFrame) -> bool:
+    """True se o DataFrame parece massa de operações (não SELIC STP)."""
+    cols = {str(c) for c in df.columns}
+    if cols & _OPS_COL_MARKERS:
+        return True
+    norm = {_normalize_nome_coluna(c) for c in df.columns}
+    return bool(
+        norm
+        & {
+            "data_da_contratacao",
+            "data_contratacao",
+            "valor_desembolsado_reais",
+            "valor_desembolsado_r",
+            "juros",
+            "prazo_amortizacao_meses",
+            "prazo_amortizacao",
+            "custo_financeiro",
+        }
+    )
+
+
+def _parece_dataframe_selic(df: pd.DataFrame) -> bool:
+    """True se parece série de fatores SELIC ContAgil/Bacen."""
+    if _parece_dataframe_operacoes(df):
+        return False
+    cols_lower = {str(c).strip().lower() for c in df.columns}
+    if "fator_acumulado" in cols_lower or "fator" in cols_lower:
+        return True
+    # Layout STP ContAgil: várias colunas, sem campos de contrato
+    return df.shape[1] >= 5
+
+
+def _normalize_nome_coluna(name: object) -> str:
+    import unicodedata
+
+    text = str(name).strip().lower()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    cleaned: list[str] = []
+    for ch in text:
+        if ch.isalnum():
+            cleaned.append(ch)
+        else:
+            cleaned.append("_")
+    text = "".join(cleaned)
+    while "__" in text:
+        text = text.replace("__", "_")
+    return text.strip("_")
+
+
+def _as_contratos(df: pd.DataFrame) -> pd.DataFrame:
+    """Aceita contratos já preparados ou planilha/CSV brutos ContAgil."""
+    if {"data_contratacao", "valor_desembolsado", "juros", "prazo_amortizacao"}.issubset(
+        df.columns
+    ):
+        out = df.copy()
+        if "contrato" not in out.columns:
+            out = out.reset_index(drop=True)
+            out["contrato"] = out.index
+        if "agente" not in out.columns:
+            out["agente"] = AGENTE_NAO_INFORMADO
+        if "custo_financeiro" not in out.columns:
+            out["custo_financeiro"] = ""
+        if "prazo_carencia" not in out.columns:
+            out["prazo_carencia"] = 0
+        return out
+
+    rename = {k: v for k, v in {**EXCEL_COLUMNS, **CSV_COLUMNS}.items() if k in df.columns}
+    # Também aceita nomes já normalizados / variações ContAgil
+    norm_map = {
+        "data_da_contratacao": "data_contratacao",
+        "data_contratacao": "data_contratacao",
+        "valor_desembolsado_reais": "valor_desembolsado",
+        "valor_desembolsado_r": "valor_desembolsado",
+        "juros": "juros",
+        "prazo_carencia_meses": "prazo_carencia",
+        "prazo_carencia": "prazo_carencia",
+        "prazo_amortizacao_meses": "prazo_amortizacao",
+        "prazo_amortizacao": "prazo_amortizacao",
+        "instituicao_financeira_credenciada": "agente",
+        "agente": "agente",
+        "custo_financeiro": "custo_financeiro",
+        "custo_financeiro_da_operacao": "custo_financeiro",
+    }
+    for col in df.columns:
+        key = _normalize_nome_coluna(col)
+        if key in norm_map and norm_map[key] not in rename.values():
+            rename[col] = norm_map[key]
+
+    prepared = df.rename(columns=rename)
+    return _prepare_contracts(prepared)
+
+
+def _instituicao_de_original(
+    df_original: pd.DataFrame | None, idx: int, fallback: str
+) -> str:
+    """Espelha ContAgil: instituição a partir de df_original.iloc[idx]."""
+    if df_original is None or idx >= len(df_original):
+        return fallback
+    row = df_original.iloc[idx]
+    for col in (
+        "Instituição Financeira Credenciada",
+        "Instituicao Financeira Credenciada",
+        "instituicao_financeira_credenciada",
+        "agente",
+    ):
+        if col in df_original.columns:
+            val = row[col]
+            if pd.notna(val) and str(val).strip():
+                return str(val).strip()
+    # tenta por nome normalizado
+    for col in df_original.columns:
+        if _normalize_nome_coluna(col) in {
+            "instituicao_financeira_credenciada",
+            "agente",
+        }:
+            val = row[col]
+            if pd.notna(val) and str(val).strip():
+                return str(val).strip()
+    return fallback
+
+
+def _resolver_segundo_arg(
+    segundo: float | SelicSerie | pd.DataFrame,
     selic_serie: SelicSerie | None,
-) -> tuple[float, SelicSerie | None]:
-    """Compat ContAgil: gerar_fluxos(df, selic_df) ou gerar_fluxos(df, serie)."""
-    if isinstance(selic_aa, SelicSerie):
-        return TAXA_SELIC_ANUAL, selic_aa
-    if isinstance(selic_aa, pd.DataFrame):
-        # Script ContAgil: gerar_fluxos(df, df) / gerar_fluxos(contratos, selic)
-        return TAXA_SELIC_ANUAL, SelicSerie.from_dataframe(selic_aa, origem="dataframe")
-    return float(selic_aa), selic_serie
+) -> tuple[float, SelicSerie | None, pd.DataFrame | None]:
+    """Resolve 2º argumento ContAgil: SELIC, série, taxa ou df_original.
+
+    Aceita o rascunho ContAgil ``gerar_fluxos(df, df)`` (df_original para
+    Instituição Financeira) e também ``gerar_fluxos(df, selic_df)``.
+    """
+    if isinstance(segundo, SelicSerie):
+        return TAXA_SELIC_ANUAL, segundo, None
+    if isinstance(segundo, pd.DataFrame):
+        if _parece_dataframe_selic(segundo):
+            return (
+                TAXA_SELIC_ANUAL,
+                SelicSerie.from_dataframe(segundo, origem="dataframe"),
+                None,
+            )
+        if _parece_dataframe_operacoes(segundo):
+            # ContAgil paste: gerar_fluxos(df, df_original)
+            return TAXA_SELIC_ANUAL, selic_serie, segundo
+        # Ambíguo: assume SELIC só se tiver ≥5 colunas (layout STP)
+        if segundo.shape[1] >= 5:
+            return (
+                TAXA_SELIC_ANUAL,
+                SelicSerie.from_dataframe(segundo, origem="dataframe"),
+                None,
+            )
+        return TAXA_SELIC_ANUAL, selic_serie, segundo
+    return float(segundo), selic_serie, None
 
 
 def gerar_fluxos(
@@ -1071,27 +1255,38 @@ def gerar_fluxos(
     fluxo_diario: bool = False,
     saida_diario: Path | str | None = None,
 ) -> pd.DataFrame:
-    """Gera DataFrame completo de fluxos (adequado para volumes menores / testes).
+    """Gera DataFrame completo de fluxos (parcelas mensais).
 
-    Compatível com o script ContAgil:
-      df_fluxos = gerar_fluxos(df, selic)   # selic = DataFrame STP ou SelicSerie
+    Compatível com o rascunho ContAgil (lógica corrigida)::
+
+        df_fluxos = gerar_fluxos(df, df)          # df_original = instituições
+        df_fluxos = gerar_fluxos(df, selic_df)    # fatores STP/Bacen
+        df_fluxos = gerar_fluxos(contratos)       # SELIC 14,5% composta
+
+    Aceita planilha bruta (header=5, colunas em português) ou contratos
+    já preparados. Mantém carência+n (corrige o bug ``p=1..n`` com offset).
 
     Com fluxo_diario=True, também gera a tabela dia a dia em
     output/fluxos_diarios_detalhados.xlsx (ou saida_diario).
     """
-    selic_aa, selic_serie = _resolver_selic_arg(selic_aa, selic_serie)
+    print("🚀 Gerando fluxos com lógica corrigida...")
+    selic_aa, selic_serie, df_original = _resolver_segundo_arg(selic_aa, selic_serie)
+    contratos = _as_contratos(df)
     records: list[dict] = []
     fluxos_diarios: list[dict] = []
     skipped = 0
 
-    for row in df.itertuples(index=False):
+    for pos, row in enumerate(contratos.itertuples(index=False)):
         try:
             data_contr = pd.Timestamp(row.data_contratacao)
             if pd.isna(data_contr):
                 skipped += 1
                 continue
-            instituicao = str(
+            fallback_agente = str(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
+            )
+            instituicao = _instituicao_de_original(
+                df_original, pos, fallback_agente
             )
             custo = getattr(row, "custo_financeiro", "")
             juros_pct = float(row.juros)

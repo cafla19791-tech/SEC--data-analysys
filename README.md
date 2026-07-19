@@ -131,6 +131,18 @@ Início da capitalização: **dia seguinte** à data da parcela.
 `p = 1..n`, o que zerava amortização indevidamente. Aqui o cronograma
 cobre `carência + n` meses.
 
+**API ContAgil (`gerar_fluxos`):**
+
+```python
+df = pd.read_excel("operacoes_....xlsx", sheet_name="operacoes_indiretas_automaticas", header=5)
+df_fluxos = gerar_fluxos(df, df)   # 2º arg = df_original (Instituição Financeira)
+df_fluxos.to_excel("fluxos_completos_final.xlsx", index=False)
+```
+
+O 2º argumento também aceita DataFrame de fatores SELIC (STP/Bacen) ou a
+taxa anual. Planilhas brutas (colunas em português) são normalizadas
+automaticamente.
+
 ## Resultado do run completo (2009–2010)
 
 Com fatores SELIC Bacen (SGS 11) no layout ContAgil (col E = fator; +1 dia),

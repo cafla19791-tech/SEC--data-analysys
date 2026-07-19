@@ -162,7 +162,8 @@ def main() -> None:
             """
             - **Agente** = Instituição Financeira Credenciada  
             - **Taxa contrato** (`taxa_contrato_efetiva`): TAXA FIXA → `(1+juros)^(1/12)−1`;
-              TJLP/TLP → `(1,06)^(1/12)×(1+juros)^(1/12)−1`  
+              TJLP/TLP → `(1,06)^(1/12)×(1+juros)^(1/12)−1`
+            - **API ContAgil**: `gerar_fluxos(df, df)` (df_original) ou `gerar_fluxos(df, selic)`  
             - Dual balance: `saldo_fiscal` (principal) e `saldo_contrato` (com juros)  
             - **Subsídio** mensal = saldo_fiscal × (SELIC_m − taxa_contrato_m)  
             - **Impacto fiscal 2026** = subsídio × (1 + SELIC_m)^(meses até 30/06/2026)  

@@ -11,7 +11,7 @@ e impacto fiscal ContAgil (col E, capitalização a partir do dia seguinte → 3
 
 Correções vs script ContAgil original (colado/corrompido):
   - sintaxe Python válida (True/values/method='nearest'/etc.)
-  - gerar_fluxos(df, selic) — não gerar_fluxos(df, df)
+  - gerar_fluxos(df, df) = df_original (instituição); gerar_fluxos(df, selic) = fatores
   - carência: cronograma cobre (carência + n) meses
   - taxa_contrato_efetiva: TAXA FIXA / TJLP/TLP com composição mensal
   - dual balance: saldo_fiscal (principal) + saldo_contrato (com juros)

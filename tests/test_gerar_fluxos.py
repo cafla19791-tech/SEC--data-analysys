@@ -380,3 +380,62 @@ def test_gerar_fluxos_escreve_excel_diario(tmp_path):
     assert len(diarios) >= 59  # ~2 meses
     assert "taxa_selic_diaria" in diarios.columns
     assert "subsidio" in diarios.columns
+
+
+def test_taxa_contrato_efetiva_aceita_row_contagil():
+    """Rascunho ContAgil: taxa_contrato_efetiva(row) com colunas em português."""
+    row = pd.Series({"Custo financeiro": "TJLP", "Juros": "2,0"})
+    assert abs(taxa_contrato_efetiva(row) - taxa_contrato_efetiva("TJLP", 2.0)) < 1e-12
+    row_fixa = {"Custo financeiro": "TAXA FIXA", "Juros": "5.5%"}
+    assert abs(taxa_contrato_efetiva(row_fixa) - ((1.055) ** (1 / 12) - 1)) < 1e-12
+
+
+def test_gerar_fluxos_df_df_contagil_paste():
+    """ContAgil: gerar_fluxos(df, df) usa df_original para Instituição Financeira."""
+    bruto = pd.DataFrame(
+        {
+            "Data da contratação": ["15/01/2010"],
+            "Valor Desembolsado R$ (*)": [1200.0],
+            "Juros": ["6,0"],
+            "Prazo - Carência (meses)": [1],
+            "Prazo - Amortização (meses)": [2],
+            "Instituição Financeira Credenciada": ["BANCO PASTE SA"],
+            "Custo financeiro": ["TAXA FIXA"],
+        }
+    )
+    fluxos = gerar_fluxos(bruto, bruto)
+    # carência(1) + amort(2) — corrige bug p=1..n do rascunho
+    assert len(fluxos) == 3
+    assert list(fluxos["em_carencia"]) == [True, False, False]
+    assert fluxos.iloc[0]["Instituição Financeira"] == "BANCO PASTE SA"
+    assert "saldo_fiscal" in fluxos.columns
+    assert "saldo_contrato" in fluxos.columns
+    assert "impacto_fiscal" in fluxos.columns
+    assert fluxos.iloc[0]["taxa_contrato_mensal"] is not None
+    assert pd.isna(fluxos.iloc[1]["taxa_contrato_mensal"]) or fluxos.iloc[1][
+        "taxa_contrato_mensal"
+    ] is None
+    # dual balance: contrato cresce na carência
+    assert fluxos.iloc[1]["saldo_contrato"] > fluxos.iloc[0]["saldo_contrato"]
+    assert fluxos.iloc[1]["saldo_fiscal"] == fluxos.iloc[0]["saldo_fiscal"]
+
+
+def test_gerar_fluxos_df_df_nao_trata_ops_como_selic():
+    """Regressão: gerar_fluxos(df, df) não pode interpretar ops como fatores SELIC."""
+    bruto = pd.DataFrame(
+        {
+            "data_contratacao": [pd.Timestamp("2010-01-15")],
+            "valor_desembolsado": [1000.0],
+            "juros": [6.0],
+            "prazo_carencia": [0],
+            "prazo_amortizacao": [2],
+            "agente": ["BANCO X"],
+            "custo_financeiro": ["TAXA FIXA"],
+            "contrato": [0],
+        }
+    )
+    fluxos = gerar_fluxos(bruto, bruto)
+    assert len(fluxos) == 2
+    # SELIC constante 14,5% composta (não fatores inventados da col E de ops)
+    esperado = taxa_mensal_composta(0.145)
+    assert abs(fluxos.iloc[0]["taxa_selic_mensal"] - esperado) < 1e-8
