@@ -23,6 +23,10 @@ Uso (ContAgil / WinPython):
     --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
     --arquivo-selic "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\STP-20260716182715078 (1).xlsx"
 
+  # Run completo 2009–2010 (BNDES; sem WinPython local baixa o CSV aberto):
+  python3 scripts/contagil_fluxos.py --massa-dados "...\\dados" --pasta-saida "...\\saida" \\
+    --arquivo-selic "...\\STP-....xlsx" --full
+
   # Sem args: usa defaults WinPython se existirem
   python3 scripts/contagil_fluxos.py
 
@@ -274,6 +278,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Baixa/filtra CSV aberto BNDES 2009–2010 e processa em lotes.",
     )
     p.add_argument(
+        "--full",
+        action="store_true",
+        help=(
+            "Run completo 2009–2010: baixa CSV aberto BNDES e processa em lotes "
+            "(não usa a amostra ContAgil). Com massa WinPython ausente, equivale "
+            "a --download gravando também em --pasta-saida."
+        ),
+    )
+    p.add_argument(
         "--arquivo-selic",
         type=Path,
         default=None,
@@ -314,9 +327,11 @@ def _resolver_pastas(args: argparse.Namespace) -> tuple[Path | None, Path]:
     """Resolve pasta_dados / pasta_saida com defaults ContAgil → repo.
 
     Se --massa-dados/--pasta-saida apontarem para o WinPython ContAgil e as
-    pastas não existirem (ambiente Linux/cloud), usa espelho local:
-      data/contagil_winpython/dados  → amostra do repo
-      data/contagil_winpython/saida  → saída dos fluxos
+    pastas não existirem (ambiente Linux/cloud):
+      - sem --full: espelho local com amostra
+        data/contagil_winpython/dados  → amostra do repo
+        data/contagil_winpython/saida  → saída dos fluxos
+      - com --full: não gera amostra; pasta_dados=None (dispara download BNDES)
     """
     pasta_saida = args.pasta_saida
     if pasta_saida is None:
@@ -344,27 +359,65 @@ def _resolver_pastas(args: argparse.Namespace) -> tuple[Path | None, Path]:
         and args.excel is None
         and args.input is None
     ):
-        print(
-            f"⚠️ Massa ContAgil não encontrada: {pasta_dados}\n"
-            "   Ambiente sem WinPython RFB — gerando massa local da amostra do repo."
-        )
-        pasta_dados = preparar_massa_local_fallback()
-        if args.pasta_saida is not None and not _parece_caminho_contagil(
-            Path(args.pasta_saida)
-        ):
-            # Usuário pediu saida ContAgil ausente já redirecionada acima;
-            # se pediu outra pasta existente, mantém.
-            pass
-        elif not pasta_saida.exists() or _parece_caminho_contagil(pasta_saida):
-            pasta_saida = DATA_DIR / "contagil_winpython" / "saida"
-            print(f"   Pasta de saída local: {pasta_saida}")
+        if getattr(args, "full", False) or getattr(args, "download", False):
+            print(
+                f"⚠️ Massa ContAgil não encontrada: {pasta_dados}\n"
+                "   Modo --full/--download: baixará CSV aberto BNDES 2009–2010 "
+                "(não usa amostra)."
+            )
+            pasta_dados = None
+            if args.pasta_saida is not None and (
+                not Path(args.pasta_saida).exists()
+                or _parece_caminho_contagil(Path(args.pasta_saida))
+            ):
+                pasta_saida = DATA_DIR / "contagil_winpython" / "saida"
+                print(f"   Pasta de saída local: {pasta_saida}")
+        else:
+            print(
+                f"⚠️ Massa ContAgil não encontrada: {pasta_dados}\n"
+                "   Ambiente sem WinPython RFB — gerando massa local da amostra do repo."
+            )
+            pasta_dados = preparar_massa_local_fallback()
+            if args.pasta_saida is not None and not _parece_caminho_contagil(
+                Path(args.pasta_saida)
+            ):
+                # Usuário pediu saida ContAgil ausente já redirecionada acima;
+                # se pediu outra pasta existente, mantém.
+                pass
+            elif not pasta_saida.exists() or _parece_caminho_contagil(pasta_saida):
+                pasta_saida = DATA_DIR / "contagil_winpython" / "saida"
+                print(f"   Pasta de saída local: {pasta_saida}")
 
     return pasta_dados, pasta_saida
+
+
+def _copiar_saidas_full(stem: str, pasta_saida: Path) -> list[Path]:
+    """Copia Excel/CSV de resumo do output/ para pasta_saida ContAgil."""
+    import shutil
+
+    pasta_saida.mkdir(parents=True, exist_ok=True)
+    copiados: list[Path] = []
+    for nome in (
+        f"{stem}.xlsx",
+        f"{stem}.csv",
+        "resumo_por_agente.xlsx",
+        "resumo_por_agente.csv",
+    ):
+        src = OUTPUT_DIR / nome
+        if not src.exists():
+            continue
+        dest = pasta_saida / nome
+        shutil.copy2(src, dest)
+        copiados.append(dest)
+        print(f"  → ContAgil saida: {dest}")
+    return copiados
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     print("🚀 Processando arquivos ContAgil (fluxos + impacto fiscal)...")
+    if args.full:
+        print("📦 Modo --full: pipeline completo BNDES 2009–2010")
 
     baixar_selic = args.baixar_selic or not args.sem_selic_fatores
     if args.sem_selic_fatores:
@@ -384,13 +437,19 @@ def main(argv: list[str] | None = None) -> int:
     pasta_dados, pasta_saida = _resolver_pastas(args)
 
     # Pipeline completo (lotes + resumo) via gerar_fluxos.main
-    if args.download:
+    # --full: download BNDES sempre (mesmo se houver amostra ContAgil local)
+    if args.download or args.full:
         cli = ["--stem", args.stem, "--download"]
-        if args.arquivo_selic is not None:
-            cli += ["--arquivo-selic", str(args.arquivo_selic)]
+        # Só repassa STP se o arquivo existir (WinPython ausente → auto Bacen/cache)
+        selic_cli = args.arquivo_selic
+        if selic_cli is not None and not Path(selic_cli).exists():
+            selic_cli = None
+        if selic_cli is not None:
+            cli += ["--arquivo-selic", str(selic_cli)]
         if args.sem_selic_fatores:
             cli.append("--sem-selic-fatores")
-        elif args.baixar_selic:
+        elif args.baixar_selic or (args.full and selic_cli is None):
+            # --full sem STP ContAgil: Bacen/cache (não falha no path Windows)
             cli.append("--baixar-selic")
         if args.max_contratos is not None:
             cli += ["--max-contratos", str(args.max_contratos)]
@@ -400,7 +459,12 @@ def main(argv: list[str] | None = None) -> int:
                 "--saida-diario",
                 str(pasta_saida / "fluxos_diarios_detalhados.xlsx"),
             ]
-        return gerar_fluxos_main(cli)
+        print(f"Pasta de saída ContAgil: {pasta_saida}")
+        rc = gerar_fluxos_main(cli)
+        if rc == 0:
+            _copiar_saidas_full(args.stem, Path(pasta_saida))
+            print(f"✅ Run completo concluído! Saídas em {OUTPUT_DIR} e {pasta_saida}")
+        return rc
 
     # Modo ContAgil: todos os arquivos do diretório de dados
     if pasta_dados is not None and args.excel is None and args.input is None:

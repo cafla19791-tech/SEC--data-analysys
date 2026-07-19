@@ -43,6 +43,9 @@ python3 scripts/contagil_fluxos.py --massa-dados "C:\Arquivos de Programas RFB\C
 # Com tabela dia a dia por arquivo da massa:
 python3 scripts/contagil_fluxos.py --massa-dados "...\dados" --pasta-saida "...\saida" \
   --arquivo-selic "...\STP-....xlsx" --fluxo-diario
+# Run completo 2009–2010 (BNDES; sem WinPython local baixa o CSV aberto):
+python3 scripts/contagil_fluxos.py --massa-dados "...\dados" --pasta-saida "...\saida" \
+  --arquivo-selic "...\STP-....xlsx" --full
 
 # Baixa contratos 2009–2010 (CSV aberto BNDES) e gera fluxos detalhados
 python3 scripts/gerar_fluxos.py --download

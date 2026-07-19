@@ -110,6 +110,43 @@ def test_parse_args_massa_dados_alias():
     )
 
 
+def test_parse_args_full_flag():
+    args = parse_args(
+        [
+            "--massa-dados",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados",
+            "--pasta-saida",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
+            "--arquivo-selic",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\STP-20260716182715078 (1).xlsx",
+            "--full",
+        ]
+    )
+    assert args.full is True
+    assert args.download is False
+
+
+def test_resolver_pastas_full_nao_usa_amostra(tmp_path: Path, monkeypatch):
+    """Com --full e WinPython ausente, não gera amostra — deixa pasta_dados=None."""
+    import scripts.contagil_fluxos as cf
+
+    monkeypatch.setattr(cf, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(cf, "OUTPUT_DIR", tmp_path / "output")
+    args = parse_args(
+        [
+            "--massa-dados",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados",
+            "--pasta-saida",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
+            "--full",
+        ]
+    )
+    pasta_dados, pasta_saida = cf._resolver_pastas(args)
+    assert pasta_dados is None
+    assert pasta_saida == tmp_path / "contagil_winpython" / "saida"
+    assert not (tmp_path / "contagil_winpython" / "dados").exists()
+
+
 def test_main_massa_dados_cli(tmp_path: Path):
     """Smoke: comando ContAgil com --massa-dados + STP local."""
     dados = tmp_path / "dados"
