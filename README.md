@@ -86,7 +86,7 @@ python3 scripts/resumo_fluxos_avancado.py \
   --original data/sample_operacoes_com_agente.csv \
   --baixar-selic
 
-# Mesmo fluxo ContAgil em Polars (lazy CSV, join_asof SELIC col D)
+# Versão FINAL ContAgil em Polars (Excel + gráficos + RELATORIO_EXECUTIVO.md)
 python scripts/resumo_fluxos_polars.py \
   --pasta "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
   --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
@@ -119,7 +119,9 @@ streamlit run app.py
 | `resumo_contratos.xlsx` | Por contrato: total subsídio, impacto e saldo final (pasta do CSV de entrada) |
 | `resumo_por_ano.xlsx` | Por contrato × ano: total subsídio e impacto |
 | `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |
-| `resumo_fluxos_polars.xlsx` | Mesmo resumo via Polars (lazy CSV + join_asof SELIC) |
+| `resumo_fluxos_polars_final.xlsx` | Polars FINAL: Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais_Gerais |
+| `RELATORIO_EXECUTIVO.md` | Relatório markdown (totais + top agentes) |
+| `grafico_interativo.html` | Impacto fiscal por ano (Plotly) |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,

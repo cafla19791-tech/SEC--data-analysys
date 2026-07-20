@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Processamento ultra-rápido ContAgil com Polars.
+Versão FINAL ContAgil — Polars + gráficos + relatório executivo.
 
-Porta o script ContAgil/WinPython (lazy CSV + join_asof SELIC) com as
-correções de metodologia do repo:
+Porta o script ContAgil/WinPython (lazy CSV + join_asof SELIC) com:
 
-  - fatores SELIC na **coluna D** (índice 3), com fallback na coluna E
-  - fator final = FATOR_30_06_2026 (STP ContAgil) ou max até 30/06/2026
-  - join na própria ``data_fluxo`` (nearest ContAgil), não data+1
-  - aliases de colunas (taxa_selic_mensal / selic_mes, impacto / impacto_fiscal)
+  - fatores SELIC na **coluna D** (índice 3), fallback coluna E / fator_acumulado
+  - fator final = FATOR_30_06_2026 (STP) ou max até 30/06/2026 (Bacen)
+  - join_asof na própria ``data_fluxo`` (ContAgil nearest)
+  - taxa_contrato_efetiva (TJLP/TLP) + spread
+  - Excel multi-aba + Plotly/Matplotlib + RELATORIO_EXECUTIVO.md
   - fallbacks cloud quando os caminhos WinPython não existem
 
 Uso (WinPython ContAgil):
@@ -30,17 +30,23 @@ import argparse
 import glob
 import os
 import sys
-from datetime import date
+import warnings
+from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import plotly.express as px
 import polars as pl
 from xlsxwriter import Workbook
 
-from scripts.gerar_fluxos import FATOR_30_06_2026
+from scripts.gerar_fluxos import FATOR_30_06_2026, TJLP_TLP_BASE
 from scripts.resumo_fluxos_avancado import (
     listar_arquivos_fluxos,
     resolver_original,
@@ -50,7 +56,11 @@ from scripts.resumo_fluxos_avancado import (
 
 DATA_FINAL_DEFAULT = date(2026, 6, 30)
 AGENTE_COL = "Instituição Financeira Credenciada"
-WORKBOOK_NAME = "resumo_fluxos_polars.xlsx"
+WORKBOOK_NAME = "resumo_fluxos_polars_final.xlsx"
+WORKBOOK_ALIAS = "resumo_fluxos_polars.xlsx"
+RELATORIO_NAME = "RELATORIO_EXECUTIVO.md"
+GRAFICO_HTML = "grafico_interativo.html"
+GRAFICO_PNG = "grafico_top_subsidio.png"
 
 
 def _normalizar_coluna_data(df: pl.DataFrame, col: str = "data") -> pl.DataFrame:
@@ -341,24 +351,73 @@ def carregar_instituicoes(caminho_original: str | Path) -> pl.DataFrame | None:
     return None
 
 
+def adicionar_taxa_contrato_efetiva(df: pl.DataFrame) -> pl.DataFrame:
+    """Define ``taxa_contrato_efetiva`` (mensal) no espírito ContAgil TJLP/TLP.
+
+    Preferência:
+      1) ``taxa_contrato`` / ``taxa_contrato_mensal`` já nos fluxos
+      2) recomputa a partir de ``encargo_financeiro``/``custo_financeiro`` + ``juros``
+         (TJLP/TLP: (1+6%)^(1/12)×(1+juros)^(1/12)−1; demais: (1+juros)^(1/12)−1)
+    """
+    work = df
+    # Aliases ContAgil
+    if "encargo_financeiro" not in work.columns and "custo_financeiro" in work.columns:
+        work = work.with_columns(pl.col("custo_financeiro").alias("encargo_financeiro"))
+    if "taxa_contrato" not in work.columns and "taxa_contrato_mensal" in work.columns:
+        work = work.with_columns(pl.col("taxa_contrato_mensal").alias("taxa_contrato"))
+
+    if "taxa_contrato" in work.columns:
+        return work.with_columns(
+            pl.col("taxa_contrato").cast(pl.Float64, strict=False).alias("taxa_contrato_efetiva")
+        )
+
+    if "juros" not in work.columns:
+        return work.with_columns(pl.lit(None).cast(pl.Float64).alias("taxa_contrato_efetiva"))
+
+    juros_aa = pl.col("juros").cast(pl.Float64, strict=False) / 100.0
+    base_m = (1.0 + TJLP_TLP_BASE) ** (1.0 / 12.0)
+    juros_m = (1.0 + juros_aa) ** (1.0 / 12.0) - 1.0
+    tjlp_m = base_m * (1.0 + juros_aa) ** (1.0 / 12.0) - 1.0
+
+    if "encargo_financeiro" in work.columns:
+        enc = pl.col("encargo_financeiro").cast(pl.Utf8).str.to_uppercase()
+        efetiva = (
+            pl.when(enc.str.contains("TJLP") | enc.str.contains("TLP"))
+            .then(tjlp_m)
+            .otherwise(juros_m)
+        )
+    else:
+        efetiva = juros_m
+
+    return work.with_columns(efetiva.alias("taxa_contrato_efetiva"))
+
+
 def adicionar_spread(df: pl.DataFrame) -> pl.DataFrame:
-    """spread = (1 + selic_mes − taxa_contrato) ** mes_no_contrato (se colunas existirem)."""
-    if "selic_mes" not in df.columns or "taxa_contrato" not in df.columns:
-        return df.with_columns(pl.lit(None).cast(pl.Float64).alias("spread"))
+    """spread = (1 + selic_mes − taxa_contrato_efetiva) ** mes_no_contrato."""
+    work = adicionar_taxa_contrato_efetiva(df)
+
+    if "selic_mes" not in work.columns:
+        if "taxa_selic_mensal" in work.columns:
+            work = work.with_columns(pl.col("taxa_selic_mensal").alias("selic_mes"))
+        else:
+            return work.with_columns(pl.lit(None).cast(pl.Float64).alias("spread"))
+
+    if "taxa_contrato_efetiva" not in work.columns:
+        return work.with_columns(pl.lit(None).cast(pl.Float64).alias("spread"))
 
     return (
-        df.sort(["contrato", "data_fluxo"])
+        work.sort(["contrato", "data_fluxo"])
         .with_columns(
             [
                 pl.col("contrato").cum_count().over("contrato").alias("mes_no_contrato"),
                 pl.col("selic_mes").cast(pl.Float64, strict=False),
-                pl.col("taxa_contrato").cast(pl.Float64, strict=False),
+                pl.col("taxa_contrato_efetiva").cast(pl.Float64, strict=False),
             ]
         )
         .with_columns(
             [
                 (
-                    (1 + pl.col("selic_mes") - pl.col("taxa_contrato"))
+                    (1 + pl.col("selic_mes") - pl.col("taxa_contrato_efetiva"))
                     ** pl.col("mes_no_contrato")
                 )
                 .cast(pl.Float64)
@@ -368,8 +427,33 @@ def adicionar_spread(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def montar_totais(df: pl.DataFrame) -> pl.DataFrame:
+    """Aba Totais_Gerais do workbook final."""
+    n_agentes = (
+        int(df[AGENTE_COL].n_unique()) if AGENTE_COL in df.columns else 0
+    )
+    return pl.DataFrame(
+        {
+            "Métrica": [
+                "Total Subsídio",
+                "Total Impacto 2026",
+                "Total Contratos",
+                "Total Agentes",
+                "Total Parcelas",
+            ],
+            "Valor": [
+                round(float(df["subsidio"].sum()), 2),
+                round(float(df["impacto_acumulado_2026"].sum()), 2),
+                int(df["contrato"].n_unique()),
+                n_agentes,
+                int(df.height),
+            ],
+        }
+    )
+
+
 def montar_resumos(df: pl.DataFrame) -> dict[str, pl.DataFrame]:
-    """Gera Contratos / Por_Ano / Por_Agente / Impacto_Por_Ano."""
+    """Gera Contratos / Por_Ano / Por_Agente / Impacto_Por_Ano / Totais_Gerais."""
     agente = AGENTE_COL if AGENTE_COL in df.columns else None
     group_contrato = ["contrato"] + ([agente] if agente else [])
 
@@ -386,31 +470,46 @@ def montar_resumos(df: pl.DataFrame) -> dict[str, pl.DataFrame]:
 
     resumo_contratos = df.group_by(group_contrato).agg(aggs).sort("contrato")
 
-    group_ano = ["contrato", "ano"] + ([agente] if agente else [])
-    resumo_ano = (
-        df.group_by(group_ano)
-        .agg(
-            [
-                pl.sum("subsidio").round(2).alias("subsidio"),
-                pl.sum("impacto_acumulado_2026").round(2).alias("impacto_acumulado_2026"),
-            ]
-        )
-        .sort(["contrato", "ano"])
-    )
-
+    # Versão FINAL: Por_Ano = ano × instituição (paste ContAgil)
     if agente:
+        resumo_ano = (
+            df.group_by(["ano", agente])
+            .agg(
+                [
+                    pl.sum("subsidio").round(2).alias("subsidio"),
+                    pl.sum("impacto_acumulado_2026")
+                    .round(2)
+                    .alias("impacto_acumulado_2026"),
+                ]
+            )
+            .sort(["ano", agente])
+        )
         por_agente = (
             df.group_by(agente)
             .agg(
                 [
                     pl.col("contrato").n_unique().alias("qtd_contratos"),
                     pl.sum("subsidio").round(2).alias("subsidio"),
-                    pl.sum("impacto_acumulado_2026").round(2).alias("impacto_acumulado_2026"),
+                    pl.sum("impacto_acumulado_2026")
+                    .round(2)
+                    .alias("impacto_acumulado_2026"),
                 ]
             )
             .sort("subsidio", descending=True)
         )
     else:
+        resumo_ano = (
+            df.group_by("ano")
+            .agg(
+                [
+                    pl.sum("subsidio").round(2).alias("subsidio"),
+                    pl.sum("impacto_acumulado_2026")
+                    .round(2)
+                    .alias("impacto_acumulado_2026"),
+                ]
+            )
+            .sort("ano")
+        )
         por_agente = pl.DataFrame(
             {
                 AGENTE_COL: [],
@@ -437,7 +536,110 @@ def montar_resumos(df: pl.DataFrame) -> dict[str, pl.DataFrame]:
         "Por_Ano": resumo_ano,
         "Por_Agente": por_agente,
         "Impacto_Por_Ano": impacto_ano,
+        "Totais_Gerais": montar_totais(df),
     }
+
+
+def gerar_graficos(df: pl.DataFrame, output_dir: Path) -> tuple[Path, Path]:
+    """Gera PNG (Matplotlib top-10) + HTML interativo (Plotly impacto/ano)."""
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    png_path = output_dir / GRAFICO_PNG
+    html_path = output_dir / GRAFICO_HTML
+
+    top = (
+        df.group_by("contrato")
+        .agg(pl.sum("subsidio").alias("subsidio"))
+        .sort("subsidio", descending=True)
+        .head(10)
+        .to_pandas()
+    )
+    plt.figure(figsize=(12, 6))
+    plt.bar(top["contrato"].astype(str), top["subsidio"], color="#1f4e79")
+    plt.title("Top 10 Contratos — Subsídio Nominal")
+    plt.xlabel("Contrato")
+    plt.ylabel("Subsídio (R$)")
+    plt.tight_layout()
+    plt.savefig(png_path, dpi=120)
+    plt.close()
+
+    por_ano = (
+        df.group_by("ano")
+        .agg(pl.sum("impacto_acumulado_2026").alias("impacto_acumulado_2026"))
+        .sort("ano")
+        .to_pandas()
+    )
+    fig = px.bar(
+        por_ano,
+        x="ano",
+        y="impacto_acumulado_2026",
+        title="Impacto Fiscal acumulado até 30/06/2026 por Ano",
+        labels={
+            "ano": "Ano",
+            "impacto_acumulado_2026": "Impacto Fiscal 2026 (R$)",
+        },
+    )
+    fig.write_html(str(html_path), include_plotlyjs="cdn")
+    return png_path, html_path
+
+
+def gerar_relatorio_executivo(df: pl.DataFrame, output_dir: Path) -> Path:
+    """Escreve RELATORIO_EXECUTIVO.md com totais e top agentes."""
+    output_dir = Path(output_dir)
+    path = output_dir / RELATORIO_NAME
+
+    n_contratos = int(df["contrato"].n_unique())
+    total_sub = float(df["subsidio"].sum())
+    total_imp = float(df["impacto_acumulado_2026"].sum())
+
+    if AGENTE_COL in df.columns:
+        top_agentes = (
+            df.group_by(AGENTE_COL)
+            .agg(
+                [
+                    pl.col("contrato").n_unique().alias("Contratos"),
+                    pl.sum("subsidio").round(2).alias("Subsídio (R$)"),
+                    pl.sum("impacto_acumulado_2026")
+                    .round(2)
+                    .alias("Impacto 2026 (R$)"),
+                ]
+            )
+            .sort("Impacto 2026 (R$)", descending=True)
+            .head(5)
+            .to_pandas()
+        )
+        try:
+            tabela = top_agentes.to_markdown(index=False)
+        except Exception:
+            tabela = top_agentes.to_string(index=False)
+    else:
+        tabela = "_Instituição financeira não disponível nos fluxos._"
+
+    relatorio = f"""# Relatório Executivo - Subsídios BNDES
+
+**Data:** {datetime.now().strftime("%d/%m/%Y %H:%M")}
+**Total de Contratos:** {n_contratos:,}
+**Total de Parcelas:** {df.height:,}
+**Total Subsídio Nominal:** R$ {total_sub:,.2f}
+**Total Impacto Fiscal 2026:** R$ {total_imp:,.2f}
+
+## Principais Agentes
+
+{tabela}
+
+## Arquivos gerados
+
+- `{WORKBOOK_NAME}` — Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais_Gerais
+- `{GRAFICO_HTML}` — gráfico interativo (Plotly)
+- `{GRAFICO_PNG}` — top 10 contratos (Matplotlib)
+- `{RELATORIO_NAME}` — este relatório
+
+Metodologia ContAgil: impacto = subsídio × fator_final / fator(data_fluxo),
+com fator na coluna D do STP (FATOR_30_06_2026 = {FATOR_30_06_2026}) ou
+série Bacen equivalente.
+"""
+    path.write_text(relatorio, encoding="utf-8")
+    return path
 
 
 def exportar_excel(resumos: dict[str, pl.DataFrame], output_path: Path) -> Path:
@@ -473,6 +675,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Força Bacen se STP ausente (já é automático para nomes STP-*)",
     )
+    p.add_argument(
+        "--sem-graficos",
+        action="store_true",
+        help="Não gera PNG/HTML (útil em testes headless sem plotly).",
+    )
     return p.parse_args(argv)
 
 
@@ -493,10 +700,10 @@ def main(argv: list[str] | None = None) -> int:
         print("Arquivo SELIC não encontrado.", file=sys.stderr)
         return 1
 
-    output_dir = args.output_dir if args.output_dir is not None else pasta
+    output_dir = Path(args.output_dir if args.output_dir is not None else pasta)
     os.makedirs(output_dir, exist_ok=True)
 
-    print("Processamento Ultra-Rápido ContAgil (Polars)")
+    print("Versão FINAL ContAgil — Polars + gráficos + relatório")
     print(f"Pasta fluxos : {pasta}")
     print(f"Original     : {original_path}")
     print(f"SELIC        : {selic_path}")
@@ -524,29 +731,38 @@ def main(argv: list[str] | None = None) -> int:
         df = df.with_columns(pl.col("data_fluxo").dt.year().alias("ano"))
 
         resumos = montar_resumos(df)
-        out = exportar_excel(resumos, Path(output_dir) / WORKBOOK_NAME)
+        out = exportar_excel(resumos, output_dir / WORKBOOK_NAME)
+        # Alias de compatibilidade com a versão anterior
+        exportar_excel(resumos, output_dir / WORKBOOK_ALIAS)
 
-        # Espelhos CSV leves
-        resumos["Contratos"].write_csv(Path(output_dir) / "resumo_contratos_polars.csv")
-        resumos["Por_Ano"].write_csv(Path(output_dir) / "resumo_por_ano_polars.csv")
-        resumos["Por_Agente"].write_csv(Path(output_dir) / "resumo_por_agente_polars.csv")
+        resumos["Contratos"].write_csv(output_dir / "resumo_contratos_polars.csv")
+        resumos["Por_Ano"].write_csv(output_dir / "resumo_por_ano_polars.csv")
+        resumos["Por_Agente"].write_csv(output_dir / "resumo_por_agente_polars.csv")
         resumos["Impacto_Por_Ano"].write_csv(
-            Path(output_dir) / "impacto_fiscal_por_ano_polars.csv"
+            output_dir / "impacto_fiscal_por_ano_polars.csv"
         )
+        resumos["Totais_Gerais"].write_csv(output_dir / "totais_gerais_polars.csv")
+
+        relatorio = gerar_relatorio_executivo(df, output_dir)
+        png_path = html_path = None
+        if not args.sem_graficos:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                png_path, html_path = gerar_graficos(df, output_dir)
     except (FileNotFoundError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 1
 
-    print("✅ Processamento Polars concluído com sucesso!")
+    print("✅ Versão FINAL com Polars gerada com sucesso!")
     print(f"   Workbook        : {out}")
+    print(f"   Relatório       : {relatorio}")
+    if png_path is not None:
+        print(f"   Gráfico PNG     : {png_path}")
+        print(f"   Gráfico HTML    : {html_path}")
     print(f"   Total contratos : {df['contrato'].n_unique():,}")
     print(f"   Total linhas    : {df.height:,}")
-    print(
-        f"   Subsídio total  : R$ {df['subsidio'].sum():,.2f}"
-    )
-    print(
-        f"   Impacto 2026    : R$ {df['impacto_acumulado_2026'].sum():,.2f}"
-    )
+    print(f"   Subsídio total  : R$ {df['subsidio'].sum():,.2f}")
+    print(f"   Impacto 2026    : R$ {df['impacto_acumulado_2026'].sum():,.2f}")
     return 0
 
 

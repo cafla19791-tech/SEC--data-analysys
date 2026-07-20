@@ -29,6 +29,9 @@ output/*_stats.json
 !output/resumo_por_ano_polars.csv
 !output/resumo_por_agente_polars.csv
 !output/impacto_fiscal_por_ano_polars.csv
+!output/totais_gerais_polars.csv
+!output/RELATORIO_EXECUTIVO.md
+!output/grafico_interativo.html
 
 # Artefato clássico na raiz (cópia do resumo anual)
 /impacto_fiscal_por_ano.xlsx

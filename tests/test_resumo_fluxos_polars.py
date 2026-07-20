@@ -8,14 +8,19 @@ import pytest
 
 from scripts.gerar_fluxos import FATOR_30_06_2026
 from scripts.resumo_fluxos_polars import (
+    RELATORIO_NAME,
+    WORKBOOK_NAME,
     adicionar_spread,
+    adicionar_taxa_contrato_efetiva,
     calcular_impacto_fiscal,
     carregar_fatores_selic,
-    carregar_fluxos_polars,
     carregar_instituicoes,
     exportar_excel,
+    gerar_graficos,
+    gerar_relatorio_executivo,
     main,
     montar_resumos,
+    montar_totais,
     _escolher_coluna_fator,
 )
 
@@ -111,10 +116,34 @@ def test_adicionar_spread_e_resumos():
     # força impacto para montar_resumos
     df = df.with_columns(pl.col("subsidio").alias("impacto_acumulado_2026"))
     assert "spread" in df.columns
+    assert "taxa_contrato_efetiva" in df.columns
     resumos = montar_resumos(df)
-    assert set(resumos) == {"Contratos", "Por_Ano", "Por_Agente", "Impacto_Por_Ano"}
+    assert set(resumos) == {
+        "Contratos",
+        "Por_Ano",
+        "Por_Agente",
+        "Impacto_Por_Ano",
+        "Totais_Gerais",
+    }
     assert resumos["Contratos"].height == 2
     assert resumos["Por_Agente"].height == 2
+    assert "Total Subsídio" in resumos["Totais_Gerais"]["Métrica"].to_list()
+
+
+def test_taxa_contrato_efetiva_tjlp():
+    df = pl.DataFrame(
+        {
+            "contrato": [0, 1],
+            "data_fluxo": [date(2009, 2, 15), date(2009, 3, 15)],
+            "subsidio": [1.0, 1.0],
+            "saldo": [1.0, 1.0],
+            "juros": [6.0, 6.0],
+            "encargo_financeiro": ["TJLP", "TAXA FIXA"],
+        }
+    )
+    out = adicionar_taxa_contrato_efetiva(df)
+    # TJLP mensal > TAXA FIXA mensal para mesmo juros
+    assert float(out["taxa_contrato_efetiva"][0]) > float(out["taxa_contrato_efetiva"][1])
 
 
 def test_exportar_excel(tmp_path: Path):
@@ -126,10 +155,35 @@ def test_exportar_excel(tmp_path: Path):
             pl.col("subsidio").alias("impacto_acumulado_2026"),
         ]
     )
-    out = exportar_excel(montar_resumos(df), tmp_path / "resumo_fluxos_polars.xlsx")
+    out = exportar_excel(montar_resumos(df), tmp_path / WORKBOOK_NAME)
     assert out.exists()
     nomes = set(fastexcel.read_excel(out).sheet_names)
-    assert {"Contratos", "Por_Ano", "Por_Agente", "Impacto_Por_Ano"} <= nomes
+    assert {
+        "Contratos",
+        "Por_Ano",
+        "Por_Agente",
+        "Impacto_Por_Ano",
+        "Totais_Gerais",
+    } <= nomes
+
+
+def test_relatorio_e_graficos(tmp_path: Path):
+    df = adicionar_spread(_fluxos()).with_columns(
+        [
+            pl.col("data_fluxo").dt.year().alias("ano"),
+            pl.col("subsidio").alias("impacto_acumulado_2026"),
+        ]
+    )
+    rel = gerar_relatorio_executivo(df, tmp_path)
+    assert rel.exists()
+    texto = rel.read_text(encoding="utf-8")
+    assert "Relatório Executivo" in texto
+    assert "Total de Contratos" in texto
+
+    png, html = gerar_graficos(df, tmp_path)
+    assert png.exists()
+    assert html.exists()
+    assert montar_totais(df).height == 5
 
 
 def test_carregar_instituicoes_sample():
@@ -166,7 +220,9 @@ def test_cli_contagil(tmp_path: Path):
         ]
     )
     assert rc == 0
-    assert (out / "resumo_fluxos_polars.xlsx").exists()
+    assert (out / WORKBOOK_NAME).exists()
+    assert (out / RELATORIO_NAME).exists()
+    assert (out / "grafico_interativo.html").exists()
 
 
 def test_cli_estilo_contagil_fallback(tmp_path: Path, monkeypatch):
@@ -198,4 +254,5 @@ def test_cli_estilo_contagil_fallback(tmp_path: Path, monkeypatch):
         ]
     )
     assert rc == 0
-    assert (out / "resumo_fluxos_polars.xlsx").exists()
+    assert (out / WORKBOOK_NAME).exists()
+    assert (out / RELATORIO_NAME).exists()
