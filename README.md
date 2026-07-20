@@ -85,6 +85,12 @@ python3 scripts/resumo_fluxos_avancado.py \
   --pasta output \
   --original data/sample_operacoes_com_agente.csv \
   --baixar-selic
+
+# Mesmo fluxo ContAgil em Polars (lazy CSV, join_asof SELIC col D)
+python scripts/resumo_fluxos_polars.py \
+  --pasta "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
+  --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
+  --selic "STP-20260716182715078.xlsx"
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
@@ -113,6 +119,7 @@ streamlit run app.py
 | `resumo_contratos.xlsx` | Por contrato: total subsídio, impacto e saldo final (pasta do CSV de entrada) |
 | `resumo_por_ano.xlsx` | Por contrato × ano: total subsídio e impacto |
 | `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |
+| `resumo_fluxos_polars.xlsx` | Mesmo resumo via Polars (lazy CSV + join_asof SELIC) |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
