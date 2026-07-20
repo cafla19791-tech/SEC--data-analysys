@@ -67,6 +67,13 @@ python3 scripts/impacto_fiscal_por_ano.py \
   --fluxos output/fluxos_completos_final.csv
 # Com impacto ContAgil já gravado no CSV:
 python3 scripts/impacto_fiscal_por_ano.py --modo coluna --fluxos output/fluxos_completos_final.csv
+
+# Resumo por contrato + por ano (script ContAgil / WinPython saida/fluxos_0.csv)
+python3 scripts/resumo_fluxos.py \
+  --fluxos "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida\fluxos_0.csv"
+# Repo local (auto-detecta output/fluxos_*):
+python3 scripts/resumo_fluxos.py --fluxos output/fluxos_amostra.xlsx
+python3 scripts/resumo_fluxos.py --contrato 0
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
@@ -92,6 +99,8 @@ streamlit run app.py
 | `output/resumo_por_agente.csv` | Ranking: Qtd Contratos, Total Subsídio, Impacto Fiscal 2026 |
 | `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
 | `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto ContAgil agregados por ano de pagamento |
+| `resumo_contratos.xlsx` | Por contrato: total subsídio, impacto e saldo final (pasta do CSV de entrada) |
+| `resumo_por_ano.xlsx` | Por contrato × ano: total subsídio e impacto |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
