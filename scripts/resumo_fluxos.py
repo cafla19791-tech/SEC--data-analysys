@@ -87,11 +87,48 @@ def resolver_fluxos(explicit: Path | None = None) -> Path:
     )
 
 
+def _eh_dataframe_parcelas(df: pd.DataFrame) -> bool:
+    """True se o DataFrame parece detalhe de parcelas ContAgil."""
+    cols = {str(c) for c in df.columns}
+    tem_data = "data_fluxo" in cols
+    tem_subsidio = "subsidio" in cols
+    tem_contrato = "contrato" in cols
+    tem_impacto = bool(cols & set(COLUNAS_IMPACTO))
+    return tem_data and tem_subsidio and tem_contrato and tem_impacto
+
+
 def carregar_fluxos(path: Path) -> pd.DataFrame:
-    """Lê CSV ou Excel de parcelas ContAgil."""
+    """Lê CSV ou Excel de parcelas ContAgil.
+
+    Em Excel multi-aba, procura a primeira aba com colunas de parcelas
+    (ignora abas Resumo / Por_Agente de workbooks agregados).
+    """
     suffix = path.suffix.lower()
     if suffix in {".xlsx", ".xls"}:
-        return pd.read_excel(path)
+        xl = pd.ExcelFile(path)
+        # Preferência: Sheet1 / Amostra_Parcelas / qualquer aba com parcelas
+        preferidas = (
+            "Sheet1",
+            "Amostra_Parcelas",
+            "Parcelas",
+            "fluxos",
+            "Fluxos",
+        )
+        ordem: list[str] = []
+        for nome in preferidas:
+            if nome in xl.sheet_names:
+                ordem.append(nome)
+        for nome in xl.sheet_names:
+            if nome not in ordem:
+                ordem.append(nome)
+        for nome in ordem:
+            df = pd.read_excel(xl, sheet_name=nome)
+            if _eh_dataframe_parcelas(df):
+                return df
+        raise ValueError(
+            f"Nenhuma aba de parcelas em {path.name}. "
+            f"Abas: {xl.sheet_names}"
+        )
     return pd.read_csv(path)
 
 
@@ -120,10 +157,17 @@ def normalizar_colunas(df: pd.DataFrame) -> pd.DataFrame:
     elif saldo_col != "saldo":
         work["saldo"] = work[saldo_col]
 
-    work["data_fluxo"] = pd.to_datetime(work["data_fluxo"])
+    work["data_fluxo"] = pd.to_datetime(work["data_fluxo"], errors="coerce")
     work["subsidio"] = pd.to_numeric(work["subsidio"], errors="coerce").fillna(0.0)
     work["impacto"] = pd.to_numeric(work["impacto"], errors="coerce").fillna(0.0)
     work["saldo"] = pd.to_numeric(work["saldo"], errors="coerce")
+    before = len(work)
+    work = work.dropna(subset=["data_fluxo"]).reset_index(drop=True)
+    if len(work) < before:
+        # Linhas sem data (abas/resumos misturados) são descartadas
+        pass
+    if work.empty:
+        raise ValueError("Nenhuma parcela com data_fluxo válida após normalização.")
     return work
 
 

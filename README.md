@@ -74,6 +74,17 @@ python3 scripts/resumo_fluxos.py \
 # Repo local (auto-detecta output/fluxos_*):
 python3 scripts/resumo_fluxos.py --fluxos output/fluxos_amostra.xlsx
 python3 scripts/resumo_fluxos.py --contrato 0
+
+# Resumo avançado ContAgil (pasta saida + Excel original + SELIC col D)
+python scripts/resumo_fluxos_avancado.py \
+  --pasta "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
+  --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
+  --selic "STP-20260716182715078.xlsx"
+# Repo / cloud (amostra + Bacen se não houver STP):
+python3 scripts/resumo_fluxos_avancado.py \
+  --pasta output \
+  --original data/sample_operacoes_com_agente.csv \
+  --baixar-selic
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
@@ -101,6 +112,7 @@ streamlit run app.py
 | `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto ContAgil agregados por ano de pagamento |
 | `resumo_contratos.xlsx` | Por contrato: total subsídio, impacto e saldo final (pasta do CSV de entrada) |
 | `resumo_por_ano.xlsx` | Por contrato × ano: total subsídio e impacto |
+| `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,

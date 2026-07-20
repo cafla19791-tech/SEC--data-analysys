@@ -13,6 +13,7 @@ Arquivos principais:
 - `fluxos_completos_final.xlsx` — abas Resumo, **Por_Agente**, Impacto_Mensal, Amostra_Parcelas (run completo 2009–2010)
 - `resumo_por_agente.csv` / `.xlsx` — ranking por Instituição Financeira Credenciada
 - `impacto_fiscal_por_ano.xlsx` / `.csv` — impacto capitalizado até 30/06/2026 por ano de pagamento
+- `resumo_fluxos_avancado.xlsx` — workbook ContAgil (Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais)
 - `amostra_fluxos_detalhados.xlsx` — primeiras parcelas com colunas ContAgil
 - `fluxos_amostra.xlsx` — amostra rápida (20 contratos de exemplo)
 
