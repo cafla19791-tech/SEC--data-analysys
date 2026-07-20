@@ -117,13 +117,20 @@ def _candidatos_nome(nome: str | Path, bases: list[Path]) -> list[Path]:
     return out
 
 
+def _parece_nome_operacoes(nome: str | Path) -> bool:
+    """True se o nome parece o Excel ContAgil/BNDES de operações indiretas."""
+    texto = Path(nome).name.lower()
+    return "operacoes_indiretas" in texto or "operações_indiretas" in texto
+
+
 def resolver_original(nome: str | Path | None, pasta: Path) -> Path:
     """Resolve Excel/CSV original de operações (nome curto ContAgil ok)."""
+    sample = DATA_DIR / "sample_operacoes_com_agente.csv"
+
     if nome is None:
         found = resolver_excel_operacoes(None)
         if found is not None:
             return found
-        sample = DATA_DIR / "sample_operacoes_com_agente.csv"
         if sample.exists():
             return sample
         raise FileNotFoundError(
@@ -151,13 +158,21 @@ def resolver_original(nome: str | Path | None, pasta: Path) -> Path:
     if found is not None:
         return found
 
-    sample = DATA_DIR / "sample_operacoes_com_agente.csv"
-    if sample.exists() and _parece_contagil(Path(nome)):
+    # Cloud / Linux sem WinPython: nome ContAgil → amostra do repo
+    if sample.exists() and (
+        _parece_contagil(Path(nome)) or _parece_nome_operacoes(nome)
+    ):
         print(f"⚠️ Original ContAgil ausente: {nome}")
         print(f"   Usando amostra local: {sample}")
         return sample
 
     raise FileNotFoundError(f"Arquivo original não encontrado: {nome}")
+
+
+def _parece_nome_selic(nome: str | Path) -> bool:
+    """True se o nome parece STP ContAgil / SELIC."""
+    texto = Path(nome).name.lower()
+    return texto.startswith("stp") or "selic" in texto
 
 
 def resolver_selic(
@@ -166,7 +181,11 @@ def resolver_selic(
     *,
     baixar_selic: bool = False,
 ) -> tuple[Path | None, SelicSerie | None]:
-    """Resolve STP ContAgil e carrega SelicSerie (ou Bacen se --baixar-selic)."""
+    """Resolve STP ContAgil e carrega SelicSerie.
+
+    Se o STP ContAgil (nome curto) não existir neste ambiente, usa cache Bacen
+    ou baixa SGS 11 — sem exigir ``--baixar-selic`` na linha ContAgil.
+    """
     if nome is not None:
         bases = [
             Path.cwd(),
@@ -200,10 +219,19 @@ def resolver_selic(
         if cand.exists():
             return cand, SelicSerie.from_excel(cand)
 
-    if baixar_selic or nome is not None:
-        # Nome ContAgil ausente neste ambiente → Bacen
+    # ContAgil WinPython: --selic STP-....xlsx costuma existir só no Windows.
+    # Aqui caímos para Bacen (cache ou download) automaticamente.
+    auto_bacen = baixar_selic or (
+        nome is not None
+        and (_parece_contagil(Path(nome)) or _parece_nome_selic(nome))
+    )
+    if auto_bacen:
         if nome is not None:
             print(f"⚠️ SELIC ContAgil ausente: {nome}")
+            if SELIC_BACEN_CACHE.exists():
+                print(f"   Usando cache Bacen: {SELIC_BACEN_CACHE}")
+                serie = SelicSerie.from_excel(SELIC_BACEN_CACHE)
+                return SELIC_BACEN_CACHE, serie
             print("   Baixando SELIC Bacen SGS 11 (fatores ContAgil)...")
         serie = SelicSerie.from_bacen(cache_path=SELIC_BACEN_CACHE)
         return SELIC_BACEN_CACHE if SELIC_BACEN_CACHE.exists() else None, serie

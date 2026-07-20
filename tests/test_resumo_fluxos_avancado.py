@@ -194,43 +194,42 @@ def test_cli_main_com_amostra(tmp_path: Path):
 
 
 def test_cli_main_estilo_contagil_args(tmp_path: Path, monkeypatch):
-    """Aceita a linha de comando ContAgil (nomes curtos) com fallbacks locais."""
+    """Aceita a linha de comando ContAgil exata (nomes curtos) com fallbacks."""
     from scripts import resumo_fluxos_avancado as mod
 
     pasta = tmp_path / "saida"
     pasta.mkdir()
     _fluxos_df().to_csv(pasta / "fluxos_0.csv", index=False)
 
-    # Simula caminhos Windows inexistentes → fallbacks
+    # Simula caminhos Windows inexistentes → fallbacks (output/ + amostra + Bacen)
     monkeypatch.setattr(mod, "OUTPUT_DIR", pasta)
     monkeypatch.setattr(mod, "CONTAGIL_PASTA_SAIDA", tmp_path / "missing_saida")
 
-    original = Path("data/sample_operacoes_com_agente.csv")
-    if not original.exists():
+    if not Path("data/sample_operacoes_com_agente.csv").exists():
         pytest.skip("amostra ausente")
 
     out = tmp_path / "saida_out"
+    # Mesma linha ContAgil/WinPython — sem --baixar-selic / path absoluto do original
     rc = main(
         [
             "--pasta",
             r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
             "--original",
-            str(original),  # nome real local (arquivo ContAgil ausente no cloud)
+            "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx",
             "--selic",
             "STP-20260716182715078.xlsx",
-            "--baixar-selic",
             "--output-dir",
             str(out),
         ]
     )
-    # Pode falhar se Bacen estiver offline; nesse caso use coluna
+    # Bacen offline: ainda deve concluir com impacto da coluna
     if rc != 0:
         rc = main(
             [
                 "--pasta",
                 str(pasta),
                 "--original",
-                str(original),
+                "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx",
                 "--output-dir",
                 str(out),
                 "--sem-recalcular",
@@ -238,3 +237,14 @@ def test_cli_main_estilo_contagil_args(tmp_path: Path, monkeypatch):
         )
     assert rc == 0
     assert (out / "resumo_fluxos_avancado.xlsx").exists()
+
+
+def test_resolver_original_nome_contagil_fallback():
+    sample = Path("data/sample_operacoes_com_agente.csv")
+    if not sample.exists():
+        pytest.skip("amostra ausente")
+    path = resolver_original(
+        "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx",
+        Path("output"),
+    )
+    assert path.resolve() == sample.resolve()
