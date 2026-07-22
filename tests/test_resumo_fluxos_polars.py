@@ -12,9 +12,13 @@ from scripts.resumo_fluxos_polars import (
     WORKBOOK_NAME,
     adicionar_spread,
     adicionar_taxa_contrato_efetiva,
+    anexar_tjlp_mensal,
     calcular_impacto_fiscal,
     carregar_fatores_selic,
     carregar_instituicoes,
+    carregar_selic_auto,
+    carregar_selic_mensal,
+    carregar_tjlp_mensal,
     exportar_excel,
     gerar_graficos,
     gerar_relatorio_executivo,
@@ -146,6 +150,55 @@ def test_taxa_contrato_efetiva_tjlp():
     assert float(out["taxa_contrato_efetiva"][0]) > float(out["taxa_contrato_efetiva"][1])
 
 
+def _selic_taxas_xlsx(tmp_path: Path) -> Path:
+    path = tmp_path / "selic_bacen.xlsx"
+    pl.DataFrame(
+        {
+            "Data": ["01/01/09", "02/01/09", "03/01/09", "15/02/09"],
+            "11 - Taxa de juros - Selic - % a.d.": [0.04, 0.04, 0.04, 0.04],
+        }
+    ).write_excel(path)
+    return path
+
+
+def _tjlp_xlsx(tmp_path: Path) -> Path:
+    path = tmp_path / "tjlp_mensal.xlsx"
+    pl.DataFrame(
+        {
+            "Data": ["01/01/09", "01/02/09", "01/03/09"],
+            " Taxas de juros - TJLP mensal - % a.m.": [0.5, 0.5, 0.6],
+        }
+    ).write_excel(path)
+    return path
+
+
+def test_carregar_selic_mensal_contagil(tmp_path: Path):
+    path = _selic_taxas_xlsx(tmp_path)
+    selic, fator_final, modo = carregar_selic_auto(path)
+    assert modo == "taxas"
+    assert float(selic["selic_taxa"][0]) == pytest.approx(0.0004)
+    assert fator_final == pytest.approx(float(selic["fator_acumulado"].max()))
+
+
+def test_carregar_tjlp_e_anexar(tmp_path: Path):
+    tjlp = carregar_tjlp_mensal(_tjlp_xlsx(tmp_path))
+    assert float(tjlp["tjlp_mensal"][0]) == pytest.approx(0.005)
+    df = anexar_tjlp_mensal(_fluxos(), tjlp)
+    assert "tjlp_mensal" in df.columns
+    assert df["tjlp_mensal"].null_count() == 0
+
+    # Com série TJLP + encargo: efetiva ContAgil (1+tjlp)*(1+spread)-1
+    work = df.with_columns(
+        [
+            pl.lit("TJLP").alias("encargo_financeiro"),
+            pl.lit(0.002).alias("taxa_contrato"),
+        ]
+    )
+    out = adicionar_taxa_contrato_efetiva(work)
+    esperado = (1.0 + 0.005) * (1.0 + 0.002) - 1.0
+    assert float(out["taxa_contrato_efetiva"][0]) == pytest.approx(esperado)
+
+
 def test_exportar_excel(tmp_path: Path):
     import fastexcel
 
@@ -207,6 +260,7 @@ def test_cli_contagil(tmp_path: Path):
         pytest.skip("amostra ausente")
 
     out = tmp_path / "out"
+    tjlp = _tjlp_xlsx(tmp_path)
     rc = main(
         [
             "--pasta",
@@ -215,6 +269,8 @@ def test_cli_contagil(tmp_path: Path):
             str(sample),
             "--selic",
             str(selic),
+            "--tjlp",
+            str(tjlp),
             "--output-dir",
             str(out),
         ]

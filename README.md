@@ -86,11 +86,12 @@ python3 scripts/resumo_fluxos_avancado.py \
   --original data/sample_operacoes_com_agente.csv \
   --baixar-selic
 
-# Versão FINAL ContAgil em Polars (Excel + gráficos + RELATORIO_EXECUTIVO.md)
+# Versão FINAL ContAgil em Polars (SELIC + TJLP mensal + gráficos + relatório)
 python scripts/resumo_fluxos_polars.py \
   --pasta "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
   --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
-  --selic "STP-20260716182715078.xlsx"
+  --selic "STP-20260716182715078.xlsx" \
+  --tjlp "tjlp_mensal.xlsx"
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
