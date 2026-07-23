@@ -463,3 +463,39 @@ def test_gerar_fluxos_df_df_nao_trata_ops_como_selic():
     # SELIC constante 14,5% composta (não fatores inventados da col E de ops)
     esperado = taxa_mensal_composta(0.145)
     assert abs(fluxos.iloc[0]["taxa_selic_mensal"] - esperado) < 1e-8
+
+
+def test_salvar_saida_fluxos_cabe_no_excel(tmp_path):
+    from scripts.gerar_fluxos import salvar_saida_fluxos
+
+    df = pd.DataFrame({"a": range(10), "b": range(10, 20)})
+    saida = salvar_saida_fluxos(df, tmp_path / "fluxos_ok.xlsx", excel_max_rows=100)
+    assert not saida.particionado
+    assert saida.csv is not None and saida.csv.exists()
+    assert saida.principal.name == "fluxos_ok.xlsx"
+    assert len(pd.read_excel(saida.principal)) == 10
+    assert len(pd.read_csv(saida.csv)) == 10
+
+
+def test_salvar_saida_fluxos_particiona_acima_do_limite(tmp_path):
+    """Acima do limite Excel: CSV completo + várias partes .xlsx (sem truncar)."""
+    from scripts.gerar_fluxos import salvar_saida_fluxos
+
+    df = pd.DataFrame({"parcela": range(2500), "valor": range(2500)})
+    saida = salvar_saida_fluxos(
+        df, tmp_path / "fluxos_big.xlsx", excel_max_rows=1000
+    )
+    assert saida.particionado
+    assert saida.n_linhas == 2500
+    assert saida.csv is not None
+    assert len(pd.read_csv(saida.csv)) == 2500
+    assert len(saida.excel_parts) == 3
+    assert [p.name for p in saida.excel_parts] == [
+        "fluxos_big_parte001.xlsx",
+        "fluxos_big_parte002.xlsx",
+        "fluxos_big_parte003.xlsx",
+    ]
+    assert not (tmp_path / "fluxos_big.xlsx").exists()
+    total = sum(len(pd.read_excel(p)) for p in saida.excel_parts)
+    assert total == 2500
+    assert saida.principal == saida.excel_parts[0]

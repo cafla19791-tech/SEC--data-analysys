@@ -11,6 +11,7 @@ from gerar_fluxos import (
     gerar_fluxos,
     load_selic,
     parse_args,
+    salvar_saida_fluxos,
 )
 
 
@@ -138,8 +139,17 @@ def test_gerar_fluxos_colunas_contagil_portugues(tmp_path: Path):
         ]
     )
     assert rc == 0
+    assert (saida / "fluxos_ops.csv").exists()
     out = pd.read_excel(saida / "fluxos_ops.xlsx")
     assert len(out) == 1
     assert float(out.iloc[0]["amortizacao_mensal"]) == 30000.0
     assert float(out.iloc[0]["subsidio_acumulado"]) > 0
     assert float(out.iloc[0]["impacto_fiscal_real"]) > 0
+
+
+def test_salvar_saida_fluxos_root_particiona(tmp_path: Path):
+    df = pd.DataFrame({"x": range(5)})
+    principal = salvar_saida_fluxos(df, tmp_path / "fluxos_x.xlsx", excel_max_rows=2)
+    assert principal.name == "fluxos_x_parte001.xlsx"
+    assert (tmp_path / "fluxos_x.csv").exists()
+    assert len(list(tmp_path.glob("fluxos_x_parte*.xlsx"))) == 3

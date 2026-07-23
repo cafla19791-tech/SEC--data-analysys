@@ -16,7 +16,7 @@ from scripts.contagil_fluxos import (
     processar_arquivo,
     processar_pasta_dados,
 )
-from scripts.gerar_fluxos import SelicSerie
+from scripts.gerar_fluxos import SelicSerie, salvar_saida_fluxos
 
 
 def _serie_sintetica() -> SelicSerie:
@@ -254,3 +254,46 @@ def test_main_massa_dados_com_fluxo_diario(tmp_path: Path):
     assert rc == 0
     assert (saida / "fluxos_lote_diario.xlsx").exists()
     assert (saida / "fluxos_diarios_lote_diario.xlsx").exists()
+
+
+def test_processar_arquivo_grava_csv_e_excel(tmp_path: Path):
+    """Sempre grava CSV espelho; Excel único quando cabe no limite."""
+    src = tmp_path / "operacoes.xlsx"
+    saida = tmp_path / "saida"
+    _excel_contratos(src)
+
+    out = processar_arquivo(src, saida, _serie_sintetica(), header=0)
+    assert out.name == "fluxos_operacoes.xlsx"
+    assert (saida / "fluxos_operacoes.csv").exists()
+    assert len(pd.read_csv(saida / "fluxos_operacoes.csv")) == len(pd.read_excel(out))
+
+
+def test_processar_arquivo_particiona_excel_grande(tmp_path: Path):
+    """Com limite artificial baixo, Excel é partido e CSV fica completo."""
+    src = tmp_path / "operacoes.xlsx"
+    saida = tmp_path / "saida"
+    _excel_contratos(src)
+
+    out = processar_arquivo(
+        src,
+        saida,
+        _serie_sintetica(),
+        header=0,
+        excel_max_rows=2,
+    )
+    assert out.name == "fluxos_operacoes_parte001.xlsx"
+    assert (saida / "fluxos_operacoes.csv").exists()
+    assert len(pd.read_csv(saida / "fluxos_operacoes.csv")) == 5
+    partes = sorted(saida.glob("fluxos_operacoes_parte*.xlsx"))
+    assert len(partes) == 3
+    assert sum(len(pd.read_excel(p)) for p in partes) == 5
+    assert not (saida / "fluxos_operacoes.xlsx").exists()
+
+
+def test_salvar_saida_fluxos_limite_oficial():
+    """Constante alinhada ao máximo de linhas do Excel (com cabeçalho)."""
+    from scripts.gerar_fluxos import EXCEL_MAX_DATA_ROWS
+
+    assert EXCEL_MAX_DATA_ROWS == 1_048_575
+    # smoke: API pública usada pelo ContAgil
+    assert callable(salvar_saida_fluxos)

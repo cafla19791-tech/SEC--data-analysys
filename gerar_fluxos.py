@@ -22,6 +22,59 @@ TJLP_TLP_BASE = 0.06
 TAXA_SELIC_ANUAL = 0.145
 # Fator ContAgil de referência em 30/06/2026 (coluna D do STP)
 FATOR_30_06_2026 = 82.84819
+# Excel: máx. 1_048_576 linhas/planilha (inclui cabeçalho) → 1_048_575 dados
+EXCEL_MAX_DATA_ROWS = 1_048_575
+
+
+def salvar_saida_fluxos(
+    df: pd.DataFrame,
+    caminho: Path | str,
+    *,
+    escrever_csv: bool = True,
+    escrever_excel: bool = True,
+    excel_max_rows: int = EXCEL_MAX_DATA_ROWS,
+) -> Path:
+    """Grava CSV completo + Excel (partido se exceder o limite de linhas)."""
+    if excel_max_rows < 1:
+        raise ValueError("excel_max_rows deve ser >= 1")
+
+    base = Path(caminho)
+    parent = base.parent if str(base.parent) not in ("", ".") else Path(".")
+    parent.mkdir(parents=True, exist_ok=True)
+    stem = base.stem if base.suffix.lower() in {".xlsx", ".xls", ".csv"} else base.name
+
+    n = len(df)
+    csv_path = parent / f"{stem}.csv" if escrever_csv else None
+    if csv_path is not None:
+        df.to_csv(csv_path, index=False)
+
+    principal: Path | None = csv_path
+    if escrever_excel:
+        if n <= excel_max_rows:
+            xlsx = parent / f"{stem}.xlsx"
+            df.to_excel(xlsx, index=False)
+            principal = xlsx
+            print(f"✅ Saída fluxos: {n:,} linhas → {xlsx}"
+                  + (f" (+ {csv_path.name})" if csv_path is not None else ""))
+        else:
+            n_partes = (n + excel_max_rows - 1) // excel_max_rows
+            partes: list[Path] = []
+            for i in range(n_partes):
+                ini = i * excel_max_rows
+                fim = min(ini + excel_max_rows, n)
+                parte = parent / f"{stem}_parte{i + 1:03d}.xlsx"
+                df.iloc[ini:fim].to_excel(parte, index=False)
+                partes.append(parte)
+            principal = partes[0]
+            print(
+                f"⚠️  {n:,} linhas excedem o limite do Excel "
+                f"({excel_max_rows:,} dados/planilha). "
+                f"CSV completo: {csv_path}; "
+                f"Excel em {n_partes} parte(s): {partes[0].name} … {partes[-1].name}"
+            )
+    elif principal is None:
+        raise FileNotFoundError("Nenhum arquivo de saída gerado")
+    return principal
 
 
 def taxa_contrato_efetiva(custo_financeiro: str | None, juros_pct: float) -> float:
@@ -446,9 +499,7 @@ def gerar_fluxos(
 
     if fluxo_diario:
         out = Path(saida_diario) if saida_diario is not None else Path(FLUXOS_DIARIOS_NOME)
-        out.parent.mkdir(parents=True, exist_ok=True)
-        pd.DataFrame(fluxos_diarios).to_excel(out, index=False)
-        print(f"✅ Fluxos diários: {out} ({len(fluxos_diarios):,} linhas)")
+        salvar_saida_fluxos(pd.DataFrame(fluxos_diarios), out)
 
     print(f"✅ Processados {len(df_fluxos)} contratos com lógica SAC + SELIC diário.")
     return df_fluxos
@@ -614,9 +665,9 @@ def main(argv: list[str] | None = None) -> int:
             max_contratos=args.max_contratos,
             saida_diario=diario_path if args.fluxo_diario else None,
         )
-        df_fluxos.to_excel(out_path, index=False)
-        print(f"  → Salvo: {out_path}")
-        saidas.append(out_path)
+        principal = salvar_saida_fluxos(df_fluxos, out_path)
+        print(f"  → Salvo: {principal}")
+        saidas.append(principal)
 
     if not saidas:
         print("Nenhum arquivo processado.")

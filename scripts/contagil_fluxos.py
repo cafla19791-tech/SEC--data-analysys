@@ -9,6 +9,10 @@ Entrypoint no estilo do script ContAgil/RFB (WinPython):
 Processa todos os .xlsx da massa de dados, gera fluxos (SAC + carência corrigida)
 e impacto fiscal ContAgil (col D, FATOR_30_06_2026 / fator_parcela).
 
+Saída: sempre CSV completo (fluxos_*.csv). Excel (fluxos_*.xlsx) é gravado
+inteiro se couber no limite (~1.048.575 linhas); caso contrário é partido em
+fluxos_*_parte001.xlsx, _parte002.xlsx, … sem truncar dados.
+
 Correções vs script ContAgil original (colado/corrompido):
   - sintaxe Python válida (True/values/method='nearest'/etc.)
   - gerar_fluxos(df, df) = df_original (instituição); gerar_fluxos(df, selic) = fatores
@@ -60,6 +64,7 @@ from scripts.gerar_fluxos import (
     CONTAGIL_SELIC_DEFAULT,
     DATA_DIR,
     DATA_IMPACTO,
+    EXCEL_MAX_DATA_ROWS,
     OUTPUT_DIR,
     SelicSerie,
     calcular_impacto_fiscal_real,
@@ -70,6 +75,7 @@ from scripts.gerar_fluxos import (
     main as gerar_fluxos_main,
     resolver_arquivo_selic,
     resolver_excel_operacoes,
+    salvar_saida_fluxos,
 )
 
 
@@ -144,14 +150,13 @@ def processar_arquivo(
     selic_serie: SelicSerie | None,
     header: int | None = None,
     fluxo_diario: bool = False,
+    excel_max_rows: int = EXCEL_MAX_DATA_ROWS,
 ) -> Path:
-    """Gera fluxos de um Excel e grava fluxos_<basename>.xlsx (script ContAgil)."""
+    """Gera fluxos de um Excel e grava CSV + Excel (partido se > limite Excel)."""
     print(f"Processando: {arquivo}")
     df = load_from_excel(arquivo, header=header)
     pasta_saida.mkdir(parents=True, exist_ok=True)
-    nome_saida = pasta_saida / f"fluxos_{arquivo.name}"
-    if nome_saida.suffix.lower() != ".xlsx":
-        nome_saida = nome_saida.with_suffix(".xlsx")
+    nome_saida = pasta_saida / f"fluxos_{arquivo.stem}.xlsx"
     saida_diario = (
         pasta_saida / f"fluxos_diarios_{arquivo.stem}.xlsx" if fluxo_diario else None
     )
@@ -162,11 +167,20 @@ def processar_arquivo(
         fluxo_diario=fluxo_diario,
         saida_diario=saida_diario,
     )
-    df_fluxos.to_excel(nome_saida, index=False)
-    print(f"  → Salvo: {nome_saida} ({len(df_fluxos):,} parcelas)")
+    saida = salvar_saida_fluxos(
+        df_fluxos,
+        nome_saida,
+        excel_max_rows=excel_max_rows,
+    )
+    print(
+        f"  → Salvo: {saida.principal} ({saida.n_linhas:,} parcelas"
+        + (f"; {len(saida.excel_parts)} partes Excel" if saida.particionado else "")
+        + (f"; CSV={saida.csv.name}" if saida.csv is not None else "")
+        + ")"
+    )
     if saida_diario is not None and Path(saida_diario).exists():
         print(f"  → Diário: {saida_diario}")
-    return nome_saida
+    return saida.principal
 
 
 def _parece_caminho_contagil(path: Path | None) -> bool:
@@ -478,8 +492,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if out.suffix.lower() != ".xlsx":
         out = out.with_suffix(".xlsx")
-    df_fluxos.to_excel(out, index=False)
-    print(f"✅ Concluído! → {out} ({len(df_fluxos):,} parcelas)")
+    saida = salvar_saida_fluxos(df_fluxos, out)
+    print(
+        f"✅ Concluído! → {saida.principal} ({saida.n_linhas:,} parcelas"
+        + (f"; Excel em {len(saida.excel_parts)} partes" if saida.particionado else "")
+        + ")"
+    )
     return 0
 
 

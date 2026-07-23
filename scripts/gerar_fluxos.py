@@ -38,6 +38,7 @@ import os
 import sys
 import time
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -52,6 +53,8 @@ DATA_IMPACTO = datetime(2026, 6, 30)
 # Fator ContAgil de referência em 30/06/2026 (coluna D do STP)
 FATOR_30_06_2026 = 82.84819
 AGENTE_NAO_INFORMADO = "Não informado"
+# Excel: máx. 1_048_576 linhas/planilha (inclui cabeçalho) → 1_048_575 dados
+EXCEL_MAX_DATA_ROWS = 1_048_575
 
 # Caminhos ContAgil Windows (WinPython / RFB)
 CONTAGIL_WINPYTHON = Path(
@@ -1080,30 +1083,108 @@ def gerar_fluxos_diarios_contrato(
     return diarios
 
 
+@dataclass(frozen=True)
+class SaidaFluxos:
+    """Resultado de gravação de fluxos respeitando o limite do Excel."""
+
+    n_linhas: int
+    csv: Path | None
+    excel_parts: tuple[Path, ...]
+    particionado: bool
+
+    @property
+    def principal(self) -> Path:
+        """Arquivo de referência: 1º Excel (ou CSV se só CSV)."""
+        if self.excel_parts:
+            return self.excel_parts[0]
+        if self.csv is not None:
+            return self.csv
+        raise FileNotFoundError("Nenhum arquivo de saída gerado")
+
+
+def salvar_saida_fluxos(
+    df: pd.DataFrame,
+    caminho: Path | str,
+    *,
+    escrever_csv: bool = True,
+    escrever_excel: bool = True,
+    excel_max_rows: int = EXCEL_MAX_DATA_ROWS,
+) -> SaidaFluxos:
+    """
+    Grava DataFrame de fluxos sem estourar o limite de linhas do Excel.
+
+    - Sempre grava CSV completo (quando ``escrever_csv``) — fonte preferida
+      para ``resumo_fluxos_polars``.
+    - Se ``len(df) <= excel_max_rows``: um único ``.xlsx`` com o mesmo stem.
+    - Se maior: vários ``{stem}_parte001.xlsx``, ``_parte002.xlsx``, …
+      cada um com até ``excel_max_rows`` linhas de dados (+ cabeçalho).
+
+    ``caminho`` pode ser ``.xlsx``, ``.csv`` ou sem extensão; o stem define os nomes.
+    """
+    if excel_max_rows < 1:
+        raise ValueError("excel_max_rows deve ser >= 1")
+
+    base = Path(caminho)
+    parent = base.parent if str(base.parent) not in ("", ".") else Path(".")
+    parent.mkdir(parents=True, exist_ok=True)
+    stem = base.stem if base.suffix.lower() in {".xlsx", ".xls", ".csv"} else base.name
+
+    n = len(df)
+    csv_path: Path | None = None
+    if escrever_csv:
+        csv_path = parent / f"{stem}.csv"
+        df.to_csv(csv_path, index=False)
+
+    excel_parts: list[Path] = []
+    particionado = False
+    if escrever_excel:
+        if n <= excel_max_rows:
+            xlsx = parent / f"{stem}.xlsx"
+            df.to_excel(xlsx, index=False)
+            excel_parts.append(xlsx)
+        else:
+            particionado = True
+            n_partes = (n + excel_max_rows - 1) // excel_max_rows
+            for i in range(n_partes):
+                ini = i * excel_max_rows
+                fim = min(ini + excel_max_rows, n)
+                parte = parent / f"{stem}_parte{i + 1:03d}.xlsx"
+                df.iloc[ini:fim].to_excel(parte, index=False)
+                excel_parts.append(parte)
+            print(
+                f"⚠️  {n:,} linhas excedem o limite do Excel "
+                f"({excel_max_rows:,} dados/planilha). "
+                f"CSV completo: {csv_path or '(não gerado)'}; "
+                f"Excel em {n_partes} parte(s): "
+                f"{excel_parts[0].name} … {excel_parts[-1].name}"
+            )
+
+    if excel_parts and not particionado:
+        msg_xlsx = str(excel_parts[0])
+    elif excel_parts:
+        msg_xlsx = f"{len(excel_parts)} arquivo(s) Excel particionado(s)"
+    else:
+        msg_xlsx = "(Excel omitido)"
+    print(
+        f"✅ Saída fluxos: {n:,} linhas → "
+        f"CSV={csv_path if csv_path else '(omitido)'}; Excel={msg_xlsx}"
+    )
+    return SaidaFluxos(
+        n_linhas=n,
+        csv=csv_path,
+        excel_parts=tuple(excel_parts),
+        particionado=particionado,
+    )
+
+
 def salvar_fluxos_diarios(
     fluxos_diarios: list[dict],
     path: Path | None = None,
 ) -> Path:
-    """Grava a tabela dia a dia em Excel (e CSV espelho se muito grande)."""
+    """Grava a tabela dia a dia em CSV + Excel (partido se > limite Excel)."""
     out = Path(path) if path is not None else OUTPUT_DIR / "fluxos_diarios_detalhados.xlsx"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    df = pd.DataFrame(fluxos_diarios)
-
-    # Limite prático do Excel (~1.048.576 linhas)
-    excel_limit = 1_000_000
-    if len(df) > excel_limit:
-        csv_path = out.with_suffix(".csv")
-        df.to_csv(csv_path, index=False)
-        amostra = df.head(excel_limit)
-        amostra.to_excel(out, index=False)
-        print(
-            f"⚠️  Fluxos diários: {len(df):,} linhas > limite Excel; "
-            f"CSV completo em {csv_path} e amostra Excel em {out}"
-        )
-    else:
-        df.to_excel(out, index=False)
-        print(f"✅ Fluxos diários: {out} ({len(df):,} linhas)")
-    return out
+    saida = salvar_saida_fluxos(pd.DataFrame(fluxos_diarios), out)
+    return saida.principal
 
 
 _OPS_COL_MARKERS = {
