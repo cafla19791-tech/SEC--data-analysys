@@ -110,6 +110,23 @@ def test_parse_args_massa_dados_alias():
     )
 
 
+def test_parse_args_fatores_alias():
+    """CLI ContAgil: --fatores é alias de --arquivo-selic (mensal)."""
+    args = parse_args(
+        [
+            "--massa-dados",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados",
+            "--pasta-saida",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
+            "--fatores",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx",
+        ]
+    )
+    assert args.arquivo_selic == Path(
+        r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    )
+
+
 def test_main_massa_dados_cli(tmp_path: Path):
     """Smoke: comando ContAgil com --massa-dados + STP local."""
     dados = tmp_path / "dados"
@@ -144,6 +161,44 @@ def test_main_massa_dados_cli(tmp_path: Path):
     assert out.exists()
     df = pd.read_excel(out)
     assert len(df) == 5
+    assert "impacto_fiscal" in df.columns
+
+
+def test_main_massa_dados_com_fatores_mensais(tmp_path: Path):
+    """CLI ContAgil: --massa-dados + --fatores (fator_acumulado mensal)."""
+    dados = tmp_path / "dados"
+    saida = tmp_path / "saida"
+    dados.mkdir()
+    _excel_contratos(dados / "BNDES INDIRETAS 2009.xlsx")
+
+    fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    datas = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
+    fator = (1.009) ** pd.Series(range(1, len(datas) + 1))
+    pd.DataFrame(
+        {
+            "Data": datas,
+            "Taxa_Mensal_%": [0.9] * len(datas),
+            "Fator_Acumulado": fator.values,
+        }
+    ).to_excel(fatores, index=False)
+
+    rc = contagil_main(
+        [
+            "--massa-dados",
+            str(dados),
+            "--pasta-saida",
+            str(saida),
+            "--fatores",
+            str(fatores),
+            "--excel-header",
+            "0",
+        ]
+    )
+    assert rc == 0
+    out = saida / "fluxos_BNDES INDIRETAS 2009.xlsx"
+    assert out.exists()
+    df = pd.read_excel(out)
+    assert len(df) > 0
     assert "impacto_fiscal" in df.columns
 
 

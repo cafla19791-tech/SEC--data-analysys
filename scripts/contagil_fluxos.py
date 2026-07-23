@@ -4,10 +4,10 @@ Entrypoint no estilo do script ContAgil/RFB (WinPython):
 
   massa_dados / pasta_dados = .../python_jep/winpython/dados
   pasta_saida               = .../python_jep/winpython/saida
-  arquivo_selic             = .../STP-20260716182715078 (1).xlsx
+  arquivo_selic / --fatores = STP-*.xlsx  OU  fator_acumulado_SELIC_TJLP_TLP.xlsx
 
 Processa todos os .xlsx da massa de dados, gera fluxos (SAC + carência corrigida)
-e impacto fiscal ContAgil (col D, FATOR_30_06_2026 / fator_parcela).
+e impacto fiscal ContAgil (fatores mensais ou col D STP).
 
 Correções vs script ContAgil original (colado/corrompido):
   - sintaxe Python válida (True/values/method='nearest'/etc.)
@@ -15,13 +15,18 @@ Correções vs script ContAgil original (colado/corrompido):
   - carência: cronograma cobre (carência + n) meses
   - taxa_contrato_efetiva: TAXA FIXA / TJLP/TLP com composição mensal
   - dual balance: saldo_fiscal (principal) + saldo_contrato (com juros)
-  - fator SELIC na coluna D; idx = nearest(data_parcela); fim = FATOR_30_06_2026
+  - fator SELIC mensal (--fatores) ou col D STP; idx = nearest(data_parcela)
 
-Uso (ContAgil / WinPython):
+Uso (ContAgil / WinPython) — capitalização mensal:
   python3 scripts/contagil_fluxos.py \\
     --massa-dados "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\dados" \\
     --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
-    --arquivo-selic "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\STP-20260716182715078 (1).xlsx"
+    --fatores "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+
+  # STP diário (legado ContAgil col D):
+  python3 scripts/contagil_fluxos.py \\
+    --massa-dados "...\\dados" --pasta-saida "...\\saida" \\
+    --arquivo-selic "...\\STP-20260716182715078 (1).xlsx"
 
   # Sem args: usa defaults WinPython se existirem
   python3 scripts/contagil_fluxos.py
@@ -58,6 +63,7 @@ from scripts.gerar_fluxos import (
     CONTAGIL_PASTA_DADOS,
     CONTAGIL_PASTA_SAIDA,
     CONTAGIL_SELIC_DEFAULT,
+    CONTAGIL_WINPYTHON,
     DATA_DIR,
     DATA_IMPACTO,
     OUTPUT_DIR,
@@ -103,30 +109,60 @@ def teste_contrato0(serie: SelicSerie) -> float:
     return impacto
 
 
+def _parece_fatores_mensais(path: Path) -> bool:
+    """True se o Excel é fator_acumulado_SELIC_TJLP_TLP (capitalização mensal)."""
+    nome = path.name.lower()
+    if "fator_acumulado" in nome or "selic_tjlp" in nome or "selic_mensal" in nome:
+        return True
+    try:
+        cols = {str(c).strip().lower() for c in pd.read_excel(path, nrows=0).columns}
+    except Exception:  # noqa: BLE001
+        return False
+    return "fator_acumulado" in cols and (
+        any("taxa" in c for c in cols) or "data" in cols
+    )
+
+
 def carregar_selic(arquivo_selic: Path | None, baixar: bool) -> SelicSerie | None:
-    """Carrega STP ContAgil (col D) ou Bacen; espelha o script RFB."""
+    """Carrega fatores mensais (--fatores), STP ContAgil (col D) ou Bacen."""
+    from scripts.contagil_fluxos_seguro import carregar_fatores_mensais
+
     # Preferência: caminho explícito → auto ContAgil/data → Bacen se baixar
     if arquivo_selic is not None:
         caminho = Path(arquivo_selic)
         if caminho.exists():
+            if _parece_fatores_mensais(caminho):
+                return carregar_fatores_mensais(caminho)
             serie = SelicSerie.from_excel(caminho)
             print(f"SELIC ContAgil (col D): {caminho} ({len(serie.datas):,} pontos)")
             return serie
         # Caminho ContAgil explícito ausente: tenta auto-descoberta antes de falhar
-        print(f"⚠️ Arquivo SELIC não encontrado: {caminho}")
+        print(f"⚠️ Arquivo de fatores/SELIC não encontrado: {caminho}")
         print("   Tentando auto-descoberta ContAgil/data/Bacen...")
+
+    # Default ContAgil: fator mensal na pasta winpython, senão STP
+    for cand in (
+        Path.cwd() / "fator_acumulado_SELIC_TJLP_TLP.xlsx",
+        CONTAGIL_WINPYTHON / "fator_acumulado_SELIC_TJLP_TLP.xlsx",
+        DATA_DIR / "fator_acumulado_SELIC_TJLP_TLP.xlsx",
+        DATA_DIR / "selic_mensal.xlsx",
+    ):
+        if cand.exists() and _parece_fatores_mensais(cand):
+            return carregar_fatores_mensais(cand)
 
     resolvido = resolver_arquivo_selic(None)
     if resolvido is not None:
+        if _parece_fatores_mensais(resolvido):
+            return carregar_fatores_mensais(resolvido)
         serie = SelicSerie.from_excel(resolvido)
         print(f"SELIC ContAgil (col D): {resolvido} ({len(serie.datas):,} pontos)")
         return serie
 
     if arquivo_selic is not None and not baixar:
         raise FileNotFoundError(
-            f"Arquivo SELIC não encontrado: {arquivo_selic}\n"
-            "Coloque o STP ContAgil (coluna D = fator) no caminho indicado "
-            "ou use --baixar-selic para Bacen SGS 11."
+            f"Arquivo de fatores/SELIC não encontrado: {arquivo_selic}\n"
+            "Informe --fatores (fator_acumulado_SELIC_TJLP_TLP.xlsx) "
+            "ou --arquivo-selic (STP col D), ou use --baixar-selic."
         )
 
     return carregar_selic_serie(
@@ -284,9 +320,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument(
         "--arquivo-selic",
+        "--fatores",
+        dest="arquivo_selic",
         type=Path,
         default=None,
-        help=f"STP ContAgil (default auto: {CONTAGIL_SELIC_DEFAULT.name} / Bacen).",
+        metavar="FILE",
+        help=(
+            "Fatores ContAgil: fator_acumulado_SELIC_TJLP_TLP.xlsx (mensal) "
+            f"ou STP (col D). Alias: --fatores. Default auto: "
+            f"{CONTAGIL_SELIC_DEFAULT.name} / Bacen."
+        ),
     )
     p.add_argument("--stem", default="fluxos_completos_final")
     p.add_argument("--max-contratos", type=int, default=None)
