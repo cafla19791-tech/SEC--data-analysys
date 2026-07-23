@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
 """
-Versão FINAL ContAgil — Polars + gráficos + relatório executivo.
+Versão FINAL ContAgil — Polars com SELIC/TJLP **mensais**.
 
-Porta o script ContAgil/WinPython (lazy CSV + join_asof SELIC) com:
+Capitalização mês a mês (sem SELIC diária / STP):
 
-  - fatores SELIC na **coluna D** (STP) **ou** taxas ContAgil/Bacen (% a.d.)
-  - TJLP mensal ContAgil (``--tjlp tjlp_mensal.xlsx``) na taxa efetiva
-  - fator final = FATOR_30_06_2026 (STP) ou cumprod das taxas até 30/06/2026
-  - join_asof na própria ``data_fluxo`` (ContAgil nearest) — não produto global
+  - ``selic_mensal.xlsx`` — mês × taxa Selic % a.m.
+  - ``tjlp_mensal.xlsx`` — mês × taxa TJLP % a.m.
+  - impacto = subsídio × fator_selic(30/06/2026) / fator_selic(mês da parcela)
+  - taxa efetiva TJLP = (1+tjlp_m)×(1+spread_m)−1
   - Excel multi-aba + Plotly/Matplotlib + RELATORIO_EXECUTIVO.md
-  - fallbacks cloud quando os caminhos WinPython não existem
 
 Uso (WinPython ContAgil):
   python scripts/resumo_fluxos_polars.py \\
       --pasta "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
       --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \\
-      --selic "STP-20260716182715078.xlsx" \\
-      --tjlp "tjlp_mensal.xlsx"
+      --selic "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\selic_mensal.xlsx" \\
+      --tjlp "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\tjlp_mensal.xlsx"
 
 Uso (repo / cloud):
   python3 scripts/resumo_fluxos_polars.py \\
       --pasta output \\
       --original data/sample_operacoes_com_agente.csv \\
-      --selic data/selic_fatores_bacen.xlsx
+      --selic data/selic_mensal.xlsx \\
+      --tjlp data/tjlp_mensal.xlsx
 """
 
 from __future__ import annotations
@@ -50,7 +50,6 @@ from xlsxwriter import Workbook
 from scripts.gerar_fluxos import (
     CONTAGIL_WINPYTHON,
     DATA_DIR,
-    FATOR_30_06_2026,
     TJLP_TLP_BASE,
 )
 from scripts.resumo_fluxos_avancado import (
@@ -59,7 +58,6 @@ from scripts.resumo_fluxos_avancado import (
     listar_arquivos_fluxos,
     resolver_original,
     resolver_pasta,
-    resolver_selic,
 )
 
 DATA_FINAL_DEFAULT = date(2026, 6, 30)
@@ -69,7 +67,9 @@ WORKBOOK_ALIAS = "resumo_fluxos_polars.xlsx"
 RELATORIO_NAME = "RELATORIO_EXECUTIVO.md"
 GRAFICO_HTML = "grafico_interativo.html"
 GRAFICO_PNG = "grafico_top_subsidio.png"
+CONTAGIL_SELIC_MENSAL_DEFAULT = CONTAGIL_WINPYTHON / "selic_mensal.xlsx"
 CONTAGIL_TJLP_DEFAULT = CONTAGIL_WINPYTHON / "tjlp_mensal.xlsx"
+NOME_SELIC_MENSAL = "selic_mensal.xlsx"
 NOME_TJLP_DEFAULT = "tjlp_mensal.xlsx"
 
 
@@ -112,218 +112,117 @@ def _para_decimal_taxa(
     coluna: str | None = None,
     forcar_percentual: bool | None = None,
 ) -> pl.Series:
-    """Converte taxa em % para decimal.
+    """Converte taxa mensal em % para decimal.
 
-    ContAgil Bacen usa colunas ``% a.d.`` / ``% a.m.`` com valores como 0,04
-    (percentual) → 0,0004 (decimal). Sem indício no nome, usa mediana > 0,3.
+    ContAgil ``% a.m.`` tipicamente traz 0,85 ou 1,2 (percentual) → 0,0085 / 0,012.
     """
     s = series.cast(pl.Float64, strict=False)
     if forcar_percentual is None and coluna is not None:
         low = str(coluna).lower()
-        forcar_percentual = ("% a.d" in low) or ("% a.m" in low) or ("%" in low)
+        forcar_percentual = ("%" in low) or ("a.m" in low) or ("a.d" in low)
     if forcar_percentual is None:
         med = float(s.drop_nulls().median()) if s.drop_nulls().len() else 0.0
         forcar_percentual = med > 0.3
     return s / 100.0 if forcar_percentual else s
 
 
-def _escolher_coluna_fator(raw: pl.DataFrame) -> tuple[str, bool]:
-    """Escolhe coluna de fator ContAgil.
-
-    Ordem (igual ``SelicSerie.from_dataframe``):
-      1) coluna nomeada fator_acumulado / fator → Bacen/cache (sem FATOR ref)
-      2) coluna D (índice 3) se parece fator acumulado (mediana > 1) → STP ContAgil
-      3) coluna E (índice 4) ou última numérica
-    """
-    cols = list(raw.columns)
-    lower = {str(c).strip().lower(): c for c in cols}
-    for key in ("fator_acumulado", "fator"):
-        if key in lower:
-            return lower[key], False
-
-    def _mediana(col: str) -> float:
-        s = raw.get_column(col).cast(pl.Float64, strict=False).drop_nulls()
-        if s.is_empty():
-            return 0.0
-        return float(s.median())
-
-    if len(cols) >= 4:
-        med_d = _mediana(cols[3])
-        # Taxa diária Bacen (~0.04) ≠ fator acumulado ContAgil (>1 e crescente)
-        if med_d > 1.0:
-            return cols[3], True
-    if len(cols) >= 5:
-        return cols[4], False
-    return cols[-1], False
-
-
-def carregar_fatores_selic(caminho_selic: str | Path) -> tuple[pl.DataFrame, float]:
-    """Lê STP ContAgil / Bacen: data + fator acumulado.
-
-    Retorna (selic_df, fator_final). STP ContAgil (col D) usa FATOR_30_06_2026;
-    Bacen/outros usam o fator em 30/06/2026 (ou max da série).
-    """
-    path = Path(caminho_selic)
+def _carregar_taxa_mensal(
+    caminho: str | Path,
+    *,
+    nome_serie: str,
+    needles_taxa: tuple[tuple[str, ...], ...],
+) -> pl.DataFrame:
+    """Lê Excel ContAgil mensal (Data + taxa % a.m.) → data (1º dia do mês) + taxa decimal."""
+    path = Path(caminho)
     raw = pl.read_excel(path)
-    if raw.width < 2:
-        raise ValueError(f"SELIC sem colunas suficientes: {path}")
+    print(f"Colunas {nome_serie} ({path.name}): {raw.columns}")
+    cols = [str(c) for c in raw.columns]
+    data_col = _coluna_data_contagil(cols)
 
-    data_col = raw.columns[0]
-    fator_col, usar_fator_ref = _escolher_coluna_fator(raw)
+    taxa_col = None
+    for needles in needles_taxa:
+        taxa_col = _encontrar_coluna(cols, *needles)
+        if taxa_col is not None:
+            break
+    if taxa_col is None:
+        # fallback: segunda coluna numérica / última
+        taxa_col = cols[1] if len(cols) > 1 else cols[-1]
 
-    selic = raw.select(
+    taxa = _para_decimal_taxa(raw.get_column(taxa_col), coluna=taxa_col)
+    out = raw.select(
         [
             pl.col(data_col).alias("data"),
-            pl.col(fator_col).cast(pl.Float64, strict=False).alias("fator_acumulado"),
+            pl.Series(nome_serie, taxa),
         ]
     )
-    selic = (
-        _normalizar_coluna_data(selic, "data")
-        .drop_nulls(["data", "fator_acumulado"])
-        .filter(pl.col("fator_acumulado") > 0)
+    out = (
+        _normalizar_coluna_data(out, "data")
+        .drop_nulls(["data", nome_serie])
+        .with_columns(pl.col("data").dt.truncate("1mo").alias("data"))
         .sort("data")
         .unique(subset=["data"], keep="last")
     )
-
-    if selic.is_empty():
-        raise ValueError(f"Nenhum fator SELIC válido em {path}")
-
-    if usar_fator_ref:
-        fator_final = float(FATOR_30_06_2026)
-    else:
-        ate_fim = selic.filter(pl.col("data") <= DATA_FINAL_DEFAULT)
-        fator_final = float(
-            (ate_fim if not ate_fim.is_empty() else selic)["fator_acumulado"].max()
-        )
-    return selic, fator_final
-
-
-def _parece_selic_taxas(raw: pl.DataFrame) -> bool:
-    """True se o Excel ContAgil tem taxa Selic (% a.d. / % a.m.), não fator col D."""
-    cols = [str(c) for c in raw.columns]
-    if _encontrar_coluna(cols, "selic") and (
-        _encontrar_coluna(cols, "% a.d")
-        or _encontrar_coluna(cols, "% a.m")
-        or _encontrar_coluna(cols, "a.d")
-        or _encontrar_coluna(cols, "a.m")
-    ):
-        return True
-    # fator_acumulado nomeado → fatores
-    lower = {str(c).strip().lower() for c in cols}
-    if "fator_acumulado" in lower or "fator" in lower:
-        return False
-    return False
+    if out.is_empty():
+        raise ValueError(f"Nenhuma taxa {nome_serie} válida em {path}")
+    return out
 
 
 def carregar_selic_mensal(caminho: str | Path) -> pl.DataFrame:
-    """Lê Excel ContAgil de taxas Selic (Bacen) — colunas ``Data`` + Selic % a.d./a.m.
+    """Lê ``selic_mensal.xlsx`` ContAgil — mês × Selic % a.m.
 
-    Retorna ``data``, ``selic_taxa`` (decimal) e ``fator_acumulado`` (cumprod).
+    Retorna ``data`` (mês), ``selic_mensal`` (decimal) e ``fator_acumulado`` (cumprod mensal).
     """
-    path = Path(caminho)
-    raw = pl.read_excel(path)
-    print(f"Colunas SELIC ({path.name}): {raw.columns}")
-    cols = [str(c) for c in raw.columns]
-    data_col = _coluna_data_contagil(cols)
-    taxa_col = (
-        _encontrar_coluna(cols, "selic", "% a.d")
-        or _encontrar_coluna(cols, "selic", "a.d")
-        or _encontrar_coluna(cols, "selic", "% a.m")
-        or _encontrar_coluna(cols, "selic", "a.m")
-        or _encontrar_coluna(cols, "selic")
+    selic = _carregar_taxa_mensal(
+        caminho,
+        nome_serie="selic_mensal",
+        needles_taxa=(
+            ("selic", "% a.m"),
+            ("selic", "a.m"),
+            ("selic",),
+        ),
     )
-    if taxa_col is None:
-        raise ValueError(
-            f"Coluna de taxa Selic não encontrada em {path}. Colunas: {cols}"
-        )
-
-    taxa = _para_decimal_taxa(raw.get_column(taxa_col), coluna=taxa_col)
-    selic = raw.select(
-        [
-            pl.col(data_col).alias("data"),
-            pl.Series("selic_taxa", taxa),
-        ]
+    return selic.with_columns(
+        (1.0 + pl.col("selic_mensal")).cum_prod().alias("fator_acumulado")
     )
-    selic = (
-        _normalizar_coluna_data(selic, "data")
-        .drop_nulls(["data", "selic_taxa"])
-        .filter(pl.col("selic_taxa") > -0.5)
-        .sort("data")
-        .unique(subset=["data"], keep="last")
-        .with_columns(
-            [
-                (1.0 + pl.col("selic_taxa"))
-                .cum_prod()
-                .alias("fator_acumulado")
-            ]
-        )
-    )
-    if selic.is_empty():
-        raise ValueError(f"Nenhuma taxa SELIC válida em {path}")
-    return selic
 
 
 def carregar_tjlp_mensal(caminho: str | Path) -> pl.DataFrame:
-    """Lê Excel ContAgil TJLP mensal (% a.m.).
+    """Lê ``tjlp_mensal.xlsx`` ContAgil — mês × TJLP % a.m.
 
-    Retorna ``data``, ``tjlp_mensal`` (decimal ao mês).
+    Retorna ``data`` (mês), ``tjlp_mensal`` (decimal) e ``fator_acumulado`` (cumprod).
     """
-    path = Path(caminho)
-    raw = pl.read_excel(path)
-    print(f"Colunas TJLP ({path.name}): {raw.columns}")
-    cols = [str(c) for c in raw.columns]
-    data_col = _coluna_data_contagil(cols)
-    taxa_col = (
-        _encontrar_coluna(cols, "tjlp", "% a.m")
-        or _encontrar_coluna(cols, "tjlp", "a.m")
-        or _encontrar_coluna(cols, "tjlp")
+    tjlp = _carregar_taxa_mensal(
+        caminho,
+        nome_serie="tjlp_mensal",
+        needles_taxa=(
+            ("tjlp", "% a.m"),
+            ("tjlp", "a.m"),
+            ("tjlp",),
+        ),
     )
-    if taxa_col is None:
-        raise ValueError(
-            f"Coluna TJLP mensal não encontrada em {path}. Colunas: {cols}"
-        )
-
-    taxa = _para_decimal_taxa(raw.get_column(taxa_col), coluna=taxa_col)
-    tjlp = raw.select(
-        [
-            pl.col(data_col).alias("data"),
-            pl.Series("tjlp_mensal", taxa),
-        ]
+    return tjlp.with_columns(
+        (1.0 + pl.col("tjlp_mensal")).cum_prod().alias("fator_acumulado")
     )
-    tjlp = (
-        _normalizar_coluna_data(tjlp, "data")
-        .drop_nulls(["data", "tjlp_mensal"])
-        .sort("data")
-        .unique(subset=["data"], keep="last")
-    )
-    if tjlp.is_empty():
-        raise ValueError(f"Nenhuma TJLP válida em {path}")
-    return tjlp
 
 
-def carregar_selic_auto(caminho: str | Path) -> tuple[pl.DataFrame, float, str]:
-    """Detecta layout ContAgil e carrega SELIC.
-
-    Retorna (selic_df com fator_acumulado, fator_final, modo)
-    onde modo ∈ {"fatores", "taxas"}.
-    """
-    path = Path(caminho)
-    raw = pl.read_excel(path)
-    if _parece_selic_taxas(raw):
-        selic = carregar_selic_mensal(path)
-        ate_fim = selic.filter(pl.col("data") <= DATA_FINAL_DEFAULT)
-        fator_final = float(
-            (ate_fim if not ate_fim.is_empty() else selic)["fator_acumulado"].max()
-        )
-        return selic, fator_final, "taxas"
-    selic, fator_final = carregar_fatores_selic(path)
-    return selic, fator_final, "fatores"
+def fator_final_mensal(serie: pl.DataFrame, data_final: date = DATA_FINAL_DEFAULT) -> float:
+    """Fator acumulado no mês de ``data_final`` (ou último ≤ data_final)."""
+    ate_fim = serie.filter(pl.col("data") <= data_final)
+    base = ate_fim if not ate_fim.is_empty() else serie
+    return float(base["fator_acumulado"].max())
 
 
-def resolver_tjlp(nome: str | Path | None, pasta: Path) -> Path | None:
-    """Resolve ``tjlp_mensal.xlsx`` ContAgil (opcional)."""
+def resolver_arquivo_mensal(
+    nome: str | Path | None,
+    pasta: Path,
+    *,
+    default_contagil: Path,
+    nome_local: str,
+    rotulo: str,
+) -> Path | None:
+    """Resolve Excel mensal ContAgil (selic_mensal / tjlp_mensal)."""
     if nome is None:
-        nome = CONTAGIL_TJLP_DEFAULT
+        nome = default_contagil
     path = Path(nome)
     bases = [
         Path.cwd(),
@@ -338,43 +237,82 @@ def resolver_tjlp(nome: str | Path | None, pasta: Path) -> Path | None:
     for cand in _candidatos_nome(path, bases):
         if cand.exists() and cand.is_file():
             return cand
-    if CONTAGIL_TJLP_DEFAULT.exists():
-        return CONTAGIL_TJLP_DEFAULT
-    sample = DATA_DIR / NOME_TJLP_DEFAULT
+    if default_contagil.exists():
+        return default_contagil
+    sample = DATA_DIR / nome_local
     if sample.exists():
+        if _parece_contagil(path) or path.name.lower() == nome_local.lower():
+            print(f"⚠️ {rotulo} ContAgil ausente: {nome}")
+            print(f"   Usando amostra local: {sample}")
         return sample
-    # Ausente: usa TJLP_TLP_BASE (6%) na taxa efetiva — não é erro
-    if _parece_contagil(path) or path.name.lower().startswith("tjlp"):
-        print(f"⚠️ TJLP ContAgil ausente: {nome}")
-        print(f"   Usando base ContAgil TJLP/TLP = {TJLP_TLP_BASE:.2%} a.a.")
+    if _parece_contagil(path) or path.name.lower() == nome_local.lower():
+        print(f"⚠️ {rotulo} ContAgil ausente: {nome}")
         return None
     return None
 
 
-def anexar_tjlp_mensal(df: pl.DataFrame, tjlp: pl.DataFrame | None) -> pl.DataFrame:
-    """Join_asof TJLP mensal na data da parcela (mês ContAgil)."""
-    if tjlp is None or tjlp.is_empty():
-        return df.with_columns(
-            pl.lit(None).cast(pl.Float64).alias("tjlp_mensal")
-        )
+def resolver_selic_mensal(nome: str | Path | None, pasta: Path) -> Path | None:
+    return resolver_arquivo_mensal(
+        nome,
+        pasta,
+        default_contagil=CONTAGIL_SELIC_MENSAL_DEFAULT,
+        nome_local=NOME_SELIC_MENSAL,
+        rotulo="SELIC mensal",
+    )
+
+
+def resolver_tjlp(nome: str | Path | None, pasta: Path) -> Path | None:
+    path = resolver_arquivo_mensal(
+        nome,
+        pasta,
+        default_contagil=CONTAGIL_TJLP_DEFAULT,
+        nome_local=NOME_TJLP_DEFAULT,
+        rotulo="TJLP mensal",
+    )
+    if path is None:
+        print(f"   Usando base ContAgil TJLP/TLP = {TJLP_TLP_BASE:.2%} a.a.")
+    return path
+
+
+def anexar_serie_mensal(
+    df: pl.DataFrame,
+    serie: pl.DataFrame | None,
+    *,
+    colunas: list[str],
+) -> pl.DataFrame:
+    """Join_asof de série mensal (SELIC/TJLP) no mês da parcela."""
+    if serie is None or serie.is_empty():
+        extras = [pl.lit(None).cast(pl.Float64).alias(c) for c in colunas]
+        return df.with_columns(extras)
 
     work = df.with_columns(
         [
             pl.col("data_fluxo").cast(pl.Date),
-            pl.col("data_fluxo").cast(pl.Date).dt.truncate("1mo").alias("_mes_tjlp"),
+            pl.col("data_fluxo").cast(pl.Date).dt.truncate("1mo").alias("_mes"),
         ]
-    ).sort("_mes_tjlp")
-    tjlp_m = (
-        tjlp.with_columns(pl.col("data").dt.truncate("1mo").alias("_mes_tjlp"))
-        .sort("_mes_tjlp")
-        .unique(subset=["_mes_tjlp"], keep="last")
+    ).sort("_mes")
+    mensal = (
+        serie.with_columns(pl.col("data").dt.truncate("1mo").alias("_mes"))
+        .sort("_mes")
+        .unique(subset=["_mes"], keep="last")
     )
-    joined = work.join_asof(
-        tjlp_m.select(["_mes_tjlp", "tjlp_mensal"]),
-        on="_mes_tjlp",
+    cols_join = ["_mes"] + [c for c in colunas if c in mensal.columns]
+    return work.join_asof(
+        mensal.select(cols_join),
+        on="_mes",
         strategy="backward",
-    ).drop("_mes_tjlp")
-    return joined
+    ).drop("_mes")
+
+
+def anexar_tjlp_mensal(df: pl.DataFrame, tjlp: pl.DataFrame | None) -> pl.DataFrame:
+    return anexar_serie_mensal(df, tjlp, colunas=["tjlp_mensal"])
+
+
+def anexar_selic_mensal(df: pl.DataFrame, selic: pl.DataFrame) -> pl.DataFrame:
+    """Anexa selic_mensal + fator_acumulado do mês da parcela."""
+    return anexar_serie_mensal(
+        df, selic, colunas=["selic_mensal", "fator_acumulado"]
+    )
 
 
 def calcular_impacto_fiscal(
@@ -382,23 +320,18 @@ def calcular_impacto_fiscal(
     selic_df: pl.DataFrame,
     fator_final: float,
 ) -> pl.DataFrame:
-    """impacto = subsidio × fator_final / fator(nearest data_fluxo) — ContAgil."""
+    """impacto = subsidio × fator_final / fator_selic(mês da parcela) — mensal."""
     work = df.with_columns(
         [
             pl.col("data_fluxo").cast(pl.Date).alias("data_fluxo"),
             pl.col("subsidio").cast(pl.Float64),
         ]
-    ).sort("data_fluxo")
-
-    # ContAgil: nearest na própria data da parcela (join_asof backward ≈ último ≤ data)
-    joined = work.join_asof(
-        selic_df.sort("data"),
-        left_on="data_fluxo",
-        right_on="data",
-        strategy="backward",
     )
+    # Garante fator do mês (pode já ter vindo de anexar_selic_mensal)
+    if "fator_acumulado" not in work.columns:
+        work = anexar_selic_mensal(work, selic_df)
 
-    return joined.with_columns(
+    return work.with_columns(
         [
             pl.when(pl.col("fator_acumulado").is_not_null() & (pl.col("fator_acumulado") > 0))
             .then(
@@ -407,7 +340,7 @@ def calcular_impacto_fiscal(
             .otherwise(pl.col("subsidio").round(2))
             .alias("impacto_acumulado_2026")
         ]
-    ).drop([c for c in ("data",) if c in joined.columns and c != "data_fluxo"])
+    )
 
 
 def _normalizar_colunas_fluxos(df: pl.DataFrame) -> pl.DataFrame:
@@ -640,10 +573,12 @@ def adicionar_taxa_contrato_efetiva(df: pl.DataFrame) -> pl.DataFrame:
 
 
 def adicionar_spread(df: pl.DataFrame) -> pl.DataFrame:
-    """spread = (1 + selic_mes − taxa_contrato_efetiva) ** mes_no_contrato."""
+    """spread = (1 + selic_mensal − taxa_contrato_efetiva) ** mes_no_contrato."""
     work = adicionar_taxa_contrato_efetiva(df)
 
-    if "selic_mes" not in work.columns:
+    if "selic_mensal" in work.columns:
+        work = work.with_columns(pl.col("selic_mensal").alias("selic_mes"))
+    elif "selic_mes" not in work.columns:
         if "taxa_selic_mensal" in work.columns:
             work = work.with_columns(pl.col("taxa_selic_mensal").alias("selic_mes"))
         else:
@@ -881,9 +816,8 @@ def gerar_relatorio_executivo(df: pl.DataFrame, output_dir: Path) -> Path:
 - `{GRAFICO_PNG}` — top 10 contratos (Matplotlib)
 - `{RELATORIO_NAME}` — este relatório
 
-Metodologia ContAgil: impacto = subsídio × fator_final / fator(data_fluxo),
-com fator na coluna D do STP (FATOR_30_06_2026 = {FATOR_30_06_2026}) ou
-série Bacen equivalente.
+Metodologia ContAgil (mensal): impacto = subsídio × fator_selic(30/06/2026)
+/ fator_selic(mês da parcela), com `selic_mensal.xlsx` e `tjlp_mensal.xlsx`.
 """
     path.write_text(relatorio, encoding="utf-8")
     return path
@@ -908,8 +842,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument(
         "--selic",
-        required=True,
-        help="Excel STP ContAgil (col D) ou taxas Selic ContAgil/Bacen",
+        default=str(CONTAGIL_SELIC_MENSAL_DEFAULT),
+        help=(
+            "Excel SELIC mensal ContAgil "
+            f"(default: {CONTAGIL_SELIC_MENSAL_DEFAULT})"
+        ),
     )
     p.add_argument(
         "--tjlp",
@@ -926,11 +863,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Pasta de saída (default: --pasta resolvida)",
     )
     p.add_argument(
-        "--baixar-selic",
-        action="store_true",
-        help="Força Bacen se STP ausente (já é automático para nomes STP-*)",
-    )
-    p.add_argument(
         "--sem-graficos",
         action="store_true",
         help="Não gera PNG/HTML (útil em testes headless sem plotly).",
@@ -944,26 +876,28 @@ def main(argv: list[str] | None = None) -> int:
     try:
         pasta = resolver_pasta(args.pasta)
         original_path = resolver_original(args.original, pasta)
-        selic_path, _serie = resolver_selic(
-            args.selic, pasta, baixar_selic=args.baixar_selic
-        )
+        selic_path = resolver_selic_mensal(args.selic, pasta)
         tjlp_path = resolver_tjlp(args.tjlp, pasta)
     except FileNotFoundError as exc:
         print(str(exc), file=sys.stderr)
         return 1
 
     if selic_path is None:
-        print("Arquivo SELIC não encontrado.", file=sys.stderr)
+        print(
+            "Arquivo SELIC mensal não encontrado "
+            f"(esperado: {CONTAGIL_SELIC_MENSAL_DEFAULT} ou data/{NOME_SELIC_MENSAL}).",
+            file=sys.stderr,
+        )
         return 1
 
     output_dir = Path(args.output_dir if args.output_dir is not None else pasta)
     os.makedirs(output_dir, exist_ok=True)
 
-    print("Versão FINAL ContAgil — Polars + SELIC/TJLP + gráficos + relatório")
+    print("Versão FINAL ContAgil — Polars + SELIC/TJLP mensais + gráficos")
     print(f"Pasta fluxos : {pasta}")
     print(f"Original     : {original_path}")
-    print(f"SELIC        : {selic_path}")
-    print(f"TJLP         : {tjlp_path if tjlp_path else f'(base {TJLP_TLP_BASE:.2%} a.a.)'}")
+    print(f"SELIC mensal : {selic_path}")
+    print(f"TJLP mensal  : {tjlp_path if tjlp_path else f'(base {TJLP_TLP_BASE:.2%} a.a.)'}")
 
     try:
         df = carregar_fluxos_polars(pasta)
@@ -978,17 +912,22 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print("Instituições  : (não encontradas no original)")
 
-        selic_df, fator_final, modo_selic = carregar_selic_auto(selic_path)
+        selic_df = carregar_selic_mensal(selic_path)
+        fator_final = fator_final_mensal(selic_df)
         print(
-            f"SELIC pontos  : {selic_df.height:,} | modo={modo_selic} | "
-            f"fator_final={fator_final:.5f}"
+            f"SELIC meses   : {selic_df.height:,} | "
+            f"fator_final(30/06/2026)={fator_final:.6f}"
         )
 
         tjlp_df = carregar_tjlp_mensal(tjlp_path) if tjlp_path is not None else None
         if tjlp_df is not None:
-            print(f"TJLP pontos   : {tjlp_df.height:,}")
-        df = anexar_tjlp_mensal(df, tjlp_df)
+            print(
+                f"TJLP meses    : {tjlp_df.height:,} | "
+                f"fator_tjlp_final={fator_final_mensal(tjlp_df):.6f}"
+            )
 
+        df = anexar_selic_mensal(df, selic_df)
+        df = anexar_tjlp_mensal(df, tjlp_df)
         df = calcular_impacto_fiscal(df, selic_df, fator_final)
         df = adicionar_spread(df)
         df = df.with_columns(pl.col("data_fluxo").dt.year().alias("ano"))

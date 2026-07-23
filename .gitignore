@@ -14,6 +14,7 @@ data/*.xlsx
 !data/.gitkeep
 !data/sample_operacoes_com_agente.csv
 !data/tjlp_mensal.xlsx
+!data/selic_mensal.xlsx
 !data/selic_taxas_contagil.xlsx
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
