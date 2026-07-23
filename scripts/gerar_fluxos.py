@@ -496,10 +496,17 @@ OUTPUT_DIR = ROOT / "output"
 
 EXCEL_COLUMNS = {
     "Data da contratação": "data_contratacao",
+    "Data da Contratação": "data_contratacao",
     "Valor Desembolsado R$ (*)": "valor_desembolsado",
+    "Valor desembolsado Reais": "valor_desembolsado",
+    "Valor Desembolsado Reais": "valor_desembolsado",
+    "Valor da operação em Reais": "valor_desembolsado",
+    "Valor da Operação em Reais": "valor_desembolsado",
     "Juros": "juros",
     "Prazo - Carência (meses)": "prazo_carencia",
+    "Prazo de Carência (meses)": "prazo_carencia",
     "Prazo - Amortização (meses)": "prazo_amortizacao",
+    "Prazo de Amortização (meses)": "prazo_amortizacao",
     "Instituição Financeira Credenciada": "agente",
     "Instituicao Financeira Credenciada": "agente",
     "Custo financeiro": "custo_financeiro",
@@ -509,12 +516,98 @@ EXCEL_COLUMNS = {
 CSV_COLUMNS = {
     "data_da_contratacao": "data_contratacao",
     "valor_desembolsado_reais": "valor_desembolsado",
+    "valor_da_operacao_em_reais": "valor_desembolsado",
     "juros": "juros",
     "prazo_carencia_meses": "prazo_carencia",
     "prazo_amortizacao_meses": "prazo_amortizacao",
     "instituicao_financeira_credenciada": "agente",
     "custo_financeiro": "custo_financeiro",
 }
+
+# Aliases após normalização (minúsculas, sem acento/símbolos).
+# Cobre ContAgil, portal BNDES e variações "BNDES INDIRETAS *.xlsx".
+NORM_COLUMN_ALIASES: dict[str, str] = {
+    "data_da_contratacao": "data_contratacao",
+    "data_contratacao": "data_contratacao",
+    "data_de_contratacao": "data_contratacao",
+    "valor_desembolsado_reais": "valor_desembolsado",
+    "valor_desembolsado_r": "valor_desembolsado",
+    "valor_desembolsado": "valor_desembolsado",
+    "valor_da_operacao_em_reais": "valor_desembolsado",
+    "valor_da_operacao_reais": "valor_desembolsado",
+    "valor_da_operacao": "valor_desembolsado",
+    "juros": "juros",
+    "taxa_juros": "juros",
+    "prazo_carencia_meses": "prazo_carencia",
+    "prazo_carencia": "prazo_carencia",
+    "prazo_de_carencia_meses": "prazo_carencia",
+    "carencia_meses": "prazo_carencia",
+    "prazo_amortizacao_meses": "prazo_amortizacao",
+    "prazo_amortizacao": "prazo_amortizacao",
+    "prazo_de_amortizacao_meses": "prazo_amortizacao",
+    "amortizacao_meses": "prazo_amortizacao",
+    "instituicao_financeira_credenciada": "agente",
+    "instituicao_financeira": "agente",
+    "agente_financeiro": "agente",
+    "agente": "agente",
+    "custo_financeiro": "custo_financeiro",
+    "custo_financeiro_da_operacao": "custo_financeiro",
+}
+
+
+def _normalize_nome_coluna(name: object) -> str:
+    """Normaliza nome de coluna: minúsculas, sem acentos/símbolos."""
+    import unicodedata
+
+    text = str(name).strip().lower()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    cleaned: list[str] = []
+    for ch in text:
+        if ch.isalnum():
+            cleaned.append(ch)
+        else:
+            cleaned.append("_")
+    text = "".join(cleaned)
+    while "__" in text:
+        text = text.replace("__", "_")
+    return text.strip("_")
+
+
+def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, str]]:
+    """Renomeia colunas ContAgil/BNDES → canônicas (exato + normalizado)."""
+    rename: dict[str, str] = {}
+    used_targets: set[str] = set()
+
+    for k, v in {**EXCEL_COLUMNS, **CSV_COLUMNS}.items():
+        if k in df.columns and v not in used_targets:
+            rename[k] = v
+            used_targets.add(v)
+
+    for col in df.columns:
+        if col in rename:
+            continue
+        key = _normalize_nome_coluna(col)
+        target = NORM_COLUMN_ALIASES.get(key)
+        if target is None:
+            # ContAgil: "Valor Desembolsado R$ (*)" → valor_desembolsado_r_*
+            if key.startswith("valor_desembolsado"):
+                target = "valor_desembolsado"
+            elif key.startswith("valor_da_operacao"):
+                target = "valor_desembolsado"
+            elif "prazo" in key and "carencia" in key:
+                target = "prazo_carencia"
+            elif "prazo" in key and "amortizacao" in key:
+                target = "prazo_amortizacao"
+            elif "instituicao" in key and "financeira" in key:
+                target = "agente"
+            elif key.startswith("custo_financeiro"):
+                target = "custo_financeiro"
+        if target is not None and target not in used_targets:
+            rename[col] = target
+            used_targets.add(target)
+
+    return df.rename(columns=rename), rename
 
 
 def limpar_valor(series: pd.Series) -> pd.Series:
@@ -695,20 +788,20 @@ def download_and_filter_csv(
 
 
 def _excel_tem_colunas_contratos(df: pd.DataFrame) -> bool:
-    """True se o DataFrame já tem as colunas ContAgil / portal (header na 1ª linha)."""
-    cols = set(df.columns.astype(str))
-    rename_hits = sum(1 for k in EXCEL_COLUMNS if k in cols)
-    prepared_hits = sum(
+    """True se o DataFrame já tem as colunas ContAgil / portal / BNDES."""
+    mapped, _ = _mapear_colunas_contratos(df)
+    hits = sum(
         1
         for k in (
             "data_contratacao",
             "valor_desembolsado",
             "juros",
+            "prazo_carencia",
             "prazo_amortizacao",
         )
-        if k in cols
+        if k in mapped.columns
     )
-    return rename_hits >= 3 or prepared_hits >= 3
+    return hits >= 3
 
 
 def load_from_excel(
@@ -716,11 +809,11 @@ def load_from_excel(
     sheet_name: str | int = "operacoes_indiretas_automaticas",
     header: int | None = None,
 ) -> pd.DataFrame:
-    """Carrega Excel ContAgil / portal.
+    """Carrega Excel ContAgil / portal / BNDES INDIRETAS.
 
-    - header=None (default): tenta header=0 (pasta ContAgil/dados) e, se falhar,
-      header=5 (portal de transparência).
+    - header=None (default): tenta header=0..8 (ContAgil, títulos extras, portal).
     - header explícito: usa só esse valor.
+    - Mapeia colunas por nome exato e por forma normalizada (acentos/espaços).
     """
 
     def _read(h: int) -> pd.DataFrame:
@@ -730,22 +823,41 @@ def load_from_excel(
             return pd.read_excel(path, sheet_name=0, header=h)
 
     if header is not None:
-        df = _read(header)
+        candidatos = [header]
     else:
-        df = _read(0)
-        if not _excel_tem_colunas_contratos(df):
-            df = _read(5)
+        # 0 = ContAgil/dados; 5 = portal; demais = planilhas com título/metadados
+        candidatos = [0, 5, 1, 2, 3, 4, 6, 7, 8]
 
-    rename = {k: v for k, v in EXCEL_COLUMNS.items() if k in df.columns}
-    df = df.rename(columns=rename)
+    df = None
+    header_usado: int | None = None
+    for h in candidatos:
+        try:
+            candidato = _read(h)
+        except Exception:  # noqa: BLE001 — tenta próximo header
+            continue
+        if _excel_tem_colunas_contratos(candidato):
+            df = candidato
+            header_usado = h
+            break
+        if df is None:
+            df = candidato
+            header_usado = h
+
+    if df is None:
+        raise ValueError(f"Não foi possível ler Excel: {path}")
+
+    df, rename = _mapear_colunas_contratos(df)
+    if header_usado is not None and header_usado != 0:
+        print(f"  Header Excel detectado na linha {header_usado}")
+    if rename:
+        print(f"  Colunas mapeadas: {rename}")
     return _prepare_contracts(df)
 
 
 def load_from_csv(path: Path) -> pd.DataFrame:
     """Carrega CSV do portal de dados abertos."""
     df = pd.read_csv(path, sep=";", encoding="utf-8", dtype=str, low_memory=False)
-    rename = {k: v for k, v in CSV_COLUMNS.items() if k in df.columns}
-    df = df.rename(columns=rename)
+    df, _ = _mapear_colunas_contratos(df)
     return _prepare_contracts(df)
 
 
@@ -1155,24 +1267,6 @@ def _parece_dataframe_selic(df: pd.DataFrame) -> bool:
     return df.shape[1] >= 5
 
 
-def _normalize_nome_coluna(name: object) -> str:
-    import unicodedata
-
-    text = str(name).strip().lower()
-    text = unicodedata.normalize("NFKD", text)
-    text = "".join(ch for ch in text if not unicodedata.combining(ch))
-    cleaned: list[str] = []
-    for ch in text:
-        if ch.isalnum():
-            cleaned.append(ch)
-        else:
-            cleaned.append("_")
-    text = "".join(cleaned)
-    while "__" in text:
-        text = text.replace("__", "_")
-    return text.strip("_")
-
-
 def _as_contratos(df: pd.DataFrame) -> pd.DataFrame:
     """Aceita contratos já preparados ou planilha/CSV brutos ContAgil."""
     if {"data_contratacao", "valor_desembolsado", "juros", "prazo_amortizacao"}.issubset(
@@ -1190,29 +1284,7 @@ def _as_contratos(df: pd.DataFrame) -> pd.DataFrame:
             out["prazo_carencia"] = 0
         return out
 
-    rename = {k: v for k, v in {**EXCEL_COLUMNS, **CSV_COLUMNS}.items() if k in df.columns}
-    # Também aceita nomes já normalizados / variações ContAgil
-    norm_map = {
-        "data_da_contratacao": "data_contratacao",
-        "data_contratacao": "data_contratacao",
-        "valor_desembolsado_reais": "valor_desembolsado",
-        "valor_desembolsado_r": "valor_desembolsado",
-        "juros": "juros",
-        "prazo_carencia_meses": "prazo_carencia",
-        "prazo_carencia": "prazo_carencia",
-        "prazo_amortizacao_meses": "prazo_amortizacao",
-        "prazo_amortizacao": "prazo_amortizacao",
-        "instituicao_financeira_credenciada": "agente",
-        "agente": "agente",
-        "custo_financeiro": "custo_financeiro",
-        "custo_financeiro_da_operacao": "custo_financeiro",
-    }
-    for col in df.columns:
-        key = _normalize_nome_coluna(col)
-        if key in norm_map and norm_map[key] not in rename.values():
-            rename[col] = norm_map[key]
-
-    prepared = df.rename(columns=rename)
+    prepared, _ = _mapear_colunas_contratos(df)
     return _prepare_contracts(prepared)
 
 
