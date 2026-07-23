@@ -87,7 +87,8 @@ python3 scripts/resumo_fluxos_avancado.py \
   --baixar-selic
 
 # Versão FINAL ContAgil em Polars (SELIC/TJLP mensais — sem SELIC diária)
-python scripts/resumo_fluxos_polars.py \
+# No WinPython, copie resumo_fluxos_polars.py (+ pasta scripts/) e rode:
+python resumo_fluxos_polars.py \
   --pasta "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
   --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
   --selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\selic_mensal.xlsx" \

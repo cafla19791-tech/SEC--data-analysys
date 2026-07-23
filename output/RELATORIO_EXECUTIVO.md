@@ -1,6 +1,6 @@
 # Relatório Executivo - Subsídios BNDES
 
-**Data:** 23/07/2026 01:26
+**Data:** 23/07/2026 04:56
 **Total de Contratos:** 20
 **Total de Parcelas:** 3,312
 **Total Subsídio Nominal:** R$ 1,850,296.83

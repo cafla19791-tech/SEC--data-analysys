@@ -10,8 +10,8 @@ Capitalização mês a mês (sem SELIC diária / STP):
   - taxa efetiva TJLP = (1+tjlp_m)×(1+spread_m)−1
   - Excel multi-aba + Plotly/Matplotlib + RELATORIO_EXECUTIVO.md
 
-Uso (WinPython ContAgil):
-  python scripts/resumo_fluxos_polars.py \\
+Uso (WinPython ContAgil — na pasta winpython):
+  python resumo_fluxos_polars.py \\
       --pasta "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
       --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \\
       --selic "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\selic_mensal.xlsx" \\

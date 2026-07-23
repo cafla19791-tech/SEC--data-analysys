@@ -1,5 +1,6 @@
 """Testes do resumo ContAgil Polars com SELIC/TJLP mensais."""
 
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -228,6 +229,48 @@ def test_cli_contagil_mensal(tmp_path: Path):
     assert (out / WORKBOOK_NAME).exists()
     assert (out / RELATORIO_NAME).exists()
     assert (out / "grafico_interativo.html").exists()
+
+
+def test_entrypoint_raiz_contagil(tmp_path: Path, monkeypatch):
+    """``python resumo_fluxos_polars.py ...`` (entrypoint na raiz)."""
+    import runpy
+    from scripts import resumo_fluxos_avancado as adv
+
+    pasta = tmp_path / "saida"
+    pasta.mkdir()
+    _fluxos().write_csv(pasta / "fluxos_0.csv")
+    monkeypatch.setattr(adv, "OUTPUT_DIR", pasta)
+
+    if not Path("data/sample_operacoes_com_agente.csv").exists():
+        pytest.skip("amostra ausente")
+    if not Path("data/selic_mensal.xlsx").exists():
+        pytest.skip("selic_mensal amostra ausente")
+    if not Path("data/tjlp_mensal.xlsx").exists():
+        pytest.skip("tjlp_mensal amostra ausente")
+
+    out = tmp_path / "out"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "resumo_fluxos_polars.py",
+            "--pasta",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
+            "--original",
+            "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx",
+            "--selic",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\selic_mensal.xlsx",
+            "--tjlp",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx",
+            "--output-dir",
+            str(out),
+            "--sem-graficos",
+        ],
+    )
+    with pytest.raises(SystemExit) as exc:
+        runpy.run_path("resumo_fluxos_polars.py", run_name="__main__")
+    assert exc.value.code == 0
+    assert (out / WORKBOOK_NAME).exists()
 
 
 def test_cli_estilo_contagil_paths(tmp_path: Path, monkeypatch):
