@@ -1,4 +1,4 @@
-"""Testes do resumo ContAgil Polars com SELIC/TJLP mensais."""
+"""Testes do resumo ContAgil Polars com SELIC/TJLP/TLP mensais."""
 
 import sys
 from datetime import date
@@ -8,16 +8,20 @@ import polars as pl
 import pytest
 
 from scripts.resumo_fluxos_polars import (
+    FATOR_SELIC_30_06_2026,
     RELATORIO_NAME,
     WORKBOOK_NAME,
     adicionar_spread,
     adicionar_taxa_contrato_efetiva,
     anexar_selic_mensal,
     anexar_tjlp_mensal,
+    anexar_tlp_mensal,
     calcular_impacto_fiscal,
+    carregar_fator_acumulado_combinado,
     carregar_instituicoes,
     carregar_selic_mensal,
     carregar_tjlp_mensal,
+    carregar_tlp_mensal,
     exportar_excel,
     fator_final_mensal,
     gerar_graficos,
@@ -25,6 +29,7 @@ from scripts.resumo_fluxos_polars import (
     main,
     montar_resumos,
     montar_totais,
+    resolver_fator_selic_final,
 )
 
 
@@ -68,6 +73,30 @@ def _tjlp_xlsx(tmp_path: Path) -> Path:
     return path
 
 
+def _tlp_xlsx(tmp_path: Path) -> Path:
+    path = tmp_path / "tlp_mensal.xlsx"
+    pl.DataFrame(
+        {
+            "Data": ["01/01/09", "01/02/09", "01/03/09"],
+            "Taxas de juros - TLP mensal - % a.m.": [0.55, 0.55, 0.65],
+        }
+    ).write_excel(path)
+    return path
+
+
+def _fator_combinado_xlsx(tmp_path: Path) -> Path:
+    path = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    pl.DataFrame(
+        {
+            "Data": ["01/01/09", "01/02/09", "01/06/26"],
+            "fator_selic": [1.0, 1.01, FATOR_SELIC_30_06_2026],
+            "fator_tjlp": [1.0, 1.005, 2.5],
+            "fator_tlp": [1.0, 1.006, 2.6],
+        }
+    ).write_excel(path)
+    return path
+
+
 def test_carregar_selic_mensal_contagil(tmp_path: Path):
     selic = carregar_selic_mensal(_selic_mensal_xlsx(tmp_path))
     assert "selic_mensal" in selic.columns
@@ -99,6 +128,47 @@ def test_carregar_tjlp_e_anexar(tmp_path: Path):
     out = adicionar_taxa_contrato_efetiva(work)
     esperado = (1.0 + 0.005) * (1.0 + 0.002) - 1.0
     assert float(out["taxa_contrato_efetiva"][0]) == pytest.approx(esperado)
+
+
+def test_carregar_tlp_e_aplica_separado_de_tjlp(tmp_path: Path):
+    tlp = carregar_tlp_mensal(_tlp_xlsx(tmp_path))
+    tjlp = carregar_tjlp_mensal(_tjlp_xlsx(tmp_path))
+    assert float(tlp["tlp_mensal"][0]) == pytest.approx(0.0055)
+    assert float(tjlp["tjlp_mensal"][0]) == pytest.approx(0.005)
+
+    df = anexar_tlp_mensal(anexar_tjlp_mensal(_fluxos(), tjlp), tlp)
+    work = df.with_columns(
+        [
+            pl.Series("encargo_financeiro", ["TJLP", "TJLP", "TLP"]),
+            pl.lit(0.002).alias("taxa_contrato"),
+        ]
+    )
+    out = adicionar_taxa_contrato_efetiva(work)
+    # fev/2009 → TJLP 0,5% a.m.; mar/2009 → TLP 0,65% a.m.
+    esp_tjlp = (1.0 + 0.005) * (1.0 + 0.002) - 1.0
+    esp_tlp = (1.0 + 0.0065) * (1.0 + 0.002) - 1.0
+    assert float(out["taxa_contrato_efetiva"][0]) == pytest.approx(esp_tjlp)
+    assert float(out["taxa_contrato_efetiva"][2]) == pytest.approx(esp_tlp)
+
+
+def test_fator_validado_e_combinado(tmp_path: Path):
+    assert FATOR_SELIC_30_06_2026 == pytest.approx(82.79354074)
+    selic = carregar_selic_mensal(_selic_mensal_xlsx(tmp_path))
+    usado, serie = resolver_fator_selic_final(selic, usar_fator_validado=True)
+    assert usado == pytest.approx(FATOR_SELIC_30_06_2026)
+    assert serie != usado  # amostra sintética ≠ validado
+
+    comb = carregar_fator_acumulado_combinado(_fator_combinado_xlsx(tmp_path))
+    assert comb is not None
+    assert "fator_selic" in comb.columns
+    usado2, _ = resolver_fator_selic_final(
+        selic,
+        fator_combinado=comb,
+        fator_final=None,
+        usar_fator_validado=False,
+    )
+    # arquivo combinado cobre 06/2026 com fator validado → usado via série combinada
+    assert usado2 == pytest.approx(FATOR_SELIC_30_06_2026)
 
 
 def test_impacto_capitalizacao_mensal(tmp_path: Path):
@@ -181,6 +251,7 @@ def test_relatorio_e_graficos(tmp_path: Path):
     assert rel.exists()
     texto = rel.read_text(encoding="utf-8")
     assert "Relatório Executivo" in texto
+    assert "82.79354074" in texto
     assert "mensal" in texto.lower() or "selic_mensal" in texto.lower()
 
     png, html = gerar_graficos(df, tmp_path)
@@ -205,6 +276,7 @@ def test_cli_contagil_mensal(tmp_path: Path):
     _fluxos().write_csv(pasta / "fluxos_0.csv")
     selic = _selic_mensal_xlsx(tmp_path)
     tjlp = _tjlp_xlsx(tmp_path)
+    tlp = _tlp_xlsx(tmp_path)
 
     sample = Path("data/sample_operacoes_com_agente.csv")
     if not sample.exists():
@@ -221,6 +293,8 @@ def test_cli_contagil_mensal(tmp_path: Path):
             str(selic),
             "--tjlp",
             str(tjlp),
+            "--tlp",
+            str(tlp),
             "--output-dir",
             str(out),
         ]
@@ -247,6 +321,8 @@ def test_entrypoint_raiz_contagil(tmp_path: Path, monkeypatch):
         pytest.skip("selic_mensal amostra ausente")
     if not Path("data/tjlp_mensal.xlsx").exists():
         pytest.skip("tjlp_mensal amostra ausente")
+    if not Path("data/tlp_mensal.xlsx").exists():
+        pytest.skip("tlp_mensal amostra ausente")
 
     out = tmp_path / "out"
     monkeypatch.setattr(
@@ -262,6 +338,8 @@ def test_entrypoint_raiz_contagil(tmp_path: Path, monkeypatch):
             r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\selic_mensal.xlsx",
             "--tjlp",
             r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx",
+            "--tlp",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tlp_mensal.xlsx",
             "--output-dir",
             str(out),
             "--sem-graficos",
@@ -288,6 +366,8 @@ def test_cli_estilo_contagil_paths(tmp_path: Path, monkeypatch):
         pytest.skip("selic_mensal amostra ausente")
     if not Path("data/tjlp_mensal.xlsx").exists():
         pytest.skip("tjlp_mensal amostra ausente")
+    if not Path("data/tlp_mensal.xlsx").exists():
+        pytest.skip("tlp_mensal amostra ausente")
 
     out = tmp_path / "out"
     rc = main(
@@ -300,6 +380,8 @@ def test_cli_estilo_contagil_paths(tmp_path: Path, monkeypatch):
             r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\selic_mensal.xlsx",
             "--tjlp",
             r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx",
+            "--tlp",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tlp_mensal.xlsx",
             "--output-dir",
             str(out),
             "--sem-graficos",

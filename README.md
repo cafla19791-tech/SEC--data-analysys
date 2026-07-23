@@ -86,14 +86,22 @@ python3 scripts/resumo_fluxos_avancado.py \
   --original data/sample_operacoes_com_agente.csv \
   --baixar-selic
 
-# Versão FINAL ContAgil em Polars (SELIC/TJLP mensais — sem SELIC diária)
+# Versão FINAL ContAgil em Polars (SELIC + TJLP + TLP mensais — sem SELIC diária)
 # No WinPython, copie resumo_fluxos_polars.py (+ pasta scripts/) e rode:
-python resumo_fluxos_polars.py \
+python scripts/resumo_fluxos_polars.py \
   --pasta "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
   --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
   --selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\selic_mensal.xlsx" \
-  --tjlp "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx"
+  --tjlp  "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx" \
+  --tlp   "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tlp_mensal.xlsx"
 ```
+
+Arquivos mensais ContAgil: `selic_mensal.xlsx`, `tjlp_mensal.xlsx`, `tlp_mensal.xlsx`
+e (opcional) `fator_acumulado_SELIC_TJLP_TLP.xlsx`.
+Fator de referência validado (30/06/2026): **82.79354074**.
+Capitalização: `fator = cumprod(1 + taxa_mensal)`;
+impacto = `subsídio × fator_SELIC(30/06/2026) / fator_SELIC(mês da parcela)`.
+TJLP efetiva = `(1 + tjlp_m) × (1 + spread_m) − 1` (TLP análogo).
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
