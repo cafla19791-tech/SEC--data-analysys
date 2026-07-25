@@ -19,6 +19,9 @@ Uso:
   python3 scripts/impacto_fiscal_por_ano.py --baixar-selic
   python3 scripts/impacto_fiscal_por_ano.py --arquivo-selic "STP-....xlsx"
   python3 scripts/impacto_fiscal_por_ano.py --modo coluna --fluxos output/fluxos_completos_final.csv
+
+  # Massa ContAgil (~dezenas de milhões de parcelas) — streaming, sem OOM:
+  python3 scripts/agregar_impacto_fluxos.py --pasta saida --modo coluna
 """
 
 from __future__ import annotations
