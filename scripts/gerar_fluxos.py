@@ -804,6 +804,23 @@ def _excel_tem_colunas_contratos(df: pd.DataFrame) -> bool:
     return hits >= 3
 
 
+def normalizar_colunas(df: pd.DataFrame, *, preparar: bool = True) -> pd.DataFrame:
+    """Normaliza colunas de contratos ContAgil / BNDES INDIRETAS.
+
+    Mapeia headers em português/CSV (com acentos, aliases e variações) para
+    nomes canônicos (``data_contratacao``, ``valor_desembolsado``, etc.).
+
+    Usada pelo script ContAgil WinPython após ``read_excel`` — a ausência
+    desta função gerava ``NameError: name 'normalizar_colunas' is not defined``.
+    """
+    mapped, rename = _mapear_colunas_contratos(df)
+    if rename:
+        print(f"    Colunas mapeadas: {rename}")
+    if not preparar:
+        return mapped
+    return _prepare_contracts(mapped)
+
+
 def load_from_excel(
     path: Path,
     sheet_name: str | int = "operacoes_indiretas_automaticas",

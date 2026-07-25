@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""
+r"""
 Cálculo de fluxos e impactos – BNDES Indiretos
 Capitalização Mensal | Versão Segura
 
 Uso (ContAgil / WinPython):
-  python contagil_fluxos_seguro.py
+  python scripts/contagil_fluxos.py ^
+      --massa-dados "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados" ^
+      --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" ^
+      --arquivo-fatores "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx"
 
-  python contagil_fluxos_seguro.py \\
-      --massa-dados "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\dados" \\
-      --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
-      --fatores "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+Aliases de fatores: --arquivo-fatores | --fatores
 
 Lê todos os .xlsx da massa de dados (ex.: BNDES INDIRETAS 2002.xlsx),
-mapeia colunas de forma tolerante (acentos, aliases, header em linhas 0–8)
+normaliza colunas (acentos, aliases, header em linhas 0–8)
 e gera fluxos com impacto capitalizado pela série mensal de fatores.
 """
 
@@ -44,6 +44,7 @@ from scripts.gerar_fluxos import (
     _mapear_colunas_contratos,
     gerar_fluxos,
     load_from_excel,
+    normalizar_colunas,
 )
 
 FATORES_DEFAULT_NOME = "fator_acumulado_SELIC_TJLP_TLP.xlsx"
@@ -51,9 +52,10 @@ DATA_REF_DEFAULT = datetime(2026, 6, 1)
 
 
 def _banner() -> None:
+    agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print("=" * 70)
-    print(" CÁLCULO DE FLUXOS E IMPACTOS – BNDES INDIRETOS")
-    print(" Capitalização Mensal | Versão Segura")
+    print("CÁLCULO DE FLUXOS E IMPACTOS – BNDES INDIRETOS")
+    print(f"Início: {agora}")
     print("=" * 70)
 
 
@@ -125,14 +127,96 @@ def resolver_fatores(arg: Path | None) -> Path:
     raise FileNotFoundError(
         f"Arquivo de fatores não encontrado. Procurado: {FATORES_DEFAULT_NOME}\n"
         "Coloque fator_acumulado_SELIC_TJLP_TLP.xlsx na pasta winpython "
-        "ou informe --fatores."
+        "ou informe --arquivo-fatores / --fatores."
     )
+
+
+def _contar_serie_mensal(df: pd.DataFrame) -> int:
+    """Conta linhas válidas (data + valor numérico > 0) em uma série mensal."""
+    if df is None or df.empty:
+        return 0
+    cols = list(df.columns)
+    if not cols:
+        return 0
+    data_col = cols[0]
+    for c in cols:
+        if str(c).strip().lower() in {"data", "date", "mes", "mês"}:
+            data_col = c
+            break
+    valor_col = cols[-1]
+    for c in cols:
+        low = str(c).strip().lower()
+        if "fator" in low or "taxa" in low or "selic" in low or "tjlp" in low or low == "tlp":
+            valor_col = c
+            break
+    datas = pd.to_datetime(df[data_col], dayfirst=True, errors="coerce")
+    vals = pd.to_numeric(df[valor_col], errors="coerce")
+    return int((datas.notna() & vals.notna()).sum())
+
+
+def _contar_meses_auxiliares(path: Path) -> tuple[int, int]:
+    """Conta meses TJLP/TLP em abas do Excel ou arquivos irmãos na mesma pasta."""
+    n_tjlp = 0
+    n_tlp = 0
+    try:
+        with pd.ExcelFile(path) as xl:
+            for sheet in xl.sheet_names:
+                low = str(sheet).strip().lower()
+                try:
+                    part = pd.read_excel(xl, sheet_name=sheet)
+                except Exception:  # noqa: BLE001
+                    continue
+                if "tjlp" in low:
+                    n_tjlp = max(n_tjlp, _contar_serie_mensal(part))
+                elif low.strip() == "tlp" or (low.startswith("tlp") and "tjlp" not in low):
+                    n_tlp = max(n_tlp, _contar_serie_mensal(part))
+                else:
+                    # Colunas nomeadas na aba principal
+                    for c in part.columns:
+                        cl = str(c).strip().lower()
+                        if "tjlp" in cl and (
+                            "fator" in cl or "acumul" in cl or "taxa" in cl
+                        ):
+                            n_tjlp = max(
+                                n_tjlp,
+                                int(pd.to_numeric(part[c], errors="coerce").notna().sum()),
+                            )
+                        elif "tlp" in cl and "tjlp" not in cl and (
+                            "fator" in cl or "acumul" in cl or "taxa" in cl or cl == "tlp"
+                        ):
+                            n_tlp = max(
+                                n_tlp,
+                                int(pd.to_numeric(part[c], errors="coerce").notna().sum()),
+                            )
+    except Exception:  # noqa: BLE001
+        pass
+
+    pasta = path.parent
+    if n_tjlp == 0:
+        for nome in ("tjlp_mensal.xlsx", "TJLP_mensal.xlsx"):
+            cand = pasta / nome
+            if cand.exists():
+                try:
+                    n_tjlp = _contar_serie_mensal(pd.read_excel(cand))
+                except Exception:  # noqa: BLE001
+                    pass
+                break
+    if n_tlp == 0:
+        for nome in ("tlp_mensal.xlsx", "TLP_mensal.xlsx"):
+            cand = pasta / nome
+            if cand.exists():
+                try:
+                    n_tlp = _contar_serie_mensal(pd.read_excel(cand))
+                except Exception:  # noqa: BLE001
+                    pass
+                break
+    return n_tjlp, n_tlp
 
 
 def carregar_fatores_mensais(path: Path) -> SelicSerie:
     """Carrega fator_acumulado_SELIC_TJLP_TLP.xlsx (Data + Fator_Acumulado)."""
-    raw = pd.read_excel(path)
     print(f"Carregando fatores combinados: {path}")
+    raw = pd.read_excel(path)
     print(f"Colunas encontradas: {list(raw.columns)}")
 
     cols_norm = {str(c).strip().lower(): c for c in raw.columns}
@@ -145,16 +229,22 @@ def carregar_fatores_mensais(path: Path) -> SelicSerie:
         data_col = raw.columns[0]
 
     fator_col = None
-    for cand in ("fator_acumulado", "fator", "fator acumulado"):
+    for cand in ("fator_acumulado", "fator", "fator acumulado", "fator_selic"):
         if cand in cols_norm:
             fator_col = cols_norm[cand]
             break
     if fator_col is None:
-        # ContAgil: Taxa_Mensal_% + Fator_Acumulado — pega última numérica
+        # Preferência: coluna com 'selic' + fator; senão qualquer 'fator'
         for c in raw.columns:
-            if "fator" in str(c).lower():
+            low = str(c).lower()
+            if "fator" in low and "selic" in low:
                 fator_col = c
                 break
+        if fator_col is None:
+            for c in raw.columns:
+                if "fator" in str(c).lower():
+                    fator_col = c
+                    break
     if fator_col is None:
         fator_col = raw.columns[-1]
 
@@ -176,8 +266,11 @@ def carregar_fatores_mensais(path: Path) -> SelicSerie:
         fator_ref = float(fatores_arr[-1])
         data_ref_usada = pd.Timestamp(datas_arr[-1]).strftime("%Y-%m-%d")
 
+    n_selic = len(fatores_arr)
+    n_tjlp, n_tlp = _contar_meses_auxiliares(path)
+
     print(f"Referência de atualização: {data_ref_usada} | Fator SELIC = {fator_ref:.8f}")
-    print(f"SELIC: {len(fatores_arr)} meses (arquivo de fatores)")
+    print(f"SELIC: {n_selic} meses | TJLP: {n_tjlp} meses | TLP: {n_tlp} meses")
 
     return SelicSerie(
         datas_arr,
@@ -244,6 +337,21 @@ def _contar_linhas_excel(path: Path) -> int | None:
         return None
 
 
+def _ler_bruto_com_header(path: Path) -> pd.DataFrame:
+    """Lê o Excel bruto na linha de header correta (antes de normalizar_colunas)."""
+    for h in (0, 5, 1, 2, 3, 4, 6, 7, 8):
+        try:
+            candidato = pd.read_excel(path, sheet_name=0, header=h)
+        except Exception:  # noqa: BLE001
+            continue
+        if _excel_tem_colunas_contratos(candidato):
+            if h != 0:
+                print(f"    Header Excel detectado na linha {h}")
+            return candidato
+    # Fallback: tenta load_from_excel (já mapeia) — devolve bruto da linha 0
+    return pd.read_excel(path, sheet_name=0, header=0)
+
+
 def processar_arquivo(
     arquivo: Path,
     pasta_saida: Path,
@@ -256,41 +364,44 @@ def processar_arquivo(
         print(f"    Linhas: {n_linhas:,}")
 
     try:
-        df = load_from_excel(arquivo)
-    except ValueError as exc:
-        print("    [AVISO] Colunas obrigatórias não encontradas. Pulando.")
-        print(f"    Detalhe: {exc}")
+        # Fluxo ContAgil: read → normalizar_colunas → gerar_fluxos
+        # (a definição de normalizar_colunas estava ausente no script WinPython)
+        try:
+            bruto = _ler_bruto_com_header(arquivo)
+            df = normalizar_colunas(bruto)
+        except ValueError:
+            # Header/aba atípicos: tenta o loader completo
+            df = load_from_excel(arquivo)
+
+        if n_linhas is None:
+            print(f"    Linhas: {len(df):,} (após limpeza)")
+
+        if max_contratos is not None:
+            df = df.head(int(max_contratos)).copy()
+            df["contrato"] = df.index
+
+        if df.empty:
+            print("    [AVISO] Nenhum contrato válido após limpeza. Pulando.")
+            return None
+
+        pasta_saida.mkdir(parents=True, exist_ok=True)
+        saida = pasta_saida / f"fluxos_{arquivo.stem}.xlsx"
+        fluxos = gerar_fluxos(df, serie)
+        # Excel ~1M linhas: se passar, grava CSV completo + amostra xlsx
+        if len(fluxos) > 1_000_000:
+            csv_path = saida.with_suffix(".csv")
+            fluxos.to_csv(csv_path, index=False)
+            fluxos.head(1_000_000).to_excel(saida, index=False)
+            print(f"    → CSV completo: {csv_path} ({len(fluxos):,} parcelas)")
+            print(f"    → Excel (amostra 1M): {saida}")
+        else:
+            fluxos.to_excel(saida, index=False)
+            print(f"    → Salvo: {saida} ({len(fluxos):,} parcelas)")
+        return saida
+    except Exception as exc:  # noqa: BLE001 — espelha log ContAgil "ERRO: ..."
+        print(f"    ERRO: {exc}")
         diagnosticar_colunas(arquivo)
         return None
-    except Exception as exc:  # noqa: BLE001
-        print(f"    [AVISO] Falha ao carregar contratos ({exc}). Pulando.")
-        diagnosticar_colunas(arquivo)
-        return None
-
-    if n_linhas is None:
-        print(f"    Linhas: {len(df):,} (após limpeza)")
-
-    if max_contratos is not None:
-        df = df.head(int(max_contratos)).copy()
-
-    if df.empty:
-        print("    [AVISO] Nenhum contrato válido após limpeza. Pulando.")
-        return None
-
-    pasta_saida.mkdir(parents=True, exist_ok=True)
-    saida = pasta_saida / f"fluxos_{arquivo.stem}.xlsx"
-    fluxos = gerar_fluxos(df, serie)
-    # Excel ~1M linhas: se passar, grava CSV completo + amostra xlsx
-    if len(fluxos) > 1_000_000:
-        csv_path = saida.with_suffix(".csv")
-        fluxos.to_csv(csv_path, index=False)
-        fluxos.head(1_000_000).to_excel(saida, index=False)
-        print(f"    → CSV completo: {csv_path} ({len(fluxos):,} parcelas)")
-        print(f"    → Excel (amostra 1M): {saida}")
-    else:
-        fluxos.to_excel(saida, index=False)
-        print(f"    → Salvo: {saida} ({len(fluxos):,} parcelas)")
-    return saida
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -310,9 +421,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Pasta de saída (default: winpython/saida).",
     )
     p.add_argument(
+        "--arquivo-fatores",
         "--fatores",
+        dest="fatores",
         type=Path,
         default=None,
+        metavar="FILE",
         help=f"Excel de fatores mensais (default: {FATORES_DEFAULT_NOME}).",
     )
     p.add_argument(

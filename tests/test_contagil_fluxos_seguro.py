@@ -10,12 +10,14 @@ import pandas as pd
 from scripts.contagil_fluxos_seguro import (
     carregar_fatores_mensais,
     main,
+    normalizar_colunas,
     processar_arquivo,
 )
 from scripts.gerar_fluxos import (
     _excel_tem_colunas_contratos,
     _mapear_colunas_contratos,
     load_from_excel,
+    normalizar_colunas as normalizar_colunas_gf,
 )
 
 
@@ -60,6 +62,32 @@ def _df_variante_bndes() -> pd.DataFrame:
             "Custo Financeiro": ["TJLP"],
         }
     )
+
+
+def test_normalizar_colunas_definida_e_funciona():
+    """Regressão: NameError 'normalizar_colunas' is not defined no WinPython."""
+    assert normalizar_colunas is normalizar_colunas_gf
+    df = normalizar_colunas(_df_variante_bndes())
+    assert "data_contratacao" in df.columns
+    assert "valor_desembolsado" in df.columns
+    assert len(df) == 1
+    assert float(df.iloc[0]["valor_desembolsado"]) == 100000.0
+
+
+def test_parse_args_arquivo_fatores():
+    from scripts.contagil_fluxos_seguro import parse_args
+
+    args = parse_args(
+        [
+            "--massa-dados",
+            "dados",
+            "--pasta-saida",
+            "saida",
+            "--arquivo-fatores",
+            "fator_acumulado_SELIC_TJLP_TLP.xlsx",
+        ]
+    )
+    assert args.fatores.name == "fator_acumulado_SELIC_TJLP_TLP.xlsx"
 
 
 def test_mapear_colunas_portal_pt():

@@ -19,9 +19,9 @@ if not exist "%FATORES%" (
 )
 
 if exist "scripts\contagil_fluxos.py" (
-  python scripts\contagil_fluxos.py --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --fatores "%FATORES%"
+  python scripts\contagil_fluxos.py --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --arquivo-fatores "%FATORES%"
 ) else if exist "contagil_fluxos.py" (
-  python contagil_fluxos.py --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --fatores "%FATORES%"
+  python contagil_fluxos.py --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --arquivo-fatores "%FATORES%"
 ) else (
   echo [ERRO] contagil_fluxos.py nao encontrado.
   echo Clone/atualize o repo SEC--data-analysys ou copie scripts\ para esta pasta.

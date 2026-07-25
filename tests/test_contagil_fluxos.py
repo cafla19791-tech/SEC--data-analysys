@@ -127,6 +127,23 @@ def test_parse_args_fatores_alias():
     )
 
 
+def test_parse_args_arquivo_fatores_alias():
+    """CLI ContAgil WinPython: --arquivo-fatores é alias de --arquivo-selic."""
+    args = parse_args(
+        [
+            "--massa-dados",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados",
+            "--pasta-saida",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida",
+            "--arquivo-fatores",
+            r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx",
+        ]
+    )
+    assert args.arquivo_selic == Path(
+        r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    )
+
+
 def test_main_massa_dados_cli(tmp_path: Path):
     """Smoke: comando ContAgil com --massa-dados + STP local."""
     dados = tmp_path / "dados"
@@ -200,6 +217,62 @@ def test_main_massa_dados_com_fatores_mensais(tmp_path: Path):
     df = pd.read_excel(out)
     assert len(df) > 0
     assert "impacto_fiscal" in df.columns
+
+
+def test_main_massa_dados_com_arquivo_fatores(tmp_path: Path, capsys):
+    """CLI ContAgil WinPython: --arquivo-fatores + normalizar_colunas definida."""
+    from scripts.contagil_fluxos import normalizar_colunas
+    from scripts.gerar_fluxos import normalizar_colunas as normalizar_gf
+
+    assert callable(normalizar_colunas)
+    assert normalizar_colunas is normalizar_gf
+
+    dados = tmp_path / "dados"
+    saida = tmp_path / "saida"
+    dados.mkdir()
+    # Variante BNDES que exige normalizar_colunas (aliases)
+    pd.DataFrame(
+        {
+            "Data da Contratação": ["15/03/2009"],
+            "Valor desembolsado Reais": [100000.0],
+            "Juros": [6.0],
+            "Prazo de Carência (meses)": [6],
+            "Prazo de Amortização (meses)": [12],
+            "Instituicao Financeira Credenciada": ["BANCO DO BRASIL SA"],
+            "Custo Financeiro": ["TAXA FIXA"],
+        }
+    ).to_excel(dados / "BNDES INDIRETAS 2002.xlsx", index=False)
+
+    fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    datas = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
+    fator = (1.009) ** pd.Series(range(1, len(datas) + 1))
+    pd.DataFrame(
+        {
+            "Data": datas,
+            "Taxa_Mensal_%": [0.9] * len(datas),
+            "Fator_Acumulado": fator.values,
+        }
+    ).to_excel(fatores, index=False)
+
+    rc = contagil_main(
+        [
+            "--massa-dados",
+            str(dados),
+            "--pasta-saida",
+            str(saida),
+            "--arquivo-fatores",
+            str(fatores),
+        ]
+    )
+    assert rc == 0
+    out = saida / "fluxos_BNDES INDIRETAS 2002.xlsx"
+    assert out.exists()
+    captured = capsys.readouterr().out
+    assert "CÁLCULO DE FLUXOS E IMPACTOS" in captured
+    assert "Início:" in captured
+    assert "SELIC:" in captured and "TJLP:" in captured and "TLP:" in captured
+    assert "name 'normalizar_colunas' is not defined" not in captured
+    assert "ERRO: name 'normalizar_colunas'" not in captured
 
 
 def test_massa_dados_inexistente_erro_claro(tmp_path: Path):
