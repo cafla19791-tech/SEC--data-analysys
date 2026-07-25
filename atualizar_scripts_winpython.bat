@@ -1,15 +1,14 @@
 @echo off
 REM Baixa os .py corretos do GitHub para a pasta WinPython ContAgil.
 REM Execute ESTE arquivo com duplo-clique ou no cmd (NAO use: python este.bat)
+REM NAO cole texto de instrucoes (markdown) no cmd.
 REM
 REM Uso:
 REM   cd /d "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
 REM   atualizar_scripts_winpython.bat
 
 setlocal EnableExtensions
-set "WINPY=%~dp0"
-if "%WINPY:~-1%"=="\" set "WINPY=%WINPY:~0,-1%"
-cd /d "%WINPY%"
+cd /d "%~dp0"
 
 set "BRANCH=cursor/normalizar-colunas-6f97"
 set "BASE=https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/%BRANCH%"
@@ -22,7 +21,6 @@ echo ============================================================
 
 if not exist "scripts" mkdir "scripts"
 
-REM Backup do arquivo corrompido (se ainda tiver REM / @echo)
 if exist "scripts\contagil_fluxos.py" (
   findstr /C:"REM ContAgil" /C:"@echo off" "scripts\contagil_fluxos.py" >nul 2>&1
   if not errorlevel 1 (
@@ -32,48 +30,56 @@ if exist "scripts\contagil_fluxos.py" (
 )
 
 echo.
-echo Baixando arquivos Python...
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$ErrorActionPreference='Stop';" ^
-  "$base='%BASE%';" ^
-  "$files=@(" ^
-  "  @{url='$base/scripts/__init__.py'; out='scripts\__init__.py'}," ^
-  "  @{url='$base/scripts/contagil_fluxos.py'; out='scripts\contagil_fluxos.py'}," ^
-  "  @{url='$base/scripts/contagil_fluxos_seguro.py'; out='scripts\contagil_fluxos_seguro.py'}," ^
-  "  @{url='$base/scripts/gerar_fluxos.py'; out='scripts\gerar_fluxos.py'}," ^
-  "  @{url='$base/contagil_fluxos.py'; out='contagil_fluxos.py'}," ^
-  "  @{url='$base/contagil_fluxos_bndes.bat'; out='contagil_fluxos_bndes.bat'}" ^
-  ");" ^
-  "foreach ($f in $files) {" ^
-  "  Write-Host ('  -> ' + $f.out);" ^
-  "  Invoke-WebRequest -Uri $f.url -OutFile $f.out -UseBasicParsing;" ^
-  "}"
+echo Baixando arquivos...
 
-if errorlevel 1 (
-  echo [ERRO] Falha ao baixar arquivos. Verifique internet / proxy.
-  exit /b 1
+REM 1) Preferir o .ps1 (mais robusto)
+if exist "%~dp0atualizar_scripts_winpython.ps1" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0atualizar_scripts_winpython.ps1"
+  if not errorlevel 1 goto :ok
+  echo [AVISO] Falha no .ps1 local - tentando curl...
 )
 
-echo.
-echo Validando scripts\contagil_fluxos.py ...
-findstr /B /C:"#!/usr/bin/env python" "scripts\contagil_fluxos.py" >nul 2>&1
-if errorlevel 1 (
-  echo [ERRO] Download invalido: o .py nao comeca com shebang Python.
-  exit /b 1
-)
-findstr /C:"REM ContAgil" "scripts\contagil_fluxos.py" >nul 2>&1
+REM 2) Baixar o .ps1 e executar
+curl.exe -fsSL -o "%TEMP%\atualizar_scripts_winpython.ps1" "%BASE%/atualizar_scripts_winpython.ps1"
 if not errorlevel 1 (
-  echo [ERRO] O .py ainda contem linhas REM. Abortando.
-  exit /b 1
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%TEMP%\atualizar_scripts_winpython.ps1"
+  if not errorlevel 1 goto :ok
 )
 
-echo OK: scripts\contagil_fluxos.py e Python valido.
+REM 3) Fallback: curl direto em cada arquivo (Windows 10+)
+echo Tentando curl.exe arquivo a arquivo...
+curl.exe -fsSL -o "scripts\__init__.py" "%BASE%/scripts/__init__.py" || goto :fail
+curl.exe -fsSL -o "scripts\contagil_fluxos.py" "%BASE%/scripts/contagil_fluxos.py" || goto :fail
+curl.exe -fsSL -o "scripts\contagil_fluxos_seguro.py" "%BASE%/scripts/contagil_fluxos_seguro.py" || goto :fail
+curl.exe -fsSL -o "scripts\gerar_fluxos.py" "%BASE%/scripts/gerar_fluxos.py" || goto :fail
+curl.exe -fsSL -o "contagil_fluxos.py" "%BASE%/contagil_fluxos.py" || goto :fail
+curl.exe -fsSL -o "contagil_fluxos_bndes.bat" "%BASE%/contagil_fluxos_bndes.bat" || goto :fail
+
+findstr /B /C:"#!/usr/bin/env python" "scripts\contagil_fluxos.py" >nul 2>&1
+if errorlevel 1 goto :fail
+
+:ok
 echo.
-echo Proximo passo - rode em UMA linha:
+echo OK: scripts atualizados.
+echo.
+echo Agora rode NO CMD esta linha (so a linha abaixo, sem texto extra):
 echo.
 echo python scripts\contagil_fluxos.py --massa-dados "%CD%\dados" --pasta-saida "%CD%\saida" --arquivo-fatores "%CD%\fator_acumulado_SELIC_TJLP_TLP.xlsx"
 echo.
-echo Ou execute: contagil_fluxos_bndes.bat
-echo ============================================================
 endlocal
 exit /b 0
+
+:fail
+echo.
+echo [ERRO] Falha ao baixar. Tente no PowerShell (copie so o bloco):
+echo.
+echo   cd "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
+echo   mkdir scripts -Force
+echo   $b="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/normalizar-colunas-6f97"
+echo   Invoke-WebRequest "$b/scripts/contagil_fluxos.py" -OutFile scripts\contagil_fluxos.py
+echo   Invoke-WebRequest "$b/scripts/contagil_fluxos_seguro.py" -OutFile scripts\contagil_fluxos_seguro.py
+echo   Invoke-WebRequest "$b/scripts/gerar_fluxos.py" -OutFile scripts\gerar_fluxos.py
+echo   Invoke-WebRequest "$b/scripts/__init__.py" -OutFile scripts\__init__.py
+echo.
+endlocal
+exit /b 1
