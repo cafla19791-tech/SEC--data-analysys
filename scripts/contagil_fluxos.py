@@ -1,31 +1,12 @@
 #!/usr/bin/env python3
-r"""
-Entrypoint no estilo do script ContAgil/RFB (WinPython):
+# -*- coding: utf-8 -*-
+"""Entrypoint ContAgil/RFB (WinPython) - calculo de fluxos BNDES indiretos.
 
-  massa_dados / pasta_dados = .../python_jep/winpython/dados
-  pasta_saida               = .../python_jep/winpython/saida
-  --arquivo-fatores / --fatores / --arquivo-selic =
-      fator_acumulado_SELIC_TJLP_TLP.xlsx  OU  STP-*.xlsx
+Este arquivo e PYTHON. Nao cole aqui o conteudo de contagil_fluxos_bndes.bat
+(linhas REM / @echo off). O .bat fica na raiz do projeto e so chama este script.
 
-Processa todos os .xlsx da massa de dados, gera fluxos (SAC + carência corrigida)
-e impacto fiscal ContAgil (fatores mensais ou col D STP).
-
-Inclui ``normalizar_colunas`` (mapeamento flexível BNDES INDIRETAS).
-
-Uso (ContAgil / WinPython) — capitalização mensal:
-  python scripts/contagil_fluxos.py ^
-    --massa-dados "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados" ^
-    --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" ^
-    --arquivo-fatores "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx"
-
-  # Alias --fatores (mesmo arquivo mensal):
-  python scripts/contagil_fluxos.py --massa-dados dados --pasta-saida saida --fatores fator_acumulado_SELIC_TJLP_TLP.xlsx
-
-  # STP diário (legado ContAgil col D):
-  python scripts/contagil_fluxos.py --massa-dados dados --pasta-saida saida --arquivo-selic STP.xlsx
-
-  # Sem args: usa defaults WinPython se existirem
-  python scripts/contagil_fluxos.py
+Uso (uma linha, sem ^):
+  python scripts/contagil_fluxos.py --massa-dados dados --pasta-saida saida --arquivo-fatores fator_acumulado_SELIC_TJLP_TLP.xlsx
 """
 
 from __future__ import annotations

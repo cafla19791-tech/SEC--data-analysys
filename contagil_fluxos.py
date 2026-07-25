@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-r"""Entrypoint ContAgil/WinPython — espelho de ``scripts/contagil_fluxos.py``.
+# -*- coding: utf-8 -*-
+"""Entrypoint ContAgil/WinPython - espelho de scripts/contagil_fluxos.py.
 
-Uso (capitalização mensal):
-  python contagil_fluxos.py ^
-      --massa-dados "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados" ^
-      --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" ^
-      --arquivo-fatores "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+Este arquivo e PYTHON. Nao cole aqui o conteudo de contagil_fluxos_bndes.bat.
+
+Uso (uma linha):
+  python contagil_fluxos.py --massa-dados dados --pasta-saida saida --arquivo-fatores fator_acumulado_SELIC_TJLP_TLP.xlsx
 """
 
 from __future__ import annotations

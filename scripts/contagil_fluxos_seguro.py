@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
-r"""
-Cálculo de fluxos e impactos – BNDES Indiretos
-Capitalização Mensal | Versão Segura
+# -*- coding: utf-8 -*-
+"""Calculo de fluxos e impactos - BNDES Indiretos (capitalizacao mensal).
 
-Uso (ContAgil / WinPython):
-  python scripts/contagil_fluxos.py ^
-      --massa-dados "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados" ^
-      --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" ^
-      --arquivo-fatores "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+Este arquivo e PYTHON. Nao cole aqui o conteudo de contagil_fluxos_bndes.bat.
 
-Aliases de fatores: --arquivo-fatores | --fatores
+Uso (uma linha):
+  python scripts/contagil_fluxos.py --massa-dados dados --pasta-saida saida --arquivo-fatores fator_acumulado_SELIC_TJLP_TLP.xlsx
 
-Lê todos os .xlsx da massa de dados (ex.: BNDES INDIRETAS 2002.xlsx),
-normaliza colunas (acentos, aliases, header em linhas 0–8)
-e gera fluxos com impacto capitalizado pela série mensal de fatores.
+Aliases: --arquivo-fatores | --fatores
 """
 
 from __future__ import annotations
@@ -54,7 +48,7 @@ DATA_REF_DEFAULT = datetime(2026, 6, 1)
 def _banner() -> None:
     agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print("=" * 70)
-    print("CÁLCULO DE FLUXOS E IMPACTOS – BNDES INDIRETOS")
+    print("CALCULO DE FLUXOS E IMPACTOS - BNDES INDIRETOS")
     print(f"Início: {agora}")
     print("=" * 70)
 

@@ -1,7 +1,8 @@
 @echo off
-REM ContAgil / WinPython — fluxos BNDES indiretos (capitalização mensal)
-REM Execute a partir da pasta do repositório (onde estão scripts\ e contagil_fluxos.py)
-REM ou copie este .bat + scripts\ + contagil_fluxos.py para a pasta winpython.
+REM ContAgil / WinPython - fluxos BNDES indiretos (capitalizacao mensal)
+REM Este arquivo e .BAT - NAO cole o conteudo dentro de scripts\contagil_fluxos.py
+REM Execute com duplo-clique ou: contagil_fluxos_bndes.bat
+REM Ou rode o Python diretamente (veja abaixo).
 
 setlocal
 set "WINPY=C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
@@ -19,12 +20,19 @@ if not exist "%FATORES%" (
 )
 
 if exist "scripts\contagil_fluxos.py" (
+  findstr /B /C:"#!/usr/bin/env python" "scripts\contagil_fluxos.py" >nul 2>&1
+  if errorlevel 1 (
+    echo [ERRO] scripts\contagil_fluxos.py nao parece um arquivo Python.
+    echo        Ele pode ter sido sobrescrito com o conteudo deste .bat.
+    echo        Restaure o .py do repositorio SEC--data-analysys ^(PR #39^).
+    exit /b 1
+  )
   python scripts\contagil_fluxos.py --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --arquivo-fatores "%FATORES%"
 ) else if exist "contagil_fluxos.py" (
   python contagil_fluxos.py --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --arquivo-fatores "%FATORES%"
 ) else (
   echo [ERRO] contagil_fluxos.py nao encontrado.
-  echo Clone/atualize o repo SEC--data-analysys ou copie scripts\ para esta pasta.
+  echo Clone/atualize o repo SEC--data-analysys ou copie a pasta scripts\ para esta pasta.
   exit /b 1
 )
 

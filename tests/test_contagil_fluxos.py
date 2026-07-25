@@ -268,11 +268,12 @@ def test_main_massa_dados_com_arquivo_fatores(tmp_path: Path, capsys):
     out = saida / "fluxos_BNDES INDIRETAS 2002.xlsx"
     assert out.exists()
     captured = capsys.readouterr().out
-    assert "CÁLCULO DE FLUXOS E IMPACTOS" in captured
-    assert "Início:" in captured
+    assert "CALCULO DE FLUXOS E IMPACTOS" in captured or "CÁLCULO DE FLUXOS E IMPACTOS" in captured
+    assert "Início:" in captured or "Inicio:" in captured
     assert "SELIC:" in captured and "TJLP:" in captured and "TLP:" in captured
     assert "name 'normalizar_colunas' is not defined" not in captured
     assert "ERRO: name 'normalizar_colunas'" not in captured
+    assert "REM ContAgil" not in captured
 
 
 def test_massa_dados_inexistente_erro_claro(tmp_path: Path):
