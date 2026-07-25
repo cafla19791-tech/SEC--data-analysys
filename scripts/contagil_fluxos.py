@@ -13,57 +13,74 @@ from __future__ import annotations
 
 import argparse
 import glob
+import importlib.util
 import os
 import sys
+import types
 from datetime import datetime
 from pathlib import Path
 
-# Bootstrap WinPython: ``python scripts\contagil_fluxos.py`` coloca scripts\ em
-# sys.path[0] e quebra ``import scripts.*``. Corrigimos antes dos imports.
+# WinPython: carrega irmãos por caminho de arquivo (nao depende de pacote scripts).
 _SCRIPTS_DIR = Path(__file__).resolve().parent
 ROOT = _SCRIPTS_DIR.parent
-sys.path[:] = [p for p in sys.path if Path(p).resolve() != _SCRIPTS_DIR.resolve()]
-if str(ROOT) in sys.path:
-    sys.path.remove(str(ROOT))
-sys.path.insert(0, str(ROOT))
-_init = _SCRIPTS_DIR / "__init__.py"
-if not _init.exists():
-    try:
-        _init.write_text("# ContAgil\n", encoding="utf-8")
-    except OSError:
-        pass
-for _req in ("gerar_fluxos.py", "contagil_fluxos_seguro.py"):
-    if not (_SCRIPTS_DIR / _req).exists():
-        print(f"ERRO: falta scripts\\{_req}")
-        print("Baixe no PowerShell (so estas linhas):")
-        print(
-            '  $b="https://raw.githubusercontent.com/cafla19791-tech/'
-            'SEC--data-analysys/cursor/normalizar-colunas-6f97"'
+_CONTAGIL_BUILD = "importlib-20260725"
+
+
+def _load_sibling(mod_name: str):
+    """Carrega ``scripts/<mod_name>.py`` via importlib (ContAgil/WinPython)."""
+    full = f"scripts.{mod_name}"
+    if full in sys.modules:
+        return sys.modules[full]
+    path = _SCRIPTS_DIR / f"{mod_name}.py"
+    if not path.is_file():
+        print(f"ERRO [{_CONTAGIL_BUILD}]: falta o arquivo:")
+        print(f"  {path}")
+        print("No PowerShell (so isto):")
+        b = (
+            "https://raw.githubusercontent.com/cafla19791-tech/"
+            "SEC--data-analysys/cursor/normalizar-colunas-6f97"
         )
-        print(f'  Invoke-WebRequest "$b/scripts/{_req}" -OutFile scripts\\{_req}')
+        print(f'  $b="{b}"')
+        print(f'  Invoke-WebRequest "$b/scripts/{mod_name}.py" -OutFile scripts\\{mod_name}.py')
         raise SystemExit(2)
+    if "scripts" not in sys.modules:
+        pkg = types.ModuleType("scripts")
+        pkg.__path__ = [str(_SCRIPTS_DIR)]
+        pkg.__package__ = "scripts"
+        sys.modules["scripts"] = pkg
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    spec = importlib.util.spec_from_file_location(full, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Nao foi possivel carregar {path}")
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[full] = mod
+    sys.modules[mod_name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_gf = _load_sibling("gerar_fluxos")
 
 import pandas as pd
 
-from scripts.gerar_fluxos import (
-    CONTAGIL_PASTA_DADOS,
-    CONTAGIL_PASTA_SAIDA,
-    CONTAGIL_SELIC_DEFAULT,
-    CONTAGIL_WINPYTHON,
-    DATA_DIR,
-    DATA_IMPACTO,
-    OUTPUT_DIR,
-    SelicSerie,
-    calcular_impacto_fiscal_real,
-    carregar_selic_serie,
-    gerar_fluxos,
-    load_from_csv,
-    load_from_excel,
-    main as gerar_fluxos_main,
-    normalizar_colunas,
-    resolver_arquivo_selic,
-    resolver_excel_operacoes,
-)
+CONTAGIL_PASTA_DADOS = _gf.CONTAGIL_PASTA_DADOS
+CONTAGIL_PASTA_SAIDA = _gf.CONTAGIL_PASTA_SAIDA
+CONTAGIL_SELIC_DEFAULT = _gf.CONTAGIL_SELIC_DEFAULT
+CONTAGIL_WINPYTHON = _gf.CONTAGIL_WINPYTHON
+DATA_DIR = _gf.DATA_DIR
+DATA_IMPACTO = _gf.DATA_IMPACTO
+OUTPUT_DIR = _gf.OUTPUT_DIR
+SelicSerie = _gf.SelicSerie
+calcular_impacto_fiscal_real = _gf.calcular_impacto_fiscal_real
+carregar_selic_serie = _gf.carregar_selic_serie
+gerar_fluxos = _gf.gerar_fluxos
+load_from_csv = _gf.load_from_csv
+load_from_excel = _gf.load_from_excel
+gerar_fluxos_main = _gf.main
+normalizar_colunas = _gf.normalizar_colunas
+resolver_arquivo_selic = _gf.resolver_arquivo_selic
+resolver_excel_operacoes = _gf.resolver_excel_operacoes
 
 # Reexporta para scripts ContAgil que fazem ``from scripts.contagil_fluxos import normalizar_colunas``
 __all__ = ["main", "normalizar_colunas", "parse_args", "carregar_selic"]
@@ -76,7 +93,7 @@ def listar_excels(pasta: Path) -> list[Path]:
 
 def teste_contrato0(serie: SelicSerie) -> float:
     """Validação ContAgil: subsidio=1886.11 em 15/02/2009."""
-    from scripts.gerar_fluxos import FATOR_30_06_2026
+    FATOR_30_06_2026 = _gf.FATOR_30_06_2026
 
     subsidio = 1886.11
     data_parcela = datetime(2009, 2, 15)
@@ -115,7 +132,7 @@ def _parece_fatores_mensais(path: Path) -> bool:
 
 def carregar_selic(arquivo_selic: Path | None, baixar: bool) -> SelicSerie | None:
     """Carrega fatores mensais (--fatores), STP ContAgil (col D) ou Bacen."""
-    from scripts.contagil_fluxos_seguro import carregar_fatores_mensais
+    carregar_fatores_mensais = _load_sibling("contagil_fluxos_seguro").carregar_fatores_mensais
 
     # Preferência: caminho explícito → auto ContAgil/data → Bacen se baixar
     if arquivo_selic is not None:
@@ -407,6 +424,8 @@ def _resolver_pastas(args: argparse.Namespace) -> tuple[Path | None, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    # Identifica build no log (confirma que o .py atualizado foi baixado)
+    print(f"[contagil_fluxos {_CONTAGIL_BUILD}]")
 
     # ContAgil WinPython: --massa-dados + --arquivo-fatores/--fatores mensal
     # → pipeline seguro (define normalizar_colunas + banner BNDES INDIRETOS)
@@ -419,7 +438,7 @@ def main(argv: list[str] | None = None) -> int:
         and args.excel is None
     )
     if mensal and (args.pasta_dados is not None or args.input is not None):
-        from scripts.contagil_fluxos_seguro import main as seguro_main
+        seguro_main = _load_sibling("contagil_fluxos_seguro").main
 
         cli: list[str] = ["--arquivo-fatores", str(args.arquivo_selic)]
         if args.pasta_dados is not None:
@@ -474,7 +493,7 @@ def main(argv: list[str] | None = None) -> int:
     if pasta_dados is not None and args.excel is None and args.input is None:
         # Fatores mensais já carregados (auto-descoberta): pipeline seguro
         if serie is not None and "mensal:" in (serie.origem or ""):
-            from scripts.contagil_fluxos_seguro import main as seguro_main
+            seguro_main = _load_sibling("contagil_fluxos_seguro").main
 
             cli = [
                 "--massa-dados",

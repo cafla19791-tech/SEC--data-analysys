@@ -14,41 +14,59 @@ from __future__ import annotations
 
 import argparse
 import glob
+import importlib.util
 import os
 import sys
+import types
 from datetime import datetime
 from pathlib import Path
 
 _SCRIPTS_DIR = Path(__file__).resolve().parent
 ROOT = _SCRIPTS_DIR.parent
-sys.path[:] = [p for p in sys.path if Path(p).resolve() != _SCRIPTS_DIR.resolve()]
-if str(ROOT) in sys.path:
-    sys.path.remove(str(ROOT))
-sys.path.insert(0, str(ROOT))
-_init = _SCRIPTS_DIR / "__init__.py"
-if not _init.exists():
-    try:
-        _init.write_text("# ContAgil\n", encoding="utf-8")
-    except OSError:
-        pass
+
+
+def _load_sibling(mod_name: str):
+    full = f"scripts.{mod_name}"
+    if full in sys.modules:
+        return sys.modules[full]
+    path = _SCRIPTS_DIR / f"{mod_name}.py"
+    if not path.is_file():
+        print(f"ERRO: falta o arquivo {path}")
+        raise SystemExit(2)
+    if "scripts" not in sys.modules:
+        pkg = types.ModuleType("scripts")
+        pkg.__path__ = [str(_SCRIPTS_DIR)]
+        pkg.__package__ = "scripts"
+        sys.modules["scripts"] = pkg
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    spec = importlib.util.spec_from_file_location(full, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Nao foi possivel carregar {path}")
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[full] = mod
+    sys.modules[mod_name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_gf = _load_sibling("gerar_fluxos")
 
 import numpy as np
 import pandas as pd
 
-from scripts.gerar_fluxos import (
-    CONTAGIL_PASTA_DADOS,
-    CONTAGIL_PASTA_SAIDA,
-    CONTAGIL_WINPYTHON,
-    DATA_DIR,
-    DATA_IMPACTO,
-    OUTPUT_DIR,
-    SelicSerie,
-    _excel_tem_colunas_contratos,
-    _mapear_colunas_contratos,
-    gerar_fluxos,
-    load_from_excel,
-    normalizar_colunas,
-)
+CONTAGIL_PASTA_DADOS = _gf.CONTAGIL_PASTA_DADOS
+CONTAGIL_PASTA_SAIDA = _gf.CONTAGIL_PASTA_SAIDA
+CONTAGIL_WINPYTHON = _gf.CONTAGIL_WINPYTHON
+DATA_DIR = _gf.DATA_DIR
+DATA_IMPACTO = _gf.DATA_IMPACTO
+OUTPUT_DIR = _gf.OUTPUT_DIR
+SelicSerie = _gf.SelicSerie
+_excel_tem_colunas_contratos = _gf._excel_tem_colunas_contratos
+_mapear_colunas_contratos = _gf._mapear_colunas_contratos
+gerar_fluxos = _gf.gerar_fluxos
+load_from_excel = _gf.load_from_excel
+normalizar_colunas = _gf.normalizar_colunas
 
 FATORES_DEFAULT_NOME = "fator_acumulado_SELIC_TJLP_TLP.xlsx"
 DATA_REF_DEFAULT = datetime(2026, 6, 1)
