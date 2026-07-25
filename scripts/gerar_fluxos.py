@@ -1390,6 +1390,19 @@ def _resolver_segundo_arg(
     return float(segundo), selic_serie, None
 
 
+def _progresso_intervalo(n: int, progress_every: int | None) -> int | None:
+    """Define intervalo de log de progresso (None = sem log intermediário)."""
+    if progress_every is not None:
+        return max(1, int(progress_every)) if progress_every > 0 else None
+    if n >= 50_000:
+        return 2_000
+    if n >= 5_000:
+        return 1_000
+    if n >= 500:
+        return 100
+    return None
+
+
 def gerar_fluxos(
     df: pd.DataFrame,
     selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
@@ -1397,6 +1410,8 @@ def gerar_fluxos(
     selic_serie: SelicSerie | None = None,
     fluxo_diario: bool = False,
     saida_diario: Path | str | None = None,
+    progress_every: int | None = None,
+    quiet: bool = False,
 ) -> pd.DataFrame:
     """Gera DataFrame completo de fluxos (parcelas mensais).
 
@@ -1411,15 +1426,24 @@ def gerar_fluxos(
 
     Com fluxo_diario=True, também gera a tabela dia a dia em
     output/fluxos_diarios_detalhados.xlsx (ou saida_diario).
+
+    Para massas grandes (>~5k contratos), prefira ``gerar_e_gravar_fluxos``
+    (grava CSV em lotes e evita estourar memória).
     """
-    print("🚀 Gerando fluxos com lógica corrigida...")
     selic_aa, selic_serie, df_original = _resolver_segundo_arg(selic_aa, selic_serie)
     contratos = _as_contratos(df)
+    n = len(contratos)
+    step = None if quiet else _progresso_intervalo(n, progress_every)
+    if not quiet:
+        print(f"🚀 Gerando fluxos com lógica corrigida... ({n:,} contratos)")
+        sys.stdout.flush()
+
     records: list[dict] = []
     fluxos_diarios: list[dict] = []
     skipped = 0
+    t0 = time.time()
 
-    for pos, row in enumerate(contratos.itertuples(index=False)):
+    for pos, row in enumerate(contratos.itertuples(index=False), start=1):
         try:
             data_contr = pd.Timestamp(row.data_contratacao)
             if pd.isna(data_contr):
@@ -1429,7 +1453,7 @@ def gerar_fluxos(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
             )
             instituicao = _instituicao_de_original(
-                df_original, pos, fallback_agente
+                df_original, pos - 1, fallback_agente
             )
             custo = getattr(row, "custo_financeiro", "")
             juros_pct = float(row.juros)
@@ -1454,7 +1478,18 @@ def gerar_fluxos(
             skipped += 1
             continue
 
-    if skipped:
+        if step is not None and (pos % step == 0 or pos == n):
+            elapsed = max(time.time() - t0, 1e-6)
+            rate = pos / elapsed
+            eta = (n - pos) / rate if rate > 0 else 0.0
+            print(
+                f"  progresso {pos:,}/{n:,} ({100.0 * pos / n:.1f}%) "
+                f"| {rate:,.0f} contr/s | ETA ~{eta / 60:.1f} min "
+                f"| parcelas={len(records):,}"
+            )
+            sys.stdout.flush()
+
+    if skipped and not quiet:
         print(f"Contratos ignorados por erro: {skipped:,}")
 
     if fluxo_diario:
@@ -1462,6 +1497,113 @@ def gerar_fluxos(
         salvar_fluxos_diarios(fluxos_diarios, path)
 
     return pd.DataFrame(records)
+
+
+def gerar_e_gravar_fluxos(
+    df: pd.DataFrame,
+    selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
+    *,
+    saida_xlsx: Path | str,
+    lote: int = 2_000,
+    excel_max_linhas: int = 1_000_000,
+    data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
+) -> dict:
+    """Gera fluxos em lotes e grava CSV completo (+ Excel amostra se >1M linhas).
+
+    Evita manter dezenas de milhões de parcelas em memória (massa BNDES ~100k–1M
+    contratos). Retorna estatísticas do processamento.
+    """
+    saida_xlsx = Path(saida_xlsx)
+    saida_xlsx.parent.mkdir(parents=True, exist_ok=True)
+    csv_path = saida_xlsx.with_suffix(".csv")
+
+    contratos = _as_contratos(df)
+    n = len(contratos)
+    lote = max(1, int(lote))
+    print(
+        f"🚀 Gerando fluxos com lógica corrigida... "
+        f"({n:,} contratos, lote={lote:,}, grava CSV em streaming)"
+    )
+    sys.stdout.flush()
+
+    if csv_path.exists():
+        csv_path.unlink()
+
+    total_parcelas = 0
+    skipped = 0
+    amostra: list[pd.DataFrame] = []
+    amostra_linhas = 0
+    t0 = time.time()
+    header = True
+
+    for start in range(0, n, lote):
+        chunk = contratos.iloc[start : start + lote]
+        try:
+            fluxos = gerar_fluxos(
+                chunk,
+                selic_aa,
+                data_impacto=data_impacto,
+                selic_serie=selic_serie,
+                quiet=True,
+            )
+        except Exception:  # noqa: BLE001 — lote isolado não derruba a massa
+            skipped += len(chunk)
+            fluxos = pd.DataFrame()
+
+        if not fluxos.empty:
+            fluxos.to_csv(csv_path, mode="a", index=False, header=header)
+            header = False
+            total_parcelas += len(fluxos)
+            if amostra_linhas < excel_max_linhas:
+                falta = excel_max_linhas - amostra_linhas
+                amostra.append(fluxos.head(falta))
+                amostra_linhas += min(len(fluxos), falta)
+
+        feitos = min(start + lote, n)
+        elapsed = max(time.time() - t0, 1e-6)
+        rate = feitos / elapsed
+        eta = (n - feitos) / rate if rate > 0 else 0.0
+        print(
+            f"  lote {start:,}-{feitos:,}/{n:,} ({100.0 * feitos / n:.1f}%) "
+            f"| {rate:,.0f} contr/s | ETA ~{eta / 60:.1f} min "
+            f"| parcelas={total_parcelas:,}"
+        )
+        sys.stdout.flush()
+
+    if total_parcelas == 0:
+        raise ValueError("Nenhuma parcela gerada (todos os contratos falharam?).")
+
+    if amostra:
+        amostra_df = pd.concat(amostra, ignore_index=True)
+    else:
+        amostra_df = pd.read_csv(csv_path, nrows=excel_max_linhas)
+
+    amostra_df.to_excel(saida_xlsx, index=False)
+
+    stats = {
+        "contratos": n,
+        "parcelas": total_parcelas,
+        "skipped": skipped,
+        "csv": str(csv_path),
+        "xlsx": str(saida_xlsx),
+        "xlsx_linhas": len(amostra_df),
+        "segundos": round(time.time() - t0, 1),
+    }
+    if total_parcelas > excel_max_linhas:
+        print(
+            f"    → CSV completo: {csv_path} ({total_parcelas:,} parcelas)"
+        )
+        print(
+            f"    → Excel (amostra {len(amostra_df):,}): {saida_xlsx}"
+        )
+    else:
+        # Massa cabe no Excel: CSV auxiliar pode ser removido pelo usuário
+        print(f"    → Salvo: {saida_xlsx} ({total_parcelas:,} parcelas)")
+        print(f"    → CSV: {csv_path}")
+    if skipped:
+        print(f"    Contratos/lotes com erro: {skipped:,}")
+    return stats
 
 
 def processar_em_lotes(

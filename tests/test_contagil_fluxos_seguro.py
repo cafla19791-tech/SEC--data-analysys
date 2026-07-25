@@ -211,6 +211,19 @@ def test_carregar_fatores_mensais(tmp_path: Path):
     assert serie.fator_referencia == 1.06
 
 
+def _fatores_mensais(path: Path) -> None:
+    datas = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
+    taxa = 0.009
+    fator = (1 + taxa) ** pd.Series(range(1, len(datas) + 1))
+    pd.DataFrame(
+        {
+            "Data": datas,
+            "Taxa_Mensal_%": [0.9] * len(datas),
+            "Fator_Acumulado": fator.values,
+        }
+    ).to_excel(path, index=False)
+
+
 def test_processar_arquivo_seguro(tmp_path: Path):
     dados = tmp_path / "dados"
     saida = tmp_path / "saida"
@@ -221,17 +234,7 @@ def test_processar_arquivo_seguro(tmp_path: Path):
     _df_variante_bndes().to_excel(contratos, index=False)
 
     fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
-    # Série longa o suficiente para capitalizar até 2026
-    datas = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
-    taxa = 0.009
-    fator = (1 + taxa) ** pd.Series(range(1, len(datas) + 1))
-    pd.DataFrame(
-        {
-            "Data": datas,
-            "Taxa_Mensal_%": [0.9] * len(datas),
-            "Fator_Acumulado": fator.values,
-        }
-    ).to_excel(fatores, index=False)
+    _fatores_mensais(fatores)
 
     serie = carregar_fatores_mensais(fatores)
     out = processar_arquivo(contratos, saida, serie)
@@ -240,6 +243,35 @@ def test_processar_arquivo_seguro(tmp_path: Path):
     fluxos = pd.read_excel(out)
     assert len(fluxos) > 0
     assert "impacto_fiscal" in fluxos.columns or "impacto" in fluxos.columns
+
+
+def test_processar_arquivo_grande_usa_streaming(tmp_path: Path, monkeypatch):
+    """Arquivos com muitos contratos devem gravar via gerar_e_gravar_fluxos."""
+    import scripts.contagil_fluxos_seguro as seguro
+
+    monkeypatch.setattr(seguro, "LIMITE_MEMORIA_CONTRATOS", 5)
+    monkeypatch.setattr(seguro, "LOTE_FLUXOS", 3)
+
+    dados = tmp_path / "dados"
+    saida = tmp_path / "saida"
+    dados.mkdir()
+    saida.mkdir()
+
+    base = _df_variante_bndes()
+    rows = pd.concat([base] * 12, ignore_index=True)
+    contratos = dados / "BNDES INDIRETAS 20112016.xlsx"
+    rows.to_excel(contratos, index=False)
+
+    fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    _fatores_mensais(fatores)
+    serie = carregar_fatores_mensais(fatores)
+
+    out = processar_arquivo(contratos, saida, serie)
+    assert out is not None
+    assert out.exists()
+    csv_path = out.with_suffix(".csv")
+    assert csv_path.exists()
+    assert len(pd.read_csv(csv_path)) > 0
 
 
 def test_main_massa_segura(tmp_path: Path, monkeypatch):

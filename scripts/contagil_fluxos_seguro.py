@@ -65,8 +65,13 @@ SelicSerie = _gf.SelicSerie
 _excel_tem_colunas_contratos = _gf._excel_tem_colunas_contratos
 _mapear_colunas_contratos = _gf._mapear_colunas_contratos
 gerar_fluxos = _gf.gerar_fluxos
+gerar_e_gravar_fluxos = _gf.gerar_e_gravar_fluxos
 load_from_excel = _gf.load_from_excel
 normalizar_colunas = _gf.normalizar_colunas
+
+# Acima deste nº de contratos, grava em lotes (CSV streaming) para não estourar RAM.
+LIMITE_MEMORIA_CONTRATOS = 5_000
+LOTE_FLUXOS = 2_000
 
 FATORES_DEFAULT_NOME = "fator_acumulado_SELIC_TJLP_TLP.xlsx"
 DATA_REF_DEFAULT = datetime(2026, 6, 1)
@@ -407,6 +412,17 @@ def processar_arquivo(
 
         pasta_saida.mkdir(parents=True, exist_ok=True)
         saida = pasta_saida / f"fluxos_{arquivo.stem}.xlsx"
+        # Massa grande (ex.: BNDES INDIRETAS ~700k+): streaming em lotes.
+        # Sem isso o processo fica minutos/horas sem log e estoura a memória.
+        if len(df) >= LIMITE_MEMORIA_CONTRATOS:
+            gerar_e_gravar_fluxos(
+                df,
+                serie,
+                saida_xlsx=saida,
+                lote=LOTE_FLUXOS,
+            )
+            return saida
+
         fluxos = gerar_fluxos(df, serie)
         # Excel ~1M linhas: se passar, grava CSV completo + amostra xlsx
         if len(fluxos) > 1_000_000:

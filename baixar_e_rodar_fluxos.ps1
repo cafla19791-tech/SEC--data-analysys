@@ -39,8 +39,8 @@ $content = Get-Content (Join-Path $Root "scripts\contagil_fluxos.py") -Raw
 if ($content -notmatch "importlib-20260725") {
     Write-Host "AVISO: contagil_fluxos.py sem marcador importlib-20260725."
 }
-if ($content -notmatch "valor-historico") {
-    Write-Host "AVISO: baixe de novo - falta suporte a coluna Valor historico."
+if ($content -notmatch "progresso-lotes") {
+    Write-Host "AVISO: baixe de novo - falta progresso/lotes para massas grandes."
 }
 
 function Find-WinPython {

@@ -1,6 +1,7 @@
 """Testes unitários do gerador de fluxos detalhados (carência + impacto)."""
 
 from datetime import datetime
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -48,6 +49,32 @@ def test_taxa_mensal_composta():
     m = taxa_mensal_composta(0.145)
     assert abs(m - ((1.145) ** (1 / 12) - 1)) < 1e-12
     assert m != 0.145 / 12  # composta ≠ linear
+
+
+def test_gerar_e_gravar_fluxos_streaming(tmp_path):
+    """Massa grande grava CSV em lotes e mostra progresso sem OOM."""
+    from scripts.gerar_fluxos import gerar_e_gravar_fluxos
+
+    n = 25
+    df = pd.DataFrame(
+        {
+            "data_contratacao": pd.to_datetime(["2009-03-15"] * n),
+            "valor_desembolsado": [10000.0] * n,
+            "juros": [6.0] * n,
+            "prazo_carencia": [3] * n,
+            "prazo_amortizacao": [12] * n,
+            "agente": ["BANCO TESTE SA"] * n,
+            "custo_financeiro": ["TAXA FIXA"] * n,
+            "contrato": list(range(n)),
+        }
+    )
+    out = tmp_path / "fluxos_teste.xlsx"
+    stats = gerar_e_gravar_fluxos(df, 0.145, saida_xlsx=out, lote=10)
+    assert out.exists()
+    assert Path(stats["csv"]).exists()
+    assert stats["contratos"] == n
+    assert stats["parcelas"] == n * 15  # 3 carência + 12 amort
+    assert pd.read_excel(out)["contrato"].nunique() == n
 
 
 def test_carencia_nao_consome_amortizacao():

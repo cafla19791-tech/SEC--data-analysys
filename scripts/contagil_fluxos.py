@@ -23,7 +23,7 @@ from pathlib import Path
 # WinPython: carrega irmãos por caminho de arquivo (nao depende de pacote scripts).
 _SCRIPTS_DIR = Path(__file__).resolve().parent
 ROOT = _SCRIPTS_DIR.parent
-_CONTAGIL_BUILD = "importlib-20260725b-valor-historico"
+_CONTAGIL_BUILD = "importlib-20260725c-progresso-lotes"
 
 
 def _load_sibling(mod_name: str):
@@ -199,6 +199,12 @@ def processar_arquivo(
         pasta_saida / f"fluxos_diarios_{arquivo.stem}.xlsx" if fluxo_diario else None
     )
     selic_arg = selic_serie if selic_serie is not None else 0.145
+    # Arquivos grandes: grava CSV em lotes (evita "travar" sem log / OOM).
+    if len(df) >= 5_000 and not fluxo_diario:
+        gerar_e_gravar = _gf.gerar_e_gravar_fluxos
+        gerar_e_gravar(df, selic_arg, saida_xlsx=nome_saida, lote=2_000)
+        return nome_saida
+
     df_fluxos = gerar_fluxos(
         df,
         selic_arg,
