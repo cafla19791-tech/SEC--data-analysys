@@ -19,9 +19,18 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+ROOT = _SCRIPTS_DIR.parent
+sys.path[:] = [p for p in sys.path if Path(p).resolve() != _SCRIPTS_DIR.resolve()]
+if str(ROOT) in sys.path:
+    sys.path.remove(str(ROOT))
+sys.path.insert(0, str(ROOT))
+_init = _SCRIPTS_DIR / "__init__.py"
+if not _init.exists():
+    try:
+        _init.write_text("# ContAgil\n", encoding="utf-8")
+    except OSError:
+        pass
 
 import numpy as np
 import pandas as pd

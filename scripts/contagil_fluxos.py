@@ -18,9 +18,30 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+# Bootstrap WinPython: ``python scripts\contagil_fluxos.py`` coloca scripts\ em
+# sys.path[0] e quebra ``import scripts.*``. Corrigimos antes dos imports.
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+ROOT = _SCRIPTS_DIR.parent
+sys.path[:] = [p for p in sys.path if Path(p).resolve() != _SCRIPTS_DIR.resolve()]
+if str(ROOT) in sys.path:
+    sys.path.remove(str(ROOT))
+sys.path.insert(0, str(ROOT))
+_init = _SCRIPTS_DIR / "__init__.py"
+if not _init.exists():
+    try:
+        _init.write_text("# ContAgil\n", encoding="utf-8")
+    except OSError:
+        pass
+for _req in ("gerar_fluxos.py", "contagil_fluxos_seguro.py"):
+    if not (_SCRIPTS_DIR / _req).exists():
+        print(f"ERRO: falta scripts\\{_req}")
+        print("Baixe no PowerShell (so estas linhas):")
+        print(
+            '  $b="https://raw.githubusercontent.com/cafla19791-tech/'
+            'SEC--data-analysys/cursor/normalizar-colunas-6f97"'
+        )
+        print(f'  Invoke-WebRequest "$b/scripts/{_req}" -OutFile scripts\\{_req}')
+        raise SystemExit(2)
 
 import pandas as pd
 
