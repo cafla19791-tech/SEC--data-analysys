@@ -26,27 +26,75 @@ Uso (WinPython ContAgil)::
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import sys
 import time
+import types
 from collections import defaultdict
 from pathlib import Path
 
 import pandas as pd
 
-from scripts.gerar_fluxos import CONTAGIL_PASTA_SAIDA, OUTPUT_DIR, TAXA_SELIC_ANUAL
-from scripts.impacto_fiscal_por_ano import (
-    DATA_REFERENCIA,
-    MODOS,
-    _coluna_impacto,
-    _impacto_composta,
-    _impacto_contagil,
-    _impacto_recalcular,
-    calcular_meses_ate_2026,
-    carregar_serie_selic,
-)
+# WinPython ContAgil: carrega irmãos por caminho (não depende de pacote instalado).
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+ROOT = _SCRIPTS_DIR.parent
 
 # Marcador para o usuário/scripts de download validarem a versão
-MARKER = "agregar-impacto-streaming-20260725a"
+MARKER = "agregar-impacto-streaming-20260725b-importlib"
+
+
+def _load_sibling(mod_name: str):
+    """Carrega ``scripts/<mod_name>.py`` via importlib (ContAgil/WinPython)."""
+    full = f"scripts.{mod_name}"
+    if full in sys.modules:
+        return sys.modules[full]
+    path = _SCRIPTS_DIR / f"{mod_name}.py"
+    if not path.is_file():
+        print(f"ERRO [{MARKER}]: falta o arquivo:")
+        print(f"  {path}")
+        print("No PowerShell:")
+        b = (
+            "https://raw.githubusercontent.com/cafla19791-tech/"
+            "SEC--data-analysys/cursor/agregar-impacto-streaming-f342"
+        )
+        print(f'  $b="{b}"')
+        print(
+            f'  Invoke-WebRequest "$b/scripts/{mod_name}.py" '
+            f"-OutFile scripts\\{mod_name}.py"
+        )
+        raise SystemExit(2)
+    if "scripts" not in sys.modules:
+        pkg = types.ModuleType("scripts")
+        pkg.__path__ = [str(_SCRIPTS_DIR)]
+        pkg.__package__ = "scripts"
+        sys.modules["scripts"] = pkg
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    spec = importlib.util.spec_from_file_location(full, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Nao foi possivel carregar {path}")
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[full] = mod
+    sys.modules[mod_name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_gf = _load_sibling("gerar_fluxos")
+_imp = _load_sibling("impacto_fiscal_por_ano")
+
+CONTAGIL_PASTA_SAIDA = _gf.CONTAGIL_PASTA_SAIDA
+OUTPUT_DIR = _gf.OUTPUT_DIR
+TAXA_SELIC_ANUAL = _gf.TAXA_SELIC_ANUAL
+
+DATA_REFERENCIA = _imp.DATA_REFERENCIA
+MODOS = _imp.MODOS
+_coluna_impacto = _imp._coluna_impacto
+_impacto_composta = _imp._impacto_composta
+_impacto_contagil = _imp._impacto_contagil
+_impacto_recalcular = _imp._impacto_recalcular
+calcular_meses_ate_2026 = _imp.calcular_meses_ate_2026
+carregar_serie_selic = _imp.carregar_serie_selic
 
 CHUNK_DEFAULT = 500_000
 COLUNAS_UTEIS = (
