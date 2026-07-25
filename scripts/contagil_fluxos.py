@@ -23,7 +23,7 @@ from pathlib import Path
 # WinPython: carrega irmãos por caminho de arquivo (nao depende de pacote scripts).
 _SCRIPTS_DIR = Path(__file__).resolve().parent
 ROOT = _SCRIPTS_DIR.parent
-_CONTAGIL_BUILD = "importlib-20260725"
+_CONTAGIL_BUILD = "importlib-20260725b-valor-historico"
 
 
 def _load_sibling(mod_name: str):

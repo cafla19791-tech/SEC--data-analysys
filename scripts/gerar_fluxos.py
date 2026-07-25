@@ -497,20 +497,35 @@ OUTPUT_DIR = ROOT / "output"
 EXCEL_COLUMNS = {
     "Data da contratação": "data_contratacao",
     "Data da Contratação": "data_contratacao",
+    "Data da contratacao": "data_contratacao",
     "Valor Desembolsado R$ (*)": "valor_desembolsado",
     "Valor desembolsado Reais": "valor_desembolsado",
     "Valor Desembolsado Reais": "valor_desembolsado",
     "Valor da operação em Reais": "valor_desembolsado",
     "Valor da Operação em Reais": "valor_desembolsado",
+    # ContAgil BNDES INDIRETAS (massa winpython/dados)
+    "Valor histórico": "valor_desembolsado",
+    "Valor Histórico": "valor_desembolsado",
+    "Valor  Histórico": "valor_desembolsado",
+    "Valor Histórico R$ (*)": "valor_desembolsado",
+    "Valor Histórico R$ ": "valor_desembolsado",
+    "Valor Histórico R$": "valor_desembolsado",
+    "Valor Histórico em R$": "valor_desembolsado",
     "Juros": "juros",
     "Prazo - Carência (meses)": "prazo_carencia",
     "Prazo de Carência (meses)": "prazo_carencia",
+    "Prazo - Carencia (meses)": "prazo_carencia",
     "Prazo - Amortização (meses)": "prazo_amortizacao",
     "Prazo de Amortização (meses)": "prazo_amortizacao",
+    "Prazo - Amortizacao (meses)": "prazo_amortizacao",
+    "Prazo - Amortizacao(meses)": "prazo_amortizacao",
     "Instituição Financeira Credenciada": "agente",
     "Instituicao Financeira Credenciada": "agente",
     "Custo financeiro": "custo_financeiro",
     "Custo Financeiro": "custo_financeiro",
+    "Encargo financeiro": "custo_financeiro",
+    "Encargo Financeiro": "custo_financeiro",
+    "encargo financeiro": "custo_financeiro",
 }
 
 CSV_COLUMNS = {
@@ -536,6 +551,11 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "valor_da_operacao_em_reais": "valor_desembolsado",
     "valor_da_operacao_reais": "valor_desembolsado",
     "valor_da_operacao": "valor_desembolsado",
+    # ContAgil BNDES INDIRETAS: "Valor histórico" / "Valor Histórico R$ (*)"
+    "valor_historico": "valor_desembolsado",
+    "valor_historico_r": "valor_desembolsado",
+    "valor_historico_em_r": "valor_desembolsado",
+    "valor_historico_reais": "valor_desembolsado",
     "juros": "juros",
     "taxa_juros": "juros",
     "prazo_carencia_meses": "prazo_carencia",
@@ -552,6 +572,7 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "agente": "agente",
     "custo_financeiro": "custo_financeiro",
     "custo_financeiro_da_operacao": "custo_financeiro",
+    "encargo_financeiro": "custo_financeiro",
 }
 
 
@@ -595,13 +616,16 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
                 target = "valor_desembolsado"
             elif key.startswith("valor_da_operacao"):
                 target = "valor_desembolsado"
+            elif key.startswith("valor_historico"):
+                # BNDES INDIRETAS ContAgil: Valor histórico / Valor Histórico R$ (*)
+                target = "valor_desembolsado"
             elif "prazo" in key and "carencia" in key:
                 target = "prazo_carencia"
             elif "prazo" in key and "amortizacao" in key:
                 target = "prazo_amortizacao"
             elif "instituicao" in key and "financeira" in key:
                 target = "agente"
-            elif key.startswith("custo_financeiro"):
+            elif key.startswith("custo_financeiro") or key.startswith("encargo_financeiro"):
                 target = "custo_financeiro"
         if target is not None and target not in used_targets:
             rename[col] = target

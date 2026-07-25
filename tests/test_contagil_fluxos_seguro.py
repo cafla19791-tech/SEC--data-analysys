@@ -117,6 +117,53 @@ def test_mapear_colunas_variante_bndes_indiretas():
     assert "data_contratacao" in rename.values()
 
 
+def test_mapear_colunas_valor_historico_contagil():
+    """Massa ContAgil BNDES INDIRETAS usa 'Valor histórico' em vez de desembolsado."""
+    valor_cols = [
+        "Valor histórico",
+        "Valor  Histórico",
+        "Valor Histórico R$ (*)",
+        "Valor Histórico R$ ",
+        "Valor Histórico em R$",
+    ]
+    for valor_col in valor_cols:
+        df = pd.DataFrame(
+            {
+                valor_col: [100000.0],
+                "Data da contratacao": ["15/03/2009"],
+                "Juros": [6.0],
+                "Prazo - Carencia (meses)": [6],
+                "Prazo - Amortizacao (meses)": [12],
+                "Instituição Financeira Credenciada": ["BANCO DO BRASIL SA"],
+                "Encargo Financeiro": ["TJLP"],
+            }
+        )
+        assert _excel_tem_colunas_contratos(df), valor_col
+        mapped, _rename = _mapear_colunas_contratos(df)
+        assert "valor_desembolsado" in mapped.columns, valor_col
+        assert "custo_financeiro" in mapped.columns, valor_col
+        assert float(mapped["valor_desembolsado"].iloc[0]) == 100000.0, valor_col
+
+
+def test_mapear_prefere_valor_historico_sobre_ipca():
+    """Se houver Valor histórico e valor IPCA, usa o histórico como principal."""
+    df = pd.DataFrame(
+        {
+            "Data da contratação": ["15/03/2009"],
+            "Valor histórico": [50000.0],
+            "Valor atualizado pelo IPCA até 31/7/2025": [99999.0],
+            "Juros": [6.0],
+            "Prazo - Carencia (meses)": [6],
+            "Prazo - Amortizacao (meses)": [12],
+            "Instituição Financeira Credenciada": ["BB"],
+            "encargo financeiro": ["TAXA FIXA"],
+        }
+    )
+    mapped, rename = _mapear_colunas_contratos(df)
+    assert rename.get("Valor histórico") == "valor_desembolsado"
+    assert float(mapped["valor_desembolsado"].iloc[0]) == 50000.0
+
+
 def test_load_from_excel_header_offset(tmp_path: Path):
     """Planilha com 2 linhas de título antes do header — comum em exports ContAgil."""
     path = tmp_path / "BNDES INDIRETAS 2009.xlsx"
