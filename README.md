@@ -58,3 +58,20 @@ Ou direto:
 CSVs gerados: `output/rtn/rtn_anual_ipca_mai26_2001_2025.csv` e `output/rtn/rtn_anual_corrente_2001_2025.csv`.
 
 Fonte oficial (mesmo boletim mai/26): [Tesouro Transparente / CKAN](https://www.tesourotransparente.gov.br/ckan/dataset/resultado-do-tesouro-nacional).
+
+## Aba 1.2-A — soma linhas 6–177 por período
+
+```bat
+.\python.exe scripts\somar_aba_1_2A_periodos.py "serie_historica_mai26 (2).xlsx" --out saida\aba_1_2A_somas_periodos.xlsx
+```
+
+| # | Período | Meses | Soma linhas 6–177 (R$ bi, IPCA Mai/2026) |
+|--:|---------|------:|------------------------------------------:|
+| 1 | jan/97–dez/02 | 72 | 41.824,35 |
+| 2 | jan/03–mai/16 | 161 | 189.340,53 |
+| 3 | jun/16–dez/18 | 31 | 41.682,34 |
+| 4 | jan/19–dez/22 | 48 | 71.523,68 |
+| 5 | jan/23–mai/26 | 41 | 72.315,77 |
+
+Arquivo: `output/rtn/aba_1_2A_somas_periodos.xlsx` (abas Resumo + Detalhe por linha).
+**Nota:** a soma agrega totais e subitens (há dupla contagem contábil).
