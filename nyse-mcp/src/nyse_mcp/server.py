@@ -1,13 +1,17 @@
-"""MCP server entrypoint: exposes NYSE/US equity tools to Cursor."""
+"""MCP server entrypoint: exposes NYSE/US equity tools to Cursor Cloud Agents."""
 
 from __future__ import annotations
 
 import json
+import os
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from . import providers
+
+HOST = os.getenv("MCP_HOST", "0.0.0.0")
+PORT = int(os.getenv("MCP_PORT", "8000"))
 
 mcp = FastMCP(
     "nyse-mcp",
@@ -16,6 +20,11 @@ mcp = FastMCP(
         "Default provider is Yahoo Finance (free, delayed). "
         "Set MARKET_DATA_PROVIDER=alphavantage and ALPHA_VANTAGE_API_KEY for Alpha Vantage."
     ),
+    host=HOST,
+    port=PORT,
+    # Recommended for remote/cloud HTTP MCP clients.
+    stateless_http=True,
+    json_response=True,
 )
 
 
@@ -77,6 +86,15 @@ def market_status() -> str:
 
 
 def main() -> None:
+    """Run MCP over stdio (Cloud Agent / IDE) or streamable-http (remote)."""
+    transport = os.getenv("MCP_TRANSPORT", "stdio").strip().lower()
+    if transport in {"http", "streamable-http", "streamable_http"}:
+        mcp.run(transport="streamable-http")
+        return
+    if transport == "sse":
+        # Kept for local experiments; Cursor Cloud Agents do not support SSE.
+        mcp.run(transport="sse")
+        return
     mcp.run(transport="stdio")
 
 

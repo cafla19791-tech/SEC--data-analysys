@@ -12,6 +12,7 @@ dependencies = [
 
 [project.scripts]
 nyse-mcp = "nyse_mcp.server:main"
+nyse-mcp-cli = "nyse_mcp.cli:main"
 
 [build-system]
 requires = ["hatchling"]

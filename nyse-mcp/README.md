@@ -1,11 +1,11 @@
 # nyse-mcp
 
-Skeleton MCP server that gives Cursor tools for **US equity market data** (NYSE/NASDAQ tickers).
+Skeleton MCP server for **US equity market data** (NYSE/NASDAQ tickers), made to work **without Cursor Desktop**.
 
 Default provider: **Yahoo Finance** (free, delayed, no API key).  
-Optional provider: **Alpha Vantage** (free tier with API key).
+Optional: **Alpha Vantage** (`MARKET_DATA_PROVIDER=alphavantage` + `ALPHA_VANTAGE_API_KEY`).
 
-> This is market **data** only — it does not place trades.
+> Market **data** only — does not place trades.
 
 ## Tools
 
@@ -17,59 +17,53 @@ Optional provider: **Alpha Vantage** (free tier with API key).
 | `search_ticker` | Find ticker by company name |
 | `market_status` | Indicative US session status |
 
-## Setup
+## Corporate / no local Cursor
+
+If you cannot install Cursor Desktop, follow **[CLOUD_SETUP.md](./CLOUD_SETUP.md)**.
+
+Short version:
+
+1. Use [cursor.com/agents](https://cursor.com/agents)
+2. Register `nyse-mcp` in the **MCP** dropdown (stdio → `bash ./nyse-mcp/run_mcp.sh`), **or**
+3. Skip MCP and use the CLI in the Cloud Agent VM:
+
+```bash
+cd nyse-mcp && python3 -m venv .venv && source .venv/bin/activate && pip install -e .
+nyse-mcp-cli quote JPM
+```
+
+## Local install (optional)
 
 ```bash
 cd nyse-mcp
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e .
 ```
 
-## Cursor config
+## Transports
 
-Project config is already at [`.cursor/mcp.json`](../.cursor/mcp.json).
-
-1. Install deps (`pip install -e .` from `nyse-mcp/`).
-2. Restart Cursor (or reload MCP servers in **Settings → Tools & MCP**).
-3. Ask things like: *“Qual a cotação da JPM?”* / *“Histórico de 1 ano da XOM”*.
-
-### Alpha Vantage (optional)
-
-Edit `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "nyse-mcp": {
-      "command": "python",
-      "args": ["-m", "nyse_mcp.server"],
-      "cwd": "${workspaceFolder}/nyse-mcp/src",
-      "env": {
-        "MARKET_DATA_PROVIDER": "alphavantage",
-        "ALPHA_VANTAGE_API_KEY": "YOUR_KEY_HERE",
-        "PYTHONPATH": "${workspaceFolder}/nyse-mcp/src"
-      }
-    }
-  }
-}
-```
-
-If your shell uses a venv, prefer:
-
-```json
-"command": "${workspaceFolder}/nyse-mcp/.venv/bin/python"
-```
-
-## Manual smoke test
+| Mode | Env | Use case |
+|------|-----|----------|
+| `stdio` (default) | `MCP_TRANSPORT=stdio` | Cloud Agent / IDE process |
+| `streamable-http` | `MCP_TRANSPORT=streamable-http` | Remote HTTP MCP (`/mcp`) |
 
 ```bash
-cd nyse-mcp
-source .venv/bin/activate
-PYTHONPATH=src python -c "from nyse_mcp.providers import get_quote; print(get_quote('AAPL'))"
+# stdio (default)
+bash ./run_mcp.sh
+
+# HTTP
+MCP_TRANSPORT=streamable-http MCP_PORT=8000 bash ./run_mcp.sh
 ```
 
-## Limits / caveats
+## Alpha Vantage (optional)
+
+```bash
+export MARKET_DATA_PROVIDER=alphavantage
+export ALPHA_VANTAGE_API_KEY=YOUR_KEY
+```
+
+## Limits
 
 - Yahoo/Alpha Vantage data is typically **delayed**, not a direct NYSE feed.
 - Free Alpha Vantage tiers have strict rate limits.
