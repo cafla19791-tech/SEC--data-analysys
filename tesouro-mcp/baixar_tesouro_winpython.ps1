@@ -75,7 +75,18 @@ set PYTHONPATH=%~dp0src;%PYTHONPATH%
 exit /b %ERRORLEVEL%
 "@
 [System.IO.File]::WriteAllText($batPath, $bat, $utf8NoBom)
-Write-Host "  tesouro_cli.bat"
+Write-Host "  tesouro-mcp\tesouro_cli.bat"
+
+# Atalho na raiz do WinPython (permite .\tesouro_cli.bat sem cd)
+$rootBatPath = Join-Path $Root "tesouro_cli.bat"
+$rootBat = @"
+@echo off
+setlocal
+call "%~dp0tesouro-mcp\tesouro_cli.bat" %*
+exit /b %ERRORLEVEL%
+"@
+[System.IO.File]::WriteAllText($rootBatPath, $rootBat, $utf8NoBom)
+Write-Host "  tesouro_cli.bat (atalho na raiz winpython)"
 
 $env:TESOURO_USER_AGENT = $UserAgent
 $env:PYTHONPATH = (Join-Path $dest "src") + ";" + $env:PYTHONPATH
@@ -96,15 +107,12 @@ Write-Host "--- headline ---"
 & $py -m tesouro_mcp.cli headline resultado_primario
 
 Write-Host ""
-Write-Host "OK. Comandos (PowerShell - use .\ ):"
-Write-Host "  cd tesouro-mcp"
+Write-Host "OK. No PowerShell use sempre .\ (ponto-barra)."
+Write-Host "Da raiz winpython:"
 Write-Host "  .\tesouro_cli.bat aliases"
-Write-Host "  .\tesouro_cli.bat serie resultado_primario --from 2024-01 --to 2025-12"
-Write-Host "  .\tesouro_cli.bat serie receita_total --from 01/2024 --to 12/2024"
-Write-Host "  .\tesouro_cli.bat headline"
-Write-Host "  .\tesouro_cli.bat search primario"
-Write-Host "  .\tesouro_cli.bat ckan-show resultado-do-tesouro-nacional"
+Write-Host "  .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tesouro-mcp\tabela_anual.csv --dgt tesouro-mcp\data\templates\dgt_renuncias_anual.csv --fundos tesouro-mcp\data\templates\fundos_constitucionais_anual.csv"
+Write-Host "Ou de dentro da pasta:"
+Write-Host "  cd tesouro-mcp"
 Write-Host "  .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv"
 Write-Host ""
-Write-Host "Cole DGT/FNO-FNE-FCO em data\templates\ (ver INSTRUCOES_COLA_DGT_FUNDOS.md)"
-Write-Host "Se 'tesouro_cli.bat' nao for reconhecido: cd para a pasta tesouro-mcp e use .\tesouro_cli.bat"
+Write-Host "Cole DGT/FNO-FNE-FCO em tesouro-mcp\data\templates\ (ver INSTRUCOES_COLA_DGT_FUNDOS.md)"

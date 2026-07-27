@@ -56,9 +56,12 @@ $u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/
 Invoke-WebRequest "$u`?v=1" -OutFile baixar_tesouro.ps1 -Headers @{"Cache-Control"="no-cache"}
 powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_tesouro.ps1
 
-# 2) Rodar o coletor (PowerShell exige .\):
+# 2) Rodar o coletor (PowerShell SEMPRE exige .\ ):
 cd tesouro-mcp
 .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv
+
+# Ou da raiz winpython (apos reinstalar, ha atalho):
+# .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tesouro-mcp\tabela_anual.csv --dgt tesouro-mcp\data\templates\dgt_renuncias_anual.csv --fundos tesouro-mcp\data\templates\fundos_constitucionais_anual.csv
 ```
 
 Celulas vazias / `n/d` sao ignoradas no merge (mantem nulo na tabela final).
