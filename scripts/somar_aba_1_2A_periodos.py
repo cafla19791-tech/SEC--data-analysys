@@ -112,7 +112,10 @@ def totails_por_item(path: str | Path) -> dict[str, Any]:
                 "fim": pm["fim"],
                 "meses": pm["meses"],
                 "colunas_excel": pm["colunas_excel"],
-                "formula_exemplo_A6": f"SOMA({pm['colunas_excel']}6)",
+                "formula_exemplo_A6": (
+                    f"SOMA({pm['colunas_excel'].split(':')[0]}6:"
+                    f"{pm['colunas_excel'].split(':')[1]}6)"
+                ),
             }
             for pm in period_meta
         ],
