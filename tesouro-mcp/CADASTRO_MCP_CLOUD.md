@@ -7,6 +7,7 @@ Consulta **estatisticas fiscais do Tesouro Nacional**:
 1. Series mensais do Boletim Resultado do Tesouro Nacional (RTN)
 2. Grandes numeros (resultado primario, estoque DPF...)
 3. Datasets abertos no Tesouro Transparente (CKAN)
+4. Coletor anual (DBGG + RTN + emissoes/resgates DPF + BNDES; merge DGT/FNO-FNE-FCO via CSV)
 
 ## A) Registrar no cursor.com/agents
 
@@ -41,7 +42,10 @@ tesouro_cli.bat aliases
 tesouro_cli.bat serie resultado_primario --from 2024-01 --to 2025-12
 tesouro_cli.bat headline resultado_primario
 tesouro_cli.bat search "Receita"
+tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv
 ```
+
+Cole DGT / FNO-FNE-FCO em `data\templates\` (ver `INSTRUCOES_COLA_DGT_FUNDOS.md`).
 
 ## Arquitetura
 
@@ -51,4 +55,6 @@ Cursor / CLI
        -> apiapex.tesouro.gov.br/aria/.../resultado-fiscal  (RTN)
        -> grandesnumeros.tesouro.gov.br                     (headlines)
        -> tesourotransparente.gov.br/ckan/api               (datasets)
+       -> api.bcb.gov.br/dados/serie                        (DBGG / BNDES)
+       -> CSV overlay local                                 (DGT / FNO-FNE-FCO)
 ```

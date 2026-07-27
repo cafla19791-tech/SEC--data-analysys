@@ -31,7 +31,12 @@ $files = @(
     "src/tesouro_mcp/__init__.py",
     "src/tesouro_mcp/cli.py",
     "src/tesouro_mcp/providers.py",
-    "src/tesouro_mcp/server.py"
+    "src/tesouro_mcp/bcb_client.py",
+    "src/tesouro_mcp/collector.py",
+    "src/tesouro_mcp/server.py",
+    "data/templates/dgt_renuncias_anual.csv",
+    "data/templates/fundos_constitucionais_anual.csv",
+    "data/templates/INSTRUCOES_COLA_DGT_FUNDOS.md"
 )
 
 if (-not (Test-Path -LiteralPath $dest)) {
@@ -75,9 +80,9 @@ Write-Host "  tesouro_cli.bat"
 $env:TESOURO_USER_AGENT = $UserAgent
 $env:PYTHONPATH = (Join-Path $dest "src") + ";" + $env:PYTHONPATH
 
-Write-Host "Instalando httpx (se preciso)..."
-& $py -m pip install "httpx>=0.28.0"
-if ($LASTEXITCODE -ne 0) { throw "pip install httpx falhou" }
+Write-Host "Instalando httpx + openpyxl (se preciso)..."
+& $py -m pip install "httpx>=0.28.0" "openpyxl>=3.1.0"
+if ($LASTEXITCODE -ne 0) { throw "pip install falhou" }
 
 Write-Host ""
 Write-Host "Testes..."
@@ -99,3 +104,6 @@ Write-Host "  .\tesouro_cli.bat serie receita_total --from 01/2024 --to 12/2024"
 Write-Host "  .\tesouro_cli.bat headline"
 Write-Host "  .\tesouro_cli.bat search primario"
 Write-Host "  .\tesouro_cli.bat ckan-show resultado-do-tesouro-nacional"
+Write-Host "  .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv"
+Write-Host ""
+Write-Host "Cole DGT/FNO-FNE-FCO em data\templates\ (ver INSTRUCOES_COLA_DGT_FUNDOS.md)"

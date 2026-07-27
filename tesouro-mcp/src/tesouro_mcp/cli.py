@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 
-from . import providers
+from . import collector, providers
 
 
 def _print(data: object) -> None:
@@ -53,6 +54,41 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("ckan-show", help="Detalha um pacote CKAN")
     s.add_argument("package_id", nargs="?", default="resultado-do-tesouro-nacional")
 
+    s = sub.add_parser(
+        "coletar-anual",
+        help=(
+            "Tabela anual DBGG/RTN/emissoes/resgates/BNDES "
+            "(+ merge opcional DGT e FNO/FNE/FCO)"
+        ),
+    )
+    s.add_argument("--from", dest="year_from", type=int, default=2001)
+    s.add_argument("--to", dest="year_to", type=int, default=2025)
+    s.add_argument(
+        "--out",
+        default="",
+        help="Caminho CSV de saida (se vazio, imprime JSON resumido)",
+    )
+    s.add_argument(
+        "--dgt",
+        default="",
+        help="CSV de renuncias (template data/templates/dgt_renuncias_anual.csv)",
+    )
+    s.add_argument(
+        "--fundos",
+        default="",
+        help="CSV FNO/FNE/FCO (template data/templates/fundos_constitucionais_anual.csv)",
+    )
+    s.add_argument(
+        "--no-emissoes",
+        action="store_true",
+        help="Nao baixar planilha de emissoes/resgates da DPF",
+    )
+    s.add_argument(
+        "--print-csv",
+        action="store_true",
+        help="Imprime CSV no stdout (alem de --out, se houver)",
+    )
+
     return p
 
 
@@ -98,6 +134,48 @@ def main(argv: list[str] | None = None) -> int:
             _print(providers.ckan_package_search(args.query, rows=args.rows))
         elif args.command == "ckan-show":
             _print(providers.ckan_package_show(args.package_id))
+        elif args.command == "coletar-anual":
+            table = collector.collect_annual_table(
+                year_from=args.year_from,
+                year_to=args.year_to,
+                dgt_csv=args.dgt or None,
+                fundos_csv=args.fundos or None,
+                include_emissoes=not args.no_emissoes,
+            )
+            csv_text = collector.rows_to_csv(table["rows"])
+            if args.out:
+                out_path = Path(args.out)
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                out_path.write_text(csv_text, encoding="utf-8")
+            if args.print_csv or not args.out:
+                if args.print_csv:
+                    print(csv_text, end="")
+                else:
+                    _print(
+                        {
+                            "year_from": table["year_from"],
+                            "year_to": table["year_to"],
+                            "unit": table["unit"],
+                            "count": table["count"],
+                            "columns": table["columns"],
+                            "sources": table["sources"],
+                            "notes": table["notes"],
+                            "out": str(Path(args.out).resolve()) if args.out else None,
+                            "rows_preview": table["rows"][:3],
+                            "rows_tail": table["rows"][-2:],
+                            "provider": table["provider"],
+                        }
+                    )
+            elif args.out:
+                _print(
+                    {
+                        "ok": True,
+                        "out": str(Path(args.out).resolve()),
+                        "count": table["count"],
+                        "notes": table["notes"],
+                        "sources": table["sources"],
+                    }
+                )
         else:
             raise SystemExit(f"unknown command: {args.command}")
     except Exception as exc:  # noqa: BLE001

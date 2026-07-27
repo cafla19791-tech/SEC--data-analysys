@@ -8,7 +8,7 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from . import providers
+from . import collector, providers
 
 HOST = os.getenv("MCP_HOST", "0.0.0.0")
 PORT = int(os.getenv("MCP_PORT", "8000"))
@@ -17,8 +17,10 @@ mcp = FastMCP(
     "tesouro-mcp",
     instructions=(
         "Tools for Tesouro Nacional fiscal statistics: Resultado do Tesouro "
-        "Nacional (RTN) monthly series via ARIA, headline Grandes Numeros, and "
-        "CKAN open datasets. Values are typically in R$ milhoes. Themes: "
+        "Nacional (RTN) monthly series via ARIA, headline Grandes Numeros, "
+        "CKAN open datasets, and an annual collector (DBGG/RTN/DPF/BNDES) with "
+        "optional DGT and FNO/FNE/FCO CSV overlays. RTN values are typically in "
+        "R$ milhoes; the annual table uses R$ bilhoes. Themes: "
         "10=resultado fiscal, 13=investimento, 20=custeio."
     ),
     host=HOST,
@@ -145,6 +147,35 @@ def ckan_package_show(package_id: str = "resultado-do-tesouro-nacional") -> str:
     """Show one CKAN package with download URLs (XLSX historical RTN, metadata, API docs)."""
     try:
         return _ok(providers.ckan_package_show(package_id))
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
+@mcp.tool()
+def collect_annual_table(
+    year_from: int = 2001,
+    year_to: int = 2025,
+    dgt_csv: str = "",
+    fundos_csv: str = "",
+    include_emissoes: bool = True,
+) -> str:
+    """Build annual fiscal/debt table in R$ bilhoes (current prices).
+
+    Auto columns: DBGG (Jan/Dec), primary/interest/nominal (RTN), DPF
+    emissions/redemptions, BNDES disbursements. Optional CSV overlays for DGT
+    tax expenditures and FNO/FNE/FCO constitutional funds (see
+    data/templates/).
+    """
+    try:
+        return _ok(
+            collector.collect_annual_table(
+                year_from=year_from,
+                year_to=year_to,
+                dgt_csv=dgt_csv or None,
+                fundos_csv=fundos_csv or None,
+                include_emissoes=include_emissoes,
+            )
+        )
     except Exception as exc:  # noqa: BLE001
         return _err(exc)
 
