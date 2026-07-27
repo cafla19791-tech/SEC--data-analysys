@@ -1,12 +1,15 @@
 # Usar o nyse-mcp **sem Cursor Desktop**
 
 Se a empresa bloqueia software não homologado, você **não precisa** de Cursor local nem de **Settings → Tools & MCP**.
+**VS Code local também não registra o MCP do Cursor.**
 
 O fluxo correto é **Cursor Cloud Agent** (browser) + registro do MCP no dashboard web.
 
 ## Caminho recomendado (Cloud Agent + stdio)
 
-O `.cursor/mcp.json` do repositório **não é lido automaticamente** pelos Cloud Agents. É preciso registrar o servidor no web:
+Passo a passo completo (tabela de campos): **[CADASTRO_MCP_CLOUD.md](./CADASTRO_MCP_CLOUD.md)**.
+
+Resumo:
 
 1. Abra [cursor.com/agents](https://cursor.com/agents)
 2. No dropdown **MCP**, adicione um servidor custom **stdio**:
@@ -25,7 +28,7 @@ Documentação oficial: [Cloud Agent capabilities → MCP tools](https://cursor.
 
 ## Alternativa imediata (sem registrar MCP)
 
-Neste mesmo Cloud Agent / VM do repo, use a CLI — não depende de UI:
+### Cloud Agent / Linux
 
 ```bash
 cd nyse-mcp
@@ -38,6 +41,16 @@ nyse-mcp-cli status
 ```
 
 Ou peça ao Cloud Agent: *“rode `nyse-mcp-cli quote JPM` e me explique o resultado”*.
+
+### Windows (VS Code terminal / ContAgil WinPython)
+
+```powershell
+cd caminho\para\SEC--data-analysys\nyse-mcp
+powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1 -Symbol JPM
+.\nyse_mcp_cli.bat quote XOM
+```
+
+Scripts: `setup_e_rodar_cli.ps1`, `nyse_mcp_cli.bat`.
 
 ## HTTP remoto (quando houver host homologado)
 

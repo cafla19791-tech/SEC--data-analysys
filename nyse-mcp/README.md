@@ -19,17 +19,28 @@ Optional: **Alpha Vantage** (`MARKET_DATA_PROVIDER=alphavantage` + `ALPHA_VANTAG
 
 ## Corporate / no local Cursor
 
-If you cannot install Cursor Desktop, follow **[CLOUD_SETUP.md](./CLOUD_SETUP.md)**.
+If you cannot install Cursor Desktop, follow:
+
+- **[CADASTRO_MCP_CLOUD.md](./CADASTRO_MCP_CLOUD.md)** — exact Cloud Agent MCP fields
+- **[CLOUD_SETUP.md](./CLOUD_SETUP.md)** — overview + Windows CLI
 
 Short version:
 
 1. Use [cursor.com/agents](https://cursor.com/agents)
 2. Register `nyse-mcp` in the **MCP** dropdown (stdio → `bash ./nyse-mcp/run_mcp.sh`), **or**
-3. Skip MCP and use the CLI in the Cloud Agent VM:
+3. Skip MCP and use the CLI in the Cloud Agent VM / Windows:
 
 ```bash
+# Cloud Agent
 cd nyse-mcp && python3 -m venv .venv && source .venv/bin/activate && pip install -e .
 nyse-mcp-cli quote JPM
+```
+
+```powershell
+# Windows (VS Code / ContAgil WinPython) — no Cursor Desktop needed
+cd nyse-mcp
+powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1 -Symbol JPM
+.\nyse_mcp_cli.bat quote XOM
 ```
 
 ## Local install (optional)
