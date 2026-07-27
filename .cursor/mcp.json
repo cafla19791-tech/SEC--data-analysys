@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "nyse-mcp": {
+      "command": "bash",
+      "args": ["./nyse-mcp/run_mcp.sh"],
+      "env": {
+        "MARKET_DATA_PROVIDER": "yahoo"
+      }
+    }
+  }
+}
