@@ -1,5 +1,5 @@
 {
-  "install": "cd nyse-mcp && python3 -m venv .venv && .venv/bin/pip install -U pip && .venv/bin/pip install -e .",
-  "start": "echo 'nyse-mcp deps ready (stdio MCP / CLI)'",
+  "install": "cd nyse-mcp && python3 -m venv .venv && .venv/bin/pip install -U pip && .venv/bin/pip install -e .; cd ../sec-edgar-mcp && python3 -m venv .venv && .venv/bin/pip install -U pip && .venv/bin/pip install -e .",
+  "start": "echo 'nyse-mcp + sec-edgar-mcp deps ready (stdio MCP / CLI)'",
   "terminals": []
 }

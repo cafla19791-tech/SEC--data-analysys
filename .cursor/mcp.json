@@ -6,6 +6,13 @@
       "env": {
         "MARKET_DATA_PROVIDER": "yahoo"
       }
+    },
+    "sec-edgar-mcp": {
+      "command": "bash",
+      "args": ["./sec-edgar-mcp/run_mcp.sh"],
+      "env": {
+        "SEC_USER_AGENT": "SEC-data-analysys/0.1 (cafla19791@gmail.com)"
+      }
     }
   }
 }
