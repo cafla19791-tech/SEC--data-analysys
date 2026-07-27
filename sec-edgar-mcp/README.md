@@ -13,7 +13,10 @@ Obrigatorio: header `User-Agent` com nome do app + e-mail (`SEC_USER_AGENT`).
 | `get_company_profile` | Nome, SIC, exchanges |
 | `list_filings` | Lista 10-K / 10-Q / 8-K... com URLs |
 | `get_company_facts` | Receita, lucro, ativos (XBRL) |
-| `get_concept` | Serie de um conceito us-gaap |
+| `get_concept` | Serie de um conceito us-gaap / ifrs-full |
+| `get_concept_range` | Serie anual mesclando us-gaap + IFRS |
+| `get_total_debt` | Borrowings + LeaseLiabilities (preenche via 20-F) |
+| `extract_filing_concepts` | Extrai tags do iXBRL do ultimo 20-F/10-K |
 
 ## Cadastro no Cursor Cloud
 
@@ -38,9 +41,18 @@ python -m sec_edgar_mcp.cli lookup AAPL
 python -m sec_edgar_mcp.cli filings AAPL --form 10-K --limit 5
 python -m sec_edgar_mcp.cli facts AAPL
 python -m sec_edgar_mcp.cli concept AAPL NetIncomeLoss
+python -m sec_edgar_mcp.cli series PBR NetIncomeLoss --from 2008 --to 2025
+python -m sec_edgar_mcp.cli debt PBR --from 2016 --to 2025
+python -m sec_edgar_mcp.cli filing-xbrl PBR --concepts Borrowings,LeaseLiabilities --form 20-F
 ```
 
 WinPython ContAgil: use `baixar_sec_edgar_winpython.ps1` (mesmo padrao do nyse-mcp v3).
+
+### Divuda total (PBR)
+
+`debt` soma `ifrs-full:Borrowings` + `ifrs-full:LeaseLiabilities`.  
+Quando o `companyfacts` ainda nao tem o FY (ex.: 2025), baixa o iXBRL do 20-F mais recente e preenche.  
+A "divida bruta" dos releases da Petrobras costuma ser so `Borrowings` (Finance Debt).
 
 ## Limites
 

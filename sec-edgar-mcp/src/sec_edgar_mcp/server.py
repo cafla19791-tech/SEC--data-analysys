@@ -160,6 +160,60 @@ def get_company_profile(ticker_or_cik: str) -> str:
         return _err(exc)
 
 
+@mcp.tool()
+def get_total_debt(
+    ticker_or_cik: str,
+    year_from: int = 2016,
+    year_to: int = 2025,
+    fill_from_filing: bool = True,
+    form: str = "",
+) -> str:
+    """Annual total debt = IFRS Borrowings + LeaseLiabilities.
+
+    For foreign issuers (PBR): fills FY gaps from the latest 20-F iXBRL when
+    companyfacts lags (e.g. 2025). Note: Petrobras IR 'dívida bruta' is often
+    Borrowings only; this total includes IFRS 16 leases.
+    """
+    try:
+        return _ok(
+            providers.get_total_debt(
+                ticker_or_cik,
+                year_from=year_from,
+                year_to=year_to,
+                fill_from_filing=fill_from_filing,
+                form=form or None,
+            )
+        )
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
+@mcp.tool()
+def extract_filing_concepts(
+    ticker_or_cik: str,
+    concepts: str = "Borrowings,LeaseLiabilities",
+    form: str = "",
+    accession: str = "",
+) -> str:
+    """Extract instant XBRL concepts from the latest 20-F/10-K iXBRL instance.
+
+    concepts: comma-separated local names (e.g. 'Borrowings,LeaseLiabilities').
+    Use when companyfacts API has not ingested a just-filed annual report yet.
+    """
+    try:
+        concept_list = [c.strip() for c in concepts.split(",") if c.strip()]
+        return _ok(
+            providers.extract_filing_concepts(
+                ticker_or_cik,
+                concept_list,
+                form=form or None,
+                accession=accession or None,
+            )
+        )
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
 def main() -> None:
     transport = os.getenv("MCP_TRANSPORT", "stdio").strip().lower()
     if transport in {"http", "streamable-http", "streamable_http"}:

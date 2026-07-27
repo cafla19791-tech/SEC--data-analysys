@@ -25,11 +25,11 @@ _MIN_INTERVAL = 0.12
 _last_request = 0.0
 
 
-def _headers() -> dict[str, str]:
+def _headers(*, accept: str = "application/json") -> dict[str, str]:
     return {
         "User-Agent": DEFAULT_UA,
         "Accept-Encoding": "gzip, deflate",
-        "Accept": "application/json",
+        "Accept": accept,
     }
 
 
@@ -42,9 +42,13 @@ def _throttle() -> None:
     _last_request = time.monotonic()
 
 
-def _get_json(url: str, *, timeout: float = 60.0) -> Any:
+def _request(url: str, *, accept: str = "application/json", timeout: float = 120.0) -> httpx.Response:
     _throttle()
-    with httpx.Client(headers=_headers(), timeout=timeout, follow_redirects=True) as client:
+    with httpx.Client(
+        headers=_headers(accept=accept),
+        timeout=timeout,
+        follow_redirects=True,
+    ) as client:
         resp = client.get(url)
         if resp.status_code == 403:
             raise RuntimeError(
@@ -52,7 +56,19 @@ def _get_json(url: str, *, timeout: float = 60.0) -> Any:
                 f"(atual: {DEFAULT_UA!r})."
             )
         resp.raise_for_status()
-        return resp.json()
+        return resp
+
+
+def _get_json(url: str, *, timeout: float = 60.0) -> Any:
+    return _request(url, accept="application/json", timeout=timeout).json()
+
+
+def _get_text(url: str, *, timeout: float = 180.0) -> str:
+    return _request(
+        url,
+        accept="application/xml,text/xml,text/html,*/*",
+        timeout=timeout,
+    ).text
 
 
 def pad_cik(cik: str | int) -> str:
@@ -570,4 +586,378 @@ def get_concept_range(
             "prevalece IFRS. Mudanca de norma pode afetar comparabilidade."
         ),
         "provider": "data.sec.gov/api/xbrl/companyconcept (merged)",
+    }
+
+
+def _annual_by_year(block: dict[str, Any] | None) -> dict[int, dict[str, Any]]:
+    """Map year -> best annual row from a get_concept() result."""
+    out: dict[int, dict[str, Any]] = {}
+    if not block:
+        return out
+    for r in block.get("recent") or []:
+        y = _year_from_row(r)
+        if y is None:
+            continue
+        end = str(r.get("end") or "")
+        # Prefer Dec year-end when several annual candidates exist
+        score = 0
+        frame = r.get("frame")
+        if isinstance(frame, str) and re.fullmatch(r"CY\d{4}", frame):
+            score += 3
+        if r.get("fp") == "FY":
+            score += 2
+        if end.endswith("-12-31"):
+            score += 1
+        prev = out.get(y)
+        if prev is None or score > prev["_score"]:
+            out[y] = {
+                "_score": score,
+                "year": y,
+                "end": end or None,
+                "val": r.get("val"),
+                "fp": r.get("fp"),
+                "form": r.get("form"),
+                "filed": r.get("filed"),
+                "frame": frame,
+                "concept": block.get("concept"),
+                "taxonomy": block.get("taxonomy"),
+                "unit": block.get("unit"),
+                "source": "companyconcept",
+            }
+    for row in out.values():
+        row.pop("_score", None)
+    return out
+
+
+def _filing_index_url(cik: str, accession: str) -> str:
+    cik_int = str(int(cik))
+    acc_nodash = accession.replace("-", "")
+    return f"{ARCHIVES}/{cik_int}/{acc_nodash}/index.json"
+
+
+def _pick_xbrl_instance(index: dict[str, Any]) -> str | None:
+    """Choose the inline/instance XBRL file from a filing index.json."""
+    items = index.get("directory", {}).get("item", []) or []
+    names = [it.get("name", "") for it in items if isinstance(it, dict)]
+    # Prefer iXBRL instance (*_htm.xml), then other non-schema XML
+    preferred = [n for n in names if n.lower().endswith("_htm.xml")]
+    if preferred:
+        # Largest *htm.xml is usually the full instance
+        preferred.sort(
+            key=lambda n: next(
+                (int(it.get("size") or 0) for it in items if it.get("name") == n),
+                0,
+            ),
+            reverse=True,
+        )
+        return preferred[0]
+    skip_suf = (
+        "_cal.xml",
+        "_def.xml",
+        "_lab.xml",
+        "_pre.xml",
+        ".xsd",
+        "filingsummary.xml",
+    )
+    candidates = []
+    for it in items:
+        name = str(it.get("name") or "")
+        low = name.lower()
+        if not low.endswith(".xml"):
+            continue
+        if any(low.endswith(s) or low == s for s in skip_suf):
+            continue
+        if "filingSummary" in name or name == "FilingSummary.xml":
+            continue
+        candidates.append((int(it.get("size") or 0), name))
+    if not candidates:
+        return None
+    candidates.sort(reverse=True)
+    return candidates[0][1]
+
+
+def parse_xbrl_instant_facts(
+    xml_text: str,
+    concepts: list[str],
+) -> dict[str, dict[str, float]]:
+    """Parse instant facts for plain (non-dimensional) contexts.
+
+    Returns ``{concept: {YYYY-MM-DD: value}}``.
+    """
+    wanted = {c.strip() for c in concepts if c.strip()}
+    if not wanted or not xml_text:
+        return {}
+
+    contexts: dict[str, str] = {}
+    for m in re.finditer(
+        r'(?is)<(?:xbrli:)?context[^>]*\bid="([^"]+)"[^>]*>(.*?)</(?:xbrli:)?context>',
+        xml_text,
+    ):
+        cid, body = m.group(1), m.group(2)
+        inst = re.search(r"<(?:xbrli:)?instant>([^<]+)</(?:xbrli:)?instant>", body)
+        if not inst:
+            continue
+        # Skip dimensional contexts (segment/scenario with explicit members)
+        if re.search(r"<(?:xbrldi:)?(?:explicitMember|typedMember)\b", body):
+            continue
+        contexts[cid] = inst.group(1).strip()
+
+    out: dict[str, dict[str, float]] = {c: {} for c in wanted}
+    # Match both namespaced and unprefixed local names
+    fact_re = re.compile(
+        r"(?is)<(?:([\w.-]+):)?([A-Za-z][\w.-]*)\b([^>]*)>([^<]+)</(?:[\w.-]+:)?\2>"
+    )
+    for m in fact_re.finditer(xml_text):
+        local = m.group(2)
+        if local not in wanted:
+            continue
+        attrs = m.group(3) or ""
+        cref_m = re.search(r'\bcontextRef="([^"]+)"', attrs)
+        if not cref_m:
+            continue
+        end = contexts.get(cref_m.group(1))
+        if not end:
+            continue
+        raw = m.group(4).strip().replace(",", "")
+        try:
+            val = float(raw)
+        except ValueError:
+            continue
+        # Keep first / overwrite with same — plain contexts are unique per date
+        out[local][end] = val
+    return {k: v for k, v in out.items() if v}
+
+
+def latest_annual_filing(
+    ticker_or_cik: str,
+    *,
+    forms: tuple[str, ...] = ("20-F", "10-K"),
+) -> dict[str, Any] | None:
+    """Most recent annual report filing (20-F preferred for foreign issuers)."""
+    for form in forms:
+        listed = list_filings(ticker_or_cik, form=form, limit=5)
+        rows = listed.get("filings") or []
+        if rows:
+            row = dict(rows[0])
+            row["cik"] = listed.get("cik")
+            row["name"] = listed.get("name")
+            return row
+    return None
+
+
+def extract_filing_concepts(
+    ticker_or_cik: str,
+    concepts: list[str],
+    *,
+    form: str | None = None,
+    accession: str | None = None,
+) -> dict[str, Any]:
+    """Download latest (or given) annual filing XBRL and extract instant concepts."""
+    cik = resolve_cik(ticker_or_cik)
+    filing: dict[str, Any] | None = None
+    if accession:
+        filing = {
+            "form": form or "?",
+            "accessionNumber": accession,
+            "cik": cik,
+        }
+    else:
+        forms = (form,) if form else ("20-F", "10-K")
+        filing = latest_annual_filing(ticker_or_cik, forms=forms)
+        if filing is None:
+            raise ValueError(
+                f"Nenhum filing anual ({'/'.join(forms)}) encontrado para {ticker_or_cik!r}"
+            )
+
+    acc = str(filing.get("accessionNumber") or "")
+    if not acc:
+        raise ValueError("Filing sem accessionNumber")
+
+    idx = _get_json(_filing_index_url(cik, acc))
+    instance = _pick_xbrl_instance(idx)
+    if not instance:
+        raise ValueError(f"XBRL instance nao encontrado no filing {acc}")
+
+    cik_int = str(int(cik))
+    acc_nodash = acc.replace("-", "")
+    xml_url = f"{ARCHIVES}/{cik_int}/{acc_nodash}/{instance}"
+    xml_text = _get_text(xml_url)
+    facts = parse_xbrl_instant_facts(xml_text, concepts)
+
+    # Compact year-end view
+    by_concept: dict[str, list[dict[str, Any]]] = {}
+    for concept, dates in facts.items():
+        rows = []
+        for end, val in sorted(dates.items()):
+            if not end.endswith("-12-31"):
+                continue
+            rows.append({"end": end, "year": int(end[:4]), "val": val})
+        by_concept[concept] = rows
+
+    return {
+        "cik": cik,
+        "name": filing.get("name"),
+        "form": filing.get("form"),
+        "accessionNumber": acc,
+        "filingDate": filing.get("filingDate"),
+        "instance": instance,
+        "instanceUrl": xml_url,
+        "documentUrl": filing.get("documentUrl"),
+        "concepts": by_concept,
+        "provider": "sec.gov/Archives (iXBRL instance)",
+    }
+
+
+def get_total_debt(
+    ticker_or_cik: str,
+    *,
+    year_from: int = 2016,
+    year_to: int = 2025,
+    fill_from_filing: bool = True,
+    form: str | None = None,
+) -> dict[str, Any]:
+    """Annual total debt = Borrowings + LeaseLiabilities (IFRS).
+
+    Uses companyconcept first; optionally fills gaps (e.g. FY just filed)
+    from the latest 20-F/10-K iXBRL instance.
+    """
+    year_from = int(year_from)
+    year_to = int(year_to)
+    if year_from > year_to:
+        year_from, year_to = year_to, year_from
+
+    cik = resolve_cik(ticker_or_cik)
+    borrowings = None
+    leases = None
+    try:
+        borrowings = get_concept(
+            ticker_or_cik,
+            "Borrowings",
+            taxonomy="ifrs-full",
+            limit=100,
+            annual_only=True,
+        )
+    except Exception:  # noqa: BLE001
+        borrowings = None
+    try:
+        leases = get_concept(
+            ticker_or_cik,
+            "LeaseLiabilities",
+            taxonomy="ifrs-full",
+            limit=100,
+            annual_only=True,
+        )
+    except Exception:  # noqa: BLE001
+        leases = None
+
+    b_by = _annual_by_year(borrowings)
+    l_by = _annual_by_year(leases)
+
+    filing_fill: dict[str, Any] | None = None
+    if fill_from_filing:
+        try:
+            filing_fill = extract_filing_concepts(
+                ticker_or_cik,
+                ["Borrowings", "LeaseLiabilities"],
+                form=form,
+            )
+            for concept, key_map in (
+                ("Borrowings", b_by),
+                ("LeaseLiabilities", l_by),
+            ):
+                for row in filing_fill.get("concepts", {}).get(concept, []):
+                    y = int(row["year"])
+                    if y < year_from or y > year_to:
+                        continue
+                    # Prefer filing when companyconcept missing that year
+                    if y not in key_map:
+                        key_map[y] = {
+                            "year": y,
+                            "end": row["end"],
+                            "val": row["val"],
+                            "fp": "FY",
+                            "form": filing_fill.get("form"),
+                            "filed": filing_fill.get("filingDate"),
+                            "frame": f"CY{y}",
+                            "concept": concept,
+                            "taxonomy": "ifrs-full",
+                            "unit": "USD",
+                            "source": "filing-ixbrl",
+                        }
+        except Exception as exc:  # noqa: BLE001
+            filing_fill = {"error": str(exc)}
+
+    years = sorted(
+        y
+        for y in set(b_by) | set(l_by)
+        if year_from <= y <= year_to
+    )
+    series: list[dict[str, Any]] = []
+    for y in years:
+        b = b_by.get(y)
+        l = l_by.get(y)
+        b_val = b.get("val") if b else None
+        l_val = l.get("val") if l else None
+        total = None
+        if b_val is not None or l_val is not None:
+            total = float(b_val or 0) + float(l_val or 0)
+        series.append(
+            {
+                "year": y,
+                "end": (b or l or {}).get("end"),
+                "borrowings": b_val,
+                "lease_liabilities": l_val,
+                "total_debt": total,
+                "unit": "USD",
+                "sources": {
+                    "borrowings": (b or {}).get("source"),
+                    "lease_liabilities": (l or {}).get("source"),
+                },
+                "forms": {
+                    "borrowings": (b or {}).get("form"),
+                    "lease_liabilities": (l or {}).get("form"),
+                },
+            }
+        )
+
+    entity = (borrowings or leases or {}).get("entityName")
+    missing = [y for y in range(year_from, year_to + 1) if y not in {r["year"] for r in series}]
+
+    return {
+        "cik": cik,
+        "entityName": entity,
+        "metric": "total_debt",
+        "definition": "Borrowings + LeaseLiabilities (IFRS); approx. aggregator Total Debt",
+        "year_from": year_from,
+        "year_to": year_to,
+        "count": len(series),
+        "years_missing": missing,
+        "series": series,
+        "components": {
+            "borrowings": {
+                "concept": (borrowings or {}).get("concept") or "Borrowings",
+                "taxonomy": "ifrs-full",
+                "points": len(b_by),
+            },
+            "lease_liabilities": {
+                "concept": (leases or {}).get("concept") or "LeaseLiabilities",
+                "taxonomy": "ifrs-full",
+                "points": len(l_by),
+            },
+        },
+        "filing_fill": {
+            "used": bool(filing_fill and not filing_fill.get("error")),
+            "accessionNumber": (filing_fill or {}).get("accessionNumber"),
+            "form": (filing_fill or {}).get("form"),
+            "instanceUrl": (filing_fill or {}).get("instanceUrl"),
+            "error": (filing_fill or {}).get("error"),
+        }
+        if fill_from_filing
+        else None,
+        "note": (
+            "Dívida financeira bruta = Borrowings. Total Debt aqui soma arrendamentos "
+            "(IFRS 16). A 'dívida bruta' dos releases da Petrobras costuma ser só "
+            "Borrowings (Finance Debt)."
+        ),
+        "provider": "data.sec.gov companyconcept + Archives iXBRL",
     }

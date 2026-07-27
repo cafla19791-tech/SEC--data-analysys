@@ -80,6 +80,37 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--from", dest="year_from", type=int, default=2008)
     s.add_argument("--to", dest="year_to", type=int, default=2025)
 
+    s = sub.add_parser(
+        "debt",
+        help="Total debt anual = Borrowings + LeaseLiabilities (preenche FY via 20-F/10-K)",
+    )
+    s.add_argument("ticker_or_cik")
+    s.add_argument("--from", dest="year_from", type=int, default=2016)
+    s.add_argument("--to", dest="year_to", type=int, default=2025)
+    s.add_argument(
+        "--form",
+        default="",
+        help="Forcar formulario para fill (20-F ou 10-K); vazio = auto",
+    )
+    s.add_argument(
+        "--no-filing",
+        action="store_true",
+        help="Nao baixar iXBRL do 20-F/10-K para preencher anos faltantes",
+    )
+
+    s = sub.add_parser(
+        "filing-xbrl",
+        help="Extrai conceitos instant do iXBRL do ultimo 20-F/10-K (ex.: Borrowings)",
+    )
+    s.add_argument("ticker_or_cik")
+    s.add_argument(
+        "--concepts",
+        default="Borrowings,LeaseLiabilities",
+        help="Tags locais separadas por virgula",
+    )
+    s.add_argument("--form", default="", help="20-F, 10-K, ...")
+    s.add_argument("--accession", default="", help="Accession Number opcional")
+
     return p
 
 
@@ -144,6 +175,26 @@ def main(argv: list[str] | None = None) -> int:
                     year_from=args.year_from,
                     year_to=args.year_to,
                     annual_only=True,
+                )
+            )
+        elif args.command == "debt":
+            _print(
+                providers.get_total_debt(
+                    args.ticker_or_cik,
+                    year_from=args.year_from,
+                    year_to=args.year_to,
+                    fill_from_filing=not args.no_filing,
+                    form=args.form or None,
+                )
+            )
+        elif args.command == "filing-xbrl":
+            concepts = [c.strip() for c in args.concepts.split(",") if c.strip()]
+            _print(
+                providers.extract_filing_concepts(
+                    args.ticker_or_cik,
+                    concepts,
+                    form=args.form or None,
+                    accession=args.accession or None,
                 )
             )
         else:
