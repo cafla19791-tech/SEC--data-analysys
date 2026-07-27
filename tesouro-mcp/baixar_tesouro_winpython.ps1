@@ -33,6 +33,7 @@ $files = @(
     "src/tesouro_mcp/providers.py",
     "src/tesouro_mcp/bcb_client.py",
     "src/tesouro_mcp/collector.py",
+    "src/tesouro_mcp/rtn_xlsx.py",
     "src/tesouro_mcp/server.py",
     "data/templates/dgt_renuncias_anual.csv",
     "data/templates/fundos_constitucionais_anual.csv",
@@ -111,8 +112,9 @@ Write-Host "OK. No PowerShell use sempre .\ (ponto-barra)."
 Write-Host "Da raiz winpython:"
 Write-Host "  .\tesouro_cli.bat aliases"
 Write-Host "  .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tesouro-mcp\tabela_anual.csv --dgt tesouro-mcp\data\templates\dgt_renuncias_anual.csv --fundos tesouro-mcp\data\templates\fundos_constitucionais_anual.csv"
-Write-Host "Ou de dentro da pasta:"
+Write-Host "Com serie_historica RTN (IPCA Mai/26):"
 Write-Host "  cd tesouro-mcp"
-Write-Host "  .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv"
+Write-Host "  .\tesouro_cli.bat rtn-xlsx ""..\serie_historica_mai26 (2).xlsx"" --constantes-ipca --out rtn_ipca_mai26.csv"
+Write-Host "  .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --rtn-xlsx ""..\serie_historica_mai26 (2).xlsx"" --constantes-ipca --out tabela_anual_ipca.csv"
 Write-Host ""
 Write-Host "Cole DGT/FNO-FNE-FCO em tesouro-mcp\data\templates\ (ver INSTRUCOES_COLA_DGT_FUNDOS.md)"

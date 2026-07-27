@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from . import collector, providers
+from . import collector, providers, rtn_xlsx
 
 
 def _print(data: object) -> None:
@@ -84,9 +84,44 @@ def build_parser() -> argparse.ArgumentParser:
         help="Nao baixar planilha de emissoes/resgates da DPF",
     )
     s.add_argument(
+        "--rtn-xlsx",
+        default="",
+        help=(
+            "Planilha serie_historica_*.xlsx do RTN "
+            "(ex.: ..\\serie_historica_mai26 (2).xlsx)"
+        ),
+    )
+    s.add_argument(
+        "--constantes-ipca",
+        action="store_true",
+        help="Com --rtn-xlsx, usa aba 1.1-A (valores IPCA da referencia da planilha)",
+    )
+    s.add_argument(
         "--print-csv",
         action="store_true",
         help="Imprime CSV no stdout (alem de --out, se houver)",
+    )
+
+    s = sub.add_parser(
+        "rtn-xlsx",
+        help="Extrai series anuais da planilha serie_historica_*.xlsx do RTN",
+    )
+    s.add_argument(
+        "path",
+        help="Caminho do XLSX (ex.: ..\\serie_historica_mai26 (2).xlsx)",
+    )
+    s.add_argument("--from", dest="year_from", type=int, default=2001)
+    s.add_argument("--to", dest="year_to", type=int, default=2025)
+    s.add_argument(
+        "--constantes-ipca",
+        action="store_true",
+        help="Usa aba 1.1-A (IPCA) em vez de 1.1 (correntes)",
+    )
+    s.add_argument("--out", default="", help="CSV de saida (opcional)")
+    s.add_argument(
+        "--list-sheets",
+        action="store_true",
+        help="So lista as abas da planilha",
     )
 
     return p
@@ -134,6 +169,35 @@ def main(argv: list[str] | None = None) -> int:
             _print(providers.ckan_package_search(args.query, rows=args.rows))
         elif args.command == "ckan-show":
             _print(providers.ckan_package_show(args.package_id))
+        elif args.command == "rtn-xlsx":
+            if args.list_sheets:
+                _print(rtn_xlsx.list_sheets(args.path))
+            else:
+                table = rtn_xlsx.extract_annual_rtn(
+                    args.path,
+                    year_from=args.year_from,
+                    year_to=args.year_to,
+                    constantes_ipca=args.constantes_ipca,
+                )
+                if args.out:
+                    import csv
+
+                    out_path = Path(args.out)
+                    out_path.parent.mkdir(parents=True, exist_ok=True)
+                    rows = table["rows"]
+                    if rows:
+                        with out_path.open("w", newline="", encoding="utf-8") as f:
+                            w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+                            w.writeheader()
+                            w.writerows(rows)
+                    table = {
+                        **table,
+                        "out": str(out_path.resolve()),
+                        "rows_preview": rows[:3],
+                        "rows_tail": rows[-2:],
+                    }
+                    table.pop("rows", None)
+                _print(table)
         elif args.command == "coletar-anual":
             table = collector.collect_annual_table(
                 year_from=args.year_from,
@@ -141,6 +205,8 @@ def main(argv: list[str] | None = None) -> int:
                 dgt_csv=args.dgt or None,
                 fundos_csv=args.fundos or None,
                 include_emissoes=not args.no_emissoes,
+                rtn_xlsx_path=args.rtn_xlsx or None,
+                constantes_ipca=args.constantes_ipca,
             )
             csv_text = collector.rows_to_csv(table["rows"])
             if args.out:

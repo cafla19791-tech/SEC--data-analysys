@@ -201,3 +201,61 @@ def test_parse_br_month():
     assert _parse_br_month("dez/20") == date(2020, 12, 1)
     assert _parse_br_month("jan/01") == date(2001, 1, 1)
     assert _parse_br_month("invalid") is None
+
+
+def test_rtn_xlsx_extract_annual(tmp_path):
+    from datetime import datetime
+
+    from openpyxl import Workbook
+
+    from tesouro_mcp import rtn_xlsx
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "1.1"
+    ws["A2"] = "Tabela 1.1"
+    ws["A3"] = "R$ Milhoes - Valores Correntes"
+    # header row 5
+    ws.cell(5, 1, "Discriminacao")
+    for i, (y, m) in enumerate([(2020, 1), (2020, 2), (2020, 3)] + [(2020, m) for m in range(4, 13)], start=2):
+        ws.cell(5, i, datetime(y, m, 1))
+    # 12 months of 10 each -> annual 120
+    ws.cell(6, 1, "1. RECEITA TOTAL 1/")
+    ws.cell(66, 1, "5. RESULTADO PRIMÁRIO GOVERNO CENTRAL - ACIMA DA LINHA (3 - 4)")
+    ws.cell(74, 1, "9. JUROS NOMINAIS 7/")
+    ws.cell(75, 1, "10. RESULTADO NOMINAL DO GOVERNO CENTRAL (8 + 9) 8/")
+    for col in range(2, 14):
+        ws.cell(6, col, 10.0)
+        ws.cell(66, col, -5.0)
+        ws.cell(74, col, -2.0)
+        ws.cell(75, col, -7.0)
+
+    # minimal 1.1-A clone
+    ws_a = wb.create_sheet("1.1-A")
+    ws_a["A2"] = "Tabela 1.1-A"
+    ws_a["A3"] = "R$ Milhoes - Valores de Mai/2026 - IPCA"
+    ws_a.cell(5, 1, "Discriminacao")
+    for col in range(2, 14):
+        ws_a.cell(5, col, datetime(2020, col - 1, 1))
+        ws_a.cell(6, col, 20.0)
+        ws_a.cell(66, col, -10.0)
+        ws_a.cell(74, col, -4.0)
+        ws_a.cell(75, col, -14.0)
+    ws_a.cell(6, 1, "1. RECEITA TOTAL 1/")
+    ws_a.cell(66, 1, "5. RESULTADO PRIMÁRIO GOVERNO CENTRAL - ACIMA DA LINHA (3 - 4)")
+    ws_a.cell(74, 1, "9. JUROS NOMINAIS 7/")
+    ws_a.cell(75, 1, "10. RESULTADO NOMINAL DO GOVERNO CENTRAL (8 + 9) 8/")
+
+    path = tmp_path / "serie.xlsx"
+    wb.save(path)
+
+    out = rtn_xlsx.extract_annual_rtn(path, year_from=2020, year_to=2020, include_fundos=False)
+    assert out["count"] == 1
+    assert out["rows"][0]["resultado_primario_R$mi"] == pytest.approx(-60.0)
+    assert out["rows"][0]["resultado_primario_R$bi"] == pytest.approx(-0.06)
+
+    out_ipca = rtn_xlsx.extract_annual_rtn(
+        path, year_from=2020, year_to=2020, constantes_ipca=True, include_fundos=False
+    )
+    assert out_ipca["sheet"] == "1.1-A"
+    assert out_ipca["rows"][0]["resultado_primario_R$mi"] == pytest.approx(-120.0)

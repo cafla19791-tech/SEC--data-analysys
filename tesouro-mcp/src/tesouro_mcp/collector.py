@@ -15,7 +15,7 @@ from typing import Any
 
 import httpx
 
-from . import bcb_client, providers
+from . import bcb_client, providers, rtn_xlsx
 
 EMISSOES_XLSX_URL = (
     "https://www.tesourotransparente.gov.br/ckan/dataset/"
@@ -205,8 +205,14 @@ def collect_annual_table(
     dgt_csv: str | Path | None = None,
     fundos_csv: str | Path | None = None,
     include_emissoes: bool = True,
+    rtn_xlsx_path: str | Path | None = None,
+    constantes_ipca: bool = False,
 ) -> dict[str, Any]:
-    """Build annual table (R$ bi, current prices)."""
+    """Build annual table (R$ bi).
+
+    Default: current prices via ARIA + BCB. With rtn_xlsx_path, RTN columns
+    come from serie_historica_*.xlsx (sheet 1.1 or 1.1-A if constantes_ipca).
+    """
     year_from = int(year_from)
     year_to = int(year_to)
     if year_from > year_to:
@@ -223,9 +229,45 @@ def collect_annual_table(
     }
 
     # RTN
-    prim = _rtn_annual("10.04.1", year_from, year_to)
-    juros = _rtn_annual("10.08.1", year_from, year_to)
-    nom = _rtn_annual("10.09.1", year_from, year_to)
+    prim: dict[int, float] = {}
+    juros: dict[int, float] = {}
+    nom: dict[int, float] = {}
+    if rtn_xlsx_path:
+        extracted = rtn_xlsx.extract_annual_rtn(
+            rtn_xlsx_path,
+            year_from=year_from,
+            year_to=year_to,
+            constantes_ipca=constantes_ipca,
+            include_fundos=False,
+        )
+        for row in extracted["rows"]:
+            y = int(row["ano"])
+            if row.get("resultado_primario_R$mi") is not None:
+                prim[y] = float(row["resultado_primario_R$mi"])
+            if row.get("juros_nominais_R$mi") is not None:
+                juros[y] = float(row["juros_nominais_R$mi"])
+            if row.get("resultado_nominal_R$mi") is not None:
+                nom[y] = float(row["resultado_nominal_R$mi"])
+        src_label = (
+            f"RTN XLSX {extracted.get('sheet')} ({extracted.get('unit')})"
+        )
+        sources["resultado_primario"] = src_label
+        sources["juros_nominais"] = src_label
+        sources["resultado_nominal"] = src_label
+        sources["rtn_xlsx"] = str(rtn_xlsx_path)
+        notes.append(
+            "RTN via serie_historica XLSX"
+            + (" em valores constantes IPCA." if constantes_ipca else " (correntes).")
+        )
+    else:
+        if constantes_ipca:
+            notes.append(
+                "constantes_ipca ignorado sem --rtn-xlsx "
+                "(use serie_historica_mai26.xlsx aba 1.1-A)."
+            )
+        prim = _rtn_annual("10.04.1", year_from, year_to)
+        juros = _rtn_annual("10.08.1", year_from, year_to)
+        nom = _rtn_annual("10.09.1", year_from, year_to)
 
     # DBGG monthly stocks
     dbgg_points = bcb_client.fetch_sgs_range(
@@ -308,7 +350,11 @@ def collect_annual_table(
     return {
         "year_from": year_from,
         "year_to": year_to,
-        "unit": "R$ bilhoes (valores correntes)",
+        "unit": (
+            "R$ bilhoes (valores constantes IPCA via RTN XLSX)"
+            if (rtn_xlsx_path and constantes_ipca)
+            else "R$ bilhoes (valores correntes)"
+        ),
         "count": len(rows),
         "columns": COLUMN_ORDER,
         "rows": rows,

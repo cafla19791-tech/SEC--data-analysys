@@ -158,13 +158,15 @@ def collect_annual_table(
     dgt_csv: str = "",
     fundos_csv: str = "",
     include_emissoes: bool = True,
+    rtn_xlsx_path: str = "",
+    constantes_ipca: bool = False,
 ) -> str:
-    """Build annual fiscal/debt table in R$ bilhoes (current prices).
+    """Build annual fiscal/debt table in R$ bilhoes.
 
     Auto columns: DBGG (Jan/Dec), primary/interest/nominal (RTN), DPF
     emissions/redemptions, BNDES disbursements. Optional CSV overlays for DGT
-    tax expenditures and FNO/FNE/FCO constitutional funds (see
-    data/templates/).
+    tax expenditures and FNO/FNE/FCO. Pass rtn_xlsx_path=serie_historica_*.xlsx
+    and constantes_ipca=True for IPCA-constant RTN (sheet 1.1-A).
     """
     try:
         return _ok(
@@ -174,6 +176,31 @@ def collect_annual_table(
                 dgt_csv=dgt_csv or None,
                 fundos_csv=fundos_csv or None,
                 include_emissoes=include_emissoes,
+                rtn_xlsx_path=rtn_xlsx_path or None,
+                constantes_ipca=constantes_ipca,
+            )
+        )
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
+@mcp.tool()
+def extract_rtn_xlsx(
+    path: str,
+    year_from: int = 2001,
+    year_to: int = 2025,
+    constantes_ipca: bool = False,
+) -> str:
+    """Extract annual RTN series from serie_historica_*.xlsx (Tesouro bulletin)."""
+    try:
+        from . import rtn_xlsx
+
+        return _ok(
+            rtn_xlsx.extract_annual_rtn(
+                path,
+                year_from=year_from,
+                year_to=year_to,
+                constantes_ipca=constantes_ipca,
             )
         )
     except Exception as exc:  # noqa: BLE001

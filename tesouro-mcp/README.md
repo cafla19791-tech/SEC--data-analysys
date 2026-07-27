@@ -35,6 +35,11 @@ python -m tesouro_mcp.cli ckan-show resultado-do-tesouro-nacional
 python -m tesouro_mcp.cli coletar-anual --from 2001 --to 2025 --out tabela_anual.csv \
   --dgt data/templates/dgt_renuncias_anual.csv \
   --fundos data/templates/fundos_constitucionais_anual.csv
+
+# Serie historica RTN (XLSX do boletim, ex. mai/26) — correntes ou IPCA:
+python -m tesouro_mcp.cli rtn-xlsx ../serie_historica_mai26.xlsx --constantes-ipca --out rtn_ipca.csv
+python -m tesouro_mcp.cli coletar-anual --from 2001 --to 2025 \
+  --rtn-xlsx ../serie_historica_mai26.xlsx --constantes-ipca --out tabela_anual_ipca.csv
 ```
 
 WinPython: `baixar_tesouro_winpython.ps1`. No PowerShell use `.\tesouro_cli.bat` (com `.\`) de dentro da pasta `tesouro-mcp`.
