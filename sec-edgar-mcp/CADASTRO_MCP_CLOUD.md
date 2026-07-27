@@ -47,6 +47,7 @@ sec_edgar_cli.bat lookup AAPL
 sec_edgar_cli.bat filings AAPL --form 10-K --limit 5
 sec_edgar_cli.bat facts KO
 sec_edgar_cli.bat concept PBR NetIncomeLoss
+sec_edgar_cli.bat concept PBR NetIncomeLoss --taxonomy ifrs-full --annual
 ```
 
 ## Arquitetura (resumo)

@@ -45,8 +45,17 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("concept", help="One XBRL concept series")
     s.add_argument("ticker_or_cik")
     s.add_argument("concept")
-    s.add_argument("--taxonomy", default="us-gaap")
+    s.add_argument(
+        "--taxonomy",
+        default="auto",
+        help="auto (padrao), us-gaap ou ifrs-full — use ifrs-full para PBR/VALE",
+    )
     s.add_argument("--limit", type=int, default=20)
+    s.add_argument(
+        "--annual",
+        action="store_true",
+        help="So periodos anuais (FY / CYYYYY)",
+    )
 
     return p
 
@@ -89,6 +98,7 @@ def main(argv: list[str] | None = None) -> int:
                     args.concept,
                     taxonomy=args.taxonomy,
                     limit=args.limit,
+                    annual_only=args.annual,
                 )
             )
         else:

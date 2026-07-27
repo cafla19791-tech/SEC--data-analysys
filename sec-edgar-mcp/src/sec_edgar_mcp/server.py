@@ -98,10 +98,16 @@ def get_company_facts(
 def get_concept(
     ticker_or_cik: str,
     concept: str,
-    taxonomy: str = "us-gaap",
+    taxonomy: str = "auto",
     limit: int = 20,
+    annual_only: bool = False,
 ) -> str:
-    """Time series for one XBRL concept (e.g. NetIncomeLoss, Revenues)."""
+    """Time series for one XBRL concept (e.g. NetIncomeLoss, Revenues).
+
+    taxonomy: auto (default; tries us-gaap then ifrs-full aliases), us-gaap, or ifrs-full.
+    For foreign issuers (PBR, VALE) prefer ifrs-full / auto — us-gaap may stop ~2011.
+    annual_only: keep FY / CYYYYY rows only.
+    """
     try:
         return _ok(
             providers.get_concept(
@@ -109,6 +115,7 @@ def get_concept(
                 concept=concept,
                 taxonomy=taxonomy,
                 limit=limit,
+                annual_only=annual_only,
             )
         )
     except Exception as exc:  # noqa: BLE001

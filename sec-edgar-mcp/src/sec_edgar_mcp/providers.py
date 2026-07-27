@@ -268,31 +268,156 @@ def get_company_facts(
     }
 
 
-def get_concept(
-    ticker_or_cik: str,
-    concept: str,
-    taxonomy: str = "us-gaap",
-    limit: int = 20,
-) -> dict[str, Any]:
-    """Single XBRL concept time series."""
-    cik = resolve_cik(ticker_or_cik)
-    concept = concept.strip()
-    taxonomy = taxonomy.strip()
+# Aliases comuns us-gaap -> ifrs-full (emissores estrangeiros: 20-F / 6-K).
+_IFRS_ALIASES: dict[str, list[str]] = {
+    "NetIncomeLoss": [
+        "ProfitLossAttributableToOwnersOfParent",
+        "ProfitLoss",
+    ],
+    "Revenues": ["Revenue"],
+    "RevenueFromContractWithCustomerExcludingAssessedTax": ["Revenue"],
+    "Assets": ["Assets"],
+    "Liabilities": ["Liabilities"],
+    "StockholdersEquity": ["Equity"],
+    "OperatingIncomeLoss": ["ProfitLossFromOperatingActivities"],
+    "EarningsPerShareDiluted": ["BasicEarningsLossPerShare", "DilutedEarningsLossPerShare"],
+}
+
+
+def _fetch_concept_raw(cik: str, taxonomy: str, concept: str) -> dict[str, Any]:
     url = f"{DATA_SEC}/api/xbrl/companyconcept/CIK{cik}/{taxonomy}/{concept}.json"
-    data = _get_json(url)
+    return _get_json(url)
+
+
+def _series_from_concept(data: dict[str, Any]) -> tuple[str | None, list[dict[str, Any]]]:
     units = data.get("units", {})
     unit_name = "USD" if "USD" in units else (next(iter(units), None))
     series = units.get(unit_name, []) if unit_name else []
     ordered = sorted(series, key=lambda x: x.get("end") or "", reverse=True)
+    return unit_name, ordered
+
+
+def _prefer_annual(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Prefer FY / frame CY#### (ano cheio), sem duplicar o mesmo end."""
+    annual = [
+        r
+        for r in rows
+        if r.get("fp") == "FY"
+        or (isinstance(r.get("frame"), str) and re.fullmatch(r"CY\d{4}", r["frame"]))
+    ]
+    pool = annual or rows
+    seen: set[str] = set()
+    out: list[dict[str, Any]] = []
+    for r in pool:
+        key = str(r.get("end") or "")
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        out.append(r)
+    return out
+
+
+def get_concept(
+    ticker_or_cik: str,
+    concept: str,
+    taxonomy: str = "auto",
+    limit: int = 20,
+    *,
+    annual_only: bool = False,
+) -> dict[str, Any]:
+    """Single XBRL concept time series.
+
+    taxonomy:
+      - ``us-gaap`` / ``ifrs-full``: fixo
+      - ``auto`` (padrao): tenta us-gaap; se vazio ou serie antiga (< ~3 anos),
+        tenta aliases IFRS (ex.: NetIncomeLoss -> ProfitLossAttributableToOwnersOfParent).
+        Necessario para emissores estrangeiros (PBR, VALE, etc.).
+    """
+    cik = resolve_cik(ticker_or_cik)
+    concept = concept.strip()
+    taxonomy = (taxonomy or "auto").strip().lower()
+    if taxonomy in {"auto", "automatico", ""}:
+        taxonomy = "auto"
     limit = max(1, min(int(limit), 100))
-    return {
-        "cik": cik,
-        "entityName": data.get("entityName"),
-        "taxonomy": taxonomy,
-        "concept": concept,
-        "label": data.get("label"),
-        "unit": unit_name,
-        "count": len(ordered),
-        "recent": ordered[:limit],
-        "provider": "data.sec.gov/api/xbrl/companyconcept",
-    }
+
+    attempts: list[tuple[str, str]] = []
+    if taxonomy == "auto":
+        attempts.append(("us-gaap", concept))
+        for alt in _IFRS_ALIASES.get(concept, [concept]):
+            attempts.append(("ifrs-full", alt))
+        if concept not in _IFRS_ALIASES:
+            attempts.append(("ifrs-full", concept))
+    else:
+        attempts.append((taxonomy, concept))
+
+    last_err: Exception | None = None
+    best: dict[str, Any] | None = None
+    best_end = ""
+
+    for tax, tag in attempts:
+        try:
+            data = _fetch_concept_raw(cik, tax, tag)
+        except Exception as exc:  # noqa: BLE001
+            last_err = exc
+            continue
+        unit_name, ordered = _series_from_concept(data)
+        if annual_only:
+            ordered = _prefer_annual(ordered)
+        else:
+            seen: set[str] = set()
+            dedup: list[dict[str, Any]] = []
+            for r in ordered:
+                key = f"{r.get('end')}|{r.get('val')}|{r.get('fp')}"
+                if key in seen:
+                    continue
+                seen.add(key)
+                dedup.append(r)
+            ordered = dedup
+
+        if not ordered:
+            continue
+        top_end = str(ordered[0].get("end") or "")
+        candidate = {
+            "cik": cik,
+            "entityName": data.get("entityName"),
+            "taxonomy": tax,
+            "concept": tag,
+            "concept_requested": concept,
+            "label": data.get("label"),
+            "unit": unit_name,
+            "count": len(ordered),
+            "recent": ordered[:limit],
+            "provider": "data.sec.gov/api/xbrl/companyconcept",
+        }
+        if top_end > best_end:
+            best = candidate
+            best_end = top_end
+        # Se ja temos dado recente (>= 2020), para
+        if top_end >= "2020-01-01":
+            best = candidate
+            break
+
+    if best is None:
+        if last_err is not None:
+            raise last_err
+        raise ValueError(
+            f"Conceito nao encontrado para {ticker_or_cik!r}: {concept!r} "
+            f"(tentativas: {attempts})"
+        )
+
+    # Aviso se a serie ainda for antiga
+    note = None
+    if best_end and best_end < "2020-01-01":
+        note = (
+            "Serie antiga no taxonomy usado. Emissores estrangeiros (20-F/6-K) "
+            "costumam estar em ifrs-full (ex.: ProfitLossAttributableToOwnersOfParent). "
+            "Rode com --taxonomy ifrs-full."
+        )
+        best["note"] = note
+    if taxonomy == "auto" and best["concept"] != concept:
+        best["note"] = (
+            (best.get("note") + " " if best.get("note") else "")
+            + f"Auto: usou {best['taxonomy']}:{best['concept']} "
+            f"(pedido era {concept})."
+        ).strip()
+    return best
