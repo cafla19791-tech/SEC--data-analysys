@@ -48,31 +48,27 @@ Rode no VM:
 e me explique o JSON.
 ```
 
-## C) CLI no Windows (VS Code terminal / ContAgil WinPython)
+## C) CLI no ContAgil WinPython (sem clonar o repo)
 
-1. Clone ou baixe o repo (branch com `nyse-mcp/`).
-2. No PowerShell:
+**Não use** `cd caminho\para\...` — isso era só um exemplo genérico.
+
+Cole **exatamente** no CMD/PowerShell do WinPython:
 
 ```powershell
-cd caminho\para\SEC--data-analysys\nyse-mcp
-powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1 -Symbol JPM
+cd "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
+$b="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/nyse-mcp-winpython-cli-f342"
+Invoke-WebRequest "$b/nyse-mcp/baixar_nyse_mcp_winpython.ps1" -OutFile baixar_nyse_mcp_winpython.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_nyse_mcp_winpython.ps1 -Symbol JPM
 ```
 
-3. Depois:
+Isso cria `winpython\nyse-mcp\` e testa a cotação. Depois:
 
 ```bat
+cd nyse-mcp
 nyse_mcp_cli.bat quote JPM
 nyse_mcp_cli.bat history XOM --period 1y
 nyse_mcp_cli.bat search "Coca Cola"
 nyse_mcp_cli.bat status
-```
-
-Com Python do ContAgil:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1 `
-  -Python "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\python.exe" `
-  -Symbol PBR
 ```
 
 > Se `pip` ou `finance.yahoo.com` forem bloqueados na rede da RFB, use só o caminho **A** (Cloud Agent), onde a saída de rede costuma ser mais ampla.
