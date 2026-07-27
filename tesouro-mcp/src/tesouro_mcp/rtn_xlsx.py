@@ -10,7 +10,7 @@ from typing import Any
 # Rows in sheet 1.1 / 1.1-A (mensal resumida)
 ROW_NEEDLES_1_1 = {
     "receita_total": "1. RECEITA TOTAL",
-    "despesa_total": "3. DESPESA TOTAL",
+    "despesa_total": "4. DESPESA TOTAL",
     "resultado_primario": "5. RESULTADO PRIMÁRIO GOVERNO CENTRAL - ACIMA DA LINHA",
     "juros_nominais": "9. JUROS NOMINAIS",
     "resultado_nominal": "10. RESULTADO NOMINAL DO GOVERNO CENTRAL",
