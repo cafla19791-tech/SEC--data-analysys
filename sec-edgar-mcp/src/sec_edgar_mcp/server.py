@@ -123,6 +123,32 @@ def get_concept(
 
 
 @mcp.tool()
+def get_concept_range(
+    ticker_or_cik: str,
+    concept: str = "NetIncomeLoss",
+    year_from: int = 2008,
+    year_to: int = 2025,
+) -> str:
+    """Annual series merging us-gaap (older) + ifrs-full (newer), e.g. PBR 2008-2025.
+
+    Prefer this for foreign issuers when you need a long window across the
+    US-GAAP → IFRS transition.
+    """
+    try:
+        return _ok(
+            providers.get_concept_range(
+                ticker_or_cik,
+                concept,
+                year_from=year_from,
+                year_to=year_to,
+                annual_only=True,
+            )
+        )
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
+@mcp.tool()
 def get_company_profile(ticker_or_cik: str) -> str:
     """Company profile from SEC submissions (name, SIC, tickers, exchanges)."""
     try:

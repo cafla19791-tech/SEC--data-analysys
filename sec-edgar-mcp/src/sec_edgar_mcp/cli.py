@@ -48,7 +48,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument(
         "--taxonomy",
         default="auto",
-        help="auto (padrao), us-gaap ou ifrs-full — use ifrs-full para PBR/VALE",
+        help="auto (padrao), us-gaap, ifrs-full ou both (mescla 2008-2025)",
     )
     s.add_argument("--limit", type=int, default=20)
     s.add_argument(
@@ -56,6 +56,29 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="So periodos anuais (FY / CYYYYY)",
     )
+    s.add_argument(
+        "--from",
+        dest="year_from",
+        type=int,
+        default=None,
+        help="Ano inicial (com --taxonomy both; default 2008)",
+    )
+    s.add_argument(
+        "--to",
+        dest="year_to",
+        type=int,
+        default=None,
+        help="Ano final (com --taxonomy both; default 2025)",
+    )
+
+    s = sub.add_parser(
+        "series",
+        help="Serie anual 2008-2025 mesclando us-gaap + ifrs (ex.: PBR NetIncomeLoss)",
+    )
+    s.add_argument("ticker_or_cik")
+    s.add_argument("concept")
+    s.add_argument("--from", dest="year_from", type=int, default=2008)
+    s.add_argument("--to", dest="year_to", type=int, default=2025)
 
     return p
 
@@ -92,13 +115,35 @@ def main(argv: list[str] | None = None) -> int:
                 )
             )
         elif args.command == "concept":
+            tax = (args.taxonomy or "auto").lower()
+            if tax in {"both", "merge", "all"}:
+                _print(
+                    providers.get_concept_range(
+                        args.ticker_or_cik,
+                        args.concept,
+                        year_from=args.year_from or 2008,
+                        year_to=args.year_to or 2025,
+                        annual_only=True,
+                    )
+                )
+            else:
+                _print(
+                    providers.get_concept(
+                        args.ticker_or_cik,
+                        args.concept,
+                        taxonomy=args.taxonomy,
+                        limit=args.limit,
+                        annual_only=args.annual,
+                    )
+                )
+        elif args.command == "series":
             _print(
-                providers.get_concept(
+                providers.get_concept_range(
                     args.ticker_or_cik,
                     args.concept,
-                    taxonomy=args.taxonomy,
-                    limit=args.limit,
-                    annual_only=args.annual,
+                    year_from=args.year_from,
+                    year_to=args.year_to,
+                    annual_only=True,
                 )
             )
         else:

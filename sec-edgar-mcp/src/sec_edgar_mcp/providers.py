@@ -421,3 +421,153 @@ def get_concept(
             f"(pedido era {concept})."
         ).strip()
     return best
+
+
+def _year_from_row(row: dict[str, Any]) -> int | None:
+    """Ano economico do ponto XBRL.
+
+    Preferir ``frame`` (CY2010) ou ano de ``end``. Nao usar ``fy`` do formulario:
+    em 20-F comparativos o fy e o ano do filing, nao o do periodo (ex.: fy=2009
+    com end=2007-12-31).
+    """
+    frame = row.get("frame")
+    if isinstance(frame, str):
+        m = re.fullmatch(r"CY(\d{4})", frame)
+        if m:
+            return int(m.group(1))
+        m = re.fullmatch(r"CY(\d{4})Q\d", frame)
+        if m:
+            return int(m.group(1))
+    end = str(row.get("end") or "")
+    m = re.match(r"(\d{4})", end)
+    if m:
+        return int(m.group(1))
+    if row.get("fy") is not None:
+        try:
+            return int(row["fy"])
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
+def get_concept_range(
+    ticker_or_cik: str,
+    concept: str,
+    *,
+    year_from: int = 2008,
+    year_to: int = 2025,
+    annual_only: bool = True,
+) -> dict[str, Any]:
+    """Serie anual unindo us-gaap (antigo) + ifrs-full (recente).
+
+    Para PBR/VALE: US-GAAP cobre ~2008-2011; IFRS cobre anos seguintes.
+    Em overlap, prefere IFRS. Valores podem nao ser estritamente comparaveis
+    entre normas.
+    """
+    year_from = int(year_from)
+    year_to = int(year_to)
+    if year_from > year_to:
+        year_from, year_to = year_to, year_from
+
+    # Busca as duas fontes com limite alto
+    us = None
+    ifrs = None
+    try:
+        us = get_concept(
+            ticker_or_cik,
+            concept,
+            taxonomy="us-gaap",
+            limit=100,
+            annual_only=annual_only,
+        )
+    except Exception:  # noqa: BLE001
+        us = None
+    try:
+        ifrs = get_concept(
+            ticker_or_cik,
+            concept,
+            taxonomy="auto" if concept in _IFRS_ALIASES else "ifrs-full",
+            limit=100,
+            annual_only=annual_only,
+        )
+        # Se auto caiu de volta no us-gaap, forcar ifrs aliases
+        if ifrs and ifrs.get("taxonomy") == "us-gaap":
+            ifrs = None
+            for alt in _IFRS_ALIASES.get(concept, [concept]):
+                try:
+                    ifrs = get_concept(
+                        ticker_or_cik,
+                        alt,
+                        taxonomy="ifrs-full",
+                        limit=100,
+                        annual_only=annual_only,
+                    )
+                    break
+                except Exception:  # noqa: BLE001
+                    continue
+    except Exception:  # noqa: BLE001
+        ifrs = None
+
+    by_year: dict[int, dict[str, Any]] = {}
+
+    def _ingest(block: dict[str, Any] | None, source: str) -> None:
+        if not block:
+            return
+        for r in block.get("recent", []):
+            y = _year_from_row(r)
+            if y is None or y < year_from or y > year_to:
+                continue
+            entry = {
+                "year": y,
+                "end": r.get("end"),
+                "val": r.get("val"),
+                "unit": block.get("unit"),
+                "fp": r.get("fp"),
+                "form": r.get("form"),
+                "filed": r.get("filed"),
+                "frame": r.get("frame"),
+                "taxonomy": block.get("taxonomy"),
+                "concept": block.get("concept"),
+                "source": source,
+            }
+            # Prefer IFRS on overlap
+            if y not in by_year or source == "ifrs":
+                by_year[y] = entry
+
+    _ingest(us, "us-gaap")
+    _ingest(ifrs, "ifrs")
+
+    series = [by_year[y] for y in sorted(by_year.keys())]
+    entity = (ifrs or us or {}).get("entityName")
+    cik = resolve_cik(ticker_or_cik)
+
+    missing = [y for y in range(year_from, year_to + 1) if y not in by_year]
+
+    return {
+        "cik": cik,
+        "entityName": entity,
+        "concept_requested": concept,
+        "year_from": year_from,
+        "year_to": year_to,
+        "annual_only": annual_only,
+        "count": len(series),
+        "years_missing": missing,
+        "series": series,
+        "sources": {
+            "us-gaap": {
+                "concept": (us or {}).get("concept"),
+                "label": (us or {}).get("label"),
+                "points": len((us or {}).get("recent") or []),
+            },
+            "ifrs-full": {
+                "concept": (ifrs or {}).get("concept"),
+                "label": (ifrs or {}).get("label"),
+                "points": len((ifrs or {}).get("recent") or []),
+            },
+        },
+        "note": (
+            "Serie mesclada us-gaap + ifrs-full. Em anos com as duas fontes, "
+            "prevalece IFRS. Mudanca de norma pode afetar comparabilidade."
+        ),
+        "provider": "data.sec.gov/api/xbrl/companyconcept (merged)",
+    }
