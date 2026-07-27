@@ -1,14 +1,9 @@
 # Instala o nyse-mcp (venv) e testa a CLI no Windows.
 # Nao precisa de Cursor Desktop. Usa Yahoo Finance (cotacao atrasada, sem API key).
+# ASCII-only (evita quebra de encoding no Invoke-WebRequest / PowerShell 5).
 #
-# Uso (PowerShell):
-#   cd caminho\para\SEC--data-analysys\nyse-mcp
-#   powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1
-#
-# Opcional: passar um ticker
+# Uso:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1 -Symbol JPM
-#
-# Opcional: apontar para o python do ContAgil WinPython
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1 `
 #     -Python "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\python.exe"
 
@@ -22,7 +17,7 @@ $Root = if ($PSScriptRoot) { $PSScriptRoot } else { (Get-Location).Path }
 Set-Location -LiteralPath $Root
 
 Write-Host "============================================================"
-Write-Host " nyse-mcp CLI — setup Windows (sem Cursor Desktop)"
+Write-Host " nyse-mcp CLI - setup Windows (sem Cursor Desktop)"
 Write-Host " Pasta: $Root"
 Write-Host "============================================================"
 
@@ -103,4 +98,4 @@ Write-Host "  .\.venv\Scripts\python.exe -m nyse_mcp.cli search `"Coca Cola`""
 Write-Host "  .\.venv\Scripts\python.exe -m nyse_mcp.cli status"
 Write-Host ""
 Write-Host "Atalho BAT: .\nyse_mcp_cli.bat quote JPM"
-Write-Host "Se a empresa bloquear finance.yahoo.com, o quote falha — use Cloud Agent + MCP."
+Write-Host "Se a empresa bloquear finance.yahoo.com, o quote falha - use Cloud Agent + MCP."
