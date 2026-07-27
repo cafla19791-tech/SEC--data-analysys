@@ -72,7 +72,13 @@ Cada célula = soma das colunas mensais **na mesma linha** (ex.: período 1 na l
 | 5 | jan/23–mai/26 | 41 | LB:MP | `SOMA(LB6:MP6)` |
 
 ```bat
-.\python.exe scripts\somar_aba_1_2A_periodos.py "serie_historica_mai26 (2).xlsx" --out saida\aba_1_2A_totais_por_item.xlsx
+.\python.exe scripts\somar_aba_1_2A_periodos.py "serie_historica_mai26 (2).xlsx" --out saida\totais_1_2A_por_item.xlsx
 ```
 
-Arquivo: `output/rtn/aba_1_2A_totais_por_item.xlsx` (172 itens × 5 períodos, R$ mi IPCA Mai/2026).
+Arquivo: `output/rtn/totais_1_2A_por_item.xlsx` (172 itens × 5 períodos, R$ mi e R$ bi, IPCA Mai/2026).
+
+Exemplo — linha 6 `1. RECEITA TOTAL` (R$ mi):
+
+| jan/97–dez/02 | jan/03–mai/16 | jun/16–dez/18 | jan/19–dez/22 | jan/23–mai/26 |
+|-------------:|-------------:|-------------:|-------------:|-------------:|
+| 6.433.212,26 | 26.103.160,84 | 5.685.250,90 | 9.781.534,92 | 10.011.944,15 |
