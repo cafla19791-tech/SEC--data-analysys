@@ -955,8 +955,8 @@ def get_total_debt(
         if fill_from_filing
         else None,
         "note": (
-            "Dívida financeira bruta = Borrowings. Total Debt aqui soma arrendamentos "
-            "(IFRS 16). A 'dívida bruta' dos releases da Petrobras costuma ser só "
+            "Divida financeira bruta = Borrowings. Total Debt aqui soma arrendamentos "
+            "(IFRS 16). A 'divida bruta' dos releases da Petrobras costuma ser so "
             "Borrowings (Finance Debt)."
         ),
         "provider": "data.sec.gov companyconcept + Archives iXBRL",
