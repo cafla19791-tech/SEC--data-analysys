@@ -134,6 +134,8 @@ streamlit run app.py
 | `output/resumo_por_agente.csv` | Ranking: Qtd Contratos, Total Subsídio, Impacto Fiscal 2026 |
 | `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
 | `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto ContAgil agregados por ano de pagamento |
+| `saida/spread_banco_por_contrato.csv` | Spread do banco (R$) por contrato — nominal e a 30/06/2026 |
+| `saida/resumo_spread_banco.xlsx` | Por_Agente + Totais + amostra dos maiores spreads |
 | `resumo_contratos.xlsx` | Por contrato: total subsídio, impacto e saldo final (pasta do CSV de entrada) |
 | `resumo_por_ano.xlsx` | Por contrato × ano: total subsídio e impacto |
 | `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |
@@ -144,7 +146,8 @@ streamlit run app.py
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
 `data_fluxo`, `saldo_fiscal`, `saldo_contrato`, `amortizacao`,
-`taxa_selic_mensal`, `taxa_contrato_mensal` (só na 1ª parcela), `spread`,
+`taxa_selic_mensal`, `taxa_contrato_mensal` (só na 1ª parcela), `spread`
+(fator ContAgil), `spread_banco` (R$ da remuneração do agente),
 `subsidio`, `impacto_fiscal`, `em_carencia`.
 
 Colunas do Excel diário: as mesmas + `taxa_selic_diaria`,
@@ -163,7 +166,8 @@ Para cada mês `p = 1 .. (carência + amortização)`:
 - Dual balance:
   - `saldo_fiscal`: só principal (base do subsídio)
   - `saldo_contrato`: principal + juros do contrato
-- `spread = (1 + (SELIC_m − taxa_contrato_m))^n`
+- `spread` (fator ContAgil) = `(1 + (SELIC_m − taxa_contrato_m))^n`
+- `spread_banco` (R$) = `saldo_fiscal × ((1+juros)^(1/12)−1)` — coluna **Juros** do agente
 - `subsídio = saldo_fiscal × (SELIC_m − taxa_contrato_m)` (antes da amortização)
 - `impacto_fiscal` (`calcular_impacto_fiscal_real`):
   - STP ContAgil (coluna D):
