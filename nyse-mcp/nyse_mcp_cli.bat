@@ -1,5 +1,5 @@
 @echo off
-REM Atalho Windows para a CLI nyse-mcp (apos rodar setup_e_rodar_cli.ps1 uma vez).
+REM Atalho Windows para a CLI nyse-mcp (WinPython ContAgil / sem .venv).
 REM Exemplos:
 REM   nyse_mcp_cli.bat quote JPM
 REM   nyse_mcp_cli.bat history XOM --period 1y
@@ -9,14 +9,12 @@ REM   nyse_mcp_cli.bat status
 setlocal
 cd /d "%~dp0"
 
-if not exist ".venv\Scripts\python.exe" (
-  echo ERRO: .venv nao encontrado.
-  echo Rode antes:
-  echo   powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_e_rodar_cli.ps1
-  exit /b 2
-)
-
 if "%MARKET_DATA_PROVIDER%"=="" set MARKET_DATA_PROVIDER=yahoo
+set PYTHONPATH=%~dp0src;%PYTHONPATH%
 
-".venv\Scripts\python.exe" -m nyse_mcp.cli %*
+REM Prefer WinPython na pasta pai; senao python do PATH
+set "PY=%~dp0..\python.exe"
+if not exist "%PY%" set "PY=python.exe"
+
+"%PY%" -m nyse_mcp.cli %*
 exit /b %ERRORLEVEL%

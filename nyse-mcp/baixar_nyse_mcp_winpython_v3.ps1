@@ -86,9 +86,10 @@ set PYTHONPATH=%~dp0src;%PYTHONPATH%
 "$py" -m nyse_mcp.cli %*
 exit /b %ERRORLEVEL%
 "@
-$utf8Bom = New-Object System.Text.UTF8Encoding $true
-[System.IO.File]::WriteAllText($batPath, $bat, $utf8Bom)
-Write-Host "  nyse_mcp_cli.bat (WinPython direto)"
+# CMD.exe nao aceita BOM no .bat (aparece '´╗┐@echo' e falha a 1a linha)
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText($batPath, $bat, $utf8NoBom)
+Write-Host "  nyse_mcp_cli.bat (WinPython direto, sem BOM)"
 
 # Gera setup LOCAL (sem venv)
 $setupPath = Join-Path $dest "setup_e_rodar_cli.ps1"
@@ -148,6 +149,7 @@ Write-Host "  .\nyse_mcp_cli.bat quote JPM"
 Write-Host "  .\nyse_mcp_cli.bat history XOM --period 1y"
 "@
 
+$utf8Bom = New-Object System.Text.UTF8Encoding $true
 [System.IO.File]::WriteAllText($setupPath, $setup, $utf8Bom)
 Write-Host "  setup_e_rodar_cli.ps1 (gerado local [local-v3-sem-venv])"
 
