@@ -96,7 +96,7 @@ Write-Host "--- headline ---"
 & $py -m tesouro_mcp.cli headline resultado_primario
 
 Write-Host ""
-Write-Host "OK. Comandos:"
+Write-Host "OK. Comandos (PowerShell - use .\ ):"
 Write-Host "  cd tesouro-mcp"
 Write-Host "  .\tesouro_cli.bat aliases"
 Write-Host "  .\tesouro_cli.bat serie resultado_primario --from 2024-01 --to 2025-12"
@@ -107,3 +107,4 @@ Write-Host "  .\tesouro_cli.bat ckan-show resultado-do-tesouro-nacional"
 Write-Host "  .\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv"
 Write-Host ""
 Write-Host "Cole DGT/FNO-FNE-FCO em data\templates\ (ver INSTRUCOES_COLA_DGT_FUNDOS.md)"
+Write-Host "Se 'tesouro_cli.bat' nao for reconhecido: cd para a pasta tesouro-mcp e use .\tesouro_cli.bat"

@@ -49,9 +49,16 @@ Exemplo:
 
 ## 3) Rodar o coletor com merge
 
-```bat
+```powershell
+# 1) Se ainda nao instalou (cria a pasta tesouro-mcp e o .bat):
+cd "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
+$u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/tesouro-mcp-f342/tesouro-mcp/baixar_tesouro_winpython.ps1"
+Invoke-WebRequest "$u`?v=1" -OutFile baixar_tesouro.ps1 -Headers @{"Cache-Control"="no-cache"}
+powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_tesouro.ps1
+
+# 2) Rodar o coletor (PowerShell exige .\):
 cd tesouro-mcp
-tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv
+.\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv
 ```
 
 Celulas vazias / `n/d` sao ignoradas no merge (mantem nulo na tabela final).

@@ -36,14 +36,16 @@ Invoke-WebRequest "$u`?v=1" -OutFile baixar_tesouro.ps1 -Headers @{"Cache-Contro
 powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_tesouro.ps1
 ```
 
-```bat
+```powershell
 cd tesouro-mcp
-tesouro_cli.bat aliases
-tesouro_cli.bat serie resultado_primario --from 2024-01 --to 2025-12
-tesouro_cli.bat headline resultado_primario
-tesouro_cli.bat search "Receita"
-tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv
+.\tesouro_cli.bat aliases
+.\tesouro_cli.bat serie resultado_primario --from 2024-01 --to 2025-12
+.\tesouro_cli.bat headline resultado_primario
+.\tesouro_cli.bat search "Receita"
+.\tesouro_cli.bat coletar-anual --from 2001 --to 2025 --out tabela_anual.csv --dgt data\templates\dgt_renuncias_anual.csv --fundos data\templates\fundos_constitucionais_anual.csv
 ```
+
+No PowerShell use sempre `.\tesouro_cli.bat` (o ponto-barra). Se o arquivo nao existir, rode o instalador acima primeiro.
 
 Cole DGT / FNO-FNE-FCO em `data\templates\` (ver `INSTRUCOES_COLA_DGT_FUNDOS.md`).
 

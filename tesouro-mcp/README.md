@@ -37,7 +37,7 @@ python -m tesouro_mcp.cli coletar-anual --from 2001 --to 2025 --out tabela_anual
   --fundos data/templates/fundos_constitucionais_anual.csv
 ```
 
-WinPython: `baixar_tesouro_winpython.ps1`.
+WinPython: `baixar_tesouro_winpython.ps1`. No PowerShell use `.\tesouro_cli.bat` (com `.\`) de dentro da pasta `tesouro-mcp`.
 
 ### Coletor anual
 
