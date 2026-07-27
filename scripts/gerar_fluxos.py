@@ -12,7 +12,9 @@ Metodologia ContAgil (lógica corrigida) + carência corrigida:
   - Fluxos em TODOS os meses (carência + amortização) — corrige bug p=1..n
   - Amortização constante só após a carência
   - Dual balance: saldo_fiscal (principal) e saldo_contrato (com juros)
-  - spread = (1 + (SELIC_m − taxa_contrato_m))^n
+  - spread (fator ContAgil) = (1 + (SELIC_m − taxa_contrato_m))^n
+    * NÃO é o spread do banco em R$; o % do agente é a coluna Juros
+  - spread_banco (R$/mês) = saldo_fiscal × ((1+juros)^(1/12)−1)
   - subsídio = saldo_fiscal × (SELIC_m − taxa_contrato_m)  [antes da amortização]
   - impacto_fiscal (calcular_impacto_fiscal_real):
       * STP ContAgil (col D): subsídio × FATOR_30_06_2026 / fator(nearest data_parcela)
@@ -139,6 +141,21 @@ def taxa_contrato_efetiva(
         return (1.0 + TJLP_TLP_BASE) ** (1.0 / 12.0) * (1.0 + juros) ** (1.0 / 12.0) - 1.0
     if "TLP" in custo:
         return (1.0 + TJLP_TLP_BASE) ** (1.0 / 12.0) * (1.0 + juros) ** (1.0 / 12.0) - 1.0
+    return (1.0 + juros) ** (1.0 / 12.0) - 1.0
+
+
+def taxa_spread_banco_mensal(juros_pct: float | None) -> float:
+    """Taxa mensal do spread do agente financeiro (coluna Juros % a.a.).
+
+    Em operações indiretas BNDES, ``Juros`` é a remuneração do banco
+    credenciado (spread), independente do custo financeiro (TJLP/TLP/FIXA).
+    """
+    try:
+        juros = float(juros_pct or 0.0) / 100.0
+    except (TypeError, ValueError):
+        juros = 0.0
+    if juros <= 0:
+        return 0.0
     return (1.0 + juros) ** (1.0 / 12.0) - 1.0
 
 
@@ -689,6 +706,79 @@ def meses_ate_impacto(data_fluxo: datetime, data_impacto: datetime = DATA_IMPACT
     return (data_impacto.year - data_fluxo.year) * 12 + (data_impacto.month - data_fluxo.month)
 
 
+def calcular_spread_banco_contrato(
+    data_contr: pd.Timestamp,
+    valor: float,
+    carencia: int,
+    n: int,
+    juros_pct: float,
+    *,
+    selic_aa: float = TAXA_SELIC_ANUAL,
+    data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: "SelicSerie | None" = None,
+) -> dict:
+    """Calcula o valor (R$) do spread do banco em um contrato (SAC ContAgil).
+
+    Em cada mês do cronograma (carência + amortização)::
+
+        spread_banco_mes = saldo_fiscal × taxa_spread_banco_mensal(juros)
+
+    Retorna totais nominais e capitalizados até ``data_impacto`` (mesma
+    lógica do impacto fiscal ContAgil).
+    """
+    if n <= 0 or valor <= 0:
+        return {
+            "juros_aa_pct": float(juros_pct or 0.0),
+            "taxa_spread_banco_mensal": 0.0,
+            "parcelas": 0,
+            "spread_banco_nominal": 0.0,
+            "spread_banco_2026": 0.0,
+        }
+
+    taxa_banco_m = taxa_spread_banco_mensal(juros_pct)
+    taxa_selic_mensal = taxa_mensal_composta(selic_aa)
+    saldo_fiscal = float(valor)
+    amort_mensal = float(valor) / float(n)
+    total_meses = int(carencia) + int(n)
+    nominal = 0.0
+    capitalizado = 0.0
+    parcelas = 0
+
+    try:
+        data_base = data_contr.replace(day=15)
+    except ValueError:
+        data_base = data_contr
+
+    for p in range(1, total_meses + 1):
+        data_fluxo = data_base + relativedelta(months=p - 1)
+        em_carencia = p <= int(carencia)
+        amort = 0.0 if em_carencia else amort_mensal
+
+        valor_mes = saldo_fiscal * taxa_banco_m
+        nominal += valor_mes
+        if selic_serie is not None:
+            capitalizado += selic_serie.capitalizar(
+                valor_mes, data_fluxo.to_pydatetime(), data_impacto
+            )
+        else:
+            meses = meses_ate_impacto(data_fluxo.to_pydatetime(), data_impacto)
+            capitalizado += valor_mes * ((1.0 + taxa_selic_mensal) ** meses)
+        parcelas += 1
+
+        if not em_carencia:
+            saldo_fiscal -= amort
+        if saldo_fiscal <= 1e-9:
+            break
+
+    return {
+        "juros_aa_pct": float(juros_pct or 0.0),
+        "taxa_spread_banco_mensal": round(taxa_banco_m, 8),
+        "parcelas": parcelas,
+        "spread_banco_nominal": round(nominal, 2),
+        "spread_banco_2026": round(capitalizado, 2),
+    }
+
+
 def _stream_download(url: str, dest: Path, retries: int = 4) -> Path:
     """Baixa arquivo grande via HTTP streaming com retries (pandas URL buffer falha em ~1GB)."""
     import requests
@@ -1070,11 +1160,15 @@ def gerar_fluxos_contrato(
     if juros_pct is not None or custo_financeiro:
         pct = float(juros_pct) if juros_pct is not None else float(taxa_juros_aa) * 100.0
         taxa_contrato_mensal = taxa_contrato_efetiva(custo_financeiro, pct)
+        taxa_banco_m = taxa_spread_banco_mensal(pct)
     else:
         # Compat testes: taxa_juros_aa já em decimal a.a. (TAXA FIXA)
         taxa_contrato_mensal = taxa_mensal_composta(taxa_juros_aa)
+        # Sem coluna Juros explícita: o spread do banco = taxa do contrato
+        taxa_banco_m = taxa_contrato_mensal
 
     taxa_selic_mensal = taxa_mensal_composta(selic_aa)
+    # Fator ContAgil (NÃO é o spread do banco em R$)
     spread = (1.0 + (taxa_selic_mensal - taxa_contrato_mensal)) ** n
     fluxos: list[dict] = []
 
@@ -1092,6 +1186,8 @@ def gerar_fluxos_contrato(
 
         # Subsídio sobre saldo fiscal ANTES da amortização do mês
         subsidio = saldo_fiscal * (taxa_selic_mensal - taxa_contrato_mensal)
+        # Remuneração do agente (coluna Juros) sobre o principal fiscal
+        spread_banco = saldo_fiscal * taxa_banco_m
 
         if selic_serie is not None:
             impacto = selic_serie.capitalizar(
@@ -1117,6 +1213,7 @@ def gerar_fluxos_contrato(
                     round(taxa_contrato_mensal, 8) if p == 1 else None
                 ),
                 "spread": round(spread, 6),
+                "spread_banco": round(spread_banco, 2),
                 "subsidio": round(subsidio, 2),
                 "impacto_fiscal": impacto,
                 "em_carencia": em_carencia,

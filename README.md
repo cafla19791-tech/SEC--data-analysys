@@ -76,6 +76,14 @@ python3 scripts/agregar_impacto_fluxos.py \
 # Ou no WinPython: powershell -File .\agregar_impacto_saida.ps1
 # Saídas: resumo_impacto_bndes.xlsx, impacto_fiscal_por_ano.xlsx, resumo_por_agente.xlsx
 
+# Spread do banco (R$) por contrato — coluna Juros % a.a. do agente
+# Não precisa reler fluxos_*.csv; usa a massa em dados/:
+python3 scripts/spread_banco_contratos.py \
+  --massa-dados "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\dados" \
+  --pasta-saida "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida" \
+  --arquivo-fatores "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+# Saídas: spread_banco_por_contrato.csv, spread_banco_por_agente.xlsx, resumo_spread_banco.xlsx
+
 # Resumo por contrato + por ano (script ContAgil / WinPython saida/fluxos_0.csv)
 python3 scripts/resumo_fluxos.py \
   --fluxos "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida\fluxos_0.csv"
