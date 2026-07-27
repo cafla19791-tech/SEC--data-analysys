@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "tesouro-mcp": {
+      "command": "bash",
+      "args": ["./tesouro-mcp/run_mcp.sh"],
+      "env": {
+        "TESOURO_USER_AGENT": "SEC-data-analysys-tesouro-mcp/0.1 (cafla19791@gmail.com)"
+      }
+    }
+  }
+}
