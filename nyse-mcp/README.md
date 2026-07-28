@@ -79,3 +79,4 @@ export ALPHA_VANTAGE_API_KEY=YOUR_KEY
 - Yahoo/Alpha Vantage data is typically **delayed**, not a direct NYSE feed.
 - Free Alpha Vantage tiers have strict rate limits.
 - `market_status` is indicative only.
+- Dependency pin: `mcp[cli]>=1.6,<2` (MCP Python SDK 2.0 renames `FastMCP` → `MCPServer` and breaks this skeleton).
