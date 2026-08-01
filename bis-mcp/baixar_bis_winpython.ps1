@@ -127,5 +127,8 @@ Write-Host "  .\bis_cli.bat excel-periodos --out ..\cbpol_taxas_acumuladas_perio
 Write-Host "  .\bis_cli.bat excel-periodos --freq M --out ..\cbpol_taxas_acumuladas_periodos_mensal.xlsx"
 Write-Host "  .\bis_cli.bat serie selic --local --last 12"
 Write-Host ""
+Write-Host "PDFs prontos (sem LibreOffice):"
+Write-Host "  na pasta winpython, rode baixar_pdfs_cbpol.ps1"
+Write-Host ""
 Write-Host "CSV ContAgil esperado (~450MB descompactado):"
 Write-Host "  $csvSibling"
