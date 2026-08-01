@@ -100,7 +100,7 @@ def build_parser() -> argparse.ArgumentParser:
         "excel-diario",
         help=(
             "Excel com 1 aba/pais: Dia | Taxa (%% a.d.) | Taxa acumulada (%%) "
-            "(juros compostos ContAgil 365)"
+            "(juros compostos, ano com 252 dias uteis)"
         ),
     )
     x.add_argument(

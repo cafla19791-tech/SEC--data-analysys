@@ -10,7 +10,7 @@
 Cada aba de país tem 3 colunas:
 
 1. **Dia**
-2. **Taxa (% a.d.)** — conversão ContAgil `(1 + taxa_aa/100)^(1/365) - 1`
+2. **Taxa (% a.d.)** — `(1 + taxa_aa/100)^(1/252) - 1` (ano com 252 dias úteis)
 3. **Taxa acumulada (%)** — juros compostos: `fator *= (1 + taxa_ad)`
 
 Abas auxiliares: `00_Legenda`, `01_Indice`.

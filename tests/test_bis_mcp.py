@@ -151,9 +151,9 @@ def test_extract_areas_csv(tmp_path: Path):
 def test_taxa_diaria_e_acumulada_composta():
     from bis_mcp.excel_diario import build_country_rows, taxa_diaria_composta_aa
 
-    # 14.5% a.a. -> % a.d. ContAgil
+    # 14.5% a.a. -> % a.d. com 252 dias uteis
     ad = taxa_diaria_composta_aa(14.5)
-    assert ad == pytest.approx((1.145) ** (1 / 365) - 1)
+    assert ad == pytest.approx((1.145) ** (1 / 252) - 1)
     rows = build_country_rows([("2024-01-01", 14.5), ("2024-01-02", 14.5)])
     assert rows[0]["Taxa (% a.d.)"] == pytest.approx(ad * 100)
     # compound 2 days

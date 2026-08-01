@@ -1,7 +1,7 @@
 """Gera Excel ContAgil: 1 aba/pais com dia, taxa % a.d. e acumulado composto.
 
-Convenção ContAgil (mesmo `gerar_fluxos.py`):
-  taxa_ad = (1 + taxa_aa)^(1/365) - 1
+Conversao anual -> diaria com ano de 252 dias uteis:
+  taxa_ad = (1 + taxa_aa)^(1/252) - 1
   fator_acum *= (1 + taxa_ad)
   taxa_acumulada = (fator_acum - 1) * 100
 """
@@ -69,9 +69,12 @@ AREA_NAMES: dict[str, str] = {
 }
 
 
+DIAS_UTEIS_ANO = 252
+
+
 def taxa_diaria_composta_aa(taxa_aa_pct: float) -> float:
-    """Taxa % a.a. -> taxa decimal ao dia (calendário 365), ContAgil."""
-    return (1.0 + float(taxa_aa_pct) / 100.0) ** (1.0 / 365.0) - 1.0
+    """Taxa % a.a. -> taxa decimal ao dia (ano com 252 dias uteis)."""
+    return (1.0 + float(taxa_aa_pct) / 100.0) ** (1.0 / DIAS_UTEIS_ANO) - 1.0
 
 
 def sheet_name(code: str, name: str) -> str:
@@ -282,7 +285,7 @@ def gerar_excel_diario(
             {"Item": "Origem dados", "Valor": source},
             {
                 "Item": "Conversao % a.a. -> % a.d.",
-                "Valor": "taxa_ad = (1 + taxa_aa/100)^(1/365) - 1   [ContAgil / calendario]",
+                "Valor": "taxa_ad = (1 + taxa_aa/100)^(1/252) - 1   [ano com 252 dias uteis]",
             },
             {
                 "Item": "Acumulacao (juros compostos)",
