@@ -148,6 +148,45 @@ def test_extract_areas_csv(tmp_path: Path):
     assert "US" not in text.splitlines()[1]
 
 
+def test_taxa_diaria_e_acumulada_composta():
+    from bis_mcp.excel_diario import build_country_rows, taxa_diaria_composta_aa
+
+    # 14.5% a.a. -> % a.d. ContAgil
+    ad = taxa_diaria_composta_aa(14.5)
+    assert ad == pytest.approx((1.145) ** (1 / 365) - 1)
+    rows = build_country_rows([("2024-01-01", 14.5), ("2024-01-02", 14.5)])
+    assert rows[0]["Taxa (% a.d.)"] == pytest.approx(ad * 100)
+    # compound 2 days
+    expected = ((1 + ad) ** 2 - 1) * 100
+    assert rows[1]["Taxa acumulada (%)"] == pytest.approx(expected)
+
+
+def test_gerar_excel_diario_from_flat(tmp_path: Path):
+    from bis_mcp import excel_diario
+
+    # Minimal daily flat rows
+    flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-01,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-02,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United States,A: Normal value
+"""
+    src = tmp_path / "WS_CBPOL_csv_flat.csv"
+    src.write_text(flat, encoding="utf-8")
+    out = tmp_path / "out.xlsx"
+    meta = excel_diario.gerar_excel_diario(out, csv_path=src, areas="BR,US")
+    assert meta["countries"] == 2
+    assert out.exists()
+    import pandas as pd
+
+    xls = pd.ExcelFile(out)
+    assert "00_Legenda" in xls.sheet_names
+    assert "01_Indice" in xls.sheet_names
+    br = [s for s in xls.sheet_names if s.startswith("BR")][0]
+    df = pd.read_excel(out, sheet_name=br)
+    assert list(df.columns) == ["Dia", "Taxa (% a.d.)", "Taxa acumulada (%)"]
+    assert len(df) == 2
+
+
 def test_cli_help():
     from bis_mcp.cli import build_parser
 

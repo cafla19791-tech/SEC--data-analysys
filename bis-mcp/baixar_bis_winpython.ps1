@@ -35,7 +35,8 @@ $files = @(
     "src/bis_mcp/__init__.py",
     "src/bis_mcp/cli.py",
     "src/bis_mcp/providers.py",
-    "src/bis_mcp/server.py"
+    "src/bis_mcp/server.py",
+    "src/bis_mcp/excel_diario.py"
 )
 
 if (-not (Test-Path -LiteralPath $dest)) {
@@ -116,6 +117,7 @@ Write-Host "  .\bis_cli.bat serie BR,US,XM --from 2020-01 --to 2026-07"
 Write-Host "  .\bis_cli.bat compare BR,US,XM,GB,JP"
 Write-Host "  .\bis_cli.bat download --dir .."
 Write-Host "  .\bis_cli.bat extract BR,US,XM --out ..\cbpol_BR_US_XM.csv"
+Write-Host "  .\bis_cli.bat excel-diario --out ..\cbpol_taxas_diarias_compostas.xlsx"
 Write-Host "  .\bis_cli.bat serie selic --local --last 12"
 Write-Host ""
 Write-Host "CSV ContAgil esperado (~450MB descompactado):"

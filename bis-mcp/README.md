@@ -53,6 +53,22 @@ O CSV flat descompactado tem **~450 MB**. Para o ContAgil, prefira SDMX (`serie`
 bis_cli.bat download --dir ..
 bis_cli.bat extract BR,US,XM --out ..\cbpol_BR_US_XM.csv
 bis_cli.bat serie BR --local --csv ..\cbpol_BR_US_XM.csv --last 24
+bis_cli.bat excel-diario --out ..\cbpol_taxas_diarias_compostas.xlsx
+```
+
+### Excel diário (1 aba por país)
+
+Gera `Dia | Taxa (% a.d.) | Taxa acumulada (%)` com juros compostos ContAgil:
+
+```text
+taxa_ad = (1 + taxa_aa/100)^(1/365) - 1
+fator  *= (1 + taxa_ad)
+taxa_acumulada_% = (fator - 1) * 100
+```
+
+```bat
+bis_cli.bat excel-diario --out ..\cbpol_taxas_diarias_compostas.xlsx
+bis_cli.bat excel-diario --areas BR,US,XM --from 2020-01-01 --out ..\cbpol_diario.xlsx
 ```
 
 ## Tools (MCP)

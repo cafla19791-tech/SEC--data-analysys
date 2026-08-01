@@ -96,6 +96,32 @@ def build_parser() -> argparse.ArgumentParser:
         help="M/D/A, ou vazio para todas as frequencias",
     )
 
+    x = sub.add_parser(
+        "excel-diario",
+        help=(
+            "Excel com 1 aba/pais: Dia | Taxa (%% a.d.) | Taxa acumulada (%%) "
+            "(juros compostos ContAgil 365)"
+        ),
+    )
+    x.add_argument(
+        "--out",
+        default="cbpol_taxas_diarias_compostas.xlsx",
+        help="Arquivo .xlsx de saida",
+    )
+    x.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
+    x.add_argument(
+        "--areas",
+        default="",
+        help="Filtrar paises (ex.: BR,US,XM). Vazio = todos com serie diaria",
+    )
+    x.add_argument("--from", dest="date_from", default="", help="YYYY-MM-DD")
+    x.add_argument("--to", dest="date_to", default="", help="YYYY-MM-DD")
+    x.add_argument(
+        "--sdmx",
+        action="store_true",
+        help="Forcar download SDMX (nao usa CSV local)",
+    )
+
     return p
 
 
@@ -155,6 +181,19 @@ def main(argv: list[str] | None = None) -> int:
                     args.out,
                     csv_path=args.csv or None,
                     freq=freq if freq else None,
+                )
+            )
+        elif args.command == "excel-diario":
+            from . import excel_diario
+
+            _print(
+                excel_diario.gerar_excel_diario(
+                    args.out,
+                    csv_path=args.csv or None,
+                    areas=args.areas or None,
+                    date_from=args.date_from or None,
+                    date_to=args.date_to or None,
+                    prefer_local=not args.sdmx,
                 )
             )
         else:
