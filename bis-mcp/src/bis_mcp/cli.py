@@ -122,6 +122,25 @@ def build_parser() -> argparse.ArgumentParser:
         help="Forcar download SDMX (nao usa CSV local)",
     )
 
+    p_per = sub.add_parser(
+        "excel-periodos",
+        help=(
+            "Excel com abas de taxa acumulada por periodo "
+            "(sem sab/dom; ordenado crescente)"
+        ),
+    )
+    p_per.add_argument(
+        "--out",
+        default="cbpol_taxas_acumuladas_periodos.xlsx",
+        help="Arquivo .xlsx de saida",
+    )
+    p_per.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
+    p_per.add_argument(
+        "--sdmx",
+        action="store_true",
+        help="Forcar SDMX (nao usa CSV local)",
+    )
+
     return p
 
 
@@ -193,6 +212,16 @@ def main(argv: list[str] | None = None) -> int:
                     areas=args.areas or None,
                     date_from=args.date_from or None,
                     date_to=args.date_to or None,
+                    prefer_local=not args.sdmx,
+                )
+            )
+        elif args.command == "excel-periodos":
+            from . import excel_periodos
+
+            _print(
+                excel_periodos.gerar_excel_periodos(
+                    args.out,
+                    csv_path=args.csv or None,
                     prefer_local=not args.sdmx,
                 )
             )

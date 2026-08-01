@@ -69,7 +69,19 @@ taxa_acumulada_% = (fator - 1) * 100
 ```bat
 bis_cli.bat excel-diario --out ..\cbpol_taxas_diarias_compostas.xlsx
 bis_cli.bat excel-diario --areas BR,US,XM --from 2020-01-01 --out ..\cbpol_diario.xlsx
+bis_cli.bat excel-periodos --out ..\cbpol_taxas_acumuladas_periodos.xlsx
 ```
+
+### Excel por períodos (ranking)
+
+Seis abas com **país + taxa acumulada** (sem sábados/domingos; ordem crescente):
+
+1. 01/01/1995–31/12/2002  
+2. 01/01/2003–30/04/2016  
+3. 01/05/2016–31/12/2018  
+4. 01/01/2019–31/12/2022  
+5. 01/01/2023–30/06/2026  
+6. taxa básica 01/01/2003–30/06/2026
 
 ## Tools (MCP)
 

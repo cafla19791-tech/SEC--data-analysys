@@ -187,6 +187,54 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United St
     assert len(df) == 2
 
 
+def test_acumular_periodo_exclui_fim_de_semana():
+    from datetime import date
+
+    from bis_mcp.excel_periodos import acumular_periodo, is_weekday
+
+    assert is_weekday(date(2024, 1, 5))  # sexta
+    assert not is_weekday(date(2024, 1, 6))  # sabado
+    assert not is_weekday(date(2024, 1, 7))  # domingo
+
+    # Sex 5/jan, Sab 6/jan, Dom 7/jan, Seg 8/jan — so 2 dias uteis
+    points = [
+        ("2024-01-05", 10.0),
+        ("2024-01-06", 10.0),
+        ("2024-01-07", 10.0),
+        ("2024-01-08", 10.0),
+    ]
+    out = acumular_periodo(points, date(2024, 1, 1), date(2024, 1, 31))
+    assert out is not None
+    assert out["n_dias_uteis"] == 2
+
+
+def test_gerar_excel_periodos(tmp_path: Path):
+    from bis_mcp import excel_periodos
+
+    flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2003-01-02,25.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2003-01-03,25.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2003-01-02,1.25,United States,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2003-01-03,1.25,United States,A: Normal value
+"""
+    src = tmp_path / "WS_CBPOL_csv_flat.csv"
+    src.write_text(flat, encoding="utf-8")
+    out = tmp_path / "periodos.xlsx"
+    meta = excel_periodos.gerar_excel_periodos(out, csv_path=src)
+    assert meta["periodos"] == 6
+    import pandas as pd
+
+    xls = pd.ExcelFile(out)
+    assert "02_2003_a_2016-04" in xls.sheet_names
+    df = pd.read_excel(out, sheet_name="02_2003_a_2016-04", header=1)
+    assert "Pais" in df.columns
+    assert "Taxa acumulada (%)" in df.columns
+    # ordenacao crescente
+    vals = df["Taxa acumulada (%)"].astype(float).tolist()
+    assert vals == sorted(vals)
+    assert df.iloc[0]["Pais"] == "United States"
+
+
 def test_cli_help():
     from bis_mcp.cli import build_parser
 
@@ -196,3 +244,4 @@ def test_cli_help():
     assert "download" in help_text
     assert "catalog" in help_text
     assert "extract" in help_text
+    assert "excel-periodos" in help_text
