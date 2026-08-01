@@ -17,7 +17,7 @@ from decimal import Decimal, getcontext
 from pathlib import Path
 from typing import Any, Iterable
 
-from . import providers
+from . import excel_format, providers
 
 getcontext().prec = 80
 
@@ -374,7 +374,19 @@ def gerar_excel_diario(
 
     with pd.ExcelWriter(out, engine=engine) as writer:
         legenda.to_excel(writer, sheet_name="00_Legenda", index=False)
-        pd.DataFrame(indice_rows).to_excel(writer, sheet_name="01_Indice", index=False)
+        excel_format.autosize_dataframe_sheet(
+            writer, "00_Legenda", legenda, engine=engine, max_width=80, padding=4
+        )
+        indice_df = pd.DataFrame(indice_rows)
+        indice_df.to_excel(writer, sheet_name="01_Indice", index=False)
+        excel_format.autosize_dataframe_sheet(
+            writer, "01_Indice", indice_df, engine=engine, padding=4
+        )
+
+        fmt_ad = fmt_ac = None
+        if engine == "xlsxwriter":
+            fmt_ad = writer.book.add_format({"num_format": "0.00000000"})
+            fmt_ac = writer.book.add_format({"num_format": "0.000000"})
 
         for code in sorted(country_tables.keys()):
             name = names.get(code, AREA_NAMES.get(code, code))
@@ -389,16 +401,19 @@ def gerar_excel_diario(
                 ]
             ]
             df.to_excel(writer, sheet_name=aba, index=False)
-            # Number formats
+            formats = None
             if engine == "xlsxwriter":
-                ws = writer.sheets[aba]
-                fmt_ad = writer.book.add_format({"num_format": "0.00000000"})
-                fmt_ac = writer.book.add_format({"num_format": "0.000000"})
-                ws.set_column(0, 0, 12)
-                ws.set_column(1, 1, 16, fmt_ad)
-                ws.set_column(2, 2, 20, fmt_ac)
-                ws.set_column(3, 3, 22, fmt_ac)
-                ws.set_column(4, 4, 22, fmt_ac)
+                formats = [None, fmt_ad, fmt_ac, fmt_ac, fmt_ac]
+            excel_format.autosize_dataframe_sheet(
+                writer,
+                aba,
+                df,
+                engine=engine,
+                col_formats=formats,
+                min_width=12,
+                max_width=36,
+                padding=4,
+            )
 
     return {
         "path": str(out.resolve()),

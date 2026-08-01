@@ -264,6 +264,22 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2003-01-03,1.25,United S
     assert df.iloc[0]["Pais"] == "United States"
 
 
+def test_column_widths_fit_headers():
+    from bis_mcp.excel_format import column_widths_for_frame
+
+    cols = [
+        "Dia",
+        "Taxa (% a.d.)",
+        "Taxa acumulada (%)",
+        "Taxa acumulada mês (%)",
+        "Taxa acumulada ano (%)",
+    ]
+    widths = column_widths_for_frame(cols, [["2024-01-31", 0.05, 12.3, 1.37, None]], padding=4)
+    assert widths[0] >= len("Dia") + 4
+    assert widths[3] >= len("Taxa acumulada mês (%)") + 4
+    assert widths[4] >= len("Taxa acumulada ano (%)") + 4
+
+
 def test_cli_help():
     from bis_mcp.cli import build_parser
 

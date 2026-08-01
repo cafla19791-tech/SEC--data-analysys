@@ -37,7 +37,8 @@ $files = @(
     "src/bis_mcp/providers.py",
     "src/bis_mcp/server.py",
     "src/bis_mcp/excel_diario.py",
-    "src/bis_mcp/excel_periodos.py"
+    "src/bis_mcp/excel_periodos.py",
+    "src/bis_mcp/excel_format.py"
 )
 
 if (-not (Test-Path -LiteralPath $dest)) {

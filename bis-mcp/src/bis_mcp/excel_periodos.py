@@ -13,7 +13,7 @@ from decimal import Decimal, getcontext
 from pathlib import Path
 from typing import Any
 
-from . import excel_diario, providers
+from . import excel_diario, excel_format, providers
 
 getcontext().prec = 80
 
@@ -228,6 +228,9 @@ def gerar_excel_periodos(
 
     with pd.ExcelWriter(out, engine=engine) as writer:
         legenda.to_excel(writer, sheet_name="00_Legenda", index=False)
+        excel_format.autosize_dataframe_sheet(
+            writer, "00_Legenda", legenda, engine=engine, max_width=80, padding=4
+        )
         # Indice dos periodos
         idx = pd.DataFrame(
             [
@@ -242,26 +245,29 @@ def gerar_excel_periodos(
             ]
         )
         idx.to_excel(writer, sheet_name="01_Indice", index=False)
+        excel_format.autosize_dataframe_sheet(
+            writer, "01_Indice", idx, engine=engine, max_width=70, padding=4
+        )
 
         for periodo, df in period_frames:
-            # Title row via sheet + first row comment in a small header sheet content:
-            # Keep data starting at row 1; put titulo in a companion? User asked only
-            # country + rate — include titulo as sheet name context; add Titulo row above?
-            # Cleaner: write titulo in A1 merged then table — keep simple flat table.
             sheet = _INVALID_SHEET.sub("-", periodo.sheet)[:31]
-            # Prepend a one-row description sheet content using two writes:
             df_out = df.copy()
             df_out.to_excel(writer, sheet_name=sheet, index=False, startrow=1)
             ws = writer.sheets[sheet]
             if engine == "xlsxwriter":
                 ws.write(0, 0, periodo.titulo)
-                ws.set_column(0, 0, 28)
-                ws.set_column(1, 1, 26)
-                ws.set_column(2, 2, 10)
-                ws.set_column(3, 3, 14)
-                ws.set_column(4, 5, 12)
             else:
                 ws.cell(row=1, column=1, value=periodo.titulo)
+            excel_format.autosize_dataframe_sheet(
+                writer,
+                sheet,
+                df_out,
+                engine=engine,
+                min_width=12,
+                max_width=40,
+                padding=4,
+                extra_title_width=len(periodo.titulo) + 4,
+            )
 
     return {
         "path": str(out.resolve()),
