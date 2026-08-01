@@ -234,7 +234,7 @@ def test_acumular_periodo_exclui_fim_de_semana():
     ]
     out = acumular_periodo(points, date(2024, 1, 1), date(2024, 1, 31))
     assert out is not None
-    assert out["n_dias_uteis"] == 2
+    assert out["n_obs"] == 2
 
 
 def test_gerar_excel_periodos(tmp_path: Path):
