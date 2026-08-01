@@ -1,7 +1,12 @@
-"""Excel resumo: taxa acumulada por pais em periodos fixos (sem sab/dom).
+"""Excel resumo: taxa acumulada por pais em periodos fixos.
 
-Conversao: taxa_ad = (1 + taxa_aa/100)^(1/252) - 1
-Acumulacao: fator *= (1 + taxa_ad)  apenas em dias de segunda a sexta.
+Frequencia diaria (padrao):
+  taxa_ad = (1 + taxa_aa/100)^(1/252) - 1
+  acumula apenas segunda a sexta.
+
+Frequencia mensal (--freq M):
+  taxa_am = (1 + taxa_aa/100)^(1/12) - 1
+  acumula todos os meses com observacao no periodo.
 """
 
 from __future__ import annotations
@@ -92,7 +97,7 @@ def acumular_periodo(
     inicio: date,
     fim: date,
 ) -> dict[str, Any] | None:
-    """Acumula compostos no periodo, ignorando sabados e domingos."""
+    """Acumula compostos diarios no periodo, ignorando sabados e domingos."""
     fator = Decimal(1)
     n = 0
     primeiro: date | None = None
@@ -113,9 +118,47 @@ def acumular_periodo(
         return None
     acum = (fator - Decimal(1)) * Decimal(100)
     return {
-        "n_dias_uteis": n,
+        "n_obs": n,
         "inicio_obs": primeiro.isoformat() if primeiro else None,
         "fim_obs": ultimo.isoformat() if ultimo else None,
+        "taxa_acumulada": excel_diario._as_excel_number(acum),
+        "taxa_acumulada_sort": float(acum)
+        if abs(float(acum)) < 1e307
+        else float("inf") * (1 if acum >= 0 else -1),
+    }
+
+
+def acumular_periodo_mensal(
+    points: list[tuple[str, float]],
+    inicio: date,
+    fim: date,
+) -> dict[str, Any] | None:
+    """Acumula compostos mensais no periodo (TIME_PERIOD YYYY-MM)."""
+    ym_from = f"{inicio:%Y-%m}"
+    ym_to = f"{fim:%Y-%m}"
+    fator = Decimal(1)
+    n = 0
+    primeiro: str | None = None
+    ultimo: str | None = None
+    for period, taxa_aa in points:
+        ym = str(period).strip()[:7]
+        if len(ym) < 7 or ym[4] != "-":
+            continue
+        if ym < ym_from or ym > ym_to:
+            continue
+        taxa_am = Decimal(str(excel_diario.taxa_mensal_composta_aa(taxa_aa)))
+        fator *= Decimal(1) + taxa_am
+        n += 1
+        if primeiro is None:
+            primeiro = ym
+        ultimo = ym
+    if n == 0:
+        return None
+    acum = (fator - Decimal(1)) * Decimal(100)
+    return {
+        "n_obs": n,
+        "inicio_obs": primeiro,
+        "fim_obs": ultimo,
         "taxa_acumulada": excel_diario._as_excel_number(acum),
         "taxa_acumulada_sort": float(acum)
         if abs(float(acum)) < 1e307
@@ -128,12 +171,17 @@ def gerar_excel_periodos(
     *,
     csv_path: str | Path | None = None,
     prefer_local: bool = True,
+    freq: str = "D",
 ) -> dict[str, Any]:
     """Gera workbook com 6 abas de ranking por periodo (+ legenda)."""
     try:
         import pandas as pd
     except ImportError as exc:  # pragma: no cover
         raise RuntimeError("pandas e necessario. pip install pandas openpyxl") from exc
+
+    freq_code = excel_diario._normalize_freq_code(freq)
+    if freq_code not in {"D", "M"}:
+        raise ValueError("excel-periodos aceita apenas frequencia D ou M")
 
     local = providers.find_local_flat_csv(csv_path) if prefer_local or csv_path else None
     if local is None and prefer_local:
@@ -143,45 +191,81 @@ def gerar_excel_periodos(
 
     date_from = min(p.inicio for p in PERIODOS).isoformat()
     date_to = max(p.fim for p in PERIODOS).isoformat()
+    # Monthly compare works with YYYY-MM prefix.
+    if freq_code == "M":
+        date_from = date_from[:7]
+        date_to = date_to[:7]
 
     if local is not None:
-        series, names = excel_diario._load_daily_from_flat(local, None, date_from, date_to)
+        series, names = excel_diario._load_freq_from_flat(
+            local, None, date_from, date_to, freq=freq_code
+        )
         source = f"local:{local}"
     else:
         # Fallback SDMX: known set (full universe via flat is preferred).
         codes = sorted(excel_diario.AREA_NAMES.keys())
-        series, names = excel_diario._load_daily_from_sdmx(codes, date_from, date_to)
+        series, names = excel_diario._load_freq_from_sdmx(
+            codes, date_from, date_to, freq=freq_code
+        )
         source = "sdmx"
 
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    legenda = pd.DataFrame(
-        [
-            {"Item": "Fonte", "Valor": "BIS WS_CBPOL (frequencia diaria)"},
-            {"Item": "Origem dados", "Valor": source},
-            {
-                "Item": "Conversao % a.a. -> % a.d.",
-                "Valor": "taxa_ad = (1 + taxa_aa/100)^(1/252) - 1",
-            },
-            {
-                "Item": "Dias excluidos",
-                "Valor": "Sabados e domingos (nao entram na acumulacao)",
-            },
-            {
-                "Item": "Acumulacao",
-                "Valor": "fator *= (1 + taxa_ad); taxa_acumulada_% = (fator - 1)*100",
-            },
-            {
-                "Item": "Ordenacao",
-                "Valor": "Cada aba em ordem crescente da taxa acumulada do periodo",
-            },
-            {
-                "Item": "Colunas",
-                "Valor": "Pais | Taxa acumulada (%)  (+ codigo e dias uteis usados)",
-            },
-        ]
-    )
+    if freq_code == "M":
+        legenda = pd.DataFrame(
+            [
+                {"Item": "Fonte", "Valor": "BIS WS_CBPOL (frequencia mensal)"},
+                {"Item": "Origem dados", "Valor": source},
+                {
+                    "Item": "Conversao % a.a. -> % a.m.",
+                    "Valor": "taxa_am = (1 + taxa_aa/100)^(1/12) - 1",
+                },
+                {
+                    "Item": "Acumulacao",
+                    "Valor": "fator *= (1 + taxa_am); taxa_acumulada_% = (fator - 1)*100",
+                },
+                {
+                    "Item": "Ordenacao",
+                    "Valor": "Cada aba em ordem crescente da taxa acumulada do periodo",
+                },
+                {
+                    "Item": "Colunas",
+                    "Valor": "Pais | Taxa acumulada (%)  (+ codigo e N_meses)",
+                },
+            ]
+        )
+        n_col = "N_meses"
+        acum_fn = acumular_periodo_mensal
+    else:
+        legenda = pd.DataFrame(
+            [
+                {"Item": "Fonte", "Valor": "BIS WS_CBPOL (frequencia diaria)"},
+                {"Item": "Origem dados", "Valor": source},
+                {
+                    "Item": "Conversao % a.a. -> % a.d.",
+                    "Valor": "taxa_ad = (1 + taxa_aa/100)^(1/252) - 1",
+                },
+                {
+                    "Item": "Dias excluidos",
+                    "Valor": "Sabados e domingos (nao entram na acumulacao)",
+                },
+                {
+                    "Item": "Acumulacao",
+                    "Valor": "fator *= (1 + taxa_ad); taxa_acumulada_% = (fator - 1)*100",
+                },
+                {
+                    "Item": "Ordenacao",
+                    "Valor": "Cada aba em ordem crescente da taxa acumulada do periodo",
+                },
+                {
+                    "Item": "Colunas",
+                    "Valor": "Pais | Taxa acumulada (%)  (+ codigo e dias uteis usados)",
+                },
+            ]
+        )
+        n_col = "N_dias_uteis"
+        acum_fn = acumular_periodo
 
     engine = "xlsxwriter"
     try:
@@ -193,7 +277,7 @@ def gerar_excel_periodos(
     for periodo in PERIODOS:
         rows: list[dict[str, Any]] = []
         for code in sorted(series.keys()):
-            stats = acumular_periodo(series[code], periodo.inicio, periodo.fim)
+            stats = acum_fn(series[code], periodo.inicio, periodo.fim)
             if stats is None:
                 continue
             pais = names.get(code) or excel_diario.AREA_NAMES.get(code, code)
@@ -202,7 +286,7 @@ def gerar_excel_periodos(
                     "Pais": pais,
                     periodo.coluna_taxa: stats["taxa_acumulada"],
                     "Codigo": code,
-                    "N_dias_uteis": stats["n_dias_uteis"],
+                    n_col: stats["n_obs"],
                     "Primeira_obs": stats["inicio_obs"],
                     "Ultima_obs": stats["fim_obs"],
                     "_sort": stats["taxa_acumulada_sort"],
@@ -219,7 +303,7 @@ def gerar_excel_periodos(
                     "Pais": r["Pais"],
                     periodo.coluna_taxa: r[periodo.coluna_taxa],
                     "Codigo": r["Codigo"],
-                    "N_dias_uteis": r["N_dias_uteis"],
+                    n_col: r[n_col],
                     "Primeira_obs": r["Primeira_obs"],
                     "Ultima_obs": r["Ultima_obs"],
                 }
@@ -276,4 +360,5 @@ def gerar_excel_periodos(
         "countries_loaded": len(series),
         "bytes": out.stat().st_size,
         "sheets": [p.sheet for p in PERIODOS],
+        "freq": freq_code,
     }

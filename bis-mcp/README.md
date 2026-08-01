@@ -74,11 +74,24 @@ taxa_acumulada_% = (fator - 1) * 100
 bis_cli.bat excel-diario --out ..\cbpol_taxas_diarias_compostas.xlsx
 bis_cli.bat excel-diario --areas BR,US,XM --from 2020-01-01 --out ..\cbpol_diario.xlsx
 bis_cli.bat excel-periodos --out ..\cbpol_taxas_acumuladas_periodos.xlsx
+bis_cli.bat excel-mensal --out ..\cbpol_taxas_mensais_compostas.xlsx
+bis_cli.bat excel-periodos --freq M --out ..\cbpol_taxas_acumuladas_periodos_mensal.xlsx
+```
+
+### Excel mensal (1 aba por país)
+
+`Mês | Taxa (% a.m.) | Taxa acumulada (%) | Taxa acumulada ano (%)`
+
+```text
+taxa_am = (1 + taxa_aa/100)^(1/12) - 1
 ```
 
 ### Excel por períodos (ranking)
 
-Seis abas com **país + taxa acumulada** (sem sábados/domingos; ordem crescente):
+Seis abas com **país + taxa acumulada** (ordem crescente):
+
+- `--freq D` (padrão): diário, sem sáb/dom, conversão 1/252  
+- `--freq M`: mensal, conversão 1/12  
 
 1. 01/01/1995–31/12/2002  
 2. 01/01/2003–30/04/2016  

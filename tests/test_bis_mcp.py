@@ -264,6 +264,63 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2003-01-03,1.25,United S
     assert df.iloc[0]["Pais"] == "United States"
 
 
+def test_taxa_mensal_e_periodos_mensal():
+    from bis_mcp.excel_diario import taxa_mensal_composta_aa
+    from bis_mcp.excel_mensal import build_country_rows_mensal
+    from bis_mcp.excel_periodos import acumular_periodo_mensal
+    from datetime import date
+
+    am = taxa_mensal_composta_aa(12.0)
+    assert am == pytest.approx((1.12) ** (1 / 12) - 1)
+    rows = build_country_rows_mensal(
+        [("2024-01", 12.0), ("2024-02", 12.0), ("2024-12", 12.0)]
+    )
+    assert rows[0]["Taxa acumulada ano (%)"] is None
+    assert rows[2]["Taxa acumulada ano (%)"] == pytest.approx(((1 + am) ** 3 - 1) * 100)
+
+    stats = acumular_periodo_mensal(
+        [("2024-01", 12.0), ("2024-02", 12.0), ("2024-03", 12.0)],
+        date(2024, 1, 1),
+        date(2024, 2, 29),
+    )
+    assert stats is not None
+    assert stats["n_obs"] == 2
+    assert stats["fim_obs"] == "2024-02"
+
+
+def test_gerar_excel_mensal_and_periodos(tmp_path: Path):
+    from bis_mcp import excel_mensal, excel_periodos
+
+    flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-01,25.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-02,25.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-01,1.25,United States,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United States,A: Normal value
+"""
+    src = tmp_path / "WS_CBPOL_csv_flat.csv"
+    src.write_text(flat, encoding="utf-8")
+    out_m = tmp_path / "mensal.xlsx"
+    meta = excel_mensal.gerar_excel_mensal(out_m, csv_path=src, areas="BR,US")
+    assert meta["countries"] == 2
+    import pandas as pd
+
+    br = [s for s in pd.ExcelFile(out_m).sheet_names if s.startswith("BR")][0]
+    df = pd.read_excel(out_m, sheet_name=br)
+    assert list(df.columns) == [
+        "Mês",
+        "Taxa (% a.m.)",
+        "Taxa acumulada (%)",
+        "Taxa acumulada ano (%)",
+    ]
+
+    out_p = tmp_path / "periodos_m.xlsx"
+    meta_p = excel_periodos.gerar_excel_periodos(out_p, csv_path=src, freq="M")
+    assert meta_p["freq"] == "M"
+    dfp = pd.read_excel(out_p, sheet_name="02_2003_a_2016-04", header=1)
+    assert "N_meses" in dfp.columns
+    assert dfp.iloc[0]["Pais"] == "United States"
+
+
 def test_column_widths_fit_headers():
     from bis_mcp.excel_format import column_widths_for_frame
 

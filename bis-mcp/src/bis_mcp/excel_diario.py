@@ -71,11 +71,17 @@ AREA_NAMES: dict[str, str] = {
 
 
 DIAS_UTEIS_ANO = 252
+MESES_ANO = 12
 
 
 def taxa_diaria_composta_aa(taxa_aa_pct: float) -> float:
     """Taxa % a.a. -> taxa decimal ao dia (ano com 252 dias uteis)."""
     return (1.0 + float(taxa_aa_pct) / 100.0) ** (1.0 / DIAS_UTEIS_ANO) - 1.0
+
+
+def taxa_mensal_composta_aa(taxa_aa_pct: float) -> float:
+    """Taxa % a.a. -> taxa decimal ao mes: (1+r)^(1/12)-1."""
+    return (1.0 + float(taxa_aa_pct) / 100.0) ** (1.0 / MESES_ANO) - 1.0
 
 
 def sheet_name(code: str, name: str) -> str:
@@ -84,20 +90,23 @@ def sheet_name(code: str, name: str) -> str:
     return base[:31]
 
 
-def _load_daily_from_flat(
+def _load_freq_from_flat(
     csv_path: Path,
     areas: set[str] | None,
     date_from: str | None,
     date_to: str | None,
+    *,
+    freq: str = "D",
 ) -> tuple[dict[str, list[tuple[str, float]]], dict[str, str]]:
-    """Return {area: [(date, taxa_aa_pct), ...]} sorted, plus area display names."""
+    """Return {area: [(period, taxa_aa_pct), ...]} sorted, plus area display names."""
+    freq_code = _normalize_freq_code(freq)
     series: dict[str, list[tuple[str, float]]] = defaultdict(list)
     names: dict[str, str] = {}
     with open(csv_path, "r", encoding="utf-8-sig", newline="") as fh:
         reader = csv.DictReader(fh)
         for raw in reader:
             data = providers._row_dict(raw)
-            if providers._norm_code(data.get("FREQ")) != "D":
+            if providers._norm_code(data.get("FREQ")) != freq_code:
                 continue
             area = providers._norm_code(data.get("REF_AREA"))
             if not area:
@@ -131,12 +140,35 @@ def _load_daily_from_flat(
     return series, names
 
 
-def _load_daily_from_sdmx(
-    area_codes: Iterable[str],
+def _normalize_freq_code(freq: str) -> str:
+    f = (freq or "D").strip().upper()
+    if f in {"D", "DAILY", "DIA", "DIARIO", "DIÁRIO"}:
+        return "D"
+    if f in {"M", "MONTHLY", "MES", "MENSAL"}:
+        return "M"
+    if f in {"A", "Y", "ANNUAL", "ANO", "ANUAL"}:
+        return "A"
+    raise ValueError(f"Frequencia invalida: {freq!r}")
+
+
+def _load_daily_from_flat(
+    csv_path: Path,
+    areas: set[str] | None,
     date_from: str | None,
     date_to: str | None,
 ) -> tuple[dict[str, list[tuple[str, float]]], dict[str, str]]:
+    return _load_freq_from_flat(csv_path, areas, date_from, date_to, freq="D")
+
+
+def _load_freq_from_sdmx(
+    area_codes: Iterable[str],
+    date_from: str | None,
+    date_to: str | None,
+    *,
+    freq: str = "D",
+) -> tuple[dict[str, list[tuple[str, float]]], dict[str, str]]:
     codes = [providers.resolve_area(a)["code"] for a in area_codes]
+    freq_code = _normalize_freq_code(freq)
     # Batch to keep URLs reasonable.
     series: dict[str, list[tuple[str, float]]] = defaultdict(list)
     names: dict[str, str] = {c: AREA_NAMES.get(c, c) for c in codes}
@@ -145,7 +177,7 @@ def _load_daily_from_sdmx(
         batch = codes[i : i + batch_size]
         data = providers.get_policy_rates(
             ",".join(batch),
-            freq="D",
+            freq=freq_code,
             date_from=date_from,
             date_to=date_to,
         )
@@ -156,6 +188,14 @@ def _load_daily_from_sdmx(
     for code in series:
         series[code].sort(key=lambda x: x[0])
     return series, names
+
+
+def _load_daily_from_sdmx(
+    area_codes: Iterable[str],
+    date_from: str | None,
+    date_to: str | None,
+) -> tuple[dict[str, list[tuple[str, float]]], dict[str, str]]:
+    return _load_freq_from_sdmx(area_codes, date_from, date_to, freq="D")
 
 
 def _as_excel_number(value: Decimal) -> float | str:

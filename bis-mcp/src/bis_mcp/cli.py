@@ -126,7 +126,7 @@ def build_parser() -> argparse.ArgumentParser:
         "excel-periodos",
         help=(
             "Excel com abas de taxa acumulada por periodo "
-            "(sem sab/dom; ordenado crescente)"
+            "(D: sem sab/dom; M: mensal; ordenado crescente)"
         ),
     )
     p_per.add_argument(
@@ -136,9 +136,40 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_per.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
     p_per.add_argument(
+        "--freq",
+        default="D",
+        help="D = diaria (padrao) ou M = mensal",
+    )
+    p_per.add_argument(
         "--sdmx",
         action="store_true",
         help="Forcar SDMX (nao usa CSV local)",
+    )
+
+    xm = sub.add_parser(
+        "excel-mensal",
+        help=(
+            "Excel com 1 aba/pais: Mes | Taxa (%% a.m.) | Taxa acumulada (%%) "
+            "(juros compostos, 1/12)"
+        ),
+    )
+    xm.add_argument(
+        "--out",
+        default="cbpol_taxas_mensais_compostas.xlsx",
+        help="Arquivo .xlsx de saida",
+    )
+    xm.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
+    xm.add_argument(
+        "--areas",
+        default="",
+        help="Filtrar paises (ex.: BR,US,XM). Vazio = todos com serie mensal",
+    )
+    xm.add_argument("--from", dest="date_from", default="", help="YYYY-MM ou YYYY-MM-DD")
+    xm.add_argument("--to", dest="date_to", default="", help="YYYY-MM ou YYYY-MM-DD")
+    xm.add_argument(
+        "--sdmx",
+        action="store_true",
+        help="Forcar download SDMX (nao usa CSV local)",
     )
 
     return p
@@ -222,6 +253,20 @@ def main(argv: list[str] | None = None) -> int:
                 excel_periodos.gerar_excel_periodos(
                     args.out,
                     csv_path=args.csv or None,
+                    prefer_local=not args.sdmx,
+                    freq=args.freq,
+                )
+            )
+        elif args.command == "excel-mensal":
+            from . import excel_mensal
+
+            _print(
+                excel_mensal.gerar_excel_mensal(
+                    args.out,
+                    csv_path=args.csv or None,
+                    areas=args.areas or None,
+                    date_from=args.date_from or None,
+                    date_to=args.date_to or None,
                     prefer_local=not args.sdmx,
                 )
             )
