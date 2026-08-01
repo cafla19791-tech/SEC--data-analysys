@@ -23,6 +23,12 @@ Uso (ContAgil / WinPython) — capitalização mensal:
     --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
     --fatores "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\fator_acumulado_SELIC_TJLP_TLP.xlsx"
 
+  # OPERACOES DIRETAS (arquivo único na pasta winpython):
+  python3 scripts/contagil_fluxos.py \\
+    --excel "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\OPERACOES DIRETAS.xlsx" \\
+    --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
+    --fatores "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\fator_acumulado_SELIC_TJLP_TLP.xlsx"
+
   # STP diário (legado ContAgil col D):
   python3 scripts/contagil_fluxos.py \\
     --massa-dados "...\\dados" --pasta-saida "...\\saida" \\

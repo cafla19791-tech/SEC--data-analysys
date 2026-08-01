@@ -502,6 +502,11 @@ EXCEL_COLUMNS = {
     "Valor Desembolsado Reais": "valor_desembolsado",
     "Valor da operação em Reais": "valor_desembolsado",
     "Valor da Operação em Reais": "valor_desembolsado",
+    # OPERACOES DIRETAS / não automáticas (portal ContAgil)
+    "Valor contratado Reais": "valor_contratado",
+    "Valor Contratado Reais": "valor_contratado",
+    "Valor contratado em Reais": "valor_contratado",
+    "Valor Contratado em Reais": "valor_contratado",
     "Juros": "juros",
     "Prazo - Carência (meses)": "prazo_carencia",
     "Prazo de Carência (meses)": "prazo_carencia",
@@ -511,21 +516,28 @@ EXCEL_COLUMNS = {
     "Instituicao Financeira Credenciada": "agente",
     "Custo financeiro": "custo_financeiro",
     "Custo Financeiro": "custo_financeiro",
+    "Forma de apoio": "forma_de_apoio",
+    "Forma de Apoio": "forma_de_apoio",
+    "Número do contrato": "numero_contrato",
+    "Numero do contrato": "numero_contrato",
 }
 
 CSV_COLUMNS = {
     "data_da_contratacao": "data_contratacao",
     "valor_desembolsado_reais": "valor_desembolsado",
     "valor_da_operacao_em_reais": "valor_desembolsado",
+    "valor_contratado_reais": "valor_contratado",
     "juros": "juros",
     "prazo_carencia_meses": "prazo_carencia",
     "prazo_amortizacao_meses": "prazo_amortizacao",
     "instituicao_financeira_credenciada": "agente",
     "custo_financeiro": "custo_financeiro",
+    "forma_de_apoio": "forma_de_apoio",
+    "numero_do_contrato": "numero_contrato",
 }
 
 # Aliases após normalização (minúsculas, sem acento/símbolos).
-# Cobre ContAgil, portal BNDES e variações "BNDES INDIRETAS *.xlsx".
+# Cobre ContAgil, portal BNDES, INDIRETAS e OPERACOES DIRETAS.
 NORM_COLUMN_ALIASES: dict[str, str] = {
     "data_da_contratacao": "data_contratacao",
     "data_contratacao": "data_contratacao",
@@ -536,6 +548,9 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "valor_da_operacao_em_reais": "valor_desembolsado",
     "valor_da_operacao_reais": "valor_desembolsado",
     "valor_da_operacao": "valor_desembolsado",
+    "valor_contratado_reais": "valor_contratado",
+    "valor_contratado_em_reais": "valor_contratado",
+    "valor_contratado": "valor_contratado",
     "juros": "juros",
     "taxa_juros": "juros",
     "prazo_carencia_meses": "prazo_carencia",
@@ -552,6 +567,25 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "agente": "agente",
     "custo_financeiro": "custo_financeiro",
     "custo_financeiro_da_operacao": "custo_financeiro",
+    "forma_de_apoio": "forma_de_apoio",
+    "numero_do_contrato": "numero_contrato",
+    "numero_contrato": "numero_contrato",
+}
+
+AGENTE_BNDES_DIRETA = "BNDES"
+_AGENTE_PLACEHOLDER = {
+    "",
+    "-",
+    "--",
+    "---",
+    "----------",
+    "nan",
+    "none",
+    "nat",
+    "n/a",
+    "na",
+    "nao informado",
+    "não informado",
 }
 
 
@@ -575,7 +609,11 @@ def _normalize_nome_coluna(name: object) -> str:
 
 
 def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, str]]:
-    """Renomeia colunas ContAgil/BNDES → canônicas (exato + normalizado)."""
+    """Renomeia colunas ContAgil/BNDES → canônicas (exato + normalizado).
+
+    OPERACOES DIRETAS: preferem ``valor_desembolsado``; se ausente, usam
+    ``valor_contratado`` como principal.
+    """
     rename: dict[str, str] = {}
     used_targets: set[str] = set()
 
@@ -593,6 +631,8 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
             # ContAgil: "Valor Desembolsado R$ (*)" → valor_desembolsado_r_*
             if key.startswith("valor_desembolsado"):
                 target = "valor_desembolsado"
+            elif key.startswith("valor_contratado"):
+                target = "valor_contratado"
             elif key.startswith("valor_da_operacao"):
                 target = "valor_desembolsado"
             elif "prazo" in key and "carencia" in key:
@@ -603,11 +643,20 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
                 target = "agente"
             elif key.startswith("custo_financeiro"):
                 target = "custo_financeiro"
+            elif key.startswith("forma_de_apoio"):
+                target = "forma_de_apoio"
+            elif "numero" in key and "contrato" in key:
+                target = "numero_contrato"
         if target is not None and target not in used_targets:
             rename[col] = target
             used_targets.add(target)
 
-    return df.rename(columns=rename), rename
+    mapped = df.rename(columns=rename)
+    # Diretas: se só há valor contratado, promove a valor_desembolsado
+    if "valor_desembolsado" not in mapped.columns and "valor_contratado" in mapped.columns:
+        mapped = mapped.rename(columns={"valor_contratado": "valor_desembolsado"})
+        rename = {**rename, "valor_contratado": "valor_desembolsado"}
+    return mapped, rename
 
 
 def limpar_valor(series: pd.Series) -> pd.Series:
@@ -861,20 +910,36 @@ def load_from_csv(path: Path) -> pd.DataFrame:
     return _prepare_contracts(df)
 
 
-def _normalizar_agente(series: pd.Series) -> pd.Series:
+def _normalizar_agente(
+    series: pd.Series,
+    forma_de_apoio: pd.Series | None = None,
+) -> pd.Series:
+    """Normaliza agente; em operações DIRETAS, placeholders viram BNDES."""
     s = series.astype(str).str.strip()
-    s = s.replace(
-        {
-            "": AGENTE_NAO_INFORMADO,
-            "nan": AGENTE_NAO_INFORMADO,
-            "None": AGENTE_NAO_INFORMADO,
-            "NaT": AGENTE_NAO_INFORMADO,
-        }
-    )
-    return s.fillna(AGENTE_NAO_INFORMADO)
+    low = s.str.lower()
+    placeholder = low.isin(_AGENTE_PLACEHOLDER) | s.str.fullmatch(r"-+", na=False)
+    out = s.mask(placeholder, other=pd.NA)
+
+    if forma_de_apoio is not None:
+        forma = forma_de_apoio.astype(str).str.upper()
+        direta = forma.str.contains("DIRETA", na=False) & ~forma.str.contains(
+            "INDIRETA", na=False
+        )
+        out = out.mask(out.isna() & direta, other=AGENTE_BNDES_DIRETA)
+
+    return out.fillna(AGENTE_NAO_INFORMADO)
 
 
 def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
+    # Diretas: preenche desembolsado com contratado quando faltar
+    work = df.copy()
+    if "valor_desembolsado" not in work.columns and "valor_contratado" in work.columns:
+        work["valor_desembolsado"] = work["valor_contratado"]
+    elif "valor_desembolsado" in work.columns and "valor_contratado" in work.columns:
+        vd = limpar_valor(work["valor_desembolsado"])
+        vc = limpar_valor(work["valor_contratado"])
+        work["valor_desembolsado"] = vd.fillna(vc)
+
     required = [
         "data_contratacao",
         "valor_desembolsado",
@@ -882,31 +947,46 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
         "prazo_carencia",
         "prazo_amortizacao",
     ]
-    missing = [c for c in required if c not in df.columns]
+    missing = [c for c in required if c not in work.columns]
     if missing:
         raise ValueError(f"Colunas ausentes: {missing}. Disponíveis: {list(df.columns)}")
 
-    if "agente" in df.columns:
-        agente = _normalizar_agente(df["agente"])
+    forma = work["forma_de_apoio"] if "forma_de_apoio" in work.columns else None
+    if "agente" in work.columns:
+        agente = _normalizar_agente(work["agente"], forma_de_apoio=forma)
+    elif forma is not None:
+        # Sem coluna de agente: DIRETA → BNDES
+        forma_u = forma.astype(str).str.upper()
+        direta = forma_u.str.contains("DIRETA", na=False) & ~forma_u.str.contains(
+            "INDIRETA", na=False
+        )
+        agente = pd.Series(
+            [AGENTE_BNDES_DIRETA if d else AGENTE_NAO_INFORMADO for d in direta],
+            index=work.index,
+        )
     else:
-        agente = pd.Series([AGENTE_NAO_INFORMADO] * len(df), index=df.index)
+        agente = pd.Series([AGENTE_NAO_INFORMADO] * len(work), index=work.index)
 
-    if "custo_financeiro" in df.columns:
-        custo = df["custo_financeiro"].astype(str).fillna("")
+    if "custo_financeiro" in work.columns:
+        custo = work["custo_financeiro"].astype(str).fillna("")
     else:
-        custo = pd.Series([""] * len(df), index=df.index)
+        custo = pd.Series([""] * len(work), index=work.index)
 
     out = pd.DataFrame(
         {
-            "data_contratacao": parse_datas(df["data_contratacao"]),
-            "valor_desembolsado": limpar_valor(df["valor_desembolsado"]),
-            "juros": limpar_valor(df["juros"]),
-            "prazo_carencia": limpar_valor(df["prazo_carencia"]).fillna(0),
-            "prazo_amortizacao": limpar_valor(df["prazo_amortizacao"]),
+            "data_contratacao": parse_datas(work["data_contratacao"]),
+            "valor_desembolsado": limpar_valor(work["valor_desembolsado"]),
+            "juros": limpar_valor(work["juros"]),
+            "prazo_carencia": limpar_valor(work["prazo_carencia"]).fillna(0),
+            "prazo_amortizacao": limpar_valor(work["prazo_amortizacao"]),
             "agente": agente.values,
             "custo_financeiro": custo.values,
         }
     )
+    if "numero_contrato" in work.columns:
+        out["numero_contrato"] = work["numero_contrato"].astype(str).values
+    if forma is not None:
+        out["forma_de_apoio"] = forma.astype(str).values
 
     before = len(out)
     out = out.dropna(

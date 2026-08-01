@@ -89,6 +89,62 @@ def test_mapear_colunas_variante_bndes_indiretas():
     assert "data_contratacao" in rename.values()
 
 
+def _df_operacoes_diretas() -> pd.DataFrame:
+    """Layout portal/ContAgil OPERACOES DIRETAS.xlsx (não automáticas)."""
+    return pd.DataFrame(
+        {
+            "data_da_contratacao": ["2002-01-02", "2002-01-03", "2009-03-15"],
+            "valor_contratado_reais": [9090000.0, 706600.0, 100000.0],
+            "valor_desembolsado_reais": [9007445.1, 745030.36, None],
+            "custo_financeiro": ["TJLP", "SEM CUSTO", "TAXA FIXA"],
+            "juros": [2.5, 0.0, 6.0],
+            "prazo_carencia_meses": [24, 0, 6],
+            "prazo_amortizacao_meses": [72, 0, 48],  # 0 = não reembolsável
+            "forma_de_apoio": ["DIRETA", "DIRETA", "DIRETA"],
+            "instituicao_financeira_credenciada": ["----------", "----------", "----------"],
+            "numero_do_contrato": ["100", "101", "102"],
+        }
+    )
+
+
+def test_mapear_e_carregar_operacoes_diretas(tmp_path: Path):
+    from scripts.gerar_fluxos import AGENTE_BNDES_DIRETA
+
+    df_raw = _df_operacoes_diretas()
+    assert _excel_tem_colunas_contratos(df_raw)
+    mapped, _ = _mapear_colunas_contratos(df_raw)
+    assert "valor_desembolsado" in mapped.columns
+
+    path = tmp_path / "OPERACOES DIRETAS.xlsx"
+    df_raw.to_excel(path, index=False)
+    df = load_from_excel(path)
+    # linha com prazo_amortizacao=0 (não reembolsável) é descartada
+    assert len(df) == 2
+    assert set(df["agente"]) == {AGENTE_BNDES_DIRETA}
+    # desembolsado nulo usa valor contratado
+    row = df.loc[df["numero_contrato"] == "102"].iloc[0]
+    assert row["valor_desembolsado"] == 100000.0
+
+
+def test_operacoes_diretas_so_valor_contratado(tmp_path: Path):
+    path = tmp_path / "OPERACOES DIRETAS.xlsx"
+    pd.DataFrame(
+        {
+            "Data da Contratação": ["15/03/2009"],
+            "Valor contratado Reais": [250000.0],
+            "Juros": [4.0],
+            "Prazo de Carência (meses)": [3],
+            "Prazo de Amortização (meses)": [24],
+            "Forma de Apoio": ["DIRETA"],
+            "Custo Financeiro": ["TJLP"],
+        }
+    ).to_excel(path, index=False)
+    df = load_from_excel(path)
+    assert len(df) == 1
+    assert df.iloc[0]["valor_desembolsado"] == 250000.0
+    assert df.iloc[0]["agente"] == "BNDES"
+
+
 def test_load_from_excel_header_offset(tmp_path: Path):
     """Planilha com 2 linhas de título antes do header — comum em exports ContAgil."""
     path = tmp_path / "BNDES INDIRETAS 2009.xlsx"

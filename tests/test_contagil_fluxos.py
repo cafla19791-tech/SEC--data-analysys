@@ -202,6 +202,55 @@ def test_main_massa_dados_com_fatores_mensais(tmp_path: Path):
     assert "impacto_fiscal" in df.columns
 
 
+def test_main_excel_operacoes_diretas(tmp_path: Path):
+    """CLI ContAgil: --excel OPERACOES DIRETAS.xlsx + --fatores."""
+    saida = tmp_path / "saida"
+    saida.mkdir()
+    excel = tmp_path / "OPERACOES DIRETAS.xlsx"
+    pd.DataFrame(
+        {
+            "data_da_contratacao": ["2009-03-15"],
+            "valor_contratado_reais": [100000.0],
+            "valor_desembolsado_reais": [98000.0],
+            "custo_financeiro": ["TJLP"],
+            "juros": [2.5],
+            "prazo_carencia_meses": [6],
+            "prazo_amortizacao_meses": [12],
+            "forma_de_apoio": ["DIRETA"],
+            "instituicao_financeira_credenciada": ["----------"],
+        }
+    ).to_excel(excel, index=False)
+
+    fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    datas = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
+    fator = (1.009) ** pd.Series(range(1, len(datas) + 1))
+    pd.DataFrame(
+        {
+            "Data": datas,
+            "Taxa_Mensal_%": [0.9] * len(datas),
+            "Fator_Acumulado": fator.values,
+        }
+    ).to_excel(fatores, index=False)
+
+    rc = contagil_main(
+        [
+            "--excel",
+            str(excel),
+            "--pasta-saida",
+            str(saida),
+            "--fatores",
+            str(fatores),
+        ]
+    )
+    assert rc == 0
+    out = saida / "fluxos_OPERACOES DIRETAS.xlsx"
+    assert out.exists()
+    df = pd.read_excel(out)
+    assert len(df) > 0
+    assert "Instituição Financeira" in df.columns
+    assert (df["Instituição Financeira"] == "BNDES").all()
+
+
 def test_massa_dados_inexistente_erro_claro(tmp_path: Path):
     missing = tmp_path / "dados_inexistente"
     try:
