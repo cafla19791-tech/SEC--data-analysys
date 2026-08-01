@@ -9,6 +9,7 @@
 | `cbpol_taxas_acumuladas_periodos.xlsx` | Ranking por país da taxa acumulada em 6 períodos (diário, sem sáb/dom) |
 | `cbpol_taxas_mensais_compostas.xlsx` | 1 aba/país com série mensal composta (1/12) |
 | `cbpol_taxas_acumuladas_periodos_mensal.xlsx` | Ranking por períodos com taxas **mensais** |
+| `pdf/*.pdf` | Versões PDF das planilhas (LibreOffice) |
 
 Cada aba de país tem 5 colunas:
 

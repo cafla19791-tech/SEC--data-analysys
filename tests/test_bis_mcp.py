@@ -321,6 +321,25 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United St
     assert dfp.iloc[0]["Pais"] == "United States"
 
 
+def test_para_pdf_requires_soffice_or_converts(tmp_path: Path):
+    from bis_mcp import pdf_export
+
+    if not pdf_export.find_soffice():
+        # Ambiente sem LibreOffice: apenas valida a mensagem.
+        with pytest.raises(RuntimeError, match="LibreOffice"):
+            pdf_export.xlsx_para_pdf(tmp_path / "x.xlsx")
+        return
+
+    # Mini workbook
+    import pandas as pd
+
+    xlsx = tmp_path / "mini.xlsx"
+    pd.DataFrame({"A": [1, 2], "B": [3, 4]}).to_excel(xlsx, index=False)
+    out = pdf_export.xlsx_para_pdf(xlsx, out_dir=tmp_path)
+    assert Path(out["path"]).is_file()
+    assert out["bytes"] > 0
+
+
 def test_column_widths_fit_headers():
     from bis_mcp.excel_format import column_widths_for_frame
 

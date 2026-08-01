@@ -14,3 +14,5 @@ WS_CBPOL_csv_flat.zip
 *.xlsx
 !output/
 !output/**/*.xlsx
+!output/pdf/
+!output/pdf/**/*.pdf

@@ -76,7 +76,10 @@ bis_cli.bat excel-diario --areas BR,US,XM --from 2020-01-01 --out ..\cbpol_diari
 bis_cli.bat excel-periodos --out ..\cbpol_taxas_acumuladas_periodos.xlsx
 bis_cli.bat excel-mensal --out ..\cbpol_taxas_mensais_compostas.xlsx
 bis_cli.bat excel-periodos --freq M --out ..\cbpol_taxas_acumuladas_periodos_mensal.xlsx
+bis_cli.bat para-pdf ..\cbpol_taxas_acumuladas_periodos.xlsx --outdir ..\pdf
 ```
+
+PDFs pre-gerados: [`output/pdf/`](../output/pdf/).
 
 ### Excel mensal (1 aba por país)
 

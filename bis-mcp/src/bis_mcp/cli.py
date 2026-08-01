@@ -172,6 +172,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Forcar download SDMX (nao usa CSV local)",
     )
 
+    pdf = sub.add_parser(
+        "para-pdf",
+        help="Converte um .xlsx em PDF (requer LibreOffice/soffice)",
+    )
+    pdf.add_argument("xlsx", help="Caminho do arquivo .xlsx")
+    pdf.add_argument(
+        "--outdir",
+        default="",
+        help="Pasta de saida (default: mesma pasta do xlsx)",
+    )
+
     return p
 
 
@@ -268,6 +279,15 @@ def main(argv: list[str] | None = None) -> int:
                     date_from=args.date_from or None,
                     date_to=args.date_to or None,
                     prefer_local=not args.sdmx,
+                )
+            )
+        elif args.command == "para-pdf":
+            from . import pdf_export
+
+            _print(
+                pdf_export.xlsx_para_pdf(
+                    args.xlsx,
+                    out_dir=args.outdir or None,
                 )
             )
         else:
