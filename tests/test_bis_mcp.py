@@ -161,6 +161,29 @@ def test_taxa_diaria_e_acumulada_composta():
     assert rows[1]["Taxa acumulada (%)"] == pytest.approx(expected)
 
 
+def test_acumulado_mes_e_ano_so_no_ultimo_dia():
+    from bis_mcp.excel_diario import build_country_rows, taxa_diaria_composta_aa
+
+    ad = taxa_diaria_composta_aa(10.0)
+    points = [
+        ("2024-01-30", 10.0),
+        ("2024-01-31", 10.0),
+        ("2024-02-01", 10.0),
+        ("2024-12-31", 10.0),
+    ]
+    rows = build_country_rows(points)
+    assert rows[0]["Taxa acumulada mês (%)"] is None
+    assert rows[1]["Taxa acumulada mês (%)"] == pytest.approx(((1 + ad) ** 2 - 1) * 100)
+    assert rows[1]["Taxa acumulada ano (%)"] is None
+    assert rows[2]["Taxa acumulada mês (%)"] == pytest.approx(ad * 100)  # so feb/1
+    # ultimo dia do ano na serie
+    assert rows[3]["Taxa acumulada ano (%)"] is not None
+    # ano 2024: dias 30/01, 31/01, 01/02, 31/12 = 4 dias
+    assert rows[3]["Taxa acumulada ano (%)"] == pytest.approx(((1 + ad) ** 4 - 1) * 100)
+    assert rows[0]["Taxa acumulada ano (%)"] is None
+    assert rows[2]["Taxa acumulada ano (%)"] is None
+
+
 def test_gerar_excel_diario_from_flat(tmp_path: Path):
     from bis_mcp import excel_diario
 
@@ -183,7 +206,13 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United St
     assert "01_Indice" in xls.sheet_names
     br = [s for s in xls.sheet_names if s.startswith("BR")][0]
     df = pd.read_excel(out, sheet_name=br)
-    assert list(df.columns) == ["Dia", "Taxa (% a.d.)", "Taxa acumulada (%)"]
+    assert list(df.columns) == [
+        "Dia",
+        "Taxa (% a.d.)",
+        "Taxa acumulada (%)",
+        "Taxa acumulada mês (%)",
+        "Taxa acumulada ano (%)",
+    ]
     assert len(df) == 2
 
 

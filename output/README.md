@@ -8,11 +8,13 @@
 | `cbpol_taxas_diarias_compostas_desde_2000.xlsx` | Mesmo layout, a partir de **2000-01-01** (recomendado ContAgil) |
 | `cbpol_taxas_acumuladas_periodos.xlsx` | Ranking por país da taxa acumulada em 6 períodos (sem sáb/dom) |
 
-Cada aba de país tem 3 colunas:
+Cada aba de país tem 5 colunas:
 
 1. **Dia**
 2. **Taxa (% a.d.)** — `(1 + taxa_aa/100)^(1/252) - 1` (ano com 252 dias úteis)
-3. **Taxa acumulada (%)** — juros compostos: `fator *= (1 + taxa_ad)`
+3. **Taxa acumulada (%)** — juros compostos desde o início da série
+4. **Taxa acumulada mês (%)** — só no último dia do mês; compostos do mês
+5. **Taxa acumulada ano (%)** — só no último dia do ano; compostos do ano
 
 Abas auxiliares: `00_Legenda`, `01_Indice`.
 

@@ -12,6 +12,7 @@ import csv
 import math
 import re
 from collections import defaultdict
+from datetime import datetime
 from decimal import Decimal, getcontext
 from pathlib import Path
 from typing import Any, Iterable
@@ -171,22 +172,63 @@ def _as_excel_number(value: Decimal) -> float | str:
     return f
 
 
+def _parse_day(dia: str):
+    return datetime.strptime(str(dia)[:10], "%Y-%m-%d").date()
+
+
 def build_country_rows(points: list[tuple[str, float]]) -> list[dict[str, Any]]:
-    """Dia | Taxa (% a.d.) | Taxa acumulada (%) com juros compostos."""
-    rows: list[dict[str, Any]] = []
-    fator = Decimal(1)
+    """Dia | taxa a.d. | acumulada | acumulada mes (fim mes) | acumulada ano (fim ano)."""
+    parsed: list[tuple[Any, str, Decimal, float]] = []
     for dia, taxa_aa_pct in points:
         if taxa_aa_pct is None or not math.isfinite(float(taxa_aa_pct)):
             continue
+        try:
+            d = _parse_day(dia)
+        except ValueError:
+            continue
         taxa_ad = Decimal(str(taxa_diaria_composta_aa(taxa_aa_pct)))
+        parsed.append((d, str(dia)[:10], taxa_ad, float(taxa_aa_pct)))
+
+    if not parsed:
+        return []
+
+    last_of_month: dict[tuple[int, int], Any] = {}
+    last_of_year: dict[int, Any] = {}
+    for d, *_rest in parsed:
+        ym = (d.year, d.month)
+        if ym not in last_of_month or d > last_of_month[ym]:
+            last_of_month[ym] = d
+        if d.year not in last_of_year or d > last_of_year[d.year]:
+            last_of_year[d.year] = d
+
+    rows: list[dict[str, Any]] = []
+    fator = Decimal(1)
+    fator_mes: dict[tuple[int, int], Decimal] = defaultdict(lambda: Decimal(1))
+    fator_ano: dict[int, Decimal] = defaultdict(lambda: Decimal(1))
+
+    for d, dia, taxa_ad, taxa_aa_pct in parsed:
         fator *= Decimal(1) + taxa_ad
-        acum = (fator - Decimal(1)) * Decimal(100)
+        ym = (d.year, d.month)
+        fator_mes[ym] *= Decimal(1) + taxa_ad
+        fator_ano[d.year] *= Decimal(1) + taxa_ad
+
+        mes_val = None
+        ano_val = None
+        if d == last_of_month[ym]:
+            mes_val = _as_excel_number((fator_mes[ym] - Decimal(1)) * Decimal(100))
+        if d == last_of_year[d.year]:
+            ano_val = _as_excel_number((fator_ano[d.year] - Decimal(1)) * Decimal(100))
+
         rows.append(
             {
                 "Dia": dia,
                 "Taxa (% a.d.)": float(taxa_ad * Decimal(100)),
-                "Taxa acumulada (%)": _as_excel_number(acum),
-                "_taxa_aa": float(taxa_aa_pct),
+                "Taxa acumulada (%)": _as_excel_number(
+                    (fator - Decimal(1)) * Decimal(100)
+                ),
+                "Taxa acumulada mês (%)": mes_val,
+                "Taxa acumulada ano (%)": ano_val,
+                "_taxa_aa": taxa_aa_pct,
                 "_fator": fator,
             }
         )
@@ -292,8 +334,25 @@ def gerar_excel_diario(
                 "Valor": "fator *= (1 + taxa_ad);  taxa_acumulada_% = (fator - 1)*100",
             },
             {
+                "Item": "Taxa acumulada mes (%)",
+                "Valor": (
+                    "Preenchida so no ultimo dia do mes da serie; "
+                    "compostos apenas com as taxas a.d. daquele mes"
+                ),
+            },
+            {
+                "Item": "Taxa acumulada ano (%)",
+                "Valor": (
+                    "Preenchida so no ultimo dia do ano da serie; "
+                    "compostos apenas com as taxas a.d. daquele ano"
+                ),
+            },
+            {
                 "Item": "Colunas por pais",
-                "Valor": "Dia | Taxa (% a.d.) | Taxa acumulada (%)",
+                "Valor": (
+                    "Dia | Taxa (% a.d.) | Taxa acumulada (%) | "
+                    "Taxa acumulada mes (%) | Taxa acumulada ano (%)"
+                ),
             },
             {
                 "Item": "Observacao",
@@ -321,15 +380,25 @@ def gerar_excel_diario(
             name = names.get(code, AREA_NAMES.get(code, code))
             aba = sheet_name(code, name)
             df = pd.DataFrame(country_tables[code])[
-                ["Dia", "Taxa (% a.d.)", "Taxa acumulada (%)"]
+                [
+                    "Dia",
+                    "Taxa (% a.d.)",
+                    "Taxa acumulada (%)",
+                    "Taxa acumulada mês (%)",
+                    "Taxa acumulada ano (%)",
+                ]
             ]
             df.to_excel(writer, sheet_name=aba, index=False)
             # Number formats
             if engine == "xlsxwriter":
                 ws = writer.sheets[aba]
+                fmt_ad = writer.book.add_format({"num_format": "0.00000000"})
+                fmt_ac = writer.book.add_format({"num_format": "0.000000"})
                 ws.set_column(0, 0, 12)
-                ws.set_column(1, 1, 16, writer.book.add_format({"num_format": "0.00000000"}))
-                ws.set_column(2, 2, 20, writer.book.add_format({"num_format": "0.000000"}))
+                ws.set_column(1, 1, 16, fmt_ad)
+                ws.set_column(2, 2, 20, fmt_ac)
+                ws.set_column(3, 3, 22, fmt_ac)
+                ws.set_column(4, 4, 22, fmt_ac)
 
     return {
         "path": str(out.resolve()),

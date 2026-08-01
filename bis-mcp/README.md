@@ -58,12 +58,16 @@ bis_cli.bat excel-diario --out ..\cbpol_taxas_diarias_compostas.xlsx
 
 ### Excel diário (1 aba por país)
 
-Gera `Dia | Taxa (% a.d.) | Taxa acumulada (%)` com juros compostos (ano de **252** dias úteis):
+Gera por país:
+
+`Dia | Taxa (% a.d.) | Taxa acumulada (%) | Taxa acumulada mês (%) | Taxa acumulada ano (%)`
 
 ```text
 taxa_ad = (1 + taxa_aa/100)^(1/252) - 1
 fator  *= (1 + taxa_ad)
 taxa_acumulada_% = (fator - 1) * 100
+# mes/ano: mesmos compostos, reiniciando a cada mes/ano;
+# celulas preenchidas so no ultimo dia do mes/ano da serie
 ```
 
 ```bat
