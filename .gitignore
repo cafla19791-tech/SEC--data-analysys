@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
+WS_CBPOL_csv_flat.csv
+WS_CBPOL_csv_flat.zip
+*.xlsx
+.env
