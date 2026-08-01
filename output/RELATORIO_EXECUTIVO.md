@@ -1,20 +1,20 @@
 # Relatório Executivo - Subsídios BNDES
 
-**Data:** 23/07/2026 04:56
-**Total de Contratos:** 20
-**Total de Parcelas:** 3,312
-**Total Subsídio Nominal:** R$ 1,850,296.83
-**Total Impacto Fiscal 2026:** R$ 8,858,951.38
+**Data:** 01/08/2026 01:25
+**Total de Contratos:** 23
+**Total de Parcelas:** 1,203
+**Total Subsídio Nominal:** R$ 859,854.93
+**Total Impacto Fiscal 2026:** R$ 4,232,480.09
 
 ## Principais Agentes
 
-| Instituição Financeira Credenciada               |   Contratos |   Subsídio (R$) |   Impacto 2026 (R$) |
-|:-------------------------------------------------|------------:|----------------:|--------------------:|
-| BANCO DO BRASIL SA                               |           5 |          515579 |         2.62495e+06 |
-| BANCO SANTANDER BRASIL SA                        |           2 |          446012 |         1.97578e+06 |
-| ITAU UNIBANCO SA                                 |           2 |          343937 |         1.60246e+06 |
-| BANCO BRADESCO SA                                |           3 |          253460 |         1.20068e+06 |
-| BANCO REGIONAL DE DESENVOLVIMENTO DO EXTREMO SUL |           2 |          137539 |    647805           |
+| Instituição Financeira Credenciada   |   Contratos |   Subsídio (R$) |   Impacto 2026 (R$) |
+|:-------------------------------------|------------:|----------------:|--------------------:|
+| BNDES                                |           3 |        251351   |         1.31772e+06 |
+| BANCO DO BRASIL SA                   |           5 |        171860   |    874982           |
+| BANCO SANTANDER BRASIL SA            |           2 |        145344   |    643867           |
+| ITAU UNIBANCO SA                     |           2 |        112879   |    525274           |
+| BANCO BRADESCO SA                    |           3 |         81317.3 |    385604           |
 
 ## Arquivos gerados
 
