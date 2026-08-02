@@ -2,7 +2,7 @@
 # ASCII-only. BAT sem BOM.
 #
 #   cd "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
-#   $u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/bis-cbpol-mcp-41ca/bis-mcp/baixar_bis_winpython.ps1"
+#   $u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/cbpol-excel-center-41ca/bis-mcp/baixar_bis_winpython.ps1"
 #   Invoke-WebRequest "$u`?v=1" -OutFile baixar_bis.ps1 -Headers @{"Cache-Control"="no-cache"}
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_bis.ps1
 #
@@ -10,7 +10,7 @@
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_bis.ps1 -DownloadCsv
 
 param(
-    [string]$Ref = "cursor/bis-cbpol-mcp-41ca",
+    [string]$Ref = "cursor/cbpol-excel-center-41ca",
     [string]$Python = "",
     [string]$UserAgent = "SEC-data-analysys-bis-mcp/0.1 (cafla19791@gmail.com)",
     [switch]$DownloadCsv

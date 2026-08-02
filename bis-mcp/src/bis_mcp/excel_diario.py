@@ -415,18 +415,26 @@ def gerar_excel_diario(
     with pd.ExcelWriter(out, engine=engine) as writer:
         legenda.to_excel(writer, sheet_name="00_Legenda", index=False)
         excel_format.autosize_dataframe_sheet(
-            writer, "00_Legenda", legenda, engine=engine, max_width=80, padding=4
+            writer,
+            "00_Legenda",
+            legenda,
+            engine=engine,
+            max_width=80,
+            padding=4,
+            center=True,
         )
         indice_df = pd.DataFrame(indice_rows)
         indice_df.to_excel(writer, sheet_name="01_Indice", index=False)
         excel_format.autosize_dataframe_sheet(
-            writer, "01_Indice", indice_df, engine=engine, padding=4
+            writer, "01_Indice", indice_df, engine=engine, padding=4, center=True
         )
 
-        fmt_ad = fmt_ac = None
+        formats_tpl = None
         if engine == "xlsxwriter":
-            fmt_ad = writer.book.add_format({"num_format": "0.00000000"})
-            fmt_ac = writer.book.add_format({"num_format": "0.000000"})
+            formats_tpl = excel_format.make_center_formats(
+                writer.book,
+                [None, "0.00000000", "0.000000", "0.000000", "0.000000"],
+            )
 
         for code in sorted(country_tables.keys()):
             name = names.get(code, AREA_NAMES.get(code, code))
@@ -441,18 +449,16 @@ def gerar_excel_diario(
                 ]
             ]
             df.to_excel(writer, sheet_name=aba, index=False)
-            formats = None
-            if engine == "xlsxwriter":
-                formats = [None, fmt_ad, fmt_ac, fmt_ac, fmt_ac]
             excel_format.autosize_dataframe_sheet(
                 writer,
                 aba,
                 df,
                 engine=engine,
-                col_formats=formats,
+                col_formats=formats_tpl,
                 min_width=12,
                 max_width=36,
                 padding=4,
+                center=True,
             )
 
     return {

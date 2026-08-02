@@ -356,6 +356,48 @@ def test_column_widths_fit_headers():
     assert widths[4] >= len("Taxa acumulada ano (%)") + 4
 
 
+def test_excel_diario_mensal_cells_centered(tmp_path: Path):
+    """Cabecalhos e dados das abas de pais ficam centralizados."""
+    from bis_mcp import excel_diario, excel_mensal
+    from openpyxl import load_workbook
+
+    flat_d = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-01,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-02,11.75,Brazil,A: Normal value
+"""
+    src_d = tmp_path / "daily.csv"
+    src_d.write_text(flat_d, encoding="utf-8")
+    out_d = tmp_path / "diario.xlsx"
+    excel_diario.gerar_excel_diario(out_d, csv_path=src_d, areas="BR")
+
+    wb_d = load_workbook(out_d)
+    br_d = [s for s in wb_d.sheetnames if s.startswith("BR")][0]
+    ws_d = wb_d[br_d]
+    assert ws_d["A1"].alignment.horizontal == "center"
+    assert ws_d["A1"].alignment.vertical == "center"
+    assert ws_d["B1"].alignment.horizontal == "center"
+    assert ws_d["A2"].alignment.horizontal == "center"
+    assert ws_d["B2"].alignment.horizontal == "center"
+    assert ws_d["C2"].alignment.horizontal == "center"
+
+    flat_m = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-01,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-02,11.25,Brazil,A: Normal value
+"""
+    src_m = tmp_path / "mensal.csv"
+    src_m.write_text(flat_m, encoding="utf-8")
+    out_m = tmp_path / "mensal.xlsx"
+    excel_mensal.gerar_excel_mensal(out_m, csv_path=src_m, areas="BR")
+
+    wb_m = load_workbook(out_m)
+    br_m = [s for s in wb_m.sheetnames if s.startswith("BR")][0]
+    ws_m = wb_m[br_m]
+    assert ws_m["A1"].alignment.horizontal == "center"
+    assert ws_m["A2"].alignment.horizontal == "center"
+    assert ws_m["B2"].alignment.horizontal == "center"
+    assert ws_m["C2"].alignment.horizontal == "center"
+
+
 def test_cli_help():
     from bis_mcp.cli import build_parser
 
