@@ -164,8 +164,18 @@ def build_parser() -> argparse.ArgumentParser:
         default="",
         help="Filtrar paises (ex.: BR,US,XM). Vazio = todos com serie mensal",
     )
-    xm.add_argument("--from", dest="date_from", default="", help="YYYY-MM ou YYYY-MM-DD")
-    xm.add_argument("--to", dest="date_to", default="", help="YYYY-MM ou YYYY-MM-DD")
+    xm.add_argument(
+        "--from",
+        dest="date_from",
+        default="1995-01",
+        help="Inicio YYYY-MM (padrao: 1995-01)",
+    )
+    xm.add_argument(
+        "--to",
+        dest="date_to",
+        default="",
+        help="Fim YYYY-MM (padrao: ultimo mes de cada pais)",
+    )
     xm.add_argument(
         "--sdmx",
         action="store_true",

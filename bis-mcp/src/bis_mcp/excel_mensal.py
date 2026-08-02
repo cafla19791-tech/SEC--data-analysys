@@ -18,6 +18,9 @@ from . import excel_diario, excel_format, providers
 
 getcontext().prec = 80
 
+# Padrao: series mensais compostas a partir de jan/1995 ate o ultimo mes do pais.
+DEFAULT_DATE_FROM = "1995-01"
+
 
 def build_country_rows_mensal(points: list[tuple[str, float]]) -> list[dict[str, Any]]:
     """Mes | Taxa (% a.m.) | Taxa acumulada (%) | Taxa acumulada ano (%)."""
@@ -78,11 +81,24 @@ def gerar_excel_mensal(
     date_to: str | None = None,
     prefer_local: bool = True,
 ) -> dict[str, Any]:
-    """Gera workbook .xlsx mensal com uma aba por país."""
+    """Gera workbook .xlsx mensal com uma aba por país.
+
+    Por padrao usa meses a partir de 1995-01 ate o ultimo mes disponivel
+    de cada pais (date_to=None). Para incluir historico anterior, passe
+    date_from mais antigo (ex.: 1980-01).
+    """
     try:
         import pandas as pd
     except ImportError as exc:  # pragma: no cover
         raise RuntimeError("pandas e necessario. pip install pandas openpyxl") from exc
+
+    if date_from is None:
+        date_from = DEFAULT_DATE_FROM
+    # Normaliza YYYY-MM-DD -> YYYY-MM para comparacao com periodos mensais
+    if len(date_from) >= 7:
+        date_from = date_from[:7]
+    if date_to is not None and len(date_to) >= 7:
+        date_to = date_to[:7]
 
     wanted: set[str] | None = None
     if areas:
@@ -148,6 +164,13 @@ def gerar_excel_mensal(
         [
             {"Item": "Fonte", "Valor": "BIS WS_CBPOL (frequencia mensal)"},
             {"Item": "Origem dados", "Valor": source},
+            {
+                "Item": "Periodo",
+                "Valor": (
+                    f"De {date_from} ate o ultimo mes disponivel de cada pais"
+                    + (f" (limite --to {date_to})" if date_to else "")
+                ),
+            },
             {
                 "Item": "Conversao % a.a. -> % a.m.",
                 "Valor": "taxa_am = (1 + taxa_aa/100)^(1/12) - 1",

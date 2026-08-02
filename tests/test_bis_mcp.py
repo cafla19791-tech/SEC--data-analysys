@@ -292,6 +292,8 @@ def test_gerar_excel_mensal_and_periodos(tmp_path: Path):
     from bis_mcp import excel_mensal, excel_periodos
 
     flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,1990-06,40.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,1995-01,25.0,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-01,25.0,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-02,25.0,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-01,1.25,United States,A: Normal value
@@ -302,6 +304,7 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United St
     out_m = tmp_path / "mensal.xlsx"
     meta = excel_mensal.gerar_excel_mensal(out_m, csv_path=src, areas="BR,US")
     assert meta["countries"] == 2
+    assert meta["date_from"] == "1995-01"
     import pandas as pd
 
     br = [s for s in pd.ExcelFile(out_m).sheet_names if s.startswith("BR")][0]
@@ -312,6 +315,10 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United St
         "Taxa acumulada (%)",
         "Taxa acumulada ano (%)",
     ]
+    # Padrao: ignora meses anteriores a 1995-01
+    assert str(df.iloc[0]["Mês"])[:7] == "1995-01"
+    assert "1990-06" not in [str(x)[:7] for x in df["Mês"].tolist()]
+    assert str(df.iloc[-1]["Mês"])[:7] == "2003-02"
 
     out_p = tmp_path / "periodos_m.xlsx"
     meta_p = excel_periodos.gerar_excel_periodos(out_p, csv_path=src, freq="M")
