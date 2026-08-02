@@ -239,6 +239,8 @@ def gerar_excel_mensal(
                 ]
             ]
             df.to_excel(writer, sheet_name=aba, index=False)
+            # Cabecalho de impressao/PDF: nome do pais no canto superior esquerdo
+            # (abas Legenda/Indice ficam sem — tipicamente paginas 1-3 do PDF).
             excel_format.autosize_dataframe_sheet(
                 writer,
                 aba,
@@ -250,6 +252,7 @@ def gerar_excel_mensal(
                 padding=4,
                 center=True,
                 print_layout=True,
+                page_header_left=name,
             )
 
     return {

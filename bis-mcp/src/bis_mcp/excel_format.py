@@ -135,6 +135,11 @@ def center_align_dataframe_sheet(
             cell.alignment = cell_align
 
 
+def _escape_header_text(text: str) -> str:
+    """Escapa '&' nos cabecalhos de impressao do Excel/xlsxwriter."""
+    return str(text).replace("&", "&&")
+
+
 def apply_print_layout(
     writer: Any,
     sheet_name: str,
@@ -145,14 +150,19 @@ def apply_print_layout(
     landscape: bool = True,
     fit_to_width: int = 1,
     fit_to_height: int = 0,
+    page_header_left: str | None = None,
 ) -> None:
     """Configura impressao/PDF: paisagem A4, caber na largura, repetir cabecalho.
 
     O LibreOffice (e o Excel) usam essas opcoes na conversao para PDF, evitando
     colunas cortadas no meio da pagina.
+
+    page_header_left: texto no canto superior esquerdo de cada pagina impressa
+    (ex.: nome do pais nas abas de pais).
     """
     ws = writer.sheets[sheet_name]
     repeat_end = header_row if repeat_through_row is None else repeat_through_row
+    top_margin = 0.75 if page_header_left else 0.5
 
     if engine == "xlsxwriter":
         if landscape:
@@ -161,7 +171,11 @@ def apply_print_layout(
         ws.fit_to_pages(fit_to_width, fit_to_height)
         ws.repeat_rows(header_row, repeat_end)
         ws.center_horizontally()
-        ws.set_margins(left=0.4, right=0.4, top=0.5, bottom=0.5)
+        ws.set_margins(left=0.4, right=0.4, top=top_margin, bottom=0.5)
+        if page_header_left:
+            # &L = esquerda; negrito para leitura no PDF
+            safe = _escape_header_text(page_header_left)
+            ws.set_header(f'&L&"Calibri,Bold"{safe}')
         # Congela cabecalho na tela (nao afeta PDF, ajuda no Excel)
         ws.freeze_panes(repeat_end + 1, 0)
         return
@@ -183,9 +197,14 @@ def apply_print_layout(
         ws.sheet_properties.pageSetUpPr.fitToPage = True
     # Linhas 1-based no print_title_rows
     ws.print_title_rows = f"{header_row + 1}:{repeat_end + 1}"
-    ws.page_margins = PageMargins(left=0.4, right=0.4, top=0.5, bottom=0.5)
+    ws.page_margins = PageMargins(left=0.4, right=0.4, top=top_margin, bottom=0.5)
     ws.print_options.horizontalCentered = True
     ws.freeze_panes = f"A{repeat_end + 2}"
+    if page_header_left:
+        ws.oddHeader.left.text = page_header_left
+        ws.oddHeader.left.font = "Calibri,Bold"
+        ws.evenHeader.left.text = page_header_left
+        ws.evenHeader.left.font = "Calibri,Bold"
 
 
 def autosize_dataframe_sheet(
@@ -204,6 +223,7 @@ def autosize_dataframe_sheet(
     header_row: int = 0,
     print_layout: bool = False,
     repeat_through_row: int | None = None,
+    page_header_left: str | None = None,
 ) -> None:
     """Ajusta colunas de uma aba ja escrita com pandas.to_excel."""
     ws = writer.sheets[sheet_name]
@@ -242,4 +262,5 @@ def autosize_dataframe_sheet(
             engine=engine,
             header_row=header_row,
             repeat_through_row=repeat_through_row,
+            page_header_left=page_header_left,
         )

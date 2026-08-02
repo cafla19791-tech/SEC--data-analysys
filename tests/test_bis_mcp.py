@@ -433,6 +433,9 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-01,11.75,Brazil,A: Norma
     assert ws_d.print_title_rows == "$1:$1"
     assert ws_d.freeze_panes == "A2"
     assert ws_d.print_options.horizontalCentered is True
+    # Nome do pais no cabecalho de pagina (PDF); Legenda/Indice sem
+    assert "Brazil" in (ws_d.oddHeader.left.text or "")
+    assert not (wb_d["00_Legenda"].oddHeader.left.text or "").strip()
 
     out_m = tmp_path / "mensal.xlsx"
     excel_mensal.gerar_excel_mensal(out_m, csv_path=src, areas="BR")
@@ -441,6 +444,7 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-01,11.75,Brazil,A: Norma
     assert ws_m.page_setup.orientation == "landscape"
     assert ws_m.sheet_properties.pageSetUpPr.fitToPage is True
     assert ws_m.print_title_rows == "$1:$1"
+    assert "Brazil" in (ws_m.oddHeader.left.text or "")
 
 
 def test_cli_help():
