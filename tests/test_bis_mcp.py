@@ -398,6 +398,39 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-02,11.25,Brazil,A: Norma
     assert ws_m["C2"].alignment.horizontal == "center"
 
 
+def test_excel_print_layout_for_pdf(tmp_path: Path):
+    """Planilhas diarias/mensais ficam prontas para PDF (paisagem + fit width)."""
+    from bis_mcp import excel_diario, excel_mensal
+    from openpyxl import load_workbook
+
+    flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-01,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-01,11.75,Brazil,A: Normal value
+"""
+    src = tmp_path / "cbpol.csv"
+    src.write_text(flat, encoding="utf-8")
+
+    out_d = tmp_path / "diario.xlsx"
+    excel_diario.gerar_excel_diario(out_d, csv_path=src, areas="BR")
+    wb_d = load_workbook(out_d)
+    ws_d = wb_d[[s for s in wb_d.sheetnames if s.startswith("BR")][0]]
+    assert ws_d.page_setup.orientation == "landscape"
+    assert ws_d.page_setup.paperSize == 9  # A4
+    assert ws_d.sheet_properties.pageSetUpPr.fitToPage is True
+    assert ws_d.page_setup.fitToHeight == 0  # altura livre; largura = 1 pagina
+    assert ws_d.print_title_rows == "$1:$1"
+    assert ws_d.freeze_panes == "A2"
+    assert ws_d.print_options.horizontalCentered is True
+
+    out_m = tmp_path / "mensal.xlsx"
+    excel_mensal.gerar_excel_mensal(out_m, csv_path=src, areas="BR")
+    wb_m = load_workbook(out_m)
+    ws_m = wb_m[[s for s in wb_m.sheetnames if s.startswith("BR")][0]]
+    assert ws_m.page_setup.orientation == "landscape"
+    assert ws_m.sheet_properties.pageSetUpPr.fitToPage is True
+    assert ws_m.print_title_rows == "$1:$1"
+
+
 def test_cli_help():
     from bis_mcp.cli import build_parser
 

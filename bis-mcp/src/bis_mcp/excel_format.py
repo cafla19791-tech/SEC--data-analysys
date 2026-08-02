@@ -135,6 +135,59 @@ def center_align_dataframe_sheet(
             cell.alignment = cell_align
 
 
+def apply_print_layout(
+    writer: Any,
+    sheet_name: str,
+    *,
+    engine: str,
+    header_row: int = 0,
+    repeat_through_row: int | None = None,
+    landscape: bool = True,
+    fit_to_width: int = 1,
+    fit_to_height: int = 0,
+) -> None:
+    """Configura impressao/PDF: paisagem A4, caber na largura, repetir cabecalho.
+
+    O LibreOffice (e o Excel) usam essas opcoes na conversao para PDF, evitando
+    colunas cortadas no meio da pagina.
+    """
+    ws = writer.sheets[sheet_name]
+    repeat_end = header_row if repeat_through_row is None else repeat_through_row
+
+    if engine == "xlsxwriter":
+        if landscape:
+            ws.set_landscape()
+        ws.set_paper(9)  # A4
+        ws.fit_to_pages(fit_to_width, fit_to_height)
+        ws.repeat_rows(header_row, repeat_end)
+        ws.center_horizontally()
+        ws.set_margins(left=0.4, right=0.4, top=0.5, bottom=0.5)
+        # Congela cabecalho na tela (nao afeta PDF, ajuda no Excel)
+        ws.freeze_panes(repeat_end + 1, 0)
+        return
+
+    # openpyxl
+    from openpyxl.worksheet.page import PageMargins
+
+    ws.page_setup.orientation = "landscape" if landscape else "portrait"
+    ws.page_setup.paperSize = ws.PAPERSIZE_A4
+    ws.page_setup.fitToPage = True
+    ws.page_setup.fitToWidth = fit_to_width
+    ws.page_setup.fitToHeight = fit_to_height
+    # openpyxl exige o flag tambem em sheet_properties
+    if ws.sheet_properties.pageSetUpPr is None:
+        from openpyxl.worksheet.properties import PageSetupProperties
+
+        ws.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
+    else:
+        ws.sheet_properties.pageSetUpPr.fitToPage = True
+    # Linhas 1-based no print_title_rows
+    ws.print_title_rows = f"{header_row + 1}:{repeat_end + 1}"
+    ws.page_margins = PageMargins(left=0.4, right=0.4, top=0.5, bottom=0.5)
+    ws.print_options.horizontalCentered = True
+    ws.freeze_panes = f"A{repeat_end + 2}"
+
+
 def autosize_dataframe_sheet(
     writer: Any,
     sheet_name: str,
@@ -149,6 +202,8 @@ def autosize_dataframe_sheet(
     extra_title_width: float | None = None,
     center: bool = False,
     header_row: int = 0,
+    print_layout: bool = False,
+    repeat_through_row: int | None = None,
 ) -> None:
     """Ajusta colunas de uma aba ja escrita com pandas.to_excel."""
     ws = writer.sheets[sheet_name]
@@ -178,4 +233,13 @@ def autosize_dataframe_sheet(
             df,
             engine=engine,
             header_row=header_row,
+        )
+
+    if print_layout:
+        apply_print_layout(
+            writer,
+            sheet_name,
+            engine=engine,
+            header_row=header_row,
+            repeat_through_row=repeat_through_row,
         )

@@ -183,11 +183,18 @@ def gerar_excel_mensal(
             max_width=80,
             padding=4,
             center=True,
+            print_layout=True,
         )
         indice_df = pd.DataFrame(indice_rows)
         indice_df.to_excel(writer, sheet_name="01_Indice", index=False)
         excel_format.autosize_dataframe_sheet(
-            writer, "01_Indice", indice_df, engine=engine, padding=4, center=True
+            writer,
+            "01_Indice",
+            indice_df,
+            engine=engine,
+            padding=4,
+            center=True,
+            print_layout=True,
         )
 
         formats_tpl = None
@@ -219,6 +226,7 @@ def gerar_excel_mensal(
                 max_width=36,
                 padding=4,
                 center=True,
+                print_layout=True,
             )
 
     return {

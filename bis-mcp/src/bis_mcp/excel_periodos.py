@@ -313,7 +313,13 @@ def gerar_excel_periodos(
     with pd.ExcelWriter(out, engine=engine) as writer:
         legenda.to_excel(writer, sheet_name="00_Legenda", index=False)
         excel_format.autosize_dataframe_sheet(
-            writer, "00_Legenda", legenda, engine=engine, max_width=80, padding=4
+            writer,
+            "00_Legenda",
+            legenda,
+            engine=engine,
+            max_width=80,
+            padding=4,
+            print_layout=True,
         )
         # Indice dos periodos
         idx = pd.DataFrame(
@@ -330,7 +336,13 @@ def gerar_excel_periodos(
         )
         idx.to_excel(writer, sheet_name="01_Indice", index=False)
         excel_format.autosize_dataframe_sheet(
-            writer, "01_Indice", idx, engine=engine, max_width=70, padding=4
+            writer,
+            "01_Indice",
+            idx,
+            engine=engine,
+            max_width=70,
+            padding=4,
+            print_layout=True,
         )
 
         for periodo, df in period_frames:
@@ -342,6 +354,7 @@ def gerar_excel_periodos(
                 ws.write(0, 0, periodo.titulo)
             else:
                 ws.cell(row=1, column=1, value=periodo.titulo)
+            # Titulo na linha 0, cabecalho na linha 1 (startrow=1)
             excel_format.autosize_dataframe_sheet(
                 writer,
                 sheet,
@@ -351,6 +364,9 @@ def gerar_excel_periodos(
                 max_width=40,
                 padding=4,
                 extra_title_width=len(periodo.titulo) + 4,
+                header_row=0,
+                print_layout=True,
+                repeat_through_row=1,
             )
 
     return {
