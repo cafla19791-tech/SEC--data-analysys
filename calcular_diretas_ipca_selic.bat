@@ -28,15 +28,29 @@ if not exist "scripts\calcular_diretas_ipca_selic.py" if not exist "calcular_dir
   exit /b 1
 )
 
-echo Arquivo: %EXCEL%
+if not exist "%WINPY%\saida" mkdir "%WINPY%\saida"
+set "SAIDA=%WINPY%\saida\OPERACOES DIRETAS - 2002 a 2018_calculado.xlsx"
+
+echo Arquivo entrada: %EXCEL%
+echo Arquivo saida  : %SAIDA%
+echo.
+
 if exist "%SELIC%" (
-  %PY% --excel "%EXCEL%" --selic "%SELIC%" --data-ref 2026-06-30
+  %PY% --excel "%EXCEL%" --saida "%SAIDA%" --selic "%SELIC%" --data-ref 2026-06-30
 ) else (
   echo [AVISO] selic_mensal.xlsx ausente — baixando SELIC do Bacen
-  %PY% --excel "%EXCEL%" --data-ref 2026-06-30
+  %PY% --excel "%EXCEL%" --saida "%SAIDA%" --data-ref 2026-06-30
 )
 
 echo.
-echo Saida: %WINPY%\*_calculado.xlsx
+if exist "%SAIDA%" (
+  echo ========================================
+  echo SAIDA PRONTA:
+  echo %SAIDA%
+  echo ========================================
+  explorer /select,"%SAIDA%"
+) else (
+  echo [ERRO] Arquivo de saida nao foi gerado.
+)
 endlocal
 exit /b %ERRORLEVEL%
