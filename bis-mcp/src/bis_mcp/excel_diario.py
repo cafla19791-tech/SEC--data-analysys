@@ -275,6 +275,10 @@ def build_country_rows(points: list[tuple[str, float]]) -> list[dict[str, Any]]:
     return rows
 
 
+# Padrao: series diarias compostas a partir de 01/01/1995 ate o ultimo dia do pais.
+DEFAULT_DATE_FROM = "1995-01-01"
+
+
 def gerar_excel_diario(
     out_path: str | Path,
     *,
@@ -284,11 +288,23 @@ def gerar_excel_diario(
     date_to: str | None = None,
     prefer_local: bool = True,
 ) -> dict[str, Any]:
-    """Gera workbook .xlsx com uma aba por país."""
+    """Gera workbook .xlsx com uma aba por país.
+
+    Por padrao usa dias a partir de 1995-01-01 ate o ultimo dia disponivel
+    de cada pais (date_to=None). Para incluir historico anterior, passe
+    date_from mais antigo (ex.: 1980-01-01).
+    """
     try:
         import pandas as pd
     except ImportError as exc:  # pragma: no cover
         raise RuntimeError("pandas e necessario. pip install pandas openpyxl") from exc
+
+    if date_from is None:
+        date_from = DEFAULT_DATE_FROM
+    if len(date_from) >= 10:
+        date_from = date_from[:10]
+    if date_to is not None and len(date_to) >= 10:
+        date_to = date_to[:10]
 
     wanted: set[str] | None = None
     if areas:
@@ -366,6 +382,13 @@ def gerar_excel_diario(
             {"Item": "Fonte", "Valor": "BIS WS_CBPOL (frequencia diaria)"},
             {"Item": "Origem dados", "Valor": source},
             {
+                "Item": "Periodo",
+                "Valor": (
+                    f"De {date_from} ate o ultimo dia disponivel de cada pais"
+                    + (f" (limite --to {date_to})" if date_to else "")
+                ),
+            },
+            {
                 "Item": "Conversao % a.a. -> % a.d.",
                 "Valor": "taxa_ad = (1 + taxa_aa/100)^(1/252) - 1   [ano com 252 dias uteis]",
             },
@@ -398,7 +421,8 @@ def gerar_excel_diario(
                 "Item": "Observacao",
                 "Valor": (
                     "OBS_VALUE do BIS esta em % a.a. (policy rate). "
-                    "A acumulacao comeca no primeiro dia disponivel de cada pais. "
+                    "A acumulacao comeca no primeiro dia >= "
+                    f"{date_from} disponivel de cada pais. "
                     "Em series muito longas (hiperinflacao), a acumulada pode aparecer "
                     "em notacao cientifica (texto) por limite numerico do Excel."
                 ),

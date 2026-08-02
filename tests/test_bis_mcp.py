@@ -187,8 +187,10 @@ def test_acumulado_mes_e_ano_so_no_ultimo_dia():
 def test_gerar_excel_diario_from_flat(tmp_path: Path):
     from bis_mcp import excel_diario
 
-    # Minimal daily flat rows
+    # Minimal daily flat rows (inclui dia anterior a 1995 que deve ser filtrado)
     flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,1990-06-15,40.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,1995-01-02,11.75,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-01,11.75,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-02,11.75,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United States,A: Normal value
@@ -198,6 +200,7 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United St
     out = tmp_path / "out.xlsx"
     meta = excel_diario.gerar_excel_diario(out, csv_path=src, areas="BR,US")
     assert meta["countries"] == 2
+    assert meta["date_from"] == "1995-01-01"
     assert out.exists()
     import pandas as pd
 
@@ -213,7 +216,9 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United St
         "Taxa acumulada mês (%)",
         "Taxa acumulada ano (%)",
     ]
-    assert len(df) == 2
+    assert len(df) == 3
+    assert str(df.iloc[0]["Dia"])[:10] == "1995-01-02"
+    assert "1990-06-15" not in [str(x)[:10] for x in df["Dia"].tolist()]
 
 
 def test_acumular_periodo_exclui_fim_de_semana():
