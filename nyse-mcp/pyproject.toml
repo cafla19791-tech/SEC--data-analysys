@@ -1,0 +1,23 @@
+[project]
+name = "nyse-mcp"
+version = "0.1.0"
+description = "Skeleton MCP server for NYSE/US equity market data via Yahoo Finance or Alpha Vantage"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  # FastMCP lives in mcp 1.x; mcp 2.0 renames it to MCPServer and breaks this skeleton.
+  "mcp[cli]>=1.6.0,<2",
+  "yfinance>=0.2.54",
+  "httpx>=0.28.0",
+]
+
+[project.scripts]
+nyse-mcp = "nyse_mcp.server:main"
+nyse-mcp-cli = "nyse_mcp.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nyse_mcp"]
