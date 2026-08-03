@@ -1,0 +1,142 @@
+{
+  "ticker": "PBR",
+  "cik": 1119639,
+  "name": "PETROBRAS - PETROLEO BRASILEIRO SA",
+  "metric": "Net Income / Lucro Líquido atribuível aos acionistas",
+  "currency_notes": {
+    "usd": "Valores em USD extraídos da SEC EDGAR CompanyFacts (IFRS, 20-F FY).",
+    "brl": "Valores em R$ estimados como USD × média anual da taxa de câmbio USD/BRL (BCB SGS série 1, venda). Podem diferir ligeiramente dos valores oficiais em reais publicados na CVM/DFP."
+  },
+  "years": [
+    {
+      "year": 2015,
+      "net_income_usd": -8450000000.0,
+      "net_income_brl": -28211981200.0,
+      "usd_brl_avg": 3.338696,
+      "yoy_usd_pct": null,
+      "yoy_brl_pct": null,
+      "form": "20-F",
+      "filed": "2018-04-18",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2016,
+      "net_income_usd": -4838000000.0,
+      "net_income_brl": -16852336469.32271,
+      "usd_brl_avg": 3.483327091633466,
+      "yoy_usd_pct": 0.42745562130177517,
+      "yoy_brl_pct": 0.40265320787457815,
+      "form": "20-F",
+      "filed": "2019-04-01",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2017,
+      "net_income_usd": -91000000.0,
+      "net_income_brl": -290521629.7188755,
+      "usd_brl_avg": 3.1925453815261045,
+      "yoy_usd_pct": 0.9811905746176106,
+      "yoy_brl_pct": 0.9827607506978199,
+      "form": "20-F",
+      "filed": "2020-03-23",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2018,
+      "net_income_usd": 7173000000.0,
+      "net_income_brl": 26222941501.2,
+      "usd_brl_avg": 3.6557844,
+      "yoy_usd_pct": 79.82417582417582,
+      "yoy_brl_pct": 91.26158061475402,
+      "form": "20-F",
+      "filed": "2021-03-25",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2019,
+      "net_income_usd": 10151000000.0,
+      "net_income_brl": 40057049675.88933,
+      "usd_brl_avg": 3.946118577075099,
+      "yoy_usd_pct": 0.4151679910776523,
+      "yoy_brl_pct": 0.5275574509463882,
+      "form": "20-F",
+      "filed": "2022-03-30",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2020,
+      "net_income_usd": 1141000000.0,
+      "net_income_brl": 5885018888.446215,
+      "usd_brl_avg": 5.157772908366534,
+      "yoy_usd_pct": -0.8875972810560536,
+      "yoy_brl_pct": -0.853084065450071,
+      "form": "20-F",
+      "filed": "2023-03-29",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2021,
+      "net_income_usd": 19875000000.0,
+      "net_income_brl": 107236766085.65736,
+      "usd_brl_avg": 5.395560557768924,
+      "yoy_usd_pct": 16.418930762489044,
+      "yoy_brl_pct": 17.221991826770573,
+      "form": "20-F",
+      "filed": "2024-04-12",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2022,
+      "net_income_usd": 36623000000.0,
+      "net_income_brl": 189175464503.18726,
+      "usd_brl_avg": 5.165482470119522,
+      "yoy_usd_pct": 0.8426666666666667,
+      "yoy_brl_pct": 0.7640914716887287,
+      "form": "20-F",
+      "filed": "2025-04-03",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2023,
+      "net_income_usd": 24884000000.0,
+      "net_income_brl": 124304244428.91566,
+      "usd_brl_avg": 4.995348192771084,
+      "yoy_usd_pct": -0.320536275018431,
+      "yoy_brl_pct": -0.3429156114120636,
+      "form": "20-F",
+      "filed": "2025-04-03",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    },
+    {
+      "year": 2024,
+      "net_income_usd": 7528000000.0,
+      "net_income_brl": 40591097995.25692,
+      "usd_brl_avg": 5.392016205533597,
+      "yoy_usd_pct": -0.6974762899855329,
+      "yoy_brl_pct": -0.6734536444693227,
+      "form": "20-F",
+      "filed": "2025-04-03",
+      "concept": "ProfitLossAttributableToOwnersOfParent",
+      "taxonomy": "ifrs-full",
+      "fx_source": "BCB SGS 1 (USD venda)"
+    }
+  ]
+}
