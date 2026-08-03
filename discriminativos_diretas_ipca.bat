@@ -30,13 +30,26 @@ if not defined REPO (
   goto :FIM
 )
 
-set "PYSCRIPT=%REPO%\scripts\discriminativos_diretas_ipca.py"
 set "PYTHON=%WINPY%\python.exe"
 if not exist "%PYTHON%" set "PYTHON=python"
 set "IPCA=%WINPY%\IPCA_MENSAL.xlsx"
 if not exist "%WINPY%\saida" mkdir "%WINPY%\saida"
 set "SAIDA=%WINPY%\saida\DISCRIMINATIVOS_DIRETAS_IPCA.xlsx"
 set "PYTHONPATH=%REPO%;%PYTHONPATH%"
+
+REM Checagem dos modulos (evita ModuleNotFoundError opaco)
+if not exist "%REPO%\scripts\__init__.py" (
+  echo [ERRO] Falta scripts\__init__.py - rode baixar_discriminativos.ps1 de novo
+  goto :FIM
+)
+if not exist "%REPO%\scripts\calcular_diretas_ipca_selic.py" (
+  echo [ERRO] Falta scripts\calcular_diretas_ipca_selic.py - rode baixar_discriminativos.ps1 de novo
+  goto :FIM
+)
+if not exist "%REPO%\scripts\gerar_fluxos.py" (
+  echo [ERRO] Falta scripts\gerar_fluxos.py - rode baixar_discriminativos.ps1 de novo
+  goto :FIM
+)
 
 REM Localiza a planilha (nome informado pelo usuario ou variantes)
 set "EXCEL="
@@ -63,10 +76,12 @@ if not defined EXCEL (
   goto :SHOWLOG
 )
 
+REM Roda como modulo (PYTHONPATH=REPO) para import scripts.* funcionar no ContAgil
+cd /d "%REPO%"
 if exist "%IPCA%" (
-  "%PYTHON%" "%PYSCRIPT%" --excel "%EXCEL%" --ipca "%IPCA%" --saida "%SAIDA%" --data-ref 2026-06-30 >> "%LOG%" 2>&1
+  "%PYTHON%" -m scripts.discriminativos_diretas_ipca --excel "%EXCEL%" --ipca "%IPCA%" --saida "%SAIDA%" --data-ref 2026-06-30 >> "%LOG%" 2>&1
 ) else (
-  "%PYTHON%" "%PYSCRIPT%" --excel "%EXCEL%" --saida "%SAIDA%" --data-ref 2026-06-30 >> "%LOG%" 2>&1
+  "%PYTHON%" -m scripts.discriminativos_diretas_ipca --excel "%EXCEL%" --saida "%SAIDA%" --data-ref 2026-06-30 >> "%LOG%" 2>&1
 )
 echo ---- fim %ERRORLEVEL% %DATE% %TIME% ---->> "%LOG%"
 

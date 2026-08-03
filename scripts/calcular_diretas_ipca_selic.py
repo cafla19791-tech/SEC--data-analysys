@@ -40,17 +40,49 @@ if str(ROOT) not in sys.path:
 
 import numpy as np
 import pandas as pd
-import requests
 from openpyxl import load_workbook
 
-from scripts.gerar_fluxos import (
-    CONTAGIL_WINPYTHON,
-    DATA_DIR,
-    _mapear_colunas_contratos,
-    limpar_valor,
-    parse_datas,
-    taxa_contrato_efetiva,
-)
+try:
+    from scripts.gerar_fluxos import (
+        CONTAGIL_WINPYTHON,
+        DATA_DIR,
+        _mapear_colunas_contratos,
+        limpar_valor,
+        parse_datas,
+        taxa_contrato_efetiva,
+    )
+except ModuleNotFoundError:
+    # ContAgil: roda a partir de scripts\*.py sem pacote instalado
+    import importlib.util
+
+    _gf = Path(__file__).resolve().parent / "gerar_fluxos.py"
+    _spec = importlib.util.spec_from_file_location("gerar_fluxos_local", _gf)
+    if _spec is None or _spec.loader is None:
+        raise
+    _mod = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_mod)
+    CONTAGIL_WINPYTHON = _mod.CONTAGIL_WINPYTHON
+    DATA_DIR = _mod.DATA_DIR
+    _mapear_colunas_contratos = _mod._mapear_colunas_contratos
+    limpar_valor = _mod.limpar_valor
+    parse_datas = _mod.parse_datas
+    taxa_contrato_efetiva = _mod.taxa_contrato_efetiva
+
+
+def _http_get(url: str, params: dict | None = None, timeout: float = 120.0):
+    """GET JSON com httpx (preferido) ou requests."""
+    try:
+        import httpx
+
+        resp = httpx.get(url, params=params, timeout=timeout, follow_redirects=True)
+        resp.raise_for_status()
+        return resp.json()
+    except ImportError:
+        import requests
+
+        resp = requests.get(url, params=params, timeout=timeout)
+        resp.raise_for_status()
+        return resp.json()
 
 BCB_SGS = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{cod}/dados"
 IPCA_COD = 433
@@ -82,9 +114,7 @@ def _baixar_sgs(cod: int, inicio: str = "01/01/2000", fim: str | None = None) ->
             "dataInicial": cursor.strftime("%d/%m/%Y"),
             "dataFinal": bloco_fim.strftime("%d/%m/%Y"),
         }
-        resp = requests.get(url, params=params, timeout=120)
-        resp.raise_for_status()
-        dados = resp.json()
+        dados = _http_get(url, params=params, timeout=120)
         if dados:
             df = pd.DataFrame(dados)
             df["data"] = pd.to_datetime(df["data"], dayfirst=True, errors="coerce")

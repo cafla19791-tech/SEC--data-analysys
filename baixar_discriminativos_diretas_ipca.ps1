@@ -51,9 +51,24 @@ if (-not $py -or -not (Test-Path -LiteralPath $py)) {
 }
 Write-Host "Python: $py"
 
-Write-Host "Instalando pandas/openpyxl/httpx (se preciso)..."
-& $py -m pip install "pandas>=2.0" "openpyxl>=3.1" "httpx>=0.28"
+Write-Host "Instalando pandas/openpyxl/httpx/requests (se preciso)..."
+& $py -m pip install "pandas>=2.0" "openpyxl>=3.1" "httpx>=0.28" "requests>=2.28"
 if ($LASTEXITCODE -ne 0) { throw "pip install falhou" }
+
+# Sanity check dos arquivos baixados
+$need = @(
+    "discriminativos_diretas_ipca.bat",
+    "scripts\__init__.py",
+    "scripts\discriminativos_diretas_ipca.py",
+    "scripts\calcular_diretas_ipca_selic.py",
+    "scripts\gerar_fluxos.py"
+)
+foreach ($rel in $need) {
+    $p = Join-Path $Root $rel
+    if (-not (Test-Path -LiteralPath $p)) { throw "Arquivo faltando apos download: $rel" }
+    if ((Get-Item -LiteralPath $p).Length -lt 50) { throw "Arquivo suspeito (muito pequeno): $rel" }
+}
+Write-Host "Checagem de arquivos: OK"
 
 if (-not (Test-Path -LiteralPath (Join-Path $Root "saida"))) {
     New-Item -ItemType Directory -Force -Path (Join-Path $Root "saida") | Out-Null

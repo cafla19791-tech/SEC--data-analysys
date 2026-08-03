@@ -33,22 +33,39 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.pagebreak import Break
 
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+_SCRIPTS = Path(__file__).resolve().parent
+for _p in (str(ROOT), str(_SCRIPTS)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
-from scripts.calcular_diretas_ipca_selic import (  # noqa: E402
-    DATA_REF_DEFAULT,
-    IPCA_COD,
-    _baixar_sgs,
-    carregar_ipca,
-    detectar_header_row,
-)
-from scripts.gerar_fluxos import (  # noqa: E402
-    CONTAGIL_WINPYTHON,
-    _mapear_colunas_contratos,
-    limpar_valor,
-    parse_datas,
-)
+
+def _load_sibling(mod_name: str, filename: str):
+    """Importa modulo irmao (pacote scripts.* ou arquivo local ContAgil)."""
+    try:
+        return __import__(f"scripts.{mod_name}", fromlist=["*"])
+    except ModuleNotFoundError:
+        import importlib.util
+
+        path = _SCRIPTS / filename
+        spec = importlib.util.spec_from_file_location(mod_name, path)
+        if spec is None or spec.loader is None:
+            raise ModuleNotFoundError(f"Nao achou {path}")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+
+
+_calc = _load_sibling("calcular_diretas_ipca_selic", "calcular_diretas_ipca_selic.py")
+_flux = _load_sibling("gerar_fluxos", "gerar_fluxos.py")
+DATA_REF_DEFAULT = _calc.DATA_REF_DEFAULT
+IPCA_COD = _calc.IPCA_COD
+_baixar_sgs = _calc._baixar_sgs
+carregar_ipca = _calc.carregar_ipca
+detectar_header_row = _calc.detectar_header_row
+CONTAGIL_WINPYTHON = _flux.CONTAGIL_WINPYTHON
+_mapear_colunas_contratos = _flux._mapear_colunas_contratos
+limpar_valor = _flux.limpar_valor
+parse_datas = _flux.parse_datas
 
 COL_IPCA = "VALOR DESEMBOLSADO ATUALIZADO - IPCA-30 DE JUNHO DE 2026"
 COL_VALOR = "Valor Desembolsado"
