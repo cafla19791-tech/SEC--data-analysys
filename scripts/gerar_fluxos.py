@@ -583,6 +583,12 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "forma_de_apoio": "forma_de_apoio",
     "numero_do_contrato": "numero_contrato",
     "numero_contrato": "numero_contrato",
+    "cliente": "cliente",
+    "nome_do_cliente": "cliente",
+    "nome_cliente": "cliente",
+    "cnpj": "cnpj",
+    "cnpj_do_cliente": "cnpj",
+    "uf": "uf",
 }
 
 AGENTE_BNDES_DIRETA = "BNDES"
