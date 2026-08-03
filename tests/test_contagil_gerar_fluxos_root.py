@@ -1,0 +1,77 @@
+"""Testes do script ContAgil na raiz (gerar_fluxos.py)."""
+
+from datetime import datetime
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+from gerar_fluxos import (
+    calcular_impacto_fiscal_real,
+    gerar_fluxos,
+    load_selic,
+    parse_args,
+)
+
+
+def _selic_sintetica() -> pd.DataFrame:
+    dates = pd.date_range("2009-01-01", "2026-06-30", freq="D")
+    # ~0.01% a.d. → fator crescente
+    fator = np.cumprod(np.full(len(dates), 1.0001))
+    return pd.DataFrame({"data": dates, "fator": fator})
+
+
+def test_parse_fluxo_diario_flag():
+    args = parse_args(
+        ["--excel", "x.xlsx", "--fluxo-diario", "--output-dir", "out", "--max-contratos", "3"]
+    )
+    assert args.fluxo_diario is True
+    assert args.max_contratos == 3
+    assert args.output_dir == "out"
+
+
+def test_calcular_impacto_usa_dia_seguinte():
+    selic = pd.DataFrame(
+        {
+            "data": pd.to_datetime(["2009-02-15", "2009-02-16", "2026-06-30"]),
+            "fator": [1.0, 2.0, 4.0],
+        }
+    )
+    # 15/02 → início 16/02 (fator 2) → 4/2 = 2×
+    assert calcular_impacto_fiscal_real(100.0, datetime(2009, 2, 15), selic) == 200.0
+
+
+def test_gerar_fluxos_resumo_e_diario(tmp_path: Path):
+    ops = pd.DataFrame(
+        {
+            "data_da_contratacao": ["15/01/2009"],
+            "valor_desembolsado_reais": [1200.0],
+            "juros": [6.0],
+            "prazo_carencia_meses": [1],
+            "prazo_amortizacao_meses": [2],
+            "instituicao_financeira_credenciada": ["BANCO TESTE"],
+        }
+    )
+    selic = _selic_sintetica()
+    diario = tmp_path / "fluxos_diarios_detalhados.xlsx"
+    out = gerar_fluxos(
+        ops, selic, fluxo_diario=True, max_contratos=1, saida_diario=diario
+    )
+
+    assert len(out) == 1
+    assert out.iloc[0]["amortizacao_mensal"] == 600.0
+    assert out.iloc[0]["subsidio_acumulado"] != 0.0
+    assert "impacto_fiscal_real" in out.columns
+    assert diario.exists()
+
+    diarios = pd.read_excel(diario)
+    assert len(diarios) >= 60  # ~3 meses
+    assert "taxa_selic_diaria" in diarios.columns
+    assert diarios["dia_parcela"].sum() == 3
+    assert set(diarios["Instituição Financeira"]) == {"BANCO TESTE"}
+
+
+def test_load_selic_placeholder_sem_arquivo():
+    df = load_selic(None)
+    assert len(df) > 1000
+    assert {"data", "fator"} <= set(df.columns)
