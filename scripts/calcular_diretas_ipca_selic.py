@@ -42,31 +42,34 @@ import numpy as np
 import pandas as pd
 from openpyxl import load_workbook
 
-try:
-    from scripts.gerar_fluxos import (
-        CONTAGIL_WINPYTHON,
-        DATA_DIR,
-        _mapear_colunas_contratos,
-        limpar_valor,
-        parse_datas,
-        taxa_contrato_efetiva,
-    )
-except ModuleNotFoundError:
-    # ContAgil: roda a partir de scripts\*.py sem pacote instalado
-    import importlib.util
+import importlib.util as _importlib_util
 
+
+def _load_gerar_fluxos():
+    """Carrega gerar_fluxos do arquivo irmao (sec_scripts) ou pacote scripts."""
     _gf = Path(__file__).resolve().parent / "gerar_fluxos.py"
-    _spec = importlib.util.spec_from_file_location("gerar_fluxos_local", _gf)
-    if _spec is None or _spec.loader is None:
-        raise
-    _mod = importlib.util.module_from_spec(_spec)
-    _spec.loader.exec_module(_mod)
-    CONTAGIL_WINPYTHON = _mod.CONTAGIL_WINPYTHON
-    DATA_DIR = _mod.DATA_DIR
-    _mapear_colunas_contratos = _mod._mapear_colunas_contratos
-    limpar_valor = _mod.limpar_valor
-    parse_datas = _mod.parse_datas
-    taxa_contrato_efetiva = _mod.taxa_contrato_efetiva
+    if _gf.exists():
+        _spec = _importlib_util.spec_from_file_location("gerar_fluxos_local", _gf)
+        if _spec is not None and _spec.loader is not None:
+            _mod = _importlib_util.module_from_spec(_spec)
+            _spec.loader.exec_module(_mod)
+            return _mod
+    try:
+        from scripts import gerar_fluxos as mod  # type: ignore
+
+        return mod
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(f"Nao achou {_gf} nem scripts.gerar_fluxos") from exc
+
+
+_gf_mod = _load_gerar_fluxos()
+CONTAGIL_WINPYTHON = _gf_mod.CONTAGIL_WINPYTHON
+DATA_DIR = _gf_mod.DATA_DIR
+_mapear_colunas_contratos = _gf_mod._mapear_colunas_contratos
+_excel_tem_colunas_contratos = _gf_mod._excel_tem_colunas_contratos
+limpar_valor = _gf_mod.limpar_valor
+parse_datas = _gf_mod.parse_datas
+taxa_contrato_efetiva = _gf_mod.taxa_contrato_efetiva
 
 
 def _http_get(url: str, params: dict | None = None, timeout: float = 120.0):
@@ -364,8 +367,6 @@ def gravar_colunas_klmn(
 
 def detectar_header_row(path: Path) -> int:
     """Retorna 1-based header row ( ContAgil = 1; portal às vezes 6)."""
-    from scripts.gerar_fluxos import _excel_tem_colunas_contratos
-
     for h0 in (0, 5, 1, 2, 3, 4):
         try:
             df = pd.read_excel(path, header=h0, nrows=5)

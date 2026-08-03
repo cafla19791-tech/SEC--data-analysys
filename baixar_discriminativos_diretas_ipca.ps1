@@ -40,7 +40,7 @@ foreach ($item in $map) {
         New-Item -ItemType Directory -Force -Path $dir | Out-Null
     }
     Write-Host ("  {0} -> {1}" -f $item.Remote, $item.Local)
-    Invoke-WebRequest -Uri "$baseRaw/$($item.Remote)`?v=3" -OutFile $out -UseBasicParsing -Headers $headers
+    Invoke-WebRequest -Uri "$baseRaw/$($item.Remote)`?v=4" -OutFile $out -UseBasicParsing -Headers $headers
 }
 
 $py = $Python
