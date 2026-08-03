@@ -510,8 +510,14 @@ EXCEL_COLUMNS = {
     "Juros": "juros",
     "Prazo - Carência (meses)": "prazo_carencia",
     "Prazo de Carência (meses)": "prazo_carencia",
+    "Prezo - carencia (meses)": "prazo_carencia",
+    "Prezo - Carencia (meses)": "prazo_carencia",
     "Prazo - Amortização (meses)": "prazo_amortizacao",
     "Prazo de Amortização (meses)": "prazo_amortizacao",
+    "Prazo - amortizaca (meses)": "prazo_amortizacao",
+    "Prazo - Amortizaca (meses)": "prazo_amortizacao",
+    "Valor desembolsado R$": "valor_desembolsado",
+    "Data da contratacao": "data_contratacao",
     "Instituição Financeira Credenciada": "agente",
     "Instituicao Financeira Credenciada": "agente",
     "Custo financeiro": "custo_financeiro",
@@ -557,10 +563,17 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "prazo_carencia": "prazo_carencia",
     "prazo_de_carencia_meses": "prazo_carencia",
     "carencia_meses": "prazo_carencia",
+    # ContAgil OPERACOES DIRETAS: typo "Prezo - carencia (meses)"
+    "prezo_carencia_meses": "prazo_carencia",
+    "prezo_carencia": "prazo_carencia",
     "prazo_amortizacao_meses": "prazo_amortizacao",
     "prazo_amortizacao": "prazo_amortizacao",
     "prazo_de_amortizacao_meses": "prazo_amortizacao",
     "amortizacao_meses": "prazo_amortizacao",
+    # ContAgil OPERACOES DIRETAS: typo "Prazo - amortizaca (meses)"
+    "prazo_amortizaca_meses": "prazo_amortizacao",
+    "prazo_amortizaca": "prazo_amortizacao",
+    "amortizaca_meses": "prazo_amortizacao",
     "instituicao_financeira_credenciada": "agente",
     "instituicao_financeira": "agente",
     "agente_financeiro": "agente",
@@ -635,9 +648,15 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
                 target = "valor_contratado"
             elif key.startswith("valor_da_operacao"):
                 target = "valor_desembolsado"
-            elif "prazo" in key and "carencia" in key:
+            elif "carencia" in key and (
+                "prazo" in key or "prezo" in key or key.startswith("carencia")
+            ):
+                # inclui typo ContAgil "Prezo - carencia (meses)"
                 target = "prazo_carencia"
-            elif "prazo" in key and "amortizacao" in key:
+            elif ("prazo" in key or "prezo" in key) and (
+                "amortizacao" in key or "amortizaca" in key
+            ):
+                # inclui typo ContAgil "Prazo - amortizaca (meses)"
                 target = "prazo_amortizacao"
             elif "instituicao" in key and "financeira" in key:
                 target = "agente"

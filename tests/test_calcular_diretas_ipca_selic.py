@@ -103,6 +103,54 @@ def test_calcular_klmn_e_gravar(tmp_path: Path):
     assert ws["N2"].value == calc[HEADERS_KLMN["N"]].iloc[0]
 
 
+def test_typos_contagil_operacoes_diretas(tmp_path: Path):
+    """Cabeçalhos reais ContAgil: Prezo/amortizaca (typos) + Valor desembolsado R$."""
+    excel = tmp_path / "OPERACOES DIRETAS - 2002 a 2018.xlsx"
+    pd.DataFrame(
+        {
+            "Cliente": ["A"],
+            "CNPJ": ["123"],
+            "UF": ["SP"],
+            "Número do contrato": ["99"],
+            "Data da contratacao": ["15/03/2009"],
+            "Valor desembolsado R$": [100000.0],
+            "Custo financeiro": ["TJLP"],
+            "Juros": [2.5],
+            "Prezo - carencia (meses)": [6],
+            "Prazo - amortizaca (meses)": [24],
+        }
+    ).to_excel(excel, index=False)
+
+    ipca = _serie_constante("2009-01-01", 220, 0.4)
+    selic = _serie_constante("2009-01-01", 220, 0.9)
+    ipca_path = tmp_path / "ipca.xlsx"
+    selic_path = tmp_path / "selic.xlsx"
+    pd.DataFrame({"Data": ipca["mes"], "IPCA": ipca["valor"]}).to_excel(
+        ipca_path, index=False
+    )
+    pd.DataFrame({"Data": selic["mes"], "SELIC": selic["valor"]}).to_excel(
+        selic_path, index=False
+    )
+
+    saida = tmp_path / "calc.xlsx"
+    rc = main(
+        [
+            "--excel",
+            str(excel),
+            "--saida",
+            str(saida),
+            "--ipca",
+            str(ipca_path),
+            "--selic",
+            str(selic_path),
+        ]
+    )
+    assert rc == 0
+    wb = load_workbook(saida)
+    assert wb.active["K2"].value is not None
+    assert wb.active["L2"].value > 1.0
+
+
 def test_main_cli(tmp_path: Path):
     excel = tmp_path / "OPERACOES DIRETAS - 2002 a 2018.xlsx"
     pd.DataFrame(
