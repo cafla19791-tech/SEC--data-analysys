@@ -1,7 +1,43 @@
 #!/usr/bin/env python3
-"""Entrypoint na raiz: discriminativos OPERAÇÕES DIRETAS + IPCA."""
+"""Entrypoint ContAgil-safe: discriminativos OPERACOES DIRETAS + IPCA.
 
-from scripts.discriminativos_diretas_ipca import main
+Evita a pasta WinPython\\Scripts (conflito case-insensitive com 'scripts').
+Carrega codigo de sec_scripts\\ (ContAgil) ou scripts\\ (repo/dev).
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import sys
+from pathlib import Path
+
+
+def _load_main():
+    root = Path(__file__).resolve().parent
+    candidates = [
+        root / "sec_scripts" / "discriminativos_diretas_ipca.py",
+        root / "scripts" / "discriminativos_diretas_ipca.py",
+    ]
+    for path in candidates:
+        if not path.exists():
+            continue
+        # Garante que o diretorio do pacote esteja no path (irmaos)
+        pkg_dir = str(path.parent)
+        if pkg_dir not in sys.path:
+            sys.path.insert(0, pkg_dir)
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        spec = importlib.util.spec_from_file_location("discriminativos_diretas_ipca_main", path)
+        if spec is None or spec.loader is None:
+            continue
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod.main
+    raise FileNotFoundError(
+        "Nao achei discriminativos_diretas_ipca.py em sec_scripts\\ nem scripts\\. "
+        "Rode baixar_discriminativos.ps1 de novo."
+    )
+
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(_load_main()())

@@ -40,19 +40,20 @@ for _p in (str(ROOT), str(_SCRIPTS)):
 
 
 def _load_sibling(mod_name: str, filename: str):
-    """Importa modulo irmao (pacote scripts.* ou arquivo local ContAgil)."""
+    """Importa modulo irmao: arquivo local primeiro (ContAgil sec_scripts)."""
+    import importlib.util
+
+    path = _SCRIPTS / filename
+    if path.exists():
+        spec = importlib.util.spec_from_file_location(f"sec_{mod_name}", path)
+        if spec is not None and spec.loader is not None:
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod
     try:
         return __import__(f"scripts.{mod_name}", fromlist=["*"])
-    except ModuleNotFoundError:
-        import importlib.util
-
-        path = _SCRIPTS / filename
-        spec = importlib.util.spec_from_file_location(mod_name, path)
-        if spec is None or spec.loader is None:
-            raise ModuleNotFoundError(f"Nao achou {path}")
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        return mod
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(f"Nao achou {path} nem scripts.{mod_name}") from exc
 
 
 _calc = _load_sibling("calcular_diretas_ipca_selic", "calcular_diretas_ipca_selic.py")

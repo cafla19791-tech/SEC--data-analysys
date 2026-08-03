@@ -1,9 +1,9 @@
 # Baixa discriminativos DIRETAS+IPCA no ContAgil WinPython.
-# ASCII-only. Rode na pasta winpython:
+# Usa pasta sec_scripts (evita colisao com WinPython\Scripts).
 #
 #   cd "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
 #   $u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/discriminativos-diretas-ipca-e4e9/baixar_discriminativos_diretas_ipca.ps1"
-#   Invoke-WebRequest "$u`?v=1" -OutFile baixar_discriminativos.ps1 -Headers @{"Cache-Control"="no-cache"}
+#   Invoke-WebRequest "$u`?v=3" -OutFile baixar_discriminativos.ps1 -Headers @{"Cache-Control"="no-cache"}
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_discriminativos.ps1
 
 param(
@@ -20,25 +20,27 @@ $headers = @{ "Cache-Control" = "no-cache"; "Pragma" = "no-cache" }
 
 Write-Host "============================================================"
 Write-Host " Baixando discriminativos DIRETAS+IPCA -> $Root"
+Write-Host " Pasta de codigo: sec_scripts (nao Scripts)"
 Write-Host "============================================================"
 
-$files = @(
-    "discriminativos_diretas_ipca.bat",
-    "discriminativos_diretas_ipca.py",
-    "scripts/__init__.py",
-    "scripts/discriminativos_diretas_ipca.py",
-    "scripts/calcular_diretas_ipca_selic.py",
-    "scripts/gerar_fluxos.py"
+# remote path -> local path (repo scripts/* vira sec_scripts/*)
+$map = @(
+    @{ Remote = "discriminativos_diretas_ipca.bat"; Local = "discriminativos_diretas_ipca.bat" },
+    @{ Remote = "discriminativos_diretas_ipca.py"; Local = "discriminativos_diretas_ipca.py" },
+    @{ Remote = "scripts/__init__.py"; Local = "sec_scripts/__init__.py" },
+    @{ Remote = "scripts/discriminativos_diretas_ipca.py"; Local = "sec_scripts/discriminativos_diretas_ipca.py" },
+    @{ Remote = "scripts/calcular_diretas_ipca_selic.py"; Local = "sec_scripts/calcular_diretas_ipca_selic.py" },
+    @{ Remote = "scripts/gerar_fluxos.py"; Local = "sec_scripts/gerar_fluxos.py" }
 )
 
-foreach ($rel in $files) {
-    $out = Join-Path $Root ($rel -replace "/", "\")
+foreach ($item in $map) {
+    $out = Join-Path $Root ($item.Local -replace "/", "\")
     $dir = Split-Path -Parent $out
     if (-not (Test-Path -LiteralPath $dir)) {
         New-Item -ItemType Directory -Force -Path $dir | Out-Null
     }
-    Write-Host "  $rel"
-    Invoke-WebRequest -Uri "$baseRaw/$rel`?v=1" -OutFile $out -UseBasicParsing -Headers $headers
+    Write-Host ("  {0} -> {1}" -f $item.Remote, $item.Local)
+    Invoke-WebRequest -Uri "$baseRaw/$($item.Remote)`?v=3" -OutFile $out -UseBasicParsing -Headers $headers
 }
 
 $py = $Python
@@ -55,13 +57,13 @@ Write-Host "Instalando pandas/openpyxl/httpx/requests (se preciso)..."
 & $py -m pip install "pandas>=2.0" "openpyxl>=3.1" "httpx>=0.28" "requests>=2.28"
 if ($LASTEXITCODE -ne 0) { throw "pip install falhou" }
 
-# Sanity check dos arquivos baixados
 $need = @(
     "discriminativos_diretas_ipca.bat",
-    "scripts\__init__.py",
-    "scripts\discriminativos_diretas_ipca.py",
-    "scripts\calcular_diretas_ipca_selic.py",
-    "scripts\gerar_fluxos.py"
+    "discriminativos_diretas_ipca.py",
+    "sec_scripts\__init__.py",
+    "sec_scripts\discriminativos_diretas_ipca.py",
+    "sec_scripts\calcular_diretas_ipca_selic.py",
+    "sec_scripts\gerar_fluxos.py"
 )
 foreach ($rel in $need) {
     $p = Join-Path $Root $rel
@@ -70,14 +72,16 @@ foreach ($rel in $need) {
 }
 Write-Host "Checagem de arquivos: OK"
 
+# Smoke: import entrypoint
+Write-Host "Teste rapido de import..."
+& $py -c "import importlib.util; from pathlib import Path; p=Path(r'$Root')/'discriminativos_diretas_ipca.py'; print('runner', p.exists(), 'sec', (Path(r'$Root')/'sec_scripts'/'discriminativos_diretas_ipca.py').exists())"
+if ($LASTEXITCODE -ne 0) { throw "teste de import falhou" }
+
 if (-not (Test-Path -LiteralPath (Join-Path $Root "saida"))) {
     New-Item -ItemType Directory -Force -Path (Join-Path $Root "saida") | Out-Null
 }
 
 Write-Host ""
-Write-Host "OK. Arquivos prontos."
-Write-Host "1) Deixe a planilha OPERACOES DIRETAS nesta pasta winpython"
-Write-Host "2) Rode:"
-Write-Host "     .\discriminativos_diretas_ipca.bat"
-Write-Host "   (no cmd: discriminativos_diretas_ipca.bat)"
-Write-Host "3) Saida: saida\DISCRIMINATIVOS_DIRETAS_IPCA.xlsx"
+Write-Host "OK. Agora rode SOMENTE esta linha:"
+Write-Host "  .\discriminativos_diretas_ipca.bat"
+Write-Host "Saida: saida\DISCRIMINATIVOS_DIRETAS_IPCA.xlsx"
