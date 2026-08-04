@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "bis-mcp": {
+      "command": "bash",
+      "args": ["./bis-mcp/run_mcp.sh"],
+      "env": {
+        "BIS_USER_AGENT": "SEC-data-analysys-bis-mcp/0.1 (cafla19791@gmail.com)"
+      }
+    }
+  }
+}
