@@ -1,0 +1,47 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dados brutos / intermediários (grandes)
+data/raw/
+data/contagil_winpython/
+data/*.csv
+data/*.parquet
+data/*.xlsx
+!data/.gitkeep
+!data/sample_operacoes_com_agente.csv
+!data/tjlp_mensal.xlsx
+!data/selic_mensal.xlsx
+!data/selic_taxas_contagil.xlsx
+
+# Saídas detalhadas (CSV pode passar de 1 GB)
+output/*.csv
+output/*.parquet
+output/*_stats.json
+!output/.gitkeep
+!output/README.md
+!output/*.xlsx
+!output/resumo_por_agente.csv
+!output/impacto_fiscal_por_ano.csv
+!output/resumo_contratos.csv
+!output/resumo_por_ano.csv
+!output/resumo_contratos_polars.csv
+!output/resumo_por_ano_polars.csv
+!output/resumo_por_agente_polars.csv
+!output/impacto_fiscal_por_ano_polars.csv
+!output/totais_gerais_polars.csv
+!output/RELATORIO_EXECUTIVO.md
+!output/desembolsos_1995_2001_ipca.md
+!output/desembolsos_1995_2001_ipca.xlsx
+!output/grafico_interativo.html
+
+# Artefato clássico na raiz (cópia do resumo anual)
+/impacto_fiscal_por_ano.xlsx
+
+*.log
+.DS_Store
+amostra_fluxos.xlsx
+data/bndes/*.xlsx
