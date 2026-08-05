@@ -26,17 +26,38 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+_SCRIPTS = Path(__file__).resolve().parent
+ROOT = _SCRIPTS.parent if (_SCRIPTS / "numerar_contratos_indiretas.py").exists() else Path(__file__).resolve().parents[1]
+for _p in (str(ROOT), str(_SCRIPTS)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
-from scripts.gerar_fluxos import (  # noqa: E402
-    CONTAGIL_PASTA_DADOS,
-    CONTAGIL_PASTA_SAIDA,
-    CONTAGIL_WINPYTHON,
-    _mapear_colunas_contratos,
-    parse_datas,
-)
+
+def _load_gerar_fluxos():
+    """Importa gerar_fluxos do diretório irmão (sec_scripts ContAgil ou scripts/)."""
+    import importlib.util
+
+    path = _SCRIPTS / "gerar_fluxos.py"
+    if path.exists():
+        spec = importlib.util.spec_from_file_location("sec_gerar_fluxos_num", path)
+        if spec is not None and spec.loader is not None:
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod
+    try:
+        return __import__("scripts.gerar_fluxos", fromlist=["*"])
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            f"Não achou {_SCRIPTS / 'gerar_fluxos.py'} nem scripts.gerar_fluxos"
+        ) from exc
+
+
+_flux = _load_gerar_fluxos()
+CONTAGIL_PASTA_DADOS = _flux.CONTAGIL_PASTA_DADOS
+CONTAGIL_PASTA_SAIDA = _flux.CONTAGIL_PASTA_SAIDA
+CONTAGIL_WINPYTHON = _flux.CONTAGIL_WINPYTHON
+_mapear_colunas_contratos = _flux._mapear_colunas_contratos
+parse_datas = _flux.parse_datas
 
 COL_NUMERO = "Número do contrato"
 ANO_MIN_DEFAULT = 2002
