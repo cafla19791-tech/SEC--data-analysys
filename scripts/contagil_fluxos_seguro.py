@@ -277,6 +277,12 @@ def processar_arquivo(
         print("    [AVISO] Nenhum contrato válido após limpeza. Pulando.")
         return None
 
+    # Garante número único N-AAAA (já aplicado em load_from_excel / preparar)
+    if "numero_contrato" in df.columns and len(df):
+        print(
+            f"    Contratos: {df['numero_contrato'].iloc[0]} … {df['numero_contrato'].iloc[-1]}"
+        )
+
     pasta_saida.mkdir(parents=True, exist_ok=True)
     saida = pasta_saida / f"fluxos_{arquivo.stem}.xlsx"
     fluxos = gerar_fluxos(df, serie)

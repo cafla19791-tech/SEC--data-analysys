@@ -1014,11 +1014,42 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
     out = out[(out["valor_desembolsado"] > 0) & (out["prazo_amortizacao"] > 0)]
     out = out.reset_index(drop=True)
     out["contrato"] = out.index
+    # Indiretas: número único por ano (1-2002, 2-2002, …). Diretas: preserva o original.
+    if _contratos_sao_indiretas(out):
+        out["numero_contrato"] = _numerar_contratos_por_ano(out["data_contratacao"])
+    elif "numero_contrato" not in out.columns:
+        out["numero_contrato"] = _numerar_contratos_por_ano(out["data_contratacao"])
 
     print(f"Contratos na entrada: {before:,}")
     print(f"Contratos válidos: {len(out):,}")
     print(f"Agentes distintos: {out['agente'].nunique():,}")
     return out
+
+
+def _contratos_sao_indiretas(df: pd.DataFrame) -> bool:
+    """True se a massa for de operações indiretas (ou sem marcação DIRETA)."""
+    if "forma_de_apoio" not in df.columns or df.empty:
+        # Massa BNDES INDIRETAS tipicamente sem coluna; default = indireta
+        return True
+    forma = df["forma_de_apoio"].astype(str).str.upper()
+    tem_indireta = forma.str.contains("INDIRETA", na=False)
+    so_direta = forma.str.contains("DIRETA", na=False) & ~tem_indireta
+    if bool(so_direta.all()):
+        return False
+    if bool(tem_indireta.any()):
+        return True
+    return True
+
+
+def _numerar_contratos_por_ano(datas: pd.Series) -> pd.Series:
+    """1-AAAA, 2-AAAA… reiniciando a cada ano civil da contratação."""
+    s = pd.Series(pd.to_datetime(datas, errors="coerce"), index=getattr(datas, "index", None))
+    anos = s.dt.year.astype("Int64")
+    if anos.isna().any():
+        seq = pd.Series(range(1, len(s) + 1), index=s.index)
+        return seq.astype(str) + "-0000"
+    seq = s.groupby(anos, sort=False).cumcount() + 1
+    return seq.astype(str) + "-" + anos.astype(str)
 
 
 def _coluna_impacto(df: pd.DataFrame) -> str:
