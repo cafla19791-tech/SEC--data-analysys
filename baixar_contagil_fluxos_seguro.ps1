@@ -1,17 +1,17 @@
 # Baixa contagil_fluxos_seguro no ContAgil WinPython (sec_scripts).
+# Apenas ASCII neste arquivo (evita erro de encoding no PowerShell Windows).
 #
-# Cole no PowerShell (ja dentro da pasta winpython):
+# No CMD (Prompt de Comando), rode:
 #
-#   cd "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
-#   $u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/numerar-contratos-indiretas-e4e9/baixar_contagil_fluxos_seguro.ps1"
-#   Invoke-WebRequest "$u`?v=1" -OutFile baixar_fluxos.ps1 -Headers @{"Cache-Control"="no-cache"}
+#   cd /d "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
+#   powershell -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest 'https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/numerar-contratos-indiretas-e4e9/baixar_contagil_fluxos_seguro.ps1?v=2' -OutFile baixar_fluxos.ps1 -Headers @{'Cache-Control'='no-cache'}"
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_fluxos.ps1
 #
-# Depois (teste rapido — 50 contratos do arquivo 2002):
-#   .\contagil_fluxos_seguro.bat "dados\Operacoes Indiretas 2002.xlsx" 50
+# Depois (teste rapido - 50 contratos):
+#   contagil_fluxos_seguro.bat "dados\Operacoes Indiretas 2002.xlsx" 50
 #
-# Massa completa (demora horas; gera arquivos grandes em saida\):
-#   .\contagil_fluxos_seguro.bat
+# Massa completa:
+#   contagil_fluxos_seguro.bat
 
 param(
     [string]$Ref = "cursor/numerar-contratos-indiretas-e4e9",
@@ -44,7 +44,7 @@ $map = @(
 )
 
 foreach ($item in $map) {
-    $out = Join-Path $Root ($item.Local -replace "/", "\")
+    $out = Join-Path $Root ($item.Local -replace "/", [string][char]92)
     $dir = Split-Path -Parent $out
     if (-not (Test-Path -LiteralPath $dir)) {
         New-Item -ItemType Directory -Force -Path $dir | Out-Null
@@ -103,13 +103,14 @@ if (-not (Test-Path -LiteralPath $fatores)) {
     Write-Host "Fatores: OK ($fatores)"
 }
 
-if (-not (Test-Path -LiteralPath (Join-Path $Root "saida"))) {
-    New-Item -ItemType Directory -Force -Path (Join-Path $Root "saida") | Out-Null
+$saidaDir = Join-Path $Root "saida"
+if (-not (Test-Path -LiteralPath $saidaDir)) {
+    New-Item -ItemType Directory -Force -Path $saidaDir | Out-Null
 }
 
 Write-Host ""
-Write-Host "OK. Proximo passo (recomendado — teste rapido):"
-Write-Host '  .\contagil_fluxos_seguro.bat "dados\Operacoes Indiretas 2002.xlsx" 50'
+Write-Host "OK. Proximo passo (recomendado - teste rapido):"
+Write-Host '  contagil_fluxos_seguro.bat "dados\Operacoes Indiretas 2002.xlsx" 50'
 Write-Host ""
-Write-Host "Massa completa (demora; arquivos grandes em saida\):"
-Write-Host "  .\contagil_fluxos_seguro.bat"
+Write-Host "Massa completa (demora; arquivos grandes em saida):"
+Write-Host "  contagil_fluxos_seguro.bat"
