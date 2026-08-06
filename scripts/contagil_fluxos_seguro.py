@@ -36,8 +36,21 @@ import pandas as pd
 
 
 def _load_gerar_fluxos():
-    """Importa gerar_fluxos do diretório irmão (sec_scripts ContAgil ou scripts/)."""
+    """Importa gerar_fluxos do diretório irmão (sec_scripts ContAgil ou scripts/).
+
+    Prefere ``scripts.gerar_fluxos`` no repo (uma só identidade de SelicSerie).
+    No ContAgil WinPython, ``scripts`` colide com site-packages - aí carrega o
+    arquivo irmão via importlib.
+    """
     import importlib.util
+
+    try:
+        mod = __import__("scripts.gerar_fluxos", fromlist=["*"])
+        # Garante que não pegamos outro pacote 'scripts' sem gerar_fluxos útil
+        if hasattr(mod, "gerar_fluxos") and hasattr(mod, "SelicSerie"):
+            return mod
+    except ModuleNotFoundError:
+        pass
 
     path = _SCRIPTS / "gerar_fluxos.py"
     if path.exists():
@@ -46,12 +59,9 @@ def _load_gerar_fluxos():
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
             return mod
-    try:
-        return __import__("scripts.gerar_fluxos", fromlist=["*"])
-    except ModuleNotFoundError as exc:
-        raise ModuleNotFoundError(
-            f"Não achou {_SCRIPTS / 'gerar_fluxos.py'} nem scripts.gerar_fluxos"
-        ) from exc
+    raise ModuleNotFoundError(
+        f"Não achou {_SCRIPTS / 'gerar_fluxos.py'} nem scripts.gerar_fluxos"
+    )
 
 
 _flux = _load_gerar_fluxos()

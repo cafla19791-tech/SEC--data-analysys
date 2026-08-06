@@ -1478,8 +1478,15 @@ def _resolver_segundo_arg(
     Aceita o rascunho ContAgil ``gerar_fluxos(df, df)`` (df_original para
     Instituição Financeira) e também ``gerar_fluxos(df, selic_df)``.
     """
-    if isinstance(segundo, SelicSerie):
-        return TAXA_SELIC_ANUAL, segundo, None
+    # Duck-typing: ContAgil pode carregar gerar_fluxos.py duas vezes (scripts/ vs
+    # sec_scripts/), gerando classes SelicSerie distintas — isinstance falha.
+    if isinstance(segundo, SelicSerie) or (
+        hasattr(segundo, "fatores")
+        and hasattr(segundo, "fator_referencia")
+        and hasattr(segundo, "origem")
+        and not isinstance(segundo, pd.DataFrame)
+    ):
+        return TAXA_SELIC_ANUAL, segundo, None  # type: ignore[return-value]
     if isinstance(segundo, pd.DataFrame):
         if _parece_dataframe_selic(segundo):
             return (
