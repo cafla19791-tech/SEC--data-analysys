@@ -43,6 +43,8 @@ copy /Y "%REPO%\scripts\numerar_contratos_indiretas.py" "%WINPY%\scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.py" "%WINPY%\" >nul
+copy /Y "%REPO%\contagil_fluxos_seguro.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_contagil_fluxos_seguro.ps1" "%WINPY%\" >nul
 copy /Y "%REPO%\resumo_fluxos_polars.py" "%WINPY%\" >nul
 copy /Y "%REPO%\calcular_diretas_ipca_selic.py" "%WINPY%\" >nul
 copy /Y "%REPO%\atualizar_desembolsos_ipca_1995_2001.py" "%WINPY%\" >nul

@@ -25,26 +25,47 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+_SCRIPTS = Path(__file__).resolve().parent
+ROOT = _SCRIPTS.parent
+for _p in (str(ROOT), str(_SCRIPTS)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 import numpy as np
 import pandas as pd
 
-from scripts.gerar_fluxos import (
-    CONTAGIL_PASTA_DADOS,
-    CONTAGIL_PASTA_SAIDA,
-    CONTAGIL_WINPYTHON,
-    DATA_DIR,
-    DATA_IMPACTO,
-    OUTPUT_DIR,
-    SelicSerie,
-    _excel_tem_colunas_contratos,
-    _mapear_colunas_contratos,
-    gerar_fluxos,
-    load_from_excel,
-)
+
+def _load_gerar_fluxos():
+    """Importa gerar_fluxos do diretório irmão (sec_scripts ContAgil ou scripts/)."""
+    import importlib.util
+
+    path = _SCRIPTS / "gerar_fluxos.py"
+    if path.exists():
+        spec = importlib.util.spec_from_file_location("sec_gerar_fluxos_seguro", path)
+        if spec is not None and spec.loader is not None:
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod
+    try:
+        return __import__("scripts.gerar_fluxos", fromlist=["*"])
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            f"Não achou {_SCRIPTS / 'gerar_fluxos.py'} nem scripts.gerar_fluxos"
+        ) from exc
+
+
+_flux = _load_gerar_fluxos()
+CONTAGIL_PASTA_DADOS = _flux.CONTAGIL_PASTA_DADOS
+CONTAGIL_PASTA_SAIDA = _flux.CONTAGIL_PASTA_SAIDA
+CONTAGIL_WINPYTHON = _flux.CONTAGIL_WINPYTHON
+DATA_DIR = _flux.DATA_DIR
+DATA_IMPACTO = _flux.DATA_IMPACTO
+OUTPUT_DIR = _flux.OUTPUT_DIR
+SelicSerie = _flux.SelicSerie
+_excel_tem_colunas_contratos = _flux._excel_tem_colunas_contratos
+_mapear_colunas_contratos = _flux._mapear_colunas_contratos
+gerar_fluxos = _flux.gerar_fluxos
+load_from_excel = _flux.load_from_excel
 
 FATORES_DEFAULT_NOME = "fator_acumulado_SELIC_TJLP_TLP.xlsx"
 DATA_REF_DEFAULT = datetime(2026, 6, 1)
@@ -195,6 +216,10 @@ def listar_contratos(pasta: Path) -> list[Path]:
         if nome.startswith("STP") or "SELIC" in nome or "FATOR" in nome or "TJLP" in nome:
             continue
         if nome.startswith("~$"):
+            continue
+        if "NUMERADOS" in nome or "DISCRIMINATIV" in nome:
+            continue
+        if "DIRETA" in nome and "INDIRET" not in nome:
             continue
         saida.append(arq)
     return saida
