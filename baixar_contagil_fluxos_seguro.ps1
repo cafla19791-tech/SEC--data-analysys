@@ -4,7 +4,7 @@
 # No CMD (Prompt de Comando), rode:
 #
 #   cd /d "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
-#   powershell -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest 'https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/numerar-contratos-indiretas-e4e9/baixar_contagil_fluxos_seguro.ps1?v=3' -OutFile baixar_fluxos.ps1 -Headers @{'Cache-Control'='no-cache'}"
+#   powershell -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest 'https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/numerar-contratos-indiretas-e4e9/baixar_contagil_fluxos_seguro.ps1?v=4' -OutFile baixar_fluxos.ps1 -Headers @{'Cache-Control'='no-cache'}"
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_fluxos.ps1
 #
 # Depois (teste rapido - 50 contratos):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Cálculo de fluxos e impactos – BNDES Indiretos
+Cálculo de fluxos e impactos - BNDES Indiretos
 Capitalização Mensal | Versão Segura
 
 Uso (ContAgil / WinPython):
@@ -12,7 +12,7 @@ Uso (ContAgil / WinPython):
       --fatores "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\fator_acumulado_SELIC_TJLP_TLP.xlsx"
 
 Lê todos os .xlsx da massa de dados (ex.: BNDES INDIRETAS 2002.xlsx),
-mapeia colunas de forma tolerante (acentos, aliases, header em linhas 0–8)
+mapeia colunas de forma tolerante (acentos, aliases, header em linhas 0-8)
 e gera fluxos com impacto capitalizado pela série mensal de fatores.
 """
 
@@ -73,7 +73,7 @@ DATA_REF_DEFAULT = datetime(2026, 6, 1)
 
 def _banner() -> None:
     print("=" * 70)
-    print(" CÁLCULO DE FLUXOS E IMPACTOS – BNDES INDIRETOS")
+    print(" CÁLCULO DE FLUXOS E IMPACTOS - BNDES INDIRETOS")
     print(" Capitalização Mensal | Versão Segura")
     print("=" * 70)
 
@@ -92,7 +92,7 @@ def resolver_pasta_dados(arg: Path | None) -> Path:
         if _parece_caminho_contagil(arg):
             local = DATA_DIR / "contagil_winpython" / "dados"
             local.mkdir(parents=True, exist_ok=True)
-            print(f"⚠️ Massa ContAgil ausente: {arg}")
+            print(f"[AVISO] Massa ContAgil ausente: {arg}")
             print(f"   Usando espelho local: {local}")
             return local
         return arg
@@ -114,7 +114,7 @@ def resolver_pasta_saida(arg: Path | None) -> Path:
             return arg
         local = DATA_DIR / "contagil_winpython" / "saida"
         local.mkdir(parents=True, exist_ok=True)
-        print(f"⚠️ Saída ContAgil ausente: {arg}")
+        print(f"[AVISO] Saída ContAgil ausente: {arg}")
         print(f"   Usando espelho local: {local}")
         return local
     if CONTAGIL_PASTA_SAIDA.exists():
@@ -171,7 +171,7 @@ def carregar_fatores_mensais(path: Path) -> SelicSerie:
             fator_col = cols_norm[cand]
             break
     if fator_col is None:
-        # ContAgil: Taxa_Mensal_% + Fator_Acumulado — pega última numérica
+        # ContAgil: Taxa_Mensal_% + Fator_Acumulado - pega última numérica
         for c in raw.columns:
             if "fator" in str(c).lower():
                 fator_col = c
@@ -226,7 +226,7 @@ def listar_contratos(pasta: Path) -> list[Path]:
 
 
 def diagnosticar_colunas(path: Path) -> None:
-    """Imprime colunas brutas e mapeamento — ajuda quando o arquivo é pulado."""
+    """Imprime colunas brutas e mapeamento - ajuda quando o arquivo é pulado."""
     for h in (0, 5, 1, 2, 3, 4):
         try:
             df = pd.read_excel(path, sheet_name=0, header=h, nrows=5)
@@ -305,7 +305,7 @@ def processar_arquivo(
     # Garante número único N-AAAA (já aplicado em load_from_excel / preparar)
     if "numero_contrato" in df.columns and len(df):
         print(
-            f"    Contratos: {df['numero_contrato'].iloc[0]} … {df['numero_contrato'].iloc[-1]}"
+            f"    Contratos: {df['numero_contrato'].iloc[0]} ... {df['numero_contrato'].iloc[-1]}"
         )
 
     pasta_saida.mkdir(parents=True, exist_ok=True)
@@ -316,11 +316,11 @@ def processar_arquivo(
         csv_path = saida.with_suffix(".csv")
         fluxos.to_csv(csv_path, index=False)
         fluxos.head(1_000_000).to_excel(saida, index=False)
-        print(f"    → CSV completo: {csv_path} ({len(fluxos):,} parcelas)")
-        print(f"    → Excel (amostra 1M): {saida}")
+        print(f"    -> CSV completo: {csv_path} ({len(fluxos):,} parcelas)")
+        print(f"    -> Excel (amostra 1M): {saida}")
     else:
         fluxos.to_excel(saida, index=False)
-        print(f"    → Salvo: {saida} ({len(fluxos):,} parcelas)")
+        print(f"    -> Salvo: {saida} ({len(fluxos):,} parcelas)")
     return saida
 
 

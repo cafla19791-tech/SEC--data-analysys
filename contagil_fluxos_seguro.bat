@@ -17,6 +17,9 @@ echo ========================================
 
 set "PYTHON=%WINPY%\python.exe"
 if not exist "%PYTHON%" set "PYTHON=python"
+REM Evita UnicodeEncodeError no console Windows (cp1252)
+set "PYTHONIOENCODING=utf-8"
+set "PYTHONUTF8=1"
 if not exist "%WINPY%\saida" mkdir "%WINPY%\saida"
 set "DADOS=%WINPY%\dados"
 set "SAIDA=%WINPY%\saida"
