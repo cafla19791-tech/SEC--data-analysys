@@ -517,6 +517,10 @@ EXCEL_COLUMNS = {
     "Prazo - amortizaca (meses)": "prazo_amortizacao",
     "Prazo - Amortizaca (meses)": "prazo_amortizacao",
     "Valor desembolsado R$": "valor_desembolsado",
+    # ContAgil "Operações Indiretas AAAA.xlsx" (valor nominal na contratação)
+    "Valor histórico": "valor_desembolsado",
+    "Valor Historico": "valor_desembolsado",
+    "Valor Histórico": "valor_desembolsado",
     "Data da contratacao": "data_contratacao",
     "Instituição Financeira Credenciada": "agente",
     "Instituicao Financeira Credenciada": "agente",
@@ -554,6 +558,10 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "valor_da_operacao_em_reais": "valor_desembolsado",
     "valor_da_operacao_reais": "valor_desembolsado",
     "valor_da_operacao": "valor_desembolsado",
+    # ContAgil Operações Indiretas: coluna "Valor histórico"
+    "valor_historico": "valor_desembolsado",
+    "valor_historico_reais": "valor_desembolsado",
+    "valor_historico_r": "valor_desembolsado",
     "valor_contratado_reais": "valor_contratado",
     "valor_contratado_em_reais": "valor_contratado",
     "valor_contratado": "valor_contratado",
@@ -648,6 +656,11 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
                 target = "valor_contratado"
             elif key.startswith("valor_da_operacao"):
                 target = "valor_desembolsado"
+            elif key.startswith("valor_histor") or (
+                key.startswith("valor") and "histor" in key
+            ):
+                # "Valor histórico" / mojibake "Valor hist¾rico"
+                target = "valor_desembolsado"
             elif "carencia" in key and (
                 "prazo" in key or "prezo" in key or key.startswith("carencia")
             ):
@@ -671,10 +684,19 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
             used_targets.add(target)
 
     mapped = df.rename(columns=rename)
-    # Diretas: se só há valor contratado, promove a valor_desembolsado
+    # Diretas / indiretas ContAgil: promove valor contratado ou histórico
     if "valor_desembolsado" not in mapped.columns and "valor_contratado" in mapped.columns:
         mapped = mapped.rename(columns={"valor_contratado": "valor_desembolsado"})
         rename = {**rename, "valor_contratado": "valor_desembolsado"}
+    if "valor_desembolsado" not in mapped.columns:
+        for col in list(mapped.columns):
+            key = _normalize_nome_coluna(col)
+            if key.startswith("valor_histor") or (
+                key.startswith("valor") and "histor" in key
+            ):
+                mapped = mapped.rename(columns={col: "valor_desembolsado"})
+                rename = {**rename, col: "valor_desembolsado"}
+                break
     return mapped, rename
 
 

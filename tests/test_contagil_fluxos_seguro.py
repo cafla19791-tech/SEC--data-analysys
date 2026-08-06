@@ -89,6 +89,29 @@ def test_mapear_colunas_variante_bndes_indiretas():
     assert "data_contratacao" in rename.values()
 
 
+def test_mapear_valor_historico_operacoes_indiretas():
+    """ContAgil 'Operações Indiretas 2002.xlsx' usa 'Valor histórico'."""
+    df = pd.DataFrame(
+        {
+            "CNPJ do Agente Financeiro": ["00.000.000/0001-00"],
+            "Instituição Financeira Credenciada": ["BANCO TESTE"],
+            "Cliente": ["EMPRESA X"],
+            "Data da contratação": ["15/03/2002"],
+            " Fonte de recurso (desembolsos) ": ["FAT"],
+            "Custo financeiro": ["TJLP"],
+            "Juros": [2.5],
+            "Prazo - Carência (meses)": [6],
+            "Prazo - Amortização (meses)": [48],
+            "Valor histórico": [250000.0],
+            "Valor atualizado pelo IPCA até 31/7/2025": [400000.0],
+        }
+    )
+    mapped, rename = _mapear_colunas_contratos(df)
+    assert "valor_desembolsado" in mapped.columns
+    assert float(mapped["valor_desembolsado"].iloc[0]) == 250000.0
+    assert _excel_tem_colunas_contratos(df)
+
+
 def _df_operacoes_diretas() -> pd.DataFrame:
     """Layout portal/ContAgil OPERACOES DIRETAS.xlsx (não automáticas)."""
     return pd.DataFrame(
