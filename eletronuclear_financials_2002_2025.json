@@ -1,28 +1,51 @@
 {
-  "entity": "ELETROBRAS TERMONUCLEAR S.A. (Eletronuclear)",
-  "period": "2002-2025 (NI from 2003; 2002 NI gap)",
-  "interest_metric": "Cash DFC finance-debt charges. 2006-2020: Pagamento de IOF e encargos de dívida (+ Furnas when shown). 2021-2025: Pagamento de encargos financeiros. Excludes IFRS 16 and Fundação Real Grandeza. 2002-2005: 0 cash (refinanced).",
-  "tax_model": "Pay 20% of interest → save 80%. ↑LAIR=0.80×juros; ↑IRPJ=0.25×↑LAIR; ↑CSLL=0.09×↑LAIR; ↑LL=0.66×↑LAIR (=0.528×juros)",
-  "fx": "BCB sgs.3698 annual avg",
+  "entity": "ELETROBRÁS TERMONUCLEAR S.A. - ELETRONUCLEAR",
+  "cnpj": "42.540.211/0001-67",
+  "period": "2002-2025",
+  "currency_unit": "R$ mil (thousands of BRL) — as presented in company DFs ('em milhares de reais')",
+  "primary_source": "https://www.eletronuclear.gov.br/Quem-Somos/Governanca/Paginas/Balancos.aspx",
+  "interest_metric_methodology": [
+    "Preferred metric = cash finance-debt charges from DFC, NOT accrual 'Encargos de dívidas' in DRE.",
+    "2021-2025: DFC line 'Pagamento de encargos financeiros'. Explicitly EXCLUDES 'Pagamento de encargos financeiros - IFRS 16' (2025) and 'Pagamento de obrigações de arrendamento - IFRS 16'.",
+    "2006-2020: DFC 'Pagamento de IOF e encargos de dívida' (Eletrobrás) + 'Pagamento de encargos de dívida - Furnas' when separately disclosed. Line includes IOF on financing together with interest/charges.",
+    "EXCLUDES: Pagamento à Fundação Real Grandeza (pension debt amortization), JSCP/dividendos, loan principal repayments, lease payments.",
+    "2002-2005: DFC/RA DFC exist but have NO separate cash encargos line; interest largely accrued and refinanced into Eletrobrás debt → juros_cash recorded as 0 (not an accrual proxy).",
+    "Net income: DRE bottom line (Lucro/Prejuízo/Resultado líquido do exercício). Prefer subsequent-year restated comparative when available (2008, 2009, 2010, 2023)."
+  ],
+  "tax_model": "Pay 20% of interest → save 80%. ↑LAIR=0.80×juros; ↑IRPJ=0.25×↑LAIR; ↑CSLL=0.09×↑LAIR; ↑LL=0.66×↑LAIR (=0.528×juros). USD: divide R$ mil by FX then by 1000 → USD mi.",
+  "fx": "BCB sgs.3698 annual average (bcb_fx_brl_usd_annual.json)",
+  "gaps": [
+    "2002 individual DF PDF not on current Balancos page; NI and DFC recovered from Wayback Machine GIF (novo/img/notasexplicativas02.gif, archived 2003-05-14).",
+    "2003 individual DF PDF not on Balancos page; NI and DFC from DF/RA 2004 comparatives.",
+    "2004 DF PDF is DOAR-era; cash-flow detail taken from RA 2004 supplementary DFC.",
+    "2006-2020 'IOF e encargos' cannot be split into pure interest vs IOF from face of DFC.",
+    "FRG (previdência) cash payments excluded; if any finance-debt interest were embedded there it is not isolated.",
+    "No separate lease-interest cash line before IFRS 16 adoption (~2019); immaterial historically."
+  ],
   "years": [
     {
       "year": 2002,
+      "juros_cash_R$_mil": 0,
+      "lucro_liquido_R$_mil": -1146244,
       "interest_paid_brl_mil": 0,
-      "net_income_brl_mil": null,
+      "net_income_brl_mil": -1146244,
       "fx_brl_per_usd": 2.9211500000000004,
       "interest_usd_mi": 0.0,
       "up_lair_usd_mi": 0.0,
       "up_irpj_usd_mi": 0.0,
       "up_csll_usd_mi": 0.0,
       "up_ll_usd_mi": 0.0,
-      "net_income_usd_mi": null,
-      "sim_ni_usd_mi": null,
-      "interest_estimated": true,
-      "source_note": "sem DF pública com linha de pagamento de encargos; tratado como 0 caixa",
-      "ni_note": "unavailable in public Balancos page"
+      "net_income_usd_mi": -392.394776,
+      "sim_ni_usd_mi": -392.394776,
+      "interest_estimated": false,
+      "ni_estimated": false,
+      "source_note": "Wayback DFC 2002 (notasexplicativas02.gif): no Pagamento de encargos line; only principal to Eletrobrás/Furnas + FRG. Interest accrued/refinanced.",
+      "ni_note": "Wayback DFC 2002 image visual read: Lucro líquido (prejuízo) do exercício (1.146.244)"
     },
     {
       "year": 2003,
+      "juros_cash_R$_mil": 0,
+      "lucro_liquido_R$_mil": -310695,
       "interest_paid_brl_mil": 0,
       "net_income_brl_mil": -310695,
       "fx_brl_per_usd": 3.0782833333333333,
@@ -33,12 +56,15 @@
       "up_ll_usd_mi": 0.0,
       "net_income_usd_mi": -100.931255,
       "sim_ni_usd_mi": -100.931255,
-      "interest_estimated": true,
-      "source_note": "sem linha DFC de encargos (DOAR/refinanciamento)",
-      "ni_note": "DF annual"
+      "interest_estimated": false,
+      "ni_estimated": false,
+      "source_note": "RA 2004 DFC comparative: no Pagamento de encargos; principal Furnas + FRG only. Interest accrued (Encargos Eletrobrás/Furnas/AFAC).",
+      "ni_note": "DF 2004 DRE comparative / RA 2004 DFC: Prejuízo (310.695)"
     },
     {
       "year": 2004,
+      "juros_cash_R$_mil": 0,
+      "lucro_liquido_R$_mil": -328311,
       "interest_paid_brl_mil": 0,
       "net_income_brl_mil": -328311,
       "fx_brl_per_usd": 2.9259166666666663,
@@ -50,11 +76,14 @@
       "net_income_usd_mi": -112.207912,
       "sim_ni_usd_mi": -112.207912,
       "interest_estimated": false,
-      "source_note": "DFC 2004/2005: sem Pagamento de encargos (refinanciamento Eletrobrás)",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "RA 2004 DFC + DF 2005 comparative: no Pagamento de encargos; refinanciamento Eletrobrás. DOAR primary in DF 2004 PDF.",
+      "ni_note": "DF 2004 DRE: Prejuízo do exercício (328.311)"
     },
     {
       "year": 2005,
+      "juros_cash_R$_mil": 0,
+      "lucro_liquido_R$_mil": 190653,
       "interest_paid_brl_mil": 0,
       "net_income_brl_mil": 190653,
       "fx_brl_per_usd": 2.435191666666667,
@@ -66,11 +95,14 @@
       "net_income_usd_mi": 78.290757,
       "sim_ni_usd_mi": 78.290757,
       "interest_estimated": false,
-      "source_note": "DFC 2005 e comparativo 2006: sem Pagamento de encargos",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2005 DFC + 2006 comparative: no Pagamento de encargos Furnas/Eletrobrás lines (blank).",
+      "ni_note": "DF 2005 DRE: Lucro líquido (prejuízo) do exercício 190.653"
     },
     {
       "year": 2006,
+      "juros_cash_R$_mil": 93667,
+      "lucro_liquido_R$_mil": 28047,
       "interest_paid_brl_mil": 93667,
       "net_income_brl_mil": 28047,
       "fx_brl_per_usd": 2.1761250000000003,
@@ -82,11 +114,14 @@
       "net_income_usd_mi": 12.888506,
       "sim_ni_usd_mi": 35.615222,
       "interest_estimated": false,
-      "source_note": "Furnas 5.389 + Eletrobrás 88.278",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2006 DFC: Pagamento encargos Furnas 5.389 + Eletrobrás 88.278 (=93.667). Excl. FRG.",
+      "ni_note": "DF 2006 DRE: Lucro líquido do exercício 28.047"
     },
     {
       "year": 2007,
+      "juros_cash_R$_mil": 138278,
+      "lucro_liquido_R$_mil": 117668,
       "interest_paid_brl_mil": 138278,
       "net_income_brl_mil": 117668,
       "fx_brl_per_usd": 1.9478583333333332,
@@ -98,59 +133,71 @@
       "net_income_usd_mi": 60.408911,
       "sim_ni_usd_mi": 97.891505,
       "interest_estimated": false,
-      "source_note": "Furnas 5.671 + IOF/encargos Eletrobrás 132.607",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2008 comparative / OCR DF 2007: Furnas 5.671 + IOF e encargos Eletrobrás 132.607 (=138.278).",
+      "ni_note": "DF 2007/2008 DRE: Lucro líquido 117.668"
     },
     {
       "year": 2008,
+      "juros_cash_R$_mil": 134769,
+      "lucro_liquido_R$_mil": -224581,
       "interest_paid_brl_mil": 134769,
-      "net_income_brl_mil": -282070,
+      "net_income_brl_mil": -224581,
       "fx_brl_per_usd": 1.8345666666666667,
       "interest_usd_mi": 73.460944,
       "up_lair_usd_mi": 58.768756,
       "up_irpj_usd_mi": 14.692189,
       "up_csll_usd_mi": 5.289188,
       "up_ll_usd_mi": 38.787379,
-      "net_income_usd_mi": -153.75293,
-      "sim_ni_usd_mi": -114.965551,
+      "net_income_usd_mi": -122.416374,
+      "sim_ni_usd_mi": -83.628996,
       "interest_estimated": false,
-      "source_note": "IOF e encargos Eletrobrás 134.769",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2008 DFC: Pagamento IOF e encargos Eletrobrás 134.769 (Furnas 0).",
+      "ni_note": "Restated in DF 2009 comparative (224.581); originally (282.070) in DF 2008"
     },
     {
       "year": 2009,
+      "juros_cash_R$_mil": 163909,
+      "lucro_liquido_R$_mil": 218247,
       "interest_paid_brl_mil": 163909,
-      "net_income_brl_mil": 55107,
+      "net_income_brl_mil": 218247,
       "fx_brl_per_usd": 1.9975833333333333,
       "interest_usd_mi": 82.053648,
       "up_lair_usd_mi": 65.642919,
       "up_irpj_usd_mi": 16.41073,
       "up_csll_usd_mi": 5.907863,
       "up_ll_usd_mi": 43.324326,
-      "net_income_usd_mi": 27.586834,
-      "sim_ni_usd_mi": 70.91116,
+      "net_income_usd_mi": 109.255517,
+      "sim_ni_usd_mi": 152.579843,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 163.909",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2009 DFC: Pagamento IOF e encargos de dívida-Eletrobrás 163.909.",
+      "ni_note": "Restated in DF 2010 comparative 218.247; originally 55.107 in DF 2009"
     },
     {
       "year": 2010,
+      "juros_cash_R$_mil": 106875,
+      "lucro_liquido_R$_mil": -119199,
       "interest_paid_brl_mil": 106875,
-      "net_income_brl_mil": -134754,
+      "net_income_brl_mil": -119199,
       "fx_brl_per_usd": 1.7601333333333333,
       "interest_usd_mi": 60.719832,
       "up_lair_usd_mi": 48.575865,
       "up_irpj_usd_mi": 12.143966,
       "up_csll_usd_mi": 4.371828,
       "up_ll_usd_mi": 32.060071,
-      "net_income_usd_mi": -76.558973,
-      "sim_ni_usd_mi": -44.498902,
+      "net_income_usd_mi": -67.721574,
+      "sim_ni_usd_mi": -35.661503,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 106.875",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2010 DFC: Pagamento IOF e encargos de dívida - Eletrobras 106.875.",
+      "ni_note": "Restated in DF 2011 comparative (119.199); originally (134.754) in DF 2010"
     },
     {
       "year": 2011,
+      "juros_cash_R$_mil": 51329,
+      "lucro_liquido_R$_mil": 306713,
       "interest_paid_brl_mil": 51329,
       "net_income_brl_mil": 306713,
       "fx_brl_per_usd": 1.6749666666666665,
@@ -162,11 +209,14 @@
       "net_income_usd_mi": 183.115883,
       "sim_ni_usd_mi": 199.296331,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 51.329",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2011 DFC (operating): Pagamento de IOF e encargos de dívida 51.329.",
+      "ni_note": "DF 2011 DRE: Lucro líquido 306.713"
     },
     {
       "year": 2012,
+      "juros_cash_R$_mil": 69623,
+      "lucro_liquido_R$_mil": 19741,
       "interest_paid_brl_mil": 69623,
       "net_income_brl_mil": 19741,
       "fx_brl_per_usd": 1.9545833333333331,
@@ -178,11 +228,14 @@
       "net_income_usd_mi": 10.099851,
       "sim_ni_usd_mi": 28.907411,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 69.623",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2012 DFC: Pagamento de IOF e encargos de dívida 69.623.",
+      "ni_note": "DF 2012 DRE: Lucro líquido 19.741"
     },
     {
       "year": 2013,
+      "juros_cash_R$_mil": 75558,
+      "lucro_liquido_R$_mil": -688535,
       "interest_paid_brl_mil": 75558,
       "net_income_brl_mil": -688535,
       "fx_brl_per_usd": 2.1576333333333335,
@@ -194,11 +247,14 @@
       "net_income_usd_mi": -319.115852,
       "sim_ni_usd_mi": -300.62586,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 75.558",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2013 DFC financing: Pagamento de IOF e encargos de dívida 75.558.",
+      "ni_note": "DF 2013 DRE: Lucro/Prejuízo líquido (688.535)"
     },
     {
       "year": 2014,
+      "juros_cash_R$_mil": 96155,
+      "lucro_liquido_R$_mil": -1000602,
       "interest_paid_brl_mil": 96155,
       "net_income_brl_mil": -1000602,
       "fx_brl_per_usd": 2.3535666666666666,
@@ -210,11 +266,14 @@
       "net_income_usd_mi": -425.142833,
       "sim_ni_usd_mi": -403.571385,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 96.155",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2014 DFC: Pagamento de IOF e encargos de dívida 96.155.",
+      "ni_note": "DF 2014 DRE: Prejuízo líquido (1.000.602)"
     },
     {
       "year": 2015,
+      "juros_cash_R$_mil": 132995,
+      "lucro_liquido_R$_mil": -5118058,
       "interest_paid_brl_mil": 132995,
       "net_income_brl_mil": -5118058,
       "fx_brl_per_usd": 3.3315333333333332,
@@ -226,11 +285,14 @@
       "net_income_usd_mi": -1536.246973,
       "sim_ni_usd_mi": -1515.169183,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 132.995",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2015 DFC: Pagamento de IOF e encargos de dívida 132.995.",
+      "ni_note": "DF 2015 DRE: Prejuízo líquido (5.118.058)"
     },
     {
       "year": 2016,
+      "juros_cash_R$_mil": 214290,
+      "lucro_liquido_R$_mil": -4075676,
       "interest_paid_brl_mil": 214290,
       "net_income_brl_mil": -4075676,
       "fx_brl_per_usd": 3.4901166666666668,
@@ -242,11 +304,14 @@
       "net_income_usd_mi": -1167.776435,
       "sim_ni_usd_mi": -1135.357714,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 214.290",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2016 DFC (operating): Pagamento de IOF e encargos de dívida 214.290.",
+      "ni_note": "DF 2016 DRE: Prejuízo líquido (4.075.676)"
     },
     {
       "year": 2017,
+      "juros_cash_R$_mil": 293485,
+      "lucro_liquido_R$_mil": -542940,
       "interest_paid_brl_mil": 293485,
       "net_income_brl_mil": -542940,
       "fx_brl_per_usd": 3.1920083333333333,
@@ -258,11 +323,14 @@
       "net_income_usd_mi": -170.093541,
       "sim_ni_usd_mi": -121.547277,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 293.485",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2017 DFC: Pagamento de IOF e encargos de dívida 293.485.",
+      "ni_note": "DF 2017 DRE: Resultado líquido (542.940)"
     },
     {
       "year": 2018,
+      "juros_cash_R$_mil": 524872,
+      "lucro_liquido_R$_mil": 7758288,
       "interest_paid_brl_mil": 524872,
       "net_income_brl_mil": 7758288,
       "fx_brl_per_usd": 3.65445,
@@ -274,11 +342,14 @@
       "net_income_usd_mi": 2122.970078,
       "sim_ni_usd_mi": 2198.804311,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 524.872",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2018 DFC: Pagamento de IOF e encargos de dívida 524.872.",
+      "ni_note": "DF 2018 DRE: Resultado líquido 7.758.288"
     },
     {
       "year": 2019,
+      "juros_cash_R$_mil": 614563,
+      "lucro_liquido_R$_mil": -480111,
       "interest_paid_brl_mil": 614563,
       "net_income_brl_mil": -480111,
       "fx_brl_per_usd": 3.9450833333333333,
@@ -290,11 +361,14 @@
       "net_income_usd_mi": -121.69857,
       "sim_ni_usd_mi": -39.447009,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 614.563",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2019 DFC: Pagamento de IOF e encargos de dívida 614.563 (lease IFRS16 separate 27.055).",
+      "ni_note": "DF 2019 DRE: Lucro líquido (Prejuízo) (480.111)"
     },
     {
       "year": 2020,
+      "juros_cash_R$_mil": 445634,
+      "lucro_liquido_R$_mil": 108617,
       "interest_paid_brl_mil": 445634,
       "net_income_brl_mil": 108617,
       "fx_brl_per_usd": 5.155841666666666,
@@ -306,11 +380,14 @@
       "net_income_usd_mi": 21.066783,
       "sim_ni_usd_mi": 66.703319,
       "interest_estimated": false,
-      "source_note": "IOF e encargos 445.634",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2020 DFC: Pagamento de IOF e encargos de dívida 445.634 (lease IFRS16 separate).",
+      "ni_note": "DF 2020 DRE: Lucro líquido 108.617"
     },
     {
       "year": 2021,
+      "juros_cash_R$_mil": 478130,
+      "lucro_liquido_R$_mil": -530255,
       "interest_paid_brl_mil": 478130,
       "net_income_brl_mil": -530255,
       "fx_brl_per_usd": 5.395025,
@@ -322,11 +399,14 @@
       "net_income_usd_mi": -98.285921,
       "sim_ni_usd_mi": -51.492321,
       "interest_estimated": false,
-      "source_note": "Pagamento de encargos financeiros 478.130",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2021 DFC: Pagamento de encargos financeiros 478.130; lease IFRS16 separate 24.199.",
+      "ni_note": "DF 2021 DRE: LUCRO LÍQUIDO (PREJUÍZO) (530.255)"
     },
     {
       "year": 2022,
+      "juros_cash_R$_mil": 494385,
+      "lucro_liquido_R$_mil": 29822,
       "interest_paid_brl_mil": 494385,
       "net_income_brl_mil": 29822,
       "fx_brl_per_usd": 5.164766666666666,
@@ -338,11 +418,14 @@
       "net_income_usd_mi": 5.774123,
       "sim_ni_usd_mi": 56.315667,
       "interest_estimated": false,
-      "source_note": "Pagamento de encargos financeiros 494.385",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2022 DFC: Pagamento de encargos financeiros 494.385; lease IFRS16 separate 30.125.",
+      "ni_note": "DF 2022 DRE: LUCRO (PREJUÍZO) DO EXERCÍCIO 29.822"
     },
     {
       "year": 2023,
+      "juros_cash_R$_mil": 480914,
+      "lucro_liquido_R$_mil": 378478,
       "interest_paid_brl_mil": 480914,
       "net_income_brl_mil": 378478,
       "fx_brl_per_usd": 4.9949666666666666,
@@ -354,11 +437,14 @@
       "net_income_usd_mi": 75.771877,
       "sim_ni_usd_mi": 126.60757,
       "interest_estimated": false,
-      "source_note": "Pagamento de encargos financeiros 480.914",
-      "ni_note": "restated in DF 2024 comparative (was 318199)"
+      "ni_estimated": false,
+      "source_note": "DF 2023/2024 DFC: Pagamento de encargos financeiros 480.914; lease IFRS16 separate.",
+      "ni_note": "Restated in DF 2024 comparative 378.478; originally 318.199 in DF 2023"
     },
     {
       "year": 2024,
+      "juros_cash_R$_mil": 271713,
+      "lucro_liquido_R$_mil": 544787,
       "interest_paid_brl_mil": 271713,
       "net_income_brl_mil": 544787,
       "fx_brl_per_usd": 5.3895333333333335,
@@ -370,11 +456,14 @@
       "net_income_usd_mi": 101.082407,
       "sim_ni_usd_mi": 127.701495,
       "interest_estimated": false,
-      "source_note": "Pagamento de encargos financeiros 271.713",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2024 DFC: Pagamento de encargos financeiros 271.713; lease IFRS16 separate 29.307.",
+      "ni_note": "DF 2024 DRE: LUCRO DO EXERCÍCIO 544.787 (confirmed in DF 2025 comparative)"
     },
     {
       "year": 2025,
+      "juros_cash_R$_mil": 509960,
+      "lucro_liquido_R$_mil": -142098,
       "interest_paid_brl_mil": 509960,
       "net_income_brl_mil": -142098,
       "fx_brl_per_usd": 5.587891666666667,
@@ -386,8 +475,9 @@
       "net_income_usd_mi": -25.429627,
       "sim_ni_usd_mi": 22.756504,
       "interest_estimated": false,
-      "source_note": "Pagamento de encargos financeiros 509.960 (IFRS16 excluído)",
-      "ni_note": "DF annual"
+      "ni_estimated": false,
+      "source_note": "DF 2025 DFC: Pagamento de encargos financeiros 509.960; excludes Pagamento de encargos financeiros - IFRS 16 13.907 and lease principal.",
+      "ni_note": "DF 2025 DRE: LUCRO (PREJUÍZO) DO EXERCÍCIO (142.098)"
     }
   ]
 }
