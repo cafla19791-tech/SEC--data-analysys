@@ -141,8 +141,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_per.add_argument(
         "--out",
-        default="cbpol_taxas_acumuladas_periodos.xlsx",
-        help="Arquivo .xlsx de saida",
+        default="",
+        help=(
+            "Arquivo .xlsx de saida "
+            "(padrao: cbpol_taxas_acumuladas_periodos.xlsx ou "
+            "..._mensal.xlsx se --freq M)"
+        ),
     )
     p_per.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
     p_per.add_argument(
@@ -316,9 +320,17 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "excel-periodos":
             from . import excel_periodos
 
+            out_periodos = (args.out or "").strip()
+            if not out_periodos:
+                freq_u = (args.freq or "D").strip().upper()
+                out_periodos = (
+                    "cbpol_taxas_acumuladas_periodos_mensal.xlsx"
+                    if freq_u in {"M", "MONTHLY", "MES", "MENSAL"}
+                    else "cbpol_taxas_acumuladas_periodos.xlsx"
+                )
             _print(
                 excel_periodos.gerar_excel_periodos(
-                    args.out,
+                    out_periodos,
                     csv_path=args.csv or None,
                     prefer_local=not args.sdmx,
                     freq=args.freq,
