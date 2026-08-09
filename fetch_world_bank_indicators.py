@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import io
 import re
 import time
@@ -12,8 +13,8 @@ from pathlib import Path
 import pandas as pd
 import requests
 
-# Featured indicators from the World Bank screenshot, grouped by category.
-INDICATORS: list[tuple[str, str, str]] = [
+# Featured indicators from World Bank screenshots, grouped by category.
+INDICATORS_GROWTH_MACRO: list[tuple[str, str, str]] = [
     # Growth and economic structure
     ("Growth and economic structure", "GDP (current US$)", "NY.GDP.MKTP.CD"),
     ("Growth and economic structure", "GDP growth (annual %)", "NY.GDP.MKTP.KD.ZG"),
@@ -173,6 +174,176 @@ INDICATORS: list[tuple[str, str, str]] = [
     ),
 ]
 
+INDICATORS_BUSINESS_INFRA: list[tuple[str, str, str]] = [
+    # Business environment
+    ("Business environment", "Time required to start a business (days)", "IC.REG.DURS"),
+    ("Business environment", "Time required to get electricity (days)", "IC.ELC.TIME"),
+    (
+        "Business environment",
+        "Firms expected to give gifts in meetings with tax officials (% of firms)",
+        "IC.TAX.GIFT.ZS",
+    ),
+    (
+        "Business environment",
+        "Firms with female top manager (% of firms)",
+        "IC.FRM.FEMM.ZS",
+    ),
+    # Financial access and stability
+    (
+        "Financial access and stability",
+        "Depositors with commercial banks (per 1,000 adults)",
+        "FB.CBK.DPTR.P3",
+    ),
+    (
+        "Financial access and stability",
+        "Borrowers from commercial banks (per 1,000 adults)",
+        "FB.CBK.BRWR.P3",
+    ),
+    (
+        "Financial access and stability",
+        "Commercial bank branches (per 100,000 adults)",
+        "FB.CBK.BRCH.P5",
+    ),
+    (
+        "Financial access and stability",
+        "Bank nonperforming loans to total gross loans (%)",
+        "FB.AST.NPER.ZS",
+    ),
+    # Stock markets
+    (
+        "Stock markets",
+        "Market capitalization of listed domestic companies (% of GDP)",
+        "CM.MKT.LCAP.GD.ZS",
+    ),
+    (
+        "Stock markets",
+        "Stocks traded, turnover ratio of domestic shares (%)",
+        "CM.MKT.TRNR",
+    ),
+    # Government finance and taxes
+    (
+        "Government finance and taxes",
+        "Revenue, excluding grants (current LCU)",
+        "GC.REV.XGRT.CN",
+    ),
+    ("Government finance and taxes", "Expense (current LCU)", "GC.XPN.TOTL.CN"),
+    (
+        "Government finance and taxes",
+        "Net lending (+) / net borrowing (-) (current LCU)",
+        "GC.NLD.TOTL.CN",
+    ),
+    (
+        "Government finance and taxes",
+        "Compensation of employees (current LCU)",
+        "GC.XPN.COMP.CN",
+    ),
+    (
+        "Government finance and taxes",
+        "Taxes on goods and services (current LCU)",
+        "GC.TAX.GSRV.CN",
+    ),
+    (
+        "Government finance and taxes",
+        "Profit tax (% of commercial profits)",
+        "IC.TAX.PRFT.CP.ZS",
+    ),
+    (
+        "Government finance and taxes",
+        "Total tax rate (% of commercial profits)",
+        "IC.TAX.TOTL.CP.ZS",
+    ),
+    # Military and fragile situations
+    (
+        "Military and fragile situations",
+        "Military expenditure (% of GDP)",
+        "MS.MIL.XPND.GD.ZS",
+    ),
+    (
+        "Military and fragile situations",
+        "Armed forces personnel, total",
+        "MS.MIL.TOTL.P1",
+    ),
+    (
+        "Military and fragile situations",
+        "Battle-related deaths (number of people)",
+        "VC.BTL.DETH",
+    ),
+    (
+        "Military and fragile situations",
+        "Intentional homicides (per 100,000 people)",
+        "VC.IHR.PSRC.P5",
+    ),
+    # Infrastructure and communications
+    (
+        "Infrastructure and communications",
+        "Air transport, passengers carried",
+        "IS.AIR.PSGR",
+    ),
+    (
+        "Infrastructure and communications",
+        "Air transport, freight (million ton-km)",
+        "IS.AIR.GOOD.MT.K1",
+    ),
+    (
+        "Infrastructure and communications",
+        "Container port traffic (TEU: 20 foot equivalent units)",
+        "IS.SHP.GOOD.TU",
+    ),
+    (
+        "Infrastructure and communications",
+        "Individuals using the Internet (% of population)",
+        "IT.NET.USER.ZS",
+    ),
+    (
+        "Infrastructure and communications",
+        "Mobile cellular subscriptions (per 100 people)",
+        "IT.CEL.SETS.P2",
+    ),
+    (
+        "Infrastructure and communications",
+        "Investment in transport with private participation (current US$)",
+        "IE.PPI.TRAN.CD",
+    ),
+    (
+        "Infrastructure and communications",
+        "Investment in energy with private participation (current US$)",
+        "IE.PPI.ENGY.CD",
+    ),
+    # Science and innovation
+    (
+        "Science and innovation",
+        "Research and development expenditure (% of GDP)",
+        "GB.XPD.RSDV.GD.ZS",
+    ),
+    ("Science and innovation", "Patent applications, residents", "IP.PAT.RESD"),
+    (
+        "Science and innovation",
+        "Industrial design applications, resident, by count",
+        "IP.IDS.RSCT",
+    ),
+    (
+        "Science and innovation",
+        "Scientific and technical journal articles",
+        "IP.JRN.ARTC.SC",
+    ),
+    (
+        "Science and innovation",
+        "ICT goods exports (% of total goods exports)",
+        "TX.VAL.ICTG.ZS.UN",
+    ),
+]
+
+WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
+    "growth-macro": (
+        Path("world_bank_featured_indicators.xlsx"),
+        INDICATORS_GROWTH_MACRO,
+    ),
+    "business-infra": (
+        Path("world_bank_featured_indicators_business_infra.xlsx"),
+        INDICATORS_BUSINESS_INFRA,
+    ),
+}
+
 DOWNLOAD_URL = "https://api.worldbank.org/v2/en/indicator/{code}"
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": "world-bank-indicators-fetcher/1.0"})
@@ -224,11 +395,9 @@ def fetch_indicator(code: str) -> pd.DataFrame:
     year_cols = [c for c in frame.columns if c.isdigit()]
     frame = frame[keep + year_cols].copy()
 
-    # Convert year columns to numeric; keep empty cells as NaN.
     for col in year_cols:
         frame[col] = pd.to_numeric(frame[col], errors="coerce")
 
-    # Keep rows with at least one observation.
     if year_cols:
         frame = frame.loc[frame[year_cols].notna().any(axis=1)].copy()
 
@@ -245,8 +414,9 @@ def year_range(frame: pd.DataFrame) -> tuple[int | None, int | None]:
     return min(present), max(present)
 
 
-def main() -> None:
-    output_path = Path("world_bank_featured_indicators.xlsx")
+def write_workbook(
+    output_path: Path, indicators: list[tuple[str, str, str]]
+) -> None:
     used_sheet_names: set[str] = {"Index", "Summary"}
     summary_rows: list[dict] = []
 
@@ -254,17 +424,19 @@ def main() -> None:
         index_df = pd.DataFrame(
             [
                 {"Category": category, "Indicator": name, "Code": code}
-                for category, name, code in INDICATORS
+                for category, name, code in indicators
             ]
         )
         index_df.to_excel(writer, sheet_name="Index", index=False)
 
-        for i, (category, name, code) in enumerate(INDICATORS, start=1):
-            print(f"[{i}/{len(INDICATORS)}] Fetching {code} — {name}", flush=True)
+        for i, (category, name, code) in enumerate(indicators, start=1):
+            print(f"[{i}/{len(indicators)}] Fetching {code} — {name}", flush=True)
             try:
                 data = fetch_indicator(code)
                 status = "ok"
-                n_countries = int(data["Country Name"].nunique()) if not data.empty else 0
+                n_countries = (
+                    int(data["Country Name"].nunique()) if not data.empty else 0
+                )
                 year_min, year_max = year_range(data)
             except Exception as exc:  # noqa: BLE001
                 print(f"  ERROR: {exc}", flush=True)
@@ -300,6 +472,28 @@ def main() -> None:
 
     size_mb = output_path.stat().st_size / (1024 * 1024)
     print(f"\nWrote {output_path} ({size_mb:.2f} MB)", flush=True)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Fetch World Bank featured indicators into Excel workbooks."
+    )
+    parser.add_argument(
+        "--set",
+        choices=["all", *WORKBOOKS.keys()],
+        default="all",
+        help="Which workbook set to regenerate (default: all).",
+    )
+    args = parser.parse_args()
+
+    selected = (
+        WORKBOOKS.items()
+        if args.set == "all"
+        else [(args.set, WORKBOOKS[args.set])]
+    )
+    for key, (path, indicators) in selected:
+        print(f"\n=== Workbook '{key}' -> {path} ({len(indicators)} indicators) ===")
+        write_workbook(path, indicators)
 
 
 if __name__ == "__main__":
