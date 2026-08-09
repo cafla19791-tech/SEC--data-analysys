@@ -335,11 +335,14 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United St
 
 def test_para_pdf_requires_soffice_or_converts(tmp_path: Path):
     from bis_mcp import pdf_export
+    import pandas as pd
 
     if not pdf_export.find_soffice():
         # Ambiente sem LibreOffice: apenas valida a mensagem.
+        xlsx = tmp_path / "x.xlsx"
+        pd.DataFrame({"A": [1]}).to_excel(xlsx, index=False)
         with pytest.raises(RuntimeError, match="LibreOffice"):
-            pdf_export.xlsx_para_pdf(tmp_path / "x.xlsx")
+            pdf_export.xlsx_para_pdf(xlsx)
         return
 
     # Mini workbook
@@ -447,6 +450,59 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-01,11.75,Brazil,A: Norma
     assert "Brazil" in (ws_m.oddHeader.left.text or "")
 
 
+def test_excel_basica_anual_year_end_table(tmp_path: Path):
+    from bis_mcp import excel_basica_anual
+    import pandas as pd
+
+    flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-01,25.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-12,16.5,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2004-06,16.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2026-06,14.25,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-12,1.0,United States,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2026-05,3.625,United States,A: Normal value
+"""
+    src = tmp_path / "WS_CBPOL_csv_flat.csv"
+    src.write_text(flat, encoding="utf-8")
+    out = tmp_path / "basica.xlsx"
+    meta = excel_basica_anual.gerar_excel_basica_anual(
+        out, csv_path=src, areas="BR,US", year_from=2003, year_to=2026
+    )
+    assert meta["countries"] == 2
+    assert meta["year_from"] == 2003
+    assert meta["year_to"] == 2026
+    assert meta["rule"] == "december_or_last_month_of_year"
+
+    df = pd.read_excel(out, sheet_name="02_Taxas_basicas_anuais")
+    assert "Pais" in df.columns
+    assert "Codigo" in df.columns
+
+    def ycol(year: int):
+        if year in df.columns:
+            return year
+        if str(year) in df.columns:
+            return str(year)
+        raise AssertionError(f"coluna do ano {year} ausente: {list(df.columns)}")
+
+    br = df[df["Codigo"] == "BR"].iloc[0]
+    # dezembro 2003
+    assert float(br[ycol(2003)]) == pytest.approx(16.5)
+    # 2004 sem dezembro -> junho
+    assert float(br[ycol(2004)]) == pytest.approx(16.0)
+    # 2026 incompleto -> junho
+    assert float(br[ycol(2026)]) == pytest.approx(14.25)
+    us = df[df["Codigo"] == "US"].iloc[0]
+    assert float(us[ycol(2003)]) == pytest.approx(1.0)
+    assert float(us[ycol(2026)]) == pytest.approx(3.625)
+
+    # helper unitario
+    rate, period = excel_basica_anual.year_end_rate(
+        [("2003-01", 25.0), ("2003-12", 16.5)], 2003
+    )
+    assert rate == pytest.approx(16.5)
+    assert period == "2003-12"
+
+
 def test_cli_help():
     from bis_mcp.cli import build_parser
 
@@ -457,3 +513,4 @@ def test_cli_help():
     assert "catalog" in help_text
     assert "extract" in help_text
     assert "excel-periodos" in help_text
+    assert "excel-basica-anual" in help_text

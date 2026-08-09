@@ -192,6 +192,42 @@ def build_parser() -> argparse.ArgumentParser:
         help="Forcar download SDMX (nao usa CSV local)",
     )
 
+    xa = sub.add_parser(
+        "excel-basica-anual",
+        help=(
+            "Excel tabela: taxa basica %% a.a. por pais e ano "
+            "(dezembro ou ultimo mes do ano; padrao 2003-2026)"
+        ),
+    )
+    xa.add_argument(
+        "--out",
+        default="cbpol_taxas_basicas_anuais.xlsx",
+        help="Arquivo .xlsx de saida",
+    )
+    xa.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
+    xa.add_argument(
+        "--areas",
+        default="",
+        help="Filtrar paises (ex.: BR,US,XM). Vazio = todos com serie mensal",
+    )
+    xa.add_argument(
+        "--year-from",
+        type=int,
+        default=2003,
+        help="Primeiro ano (padrao: 2003)",
+    )
+    xa.add_argument(
+        "--year-to",
+        type=int,
+        default=2026,
+        help="Ultimo ano (padrao: 2026)",
+    )
+    xa.add_argument(
+        "--sdmx",
+        action="store_true",
+        help="Forcar download SDMX (nao usa CSV local)",
+    )
+
     pdf = sub.add_parser(
         "para-pdf",
         help="Converte um .xlsx em PDF (requer LibreOffice/soffice)",
@@ -298,6 +334,19 @@ def main(argv: list[str] | None = None) -> int:
                     areas=args.areas or None,
                     date_from=args.date_from or None,
                     date_to=args.date_to or None,
+                    prefer_local=not args.sdmx,
+                )
+            )
+        elif args.command == "excel-basica-anual":
+            from . import excel_basica_anual
+
+            _print(
+                excel_basica_anual.gerar_excel_basica_anual(
+                    args.out,
+                    csv_path=args.csv or None,
+                    areas=args.areas or None,
+                    year_from=args.year_from,
+                    year_to=args.year_to,
                     prefer_local=not args.sdmx,
                 )
             )
