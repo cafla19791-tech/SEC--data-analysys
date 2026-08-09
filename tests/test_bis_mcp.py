@@ -187,8 +187,10 @@ def test_acumulado_mes_e_ano_so_no_ultimo_dia():
 def test_gerar_excel_diario_from_flat(tmp_path: Path):
     from bis_mcp import excel_diario
 
-    # Minimal daily flat rows
+    # Minimal daily flat rows (inclui dia anterior a 1995 que deve ser filtrado)
     flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,1990-06-15,40.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,1995-01-02,11.75,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-01,11.75,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-02,11.75,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United States,A: Normal value
@@ -198,6 +200,7 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United St
     out = tmp_path / "out.xlsx"
     meta = excel_diario.gerar_excel_diario(out, csv_path=src, areas="BR,US")
     assert meta["countries"] == 2
+    assert meta["date_from"] == "1995-01-01"
     assert out.exists()
     import pandas as pd
 
@@ -213,7 +216,9 @@ dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,US: United States,2024-01-02,5.5,United St
         "Taxa acumulada mês (%)",
         "Taxa acumulada ano (%)",
     ]
-    assert len(df) == 2
+    assert len(df) == 3
+    assert str(df.iloc[0]["Dia"])[:10] == "1995-01-02"
+    assert "1990-06-15" not in [str(x)[:10] for x in df["Dia"].tolist()]
 
 
 def test_acumular_periodo_exclui_fim_de_semana():
@@ -292,6 +297,8 @@ def test_gerar_excel_mensal_and_periodos(tmp_path: Path):
     from bis_mcp import excel_mensal, excel_periodos
 
     flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,1990-06,40.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,1995-01,25.0,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-01,25.0,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-02,25.0,Brazil,A: Normal value
 dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-01,1.25,United States,A: Normal value
@@ -302,6 +309,7 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United St
     out_m = tmp_path / "mensal.xlsx"
     meta = excel_mensal.gerar_excel_mensal(out_m, csv_path=src, areas="BR,US")
     assert meta["countries"] == 2
+    assert meta["date_from"] == "1995-01"
     import pandas as pd
 
     br = [s for s in pd.ExcelFile(out_m).sheet_names if s.startswith("BR")][0]
@@ -312,6 +320,10 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United St
         "Taxa acumulada (%)",
         "Taxa acumulada ano (%)",
     ]
+    # Padrao: ignora meses anteriores a 1995-01
+    assert str(df.iloc[0]["Mês"])[:7] == "1995-01"
+    assert "1990-06" not in [str(x)[:7] for x in df["Mês"].tolist()]
+    assert str(df.iloc[-1]["Mês"])[:7] == "2003-02"
 
     out_p = tmp_path / "periodos_m.xlsx"
     meta_p = excel_periodos.gerar_excel_periodos(out_p, csv_path=src, freq="M")
@@ -323,11 +335,14 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-02,1.25,United St
 
 def test_para_pdf_requires_soffice_or_converts(tmp_path: Path):
     from bis_mcp import pdf_export
+    import pandas as pd
 
     if not pdf_export.find_soffice():
         # Ambiente sem LibreOffice: apenas valida a mensagem.
+        xlsx = tmp_path / "x.xlsx"
+        pd.DataFrame({"A": [1]}).to_excel(xlsx, index=False)
         with pytest.raises(RuntimeError, match="LibreOffice"):
-            pdf_export.xlsx_para_pdf(tmp_path / "x.xlsx")
+            pdf_export.xlsx_para_pdf(xlsx)
         return
 
     # Mini workbook
@@ -356,6 +371,147 @@ def test_column_widths_fit_headers():
     assert widths[4] >= len("Taxa acumulada ano (%)") + 4
 
 
+def test_excel_diario_mensal_cells_centered(tmp_path: Path):
+    """Cabecalhos e dados das abas de pais ficam centralizados."""
+    from bis_mcp import excel_diario, excel_mensal
+    from openpyxl import load_workbook
+
+    flat_d = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-01,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-02,11.75,Brazil,A: Normal value
+"""
+    src_d = tmp_path / "daily.csv"
+    src_d.write_text(flat_d, encoding="utf-8")
+    out_d = tmp_path / "diario.xlsx"
+    excel_diario.gerar_excel_diario(out_d, csv_path=src_d, areas="BR")
+
+    wb_d = load_workbook(out_d)
+    br_d = [s for s in wb_d.sheetnames if s.startswith("BR")][0]
+    ws_d = wb_d[br_d]
+    assert ws_d["A1"].alignment.horizontal == "center"
+    assert ws_d["A1"].alignment.vertical == "center"
+    assert ws_d["B1"].alignment.horizontal == "center"
+    assert ws_d["A2"].alignment.horizontal == "center"
+    assert ws_d["B2"].alignment.horizontal == "center"
+    assert ws_d["C2"].alignment.horizontal == "center"
+
+    flat_m = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-01,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-02,11.25,Brazil,A: Normal value
+"""
+    src_m = tmp_path / "mensal.csv"
+    src_m.write_text(flat_m, encoding="utf-8")
+    out_m = tmp_path / "mensal.xlsx"
+    excel_mensal.gerar_excel_mensal(out_m, csv_path=src_m, areas="BR")
+
+    wb_m = load_workbook(out_m)
+    br_m = [s for s in wb_m.sheetnames if s.startswith("BR")][0]
+    ws_m = wb_m[br_m]
+    assert ws_m["A1"].alignment.horizontal == "center"
+    assert ws_m["A2"].alignment.horizontal == "center"
+    assert ws_m["B2"].alignment.horizontal == "center"
+    assert ws_m["C2"].alignment.horizontal == "center"
+
+
+def test_excel_print_layout_for_pdf(tmp_path: Path):
+    """Planilhas diarias/mensais ficam prontas para PDF (paisagem + fit width)."""
+    from bis_mcp import excel_diario, excel_mensal
+    from openpyxl import load_workbook
+
+    flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,D: Daily,BR: Brazil,2024-01-01,11.75,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2024-01,11.75,Brazil,A: Normal value
+"""
+    src = tmp_path / "cbpol.csv"
+    src.write_text(flat, encoding="utf-8")
+
+    out_d = tmp_path / "diario.xlsx"
+    excel_diario.gerar_excel_diario(out_d, csv_path=src, areas="BR")
+    wb_d = load_workbook(out_d)
+    ws_d = wb_d[[s for s in wb_d.sheetnames if s.startswith("BR")][0]]
+    assert ws_d.page_setup.orientation == "landscape"
+    assert ws_d.page_setup.paperSize == 9  # A4
+    assert ws_d.sheet_properties.pageSetUpPr.fitToPage is True
+    assert ws_d.page_setup.fitToHeight == 0  # altura livre; largura = 1 pagina
+    assert ws_d.print_title_rows == "$1:$1"
+    assert ws_d.freeze_panes == "A2"
+    assert ws_d.print_options.horizontalCentered is True
+    # Nome do pais no cabecalho de pagina (PDF); Legenda/Indice sem
+    assert "Brazil" in (ws_d.oddHeader.left.text or "")
+    assert not (wb_d["00_Legenda"].oddHeader.left.text or "").strip()
+
+    out_m = tmp_path / "mensal.xlsx"
+    excel_mensal.gerar_excel_mensal(out_m, csv_path=src, areas="BR")
+    wb_m = load_workbook(out_m)
+    ws_m = wb_m[[s for s in wb_m.sheetnames if s.startswith("BR")][0]]
+    assert ws_m.page_setup.orientation == "landscape"
+    assert ws_m.sheet_properties.pageSetUpPr.fitToPage is True
+    assert ws_m.print_title_rows == "$1:$1"
+    assert "Brazil" in (ws_m.oddHeader.left.text or "")
+
+
+def test_excel_basica_anual_year_end_table(tmp_path: Path):
+    from bis_mcp import excel_basica_anual
+    import pandas as pd
+
+    flat = """STRUCTURE,STRUCTURE_ID,ACTION,FREQ:Frequency,REF_AREA:Reference area,TIME_PERIOD:Time period or range,OBS_VALUE:Observation Value,TITLE:Title,OBS_STATUS:Observation Status
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-01,25.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2003-12,16.5,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2004-06,16.0,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,BR: Brazil,2026-06,14.25,Brazil,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2003-12,1.0,United States,A: Normal value
+dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2026-05,3.625,United States,A: Normal value
+"""
+    src = tmp_path / "WS_CBPOL_csv_flat.csv"
+    src.write_text(flat, encoding="utf-8")
+    out = tmp_path / "basica.xlsx"
+    meta = excel_basica_anual.gerar_excel_basica_anual(
+        out, csv_path=src, areas="BR,US", year_from=2003, year_to=2026
+    )
+    assert meta["countries"] == 2
+    assert meta["year_from"] == 2003
+    assert meta["year_to"] == 2026
+    assert meta["rule"] == "december_or_last_month_of_year"
+    assert meta["ranking"] == "ascending_rate"
+
+    df = pd.read_excel(out, sheet_name="02_Taxas_basicas_anuais")
+    assert "Pais" in df.columns
+    assert "Codigo" in df.columns
+
+    def ycol(year: int):
+        if year in df.columns:
+            return year
+        if str(year) in df.columns:
+            return str(year)
+        raise AssertionError(f"coluna do ano {year} ausente: {list(df.columns)}")
+
+    br = df[df["Codigo"] == "BR"].iloc[0]
+    # dezembro 2003
+    assert float(br[ycol(2003)]) == pytest.approx(16.5)
+    # 2004 sem dezembro -> junho
+    assert float(br[ycol(2004)]) == pytest.approx(16.0)
+    # 2026 incompleto -> junho
+    assert float(br[ycol(2026)]) == pytest.approx(14.25)
+    us = df[df["Codigo"] == "US"].iloc[0]
+    assert float(us[ycol(2003)]) == pytest.approx(1.0)
+    assert float(us[ycol(2026)]) == pytest.approx(3.625)
+
+    # Ranking 2003: US (1.0) antes de BR (16.5) — ordem crescente
+    r2003 = pd.read_excel(out, sheet_name="R_2003")
+    assert list(r2003.columns) == ["Posicao", "Pais", "Codigo", "Taxa (% a.a.)"]
+    assert r2003.iloc[0]["Codigo"] == "US"
+    assert int(r2003.iloc[0]["Posicao"]) == 1
+    assert r2003.iloc[1]["Codigo"] == "BR"
+    assert float(r2003.iloc[0]["Taxa (% a.a.)"]) <= float(r2003.iloc[1]["Taxa (% a.a.)"])
+
+    # helper unitario
+    rate, period = excel_basica_anual.year_end_rate(
+        [("2003-01", 25.0), ("2003-12", 16.5)], 2003
+    )
+    assert rate == pytest.approx(16.5)
+    assert period == "2003-12"
+
+
 def test_cli_help():
     from bis_mcp.cli import build_parser
 
@@ -366,3 +522,4 @@ def test_cli_help():
     assert "catalog" in help_text
     assert "extract" in help_text
     assert "excel-periodos" in help_text
+    assert "excel-basica-anual" in help_text

@@ -2,7 +2,7 @@
 # ASCII-only. BAT sem BOM.
 #
 #   cd "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
-#   $u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/bis-cbpol-mcp-41ca/bis-mcp/baixar_bis_winpython.ps1"
+#   $u="https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/cbpol-excel-center-41ca/bis-mcp/baixar_bis_winpython.ps1"
 #   Invoke-WebRequest "$u`?v=1" -OutFile baixar_bis.ps1 -Headers @{"Cache-Control"="no-cache"}
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_bis.ps1
 #
@@ -10,7 +10,7 @@
 #   powershell -NoProfile -ExecutionPolicy Bypass -File .\baixar_bis.ps1 -DownloadCsv
 
 param(
-    [string]$Ref = "cursor/bis-cbpol-mcp-41ca",
+    [string]$Ref = "cursor/cbpol-excel-center-41ca",
     [string]$Python = "",
     [string]$UserAgent = "SEC-data-analysys-bis-mcp/0.1 (cafla19791@gmail.com)",
     [switch]$DownloadCsv
@@ -39,6 +39,7 @@ $files = @(
     "src/bis_mcp/excel_diario.py",
     "src/bis_mcp/excel_periodos.py",
     "src/bis_mcp/excel_mensal.py",
+    "src/bis_mcp/excel_basica_anual.py",
     "src/bis_mcp/excel_format.py",
     "src/bis_mcp/pdf_export.py"
 )
@@ -123,6 +124,7 @@ Write-Host "  .\bis_cli.bat download --dir .."
 Write-Host "  .\bis_cli.bat extract BR,US,XM --out ..\cbpol_BR_US_XM.csv"
 Write-Host "  .\bis_cli.bat excel-diario --out ..\cbpol_taxas_diarias_compostas.xlsx"
 Write-Host "  .\bis_cli.bat excel-mensal --out ..\cbpol_taxas_mensais_compostas.xlsx"
+Write-Host "  .\bis_cli.bat excel-basica-anual --out ..\cbpol_taxas_basicas_anuais.xlsx"
 Write-Host "  .\bis_cli.bat excel-periodos --out ..\cbpol_taxas_acumuladas_periodos.xlsx"
 Write-Host "  .\bis_cli.bat excel-periodos --freq M --out ..\cbpol_taxas_acumuladas_periodos_mensal.xlsx"
 Write-Host "  .\bis_cli.bat serie selic --local --last 12"

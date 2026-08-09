@@ -114,8 +114,18 @@ def build_parser() -> argparse.ArgumentParser:
         default="",
         help="Filtrar paises (ex.: BR,US,XM). Vazio = todos com serie diaria",
     )
-    x.add_argument("--from", dest="date_from", default="", help="YYYY-MM-DD")
-    x.add_argument("--to", dest="date_to", default="", help="YYYY-MM-DD")
+    x.add_argument(
+        "--from",
+        dest="date_from",
+        default="1995-01-01",
+        help="Inicio YYYY-MM-DD (padrao: 1995-01-01)",
+    )
+    x.add_argument(
+        "--to",
+        dest="date_to",
+        default="",
+        help="Fim YYYY-MM-DD (padrao: ultimo dia de cada pais)",
+    )
     x.add_argument(
         "--sdmx",
         action="store_true",
@@ -131,8 +141,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_per.add_argument(
         "--out",
-        default="cbpol_taxas_acumuladas_periodos.xlsx",
-        help="Arquivo .xlsx de saida",
+        default="",
+        help=(
+            "Arquivo .xlsx de saida "
+            "(padrao: cbpol_taxas_acumuladas_periodos.xlsx ou "
+            "..._mensal.xlsx se --freq M)"
+        ),
     )
     p_per.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
     p_per.add_argument(
@@ -164,9 +178,55 @@ def build_parser() -> argparse.ArgumentParser:
         default="",
         help="Filtrar paises (ex.: BR,US,XM). Vazio = todos com serie mensal",
     )
-    xm.add_argument("--from", dest="date_from", default="", help="YYYY-MM ou YYYY-MM-DD")
-    xm.add_argument("--to", dest="date_to", default="", help="YYYY-MM ou YYYY-MM-DD")
     xm.add_argument(
+        "--from",
+        dest="date_from",
+        default="1995-01",
+        help="Inicio YYYY-MM (padrao: 1995-01)",
+    )
+    xm.add_argument(
+        "--to",
+        dest="date_to",
+        default="",
+        help="Fim YYYY-MM (padrao: ultimo mes de cada pais)",
+    )
+    xm.add_argument(
+        "--sdmx",
+        action="store_true",
+        help="Forcar download SDMX (nao usa CSV local)",
+    )
+
+    xa = sub.add_parser(
+        "excel-basica-anual",
+        help=(
+            "Excel tabela: taxa basica %% a.a. por pais e ano "
+            "(dezembro ou ultimo mes do ano; padrao 2003-2026)"
+        ),
+    )
+    xa.add_argument(
+        "--out",
+        default="cbpol_taxas_basicas_anuais.xlsx",
+        help="Arquivo .xlsx de saida",
+    )
+    xa.add_argument("--csv", default="", help="WS_CBPOL_csv_flat.csv de origem")
+    xa.add_argument(
+        "--areas",
+        default="",
+        help="Filtrar paises (ex.: BR,US,XM). Vazio = todos com serie mensal",
+    )
+    xa.add_argument(
+        "--year-from",
+        type=int,
+        default=2003,
+        help="Primeiro ano (padrao: 2003)",
+    )
+    xa.add_argument(
+        "--year-to",
+        type=int,
+        default=2026,
+        help="Ultimo ano (padrao: 2026)",
+    )
+    xa.add_argument(
         "--sdmx",
         action="store_true",
         help="Forcar download SDMX (nao usa CSV local)",
@@ -260,9 +320,17 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "excel-periodos":
             from . import excel_periodos
 
+            out_periodos = (args.out or "").strip()
+            if not out_periodos:
+                freq_u = (args.freq or "D").strip().upper()
+                out_periodos = (
+                    "cbpol_taxas_acumuladas_periodos_mensal.xlsx"
+                    if freq_u in {"M", "MONTHLY", "MES", "MENSAL"}
+                    else "cbpol_taxas_acumuladas_periodos.xlsx"
+                )
             _print(
                 excel_periodos.gerar_excel_periodos(
-                    args.out,
+                    out_periodos,
                     csv_path=args.csv or None,
                     prefer_local=not args.sdmx,
                     freq=args.freq,
@@ -278,6 +346,19 @@ def main(argv: list[str] | None = None) -> int:
                     areas=args.areas or None,
                     date_from=args.date_from or None,
                     date_to=args.date_to or None,
+                    prefer_local=not args.sdmx,
+                )
+            )
+        elif args.command == "excel-basica-anual":
+            from . import excel_basica_anual
+
+            _print(
+                excel_basica_anual.gerar_excel_basica_anual(
+                    args.out,
+                    csv_path=args.csv or None,
+                    areas=args.areas or None,
+                    year_from=args.year_from,
+                    year_to=args.year_to,
                     prefer_local=not args.sdmx,
                 )
             )

@@ -275,6 +275,10 @@ def build_country_rows(points: list[tuple[str, float]]) -> list[dict[str, Any]]:
     return rows
 
 
+# Padrao: series diarias compostas a partir de 01/01/1995 ate o ultimo dia do pais.
+DEFAULT_DATE_FROM = "1995-01-01"
+
+
 def gerar_excel_diario(
     out_path: str | Path,
     *,
@@ -284,11 +288,23 @@ def gerar_excel_diario(
     date_to: str | None = None,
     prefer_local: bool = True,
 ) -> dict[str, Any]:
-    """Gera workbook .xlsx com uma aba por país."""
+    """Gera workbook .xlsx com uma aba por país.
+
+    Por padrao usa dias a partir de 1995-01-01 ate o ultimo dia disponivel
+    de cada pais (date_to=None). Para incluir historico anterior, passe
+    date_from mais antigo (ex.: 1980-01-01).
+    """
     try:
         import pandas as pd
     except ImportError as exc:  # pragma: no cover
         raise RuntimeError("pandas e necessario. pip install pandas openpyxl") from exc
+
+    if date_from is None:
+        date_from = DEFAULT_DATE_FROM
+    if len(date_from) >= 10:
+        date_from = date_from[:10]
+    if date_to is not None and len(date_to) >= 10:
+        date_to = date_to[:10]
 
     wanted: set[str] | None = None
     if areas:
@@ -366,6 +382,13 @@ def gerar_excel_diario(
             {"Item": "Fonte", "Valor": "BIS WS_CBPOL (frequencia diaria)"},
             {"Item": "Origem dados", "Valor": source},
             {
+                "Item": "Periodo",
+                "Valor": (
+                    f"De {date_from} ate o ultimo dia disponivel de cada pais"
+                    + (f" (limite --to {date_to})" if date_to else "")
+                ),
+            },
+            {
                 "Item": "Conversao % a.a. -> % a.d.",
                 "Valor": "taxa_ad = (1 + taxa_aa/100)^(1/252) - 1   [ano com 252 dias uteis]",
             },
@@ -398,7 +421,8 @@ def gerar_excel_diario(
                 "Item": "Observacao",
                 "Valor": (
                     "OBS_VALUE do BIS esta em % a.a. (policy rate). "
-                    "A acumulacao comeca no primeiro dia disponivel de cada pais. "
+                    "A acumulacao comeca no primeiro dia >= "
+                    f"{date_from} disponivel de cada pais. "
                     "Em series muito longas (hiperinflacao), a acumulada pode aparecer "
                     "em notacao cientifica (texto) por limite numerico do Excel."
                 ),
@@ -415,18 +439,33 @@ def gerar_excel_diario(
     with pd.ExcelWriter(out, engine=engine) as writer:
         legenda.to_excel(writer, sheet_name="00_Legenda", index=False)
         excel_format.autosize_dataframe_sheet(
-            writer, "00_Legenda", legenda, engine=engine, max_width=80, padding=4
+            writer,
+            "00_Legenda",
+            legenda,
+            engine=engine,
+            max_width=80,
+            padding=4,
+            center=True,
+            print_layout=True,
         )
         indice_df = pd.DataFrame(indice_rows)
         indice_df.to_excel(writer, sheet_name="01_Indice", index=False)
         excel_format.autosize_dataframe_sheet(
-            writer, "01_Indice", indice_df, engine=engine, padding=4
+            writer,
+            "01_Indice",
+            indice_df,
+            engine=engine,
+            padding=4,
+            center=True,
+            print_layout=True,
         )
 
-        fmt_ad = fmt_ac = None
+        formats_tpl = None
         if engine == "xlsxwriter":
-            fmt_ad = writer.book.add_format({"num_format": "0.00000000"})
-            fmt_ac = writer.book.add_format({"num_format": "0.000000"})
+            formats_tpl = excel_format.make_center_formats(
+                writer.book,
+                [None, "0.00000000", "0.000000", "0.000000", "0.000000"],
+            )
 
         for code in sorted(country_tables.keys()):
             name = names.get(code, AREA_NAMES.get(code, code))
@@ -441,18 +480,20 @@ def gerar_excel_diario(
                 ]
             ]
             df.to_excel(writer, sheet_name=aba, index=False)
-            formats = None
-            if engine == "xlsxwriter":
-                formats = [None, fmt_ad, fmt_ac, fmt_ac, fmt_ac]
+            # Cabecalho de impressao/PDF: nome do pais no canto superior esquerdo
+            # (abas Legenda/Indice ficam sem — tipicamente paginas 1-3 do PDF).
             excel_format.autosize_dataframe_sheet(
                 writer,
                 aba,
                 df,
                 engine=engine,
-                col_formats=formats,
+                col_formats=formats_tpl,
                 min_width=12,
                 max_width=36,
                 padding=4,
+                center=True,
+                print_layout=True,
+                page_header_left=name,
             )
 
     return {

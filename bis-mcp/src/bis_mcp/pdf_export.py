@@ -28,7 +28,11 @@ def xlsx_para_pdf(
     xlsx_path: str | Path,
     out_dir: str | Path | None = None,
 ) -> dict[str, Any]:
-    """Converte um .xlsx em .pdf (todas as abas) usando LibreOffice headless."""
+    """Converte um .xlsx em .pdf (todas as abas) usando LibreOffice headless.
+
+    Prefira planilhas geradas com print_layout (paisagem + fit-to-width): o
+    LibreOffice respeita a configuracao de pagina do .xlsx na exportacao.
+    """
     src = Path(xlsx_path).resolve()
     if not src.is_file():
         raise FileNotFoundError(f"Arquivo nao encontrado: {src}")
@@ -45,18 +49,26 @@ def xlsx_para_pdf(
             "ou use os PDFs pre-gerados em output/pdf/."
         )
 
+    # calc_pdf_Export: usa page setup da planilha (landscape/fit) quando presente.
+    # UseSinglePageSheets=false evita esmagar abas enormes em uma unica pagina.
+    convert_filter = (
+        'pdf:calc_pdf_Export:'
+        '{"SinglePageSheets":{"type":"boolean","value":"false"},'
+        '"UseLosslessCompression":{"type":"boolean","value":"true"}}'
+    )
     cmd = [
         soffice,
         "--headless",
         "--nologo",
         "--nofirststartwizard",
         "--convert-to",
-        "pdf:calc_pdf_Export",
+        convert_filter,
         "--outdir",
         str(dest_dir),
         str(src),
     ]
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+    # Diarios grandes podem passar de 10 min
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)
     if proc.returncode != 0:
         raise RuntimeError(
             f"Falha na conversao (exit {proc.returncode}): {proc.stderr or proc.stdout}"

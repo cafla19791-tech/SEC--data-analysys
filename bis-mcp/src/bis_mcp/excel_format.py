@@ -1,4 +1,4 @@
-"""Helpers de formatacao Excel (largura de colunas)."""
+"""Helpers de formatacao Excel (largura de colunas e alinhamento)."""
 
 from __future__ import annotations
 
@@ -63,6 +63,150 @@ def apply_column_widths(
         worksheet.column_dimensions[get_column_letter(i)].width = width
 
 
+def make_center_formats(
+    workbook: Any,
+    num_formats: Sequence[str | None],
+) -> list[Any]:
+    """Cria formatos xlsxwriter centrados (opcionalmente com num_format)."""
+    out: list[Any] = []
+    for nf in num_formats:
+        opts: dict[str, Any] = {"align": "center", "valign": "vcenter"}
+        if nf:
+            opts["num_format"] = nf
+        out.append(workbook.add_format(opts))
+    return out
+
+
+def center_align_dataframe_sheet(
+    writer: Any,
+    sheet_name: str,
+    df: Any,
+    *,
+    engine: str,
+    header_row: int = 0,
+    bold_header: bool = True,
+    wrap_header: bool = True,
+) -> None:
+    """Centraliza cabecalhos (e dados no openpyxl) na aba.
+
+    No xlsxwriter, os dados herdam alinhamento via set_column / col_formats
+    (ver make_center_formats); aqui so reescrevemos a linha de cabecalho.
+    """
+    ws = writer.sheets[sheet_name]
+    n_cols = len(df.columns)
+    if n_cols == 0:
+        return
+
+    if engine == "xlsxwriter":
+        header_fmt = writer.book.add_format(
+            {
+                "align": "center",
+                "valign": "vcenter",
+                "bold": bold_header,
+                "text_wrap": wrap_header,
+            }
+        )
+        for c, name in enumerate(df.columns):
+            ws.write(header_row, c, name, header_fmt)
+        return
+
+    # openpyxl
+    from openpyxl.styles import Alignment, Font
+
+    header_align = Alignment(
+        horizontal="center", vertical="center", wrap_text=wrap_header
+    )
+    cell_align = Alignment(horizontal="center", vertical="center")
+    for c in range(1, n_cols + 1):
+        cell = ws.cell(row=header_row + 1, column=c)
+        cell.alignment = header_align
+        if bold_header:
+            cell.font = Font(bold=True)
+
+    n_rows = len(df)
+    if n_rows == 0:
+        return
+    data_start = header_row + 2
+    data_end = header_row + 1 + n_rows
+    for row in ws.iter_rows(
+        min_row=data_start, max_row=data_end, min_col=1, max_col=n_cols
+    ):
+        for cell in row:
+            cell.alignment = cell_align
+
+
+def _escape_header_text(text: str) -> str:
+    """Escapa '&' nos cabecalhos de impressao do Excel/xlsxwriter."""
+    return str(text).replace("&", "&&")
+
+
+def apply_print_layout(
+    writer: Any,
+    sheet_name: str,
+    *,
+    engine: str,
+    header_row: int = 0,
+    repeat_through_row: int | None = None,
+    landscape: bool = True,
+    fit_to_width: int = 1,
+    fit_to_height: int = 0,
+    page_header_left: str | None = None,
+) -> None:
+    """Configura impressao/PDF: paisagem A4, caber na largura, repetir cabecalho.
+
+    O LibreOffice (e o Excel) usam essas opcoes na conversao para PDF, evitando
+    colunas cortadas no meio da pagina.
+
+    page_header_left: texto no canto superior esquerdo de cada pagina impressa
+    (ex.: nome do pais nas abas de pais).
+    """
+    ws = writer.sheets[sheet_name]
+    repeat_end = header_row if repeat_through_row is None else repeat_through_row
+    top_margin = 0.75 if page_header_left else 0.5
+
+    if engine == "xlsxwriter":
+        if landscape:
+            ws.set_landscape()
+        ws.set_paper(9)  # A4
+        ws.fit_to_pages(fit_to_width, fit_to_height)
+        ws.repeat_rows(header_row, repeat_end)
+        ws.center_horizontally()
+        ws.set_margins(left=0.4, right=0.4, top=top_margin, bottom=0.5)
+        if page_header_left:
+            # &L = esquerda; negrito para leitura no PDF
+            safe = _escape_header_text(page_header_left)
+            ws.set_header(f'&L&"Calibri,Bold"{safe}')
+        # Congela cabecalho na tela (nao afeta PDF, ajuda no Excel)
+        ws.freeze_panes(repeat_end + 1, 0)
+        return
+
+    # openpyxl
+    from openpyxl.worksheet.page import PageMargins
+
+    ws.page_setup.orientation = "landscape" if landscape else "portrait"
+    ws.page_setup.paperSize = ws.PAPERSIZE_A4
+    ws.page_setup.fitToPage = True
+    ws.page_setup.fitToWidth = fit_to_width
+    ws.page_setup.fitToHeight = fit_to_height
+    # openpyxl exige o flag tambem em sheet_properties
+    if ws.sheet_properties.pageSetUpPr is None:
+        from openpyxl.worksheet.properties import PageSetupProperties
+
+        ws.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
+    else:
+        ws.sheet_properties.pageSetUpPr.fitToPage = True
+    # Linhas 1-based no print_title_rows
+    ws.print_title_rows = f"{header_row + 1}:{repeat_end + 1}"
+    ws.page_margins = PageMargins(left=0.4, right=0.4, top=top_margin, bottom=0.5)
+    ws.print_options.horizontalCentered = True
+    ws.freeze_panes = f"A{repeat_end + 2}"
+    if page_header_left:
+        ws.oddHeader.left.text = page_header_left
+        ws.oddHeader.left.font = "Calibri,Bold"
+        ws.evenHeader.left.text = page_header_left
+        ws.evenHeader.left.font = "Calibri,Bold"
+
+
 def autosize_dataframe_sheet(
     writer: Any,
     sheet_name: str,
@@ -75,6 +219,11 @@ def autosize_dataframe_sheet(
     max_width: float = 60,
     padding: float = 3,
     extra_title_width: float | None = None,
+    center: bool = False,
+    header_row: int = 0,
+    print_layout: bool = False,
+    repeat_through_row: int | None = None,
+    page_header_left: str | None = None,
 ) -> None:
     """Ajusta colunas de uma aba ja escrita com pandas.to_excel."""
     ws = writer.sheets[sheet_name]
@@ -91,4 +240,27 @@ def autosize_dataframe_sheet(
     )
     if extra_title_width is not None and widths:
         widths[0] = max(widths[0], extra_title_width)
+
+    if center and engine == "xlsxwriter" and col_formats is None:
+        col_formats = make_center_formats(writer.book, [None] * len(cols))
+
     apply_column_widths(ws, widths, engine=engine, formats=col_formats)
+
+    if center:
+        center_align_dataframe_sheet(
+            writer,
+            sheet_name,
+            df,
+            engine=engine,
+            header_row=header_row,
+        )
+
+    if print_layout:
+        apply_print_layout(
+            writer,
+            sheet_name,
+            engine=engine,
+            header_row=header_row,
+            repeat_through_row=repeat_through_row,
+            page_header_left=page_header_left,
+        )
