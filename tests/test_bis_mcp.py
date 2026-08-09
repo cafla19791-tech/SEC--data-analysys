@@ -472,6 +472,7 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2026-05,3.625,United S
     assert meta["year_from"] == 2003
     assert meta["year_to"] == 2026
     assert meta["rule"] == "december_or_last_month_of_year"
+    assert meta["ranking"] == "ascending_rate"
 
     df = pd.read_excel(out, sheet_name="02_Taxas_basicas_anuais")
     assert "Pais" in df.columns
@@ -494,6 +495,14 @@ dataflow,BIS:WS_CBPOL(1.0),I,M: Monthly,US: United States,2026-05,3.625,United S
     us = df[df["Codigo"] == "US"].iloc[0]
     assert float(us[ycol(2003)]) == pytest.approx(1.0)
     assert float(us[ycol(2026)]) == pytest.approx(3.625)
+
+    # Ranking 2003: US (1.0) antes de BR (16.5) — ordem crescente
+    r2003 = pd.read_excel(out, sheet_name="R_2003")
+    assert list(r2003.columns) == ["Posicao", "Pais", "Codigo", "Taxa (% a.a.)"]
+    assert r2003.iloc[0]["Codigo"] == "US"
+    assert int(r2003.iloc[0]["Posicao"]) == 1
+    assert r2003.iloc[1]["Codigo"] == "BR"
+    assert float(r2003.iloc[0]["Taxa (% a.a.)"]) <= float(r2003.iloc[1]["Taxa (% a.a.)"])
 
     # helper unitario
     rate, period = excel_basica_anual.year_end_rate(

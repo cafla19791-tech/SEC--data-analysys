@@ -60,6 +60,43 @@ def build_annual_table(
     return rows, years
 
 
+def build_year_ranking(
+    table_rows: list[dict[str, Any]],
+    year: int,
+) -> list[dict[str, Any]]:
+    """Ranking do ano em ordem crescente da taxa (menor taxa = 1o)."""
+    ykey = str(year)
+    entries: list[tuple[float, str, str]] = []
+    for r in table_rows:
+        rate = r.get(ykey)
+        if rate is None:
+            continue
+        try:
+            val = float(rate)
+        except (TypeError, ValueError):
+            continue
+        entries.append((val, str(r["Pais"]), str(r["Codigo"])))
+
+    # Crescente pela taxa; empate: nome do pais, depois codigo
+    entries.sort(key=lambda t: (t[0], t[1].lower(), t[2]))
+    ranked: list[dict[str, Any]] = []
+    for i, (rate, pais, codigo) in enumerate(entries, start=1):
+        ranked.append(
+            {
+                "Posicao": i,
+                "Pais": pais,
+                "Codigo": codigo,
+                "Taxa (% a.a.)": rate,
+            }
+        )
+    return ranked
+
+
+def ranking_sheet_name(year: int) -> str:
+    """Nome de aba Excel (<=31 chars)."""
+    return f"R_{year}"[:31]
+
+
 def gerar_excel_basica_anual(
     out_path: str | Path,
     *,
@@ -123,11 +160,25 @@ def gerar_excel_basica_anual(
     cols = ["Pais", "Codigo"] + [str(y) for y in years]
     df = pd.DataFrame(table_rows)[cols]
 
-    # Contagem de preenchimento por ano (para a legenda / indice)
+    # Contagem / indice de rankings por ano
     cobertura = []
+    rankings: dict[int, list[dict[str, Any]]] = {}
     for y in years:
-        n = sum(1 for r in table_rows if r[str(y)] is not None)
-        cobertura.append({"Ano": y, "Paises_com_taxa": n, "Total_paises": len(table_rows)})
+        ranked = build_year_ranking(table_rows, y)
+        rankings[y] = ranked
+        n = len(ranked)
+        cobertura.append(
+            {
+                "Ano": y,
+                "Aba_ranking": ranking_sheet_name(y),
+                "Paises_com_taxa": n,
+                "Total_paises": len(table_rows),
+                "Menor_taxa_%": ranked[0]["Taxa (% a.a.)"] if ranked else None,
+                "Pais_menor": ranked[0]["Pais"] if ranked else None,
+                "Maior_taxa_%": ranked[-1]["Taxa (% a.a.)"] if ranked else None,
+                "Pais_maior": ranked[-1]["Pais"] if ranked else None,
+            }
+        )
 
     legenda = pd.DataFrame(
         [
@@ -142,6 +193,13 @@ def gerar_excel_basica_anual(
                 "Valor": (
                     "Taxa de dezembro (YYYY-12); se ausente, ultimo mes "
                     "disponivel daquele ano (ex.: ano corrente incompleto)"
+                ),
+            },
+            {
+                "Item": "Ranking",
+                "Valor": (
+                    "Abas R_AAAA: Posicao | Pais | Codigo | Taxa (% a.a.), "
+                    "ordem crescente da taxa (1 = menor taxa)"
                 ),
             },
             {
@@ -210,6 +268,34 @@ def gerar_excel_basica_anual(
             page_header_left="Taxas basicas anuais (% a.a.)",
         )
 
+        rank_formats = None
+        if engine == "xlsxwriter":
+            rank_formats = excel_format.make_center_formats(
+                writer.book, [None, None, None, "0.####"]
+            )
+        for y in years:
+            ranked = rankings[y]
+            if not ranked:
+                continue
+            aba = ranking_sheet_name(y)
+            rdf = pd.DataFrame(ranked)[
+                ["Posicao", "Pais", "Codigo", "Taxa (% a.a.)"]
+            ]
+            rdf.to_excel(writer, sheet_name=aba, index=False)
+            excel_format.autosize_dataframe_sheet(
+                writer,
+                aba,
+                rdf,
+                engine=engine,
+                col_formats=rank_formats,
+                min_width=10,
+                max_width=36,
+                padding=3,
+                center=True,
+                print_layout=True,
+                page_header_left=f"Ranking {y} (crescente)",
+            )
+
     return {
         "path": str(out.resolve()),
         "source": source,
@@ -217,6 +303,8 @@ def gerar_excel_basica_anual(
         "years": years,
         "year_from": year_from,
         "year_to": year_to,
+        "rankings": len([y for y in years if rankings[y]]),
         "bytes": out.stat().st_size,
         "rule": "december_or_last_month_of_year",
+        "ranking": "ascending_rate",
     }
