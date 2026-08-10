@@ -333,6 +333,133 @@ INDICATORS_BUSINESS_INFRA: list[tuple[str, str, str]] = [
     ),
 ]
 
+INDICATORS_POVERTY: list[tuple[str, str, str]] = [
+    # Poverty rates at national poverty lines
+    (
+        "Poverty rates at national poverty lines",
+        "Poverty headcount ratio at national poverty lines (% of population)",
+        "SI.POV.NAHC",
+    ),
+    (
+        "Poverty rates at national poverty lines",
+        "Urban poverty headcount ratio at national poverty lines (% of urban population)",
+        "SI.POV.URHC",
+    ),
+    (
+        "Poverty rates at national poverty lines",
+        "Rural poverty headcount ratio at national poverty lines (% of rural population)",
+        "SI.POV.RUHC",
+    ),
+    (
+        "Poverty rates at national poverty lines",
+        "Poverty gap at national poverty lines (%)",
+        "SI.POV.NAGP",
+    ),
+    (
+        "Poverty rates at national poverty lines",
+        "Urban poverty gap at national poverty lines (%)",
+        "SI.POV.URGP",
+    ),
+    (
+        "Poverty rates at national poverty lines",
+        "Rural poverty gap at national poverty lines (%)",
+        "SI.POV.RUGP",
+    ),
+    # Poverty rates at international poverty lines
+    (
+        "Poverty rates at international poverty lines",
+        "Poverty headcount ratio at $3.00 a day (2021 PPP) (% of population)",
+        "SI.POV.DDAY",
+    ),
+    (
+        "Poverty rates at international poverty lines",
+        "Poverty headcount ratio at $4.20 a day (2021 PPP) (% of population)",
+        "SI.POV.LMIC",
+    ),
+    (
+        "Poverty rates at international poverty lines",
+        "Poverty headcount ratio at $8.30 a day (2021 PPP) (% of population)",
+        "SI.POV.UMIC",
+    ),
+    (
+        "Poverty rates at international poverty lines",
+        "Poverty gap at $3.00 a day (2021 PPP) (%)",
+        "SI.POV.GAPS",
+    ),
+    (
+        "Poverty rates at international poverty lines",
+        "Poverty gap at $4.20 a day (2021 PPP) (%)",
+        "SI.POV.LMIC.GP",
+    ),
+    (
+        "Poverty rates at international poverty lines",
+        "Poverty gap at $8.30 a day (2021 PPP) (%)",
+        "SI.POV.UMIC.GP",
+    ),
+    # Distribution of income or consumption
+    (
+        "Distribution of income or consumption",
+        "GINI index (World Bank estimate)",
+        "SI.POV.GINI",
+    ),
+    (
+        "Distribution of income or consumption",
+        "Income share held by lowest 10%",
+        "SI.DST.FRST.10",
+    ),
+    (
+        "Distribution of income or consumption",
+        "Income share held by lowest 20%",
+        "SI.DST.FRST.20",
+    ),
+    (
+        "Distribution of income or consumption",
+        "Income share held by second 20%",
+        "SI.DST.02ND.20",
+    ),
+    (
+        "Distribution of income or consumption",
+        "Income share held by third 20%",
+        "SI.DST.03RD.20",
+    ),
+    (
+        "Distribution of income or consumption",
+        "Income share held by fourth 20%",
+        "SI.DST.04TH.20",
+    ),
+    (
+        "Distribution of income or consumption",
+        "Income share held by highest 20%",
+        "SI.DST.05TH.20",
+    ),
+    (
+        "Distribution of income or consumption",
+        "Income share held by highest 10%",
+        "SI.DST.10TH.10",
+    ),
+    # Shared prosperity
+    (
+        "Shared prosperity",
+        "Annualized average growth rate in per capita real survey mean consumption or income, bottom 40% of population (%)",
+        "SI.SPR.PC40.ZG",
+    ),
+    (
+        "Shared prosperity",
+        "Annualized average growth rate in per capita real survey mean consumption or income, total population (%)",
+        "SI.SPR.PCAP.ZG",
+    ),
+    (
+        "Shared prosperity",
+        "Survey mean consumption or income per capita, bottom 40% of population (2021 PPP $ per day)",
+        "SI.SPR.PC40",
+    ),
+    (
+        "Shared prosperity",
+        "Survey mean consumption or income per capita, total population (2021 PPP $ per day)",
+        "SI.SPR.PCAP",
+    ),
+]
+
 WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "growth-macro": (
         Path("world_bank_featured_indicators.xlsx"),
@@ -341,6 +468,10 @@ WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "business-infra": (
         Path("world_bank_featured_indicators_business_infra.xlsx"),
         INDICATORS_BUSINESS_INFRA,
+    ),
+    "poverty": (
+        Path("world_bank_featured_indicators_poverty.xlsx"),
+        INDICATORS_POVERTY,
     ),
 }
 

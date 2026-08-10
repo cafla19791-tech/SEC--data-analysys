@@ -14,6 +14,11 @@ Growth and economic structure, income and savings, balance of payments, prices a
 
 Business environment, financial access and stability, stock markets, government finance and taxes, military and fragile situations, infrastructure and communications, science and innovation.
 
+### Poverty / shared prosperity set
+`world_bank_featured_indicators_poverty.xlsx`
+
+Poverty rates at national and international poverty lines, income/consumption distribution, and shared prosperity.
+
 ## Workbook layout
 
 Each file contains:
@@ -43,4 +48,5 @@ python3 fetch_world_bank_indicators.py
 # Only one set
 python3 fetch_world_bank_indicators.py --set growth-macro
 python3 fetch_world_bank_indicators.py --set business-infra
+python3 fetch_world_bank_indicators.py --set poverty
 ```
