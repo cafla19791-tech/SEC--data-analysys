@@ -29,6 +29,11 @@ Population dynamics, education, labor, health, and gender indicators.
 
 Agriculture, climate, energy & mining, environment, urban and rural development, water and sanitation.
 
+### Global links set
+`world_bank_featured_indicators_global.xlsx`
+
+External debt, trade, financial flows, aid dependency, refugees, tourism, and migration.
+
 ## Workbook layout
 
 Each file contains:
@@ -61,4 +66,5 @@ python3 fetch_world_bank_indicators.py --set business-infra
 python3 fetch_world_bank_indicators.py --set poverty
 python3 fetch_world_bank_indicators.py --set social
 python3 fetch_world_bank_indicators.py --set environment
+python3 fetch_world_bank_indicators.py --set global
 ```

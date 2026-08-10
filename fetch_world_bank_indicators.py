@@ -760,6 +760,99 @@ INDICATORS_ENVIRONMENT: list[tuple[str, str, str]] = [
     ),
 ]
 
+INDICATORS_GLOBAL: list[tuple[str, str, str]] = [
+    # External debt
+    (
+        "External debt",
+        "External debt stocks, total (DOD, current US$)",
+        "DT.DOD.DECT.CD",
+    ),
+    (
+        "External debt",
+        "External debt stocks, short-term (DOD, current US$)",
+        "DT.DOD.DSTC.CD",
+    ),
+    (
+        "External debt",
+        "External debt stocks, long-term (DOD, current US$)",
+        "DT.DOD.DLXF.CD",
+    ),
+    (
+        "External debt",
+        "External debt stocks, public and publicly guaranteed (PPG) (DOD, current US$)",
+        "DT.DOD.DPPG.CD",
+    ),
+    (
+        "External debt",
+        "External debt stocks, private nonguaranteed (PNG) (DOD, current US$)",
+        "DT.DOD.DPNG.CD",
+    ),
+    (
+        "External debt",
+        "Total debt service (% of exports of goods, services and primary income)",
+        "DT.TDS.DECT.EX.ZS",
+    ),
+    # Trade
+    ("Trade", "Merchandise trade (% of GDP)", "TG.VAL.TOTL.GD.ZS"),
+    (
+        "Trade",
+        "Net barter terms of trade index (2000 = 100)",
+        "TT.PRI.MRCH.XD.WD",
+    ),
+    # Financial flows
+    (
+        "Financial flows",
+        "Foreign direct investment, net inflows (BoP, current US$)",
+        "BX.KLT.DINV.CD.WD",
+    ),
+    (
+        "Financial flows",
+        "Personal remittances, received (current US$)",
+        "BX.TRF.PWKR.CD.DT",
+    ),
+    (
+        "Financial flows",
+        "Portfolio equity, net inflows (BoP, current US$)",
+        "BX.PEF.TOTL.CD.WD",
+    ),
+    # Aid dependency
+    (
+        "Aid dependency",
+        "Net official development assistance and official aid received (current US$)",
+        "DT.ODA.ALLD.CD",
+    ),
+    (
+        "Aid dependency",
+        "Net official development assistance received (current US$)",
+        "DT.ODA.ODAT.CD",
+    ),
+    ("Aid dependency", "Net ODA received (% of GNI)", "DT.ODA.ODAT.GN.ZS"),
+    # Refugees
+    (
+        "Refugees",
+        "Refugee population by country or territory of asylum",
+        "SM.POP.REFG",
+    ),
+    (
+        "Refugees",
+        "Refugee population by country or territory of origin",
+        "SM.POP.REFG.OR",
+    ),
+    # Tourism
+    (
+        "Tourism",
+        "International tourism, receipts (% of total exports)",
+        "ST.INT.RCPT.XP.ZS",
+    ),
+    (
+        "Tourism",
+        "International tourism, expenditures (% of total imports)",
+        "ST.INT.XPND.MP.ZS",
+    ),
+    # Migration
+    ("Migration", "Net migration", "SM.POP.NETM"),
+]
+
 WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "growth-macro": (
         Path("world_bank_featured_indicators.xlsx"),
@@ -780,6 +873,10 @@ WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "environment": (
         Path("world_bank_featured_indicators_environment.xlsx"),
         INDICATORS_ENVIRONMENT,
+    ),
+    "global": (
+        Path("world_bank_featured_indicators_global.xlsx"),
+        INDICATORS_GLOBAL,
     ),
 }
 
