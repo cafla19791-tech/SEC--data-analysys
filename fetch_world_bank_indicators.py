@@ -460,6 +460,180 @@ INDICATORS_POVERTY: list[tuple[str, str, str]] = [
     ),
 ]
 
+INDICATORS_SOCIAL: list[tuple[str, str, str]] = [
+    # Population dynamics
+    ("Population dynamics", "Population, total", "SP.POP.TOTL"),
+    ("Population dynamics", "Population growth (annual %)", "SP.POP.GROW"),
+    (
+        "Population dynamics",
+        "Birth rate, crude (per 1,000 people)",
+        "SP.DYN.CBRT.IN",
+    ),
+    (
+        "Population dynamics",
+        "Death rate, crude (per 1,000 people)",
+        "SP.DYN.CDRT.IN",
+    ),
+    (
+        "Population dynamics",
+        "Fertility rate, total (births per woman)",
+        "SP.DYN.TFRT.IN",
+    ),
+    (
+        "Population dynamics",
+        "Life expectancy at birth, male (years)",
+        "SP.DYN.LE00.MA.IN",
+    ),
+    (
+        "Population dynamics",
+        "Life expectancy at birth, female (years)",
+        "SP.DYN.LE00.FE.IN",
+    ),
+    (
+        "Population dynamics",
+        "Age dependency ratio, young (% of working-age population)",
+        "SP.POP.DPND.YG",
+    ),
+    (
+        "Population dynamics",
+        "Age dependency ratio, old (% of working-age population)",
+        "SP.POP.DPND.OL",
+    ),
+    # Education
+    (
+        "Education",
+        "Government expenditure on education, total (% of GDP)",
+        "SE.XPD.TOTL.GD.ZS",
+    ),
+    ("Education", "School enrollment, primary (% gross)", "SE.PRM.ENRR"),
+    ("Education", "School enrollment, secondary (% gross)", "SE.SEC.ENRR"),
+    ("Education", "School enrollment, tertiary (% gross)", "SE.TER.ENRR"),
+    ("Education", "Progression to secondary school (%)", "SE.SEC.PROG.ZS"),
+    (
+        "Education",
+        "Primary completion rate, total (% of relevant age group)",
+        "SE.PRM.CMPT.ZS",
+    ),
+    (
+        "Education",
+        "Literacy rate, youth total (% of people ages 15-24)",
+        "SE.ADT.1524.LT.ZS",
+    ),
+    # Labor
+    (
+        "Labor",
+        "Labor force participation rate, total (% of total population ages 15+) (modeled ILO estimate)",
+        "SL.TLF.CACT.ZS",
+    ),
+    (
+        "Labor",
+        "Employment in agriculture (% of total employment) (modeled ILO estimate)",
+        "SL.AGR.EMPL.ZS",
+    ),
+    (
+        "Labor",
+        "Employment in industry (% of total employment) (modeled ILO estimate)",
+        "SL.IND.EMPL.ZS",
+    ),
+    (
+        "Labor",
+        "Employment in services (% of total employment) (modeled ILO estimate)",
+        "SL.SRV.EMPL.ZS",
+    ),
+    (
+        "Labor",
+        "Employment to population ratio, 15+, total (%) (modeled ILO estimate)",
+        "SL.EMP.TOTL.SP.ZS",
+    ),
+    (
+        "Labor",
+        "Unemployment, total (% of total labor force) (modeled ILO estimate)",
+        "SL.UEM.TOTL.ZS",
+    ),
+    (
+        "Labor",
+        "Children in employment, total (% of children ages 7-14)",
+        "SL.TLF.0714.ZS",
+    ),
+    # Health
+    (
+        "Health",
+        "Prevalence of stunting, height for age (% of children under 5)",
+        "SH.STA.STNT.ZS",
+    ),
+    (
+        "Health",
+        "Maternal mortality ratio (modeled estimate, per 100,000 live births)",
+        "SH.STA.MMRT",
+    ),
+    (
+        "Health",
+        "Mortality rate, under-5 (per 1,000 live births)",
+        "SH.DYN.MORT",
+    ),
+    (
+        "Health",
+        "Incidence of HIV (% of uninfected population ages 15-49)",
+        "SH.HIV.INCD.ZS",
+    ),
+    (
+        "Health",
+        "Mortality from CVD, cancer, diabetes or CRD between exact ages 30 and 70 (%)",
+        "SH.DYN.NCOM.ZS",
+    ),
+    (
+        "Health",
+        "Mortality caused by road traffic injury (per 100,000 people)",
+        "SH.STA.TRAF.P5",
+    ),
+    (
+        "Health",
+        "Adolescent fertility rate (births per 1,000 women ages 15-19)",
+        "SP.ADO.TFRT",
+    ),
+    (
+        "Health",
+        "Proportion of population spending more than 10% of household consumption or income on out-of-pocket health care expenditure (%)",
+        "SH.UHC.OOPC.10.ZS",
+    ),
+    # Gender
+    (
+        "Gender",
+        "School enrollment, primary and secondary (gross), gender parity index (GPI)",
+        "SE.ENR.PRSC.FM.ZS",
+    ),
+    (
+        "Gender",
+        "Women who were first married by age 18 (% of women ages 20-24)",
+        "SP.M18.2024.FE.ZS",
+    ),
+    (
+        "Gender",
+        "Demand for family planning satisfied by modern methods (% of married women with demand for family planning)",
+        "SH.FPL.SATM.ZS",
+    ),
+    (
+        "Gender",
+        "Ratio of female to male labor force participation rate (%) (modeled ILO estimate)",
+        "SL.TLF.CACT.FM.ZS",
+    ),
+    (
+        "Gender",
+        "Female share of employment in senior and middle management (%)",
+        "SL.EMP.SMGT.FE.ZS",
+    ),
+    (
+        "Gender",
+        "Proportion of women subjected to physical and/or sexual violence in the last 12 months (% of women age 15-49)",
+        "SG.VAW.1549.ZS",
+    ),
+    (
+        "Gender",
+        "Proportion of seats held by women in national parliaments (%)",
+        "SG.GEN.PARL.ZS",
+    ),
+]
+
 WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "growth-macro": (
         Path("world_bank_featured_indicators.xlsx"),
@@ -472,6 +646,10 @@ WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "poverty": (
         Path("world_bank_featured_indicators_poverty.xlsx"),
         INDICATORS_POVERTY,
+    ),
+    "social": (
+        Path("world_bank_featured_indicators_social.xlsx"),
+        INDICATORS_SOCIAL,
     ),
 }
 

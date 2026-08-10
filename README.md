@@ -19,6 +19,11 @@ Business environment, financial access and stability, stock markets, government 
 
 Poverty rates at national and international poverty lines, income/consumption distribution, and shared prosperity.
 
+### Social set (population, education, labor, health, gender)
+`world_bank_featured_indicators_social.xlsx`
+
+Population dynamics, education, labor, health, and gender indicators.
+
 ## Workbook layout
 
 Each file contains:
@@ -49,4 +54,5 @@ python3 fetch_world_bank_indicators.py
 python3 fetch_world_bank_indicators.py --set growth-macro
 python3 fetch_world_bank_indicators.py --set business-infra
 python3 fetch_world_bank_indicators.py --set poverty
+python3 fetch_world_bank_indicators.py --set social
 ```
