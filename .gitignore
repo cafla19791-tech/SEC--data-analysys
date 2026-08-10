@@ -1,0 +1,15 @@
+data/raw/
+data/bndes/
+data/cvm/
+data/fne/
+data/fno/*.pdf
+data/fno/*.png
+data/fno/*.jpg
+data/fno/*.bin
+data/fno/basa_ra/pdfs/
+data/fno/basa_ra/txt/
+data/fno/basa_ra/*.xlsx
+data/fno/basa_ra/*.docx
+__pycache__/
+*.pyc
+.DS_Store
