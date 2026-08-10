@@ -1,0 +1,6 @@
+data/raw/
+data/bndes/
+data/cvm/
+__pycache__/
+*.pyc
+.DS_Store
