@@ -1,0 +1,11 @@
+data/raw/
+data/bndes/
+data/cvm/
+data/fne/
+data/fno/*.pdf
+data/fno/*.png
+data/fno/*.jpg
+data/fno/*.bin
+__pycache__/
+*.pyc
+.DS_Store
