@@ -2,9 +2,31 @@
 
 Repositório de análises e demonstrativos econômicos/fiscais.
 
-## OSU 2025 — Fundos Constitucionais (FNE + FNO + FCO)
+## Discriminativo — Benefícios tributários selecionados (2003–2025)
 
-Extração dos anexos do Orçamento de Subsídios da União (MPO): benefício creditício implícito agregado dos fundos constitucionais, 2003–2024.
+Nove gastos tributários (OSU 2025 Anexos para 2003–2024; projeção PLDO 2025 para 2025), em valores correntes e atualizados pelo IPCA até 30/06/2026:
+
+1. Desenvolvimento Regional  
+2. Entidades Sem Fins Lucrativos – Imunes e Isentas  
+3. Pesquisas Científicas e Tecnológicas  
+4. Informática e Automação  
+5. Zona Franca de Manaus  
+6. Cultura e Audiovisual  
+7. Regime Automotivo (Setor Automotivo)  
+8. Água Mineral  
+9. Fundos Constitucionais (gasto tributário)
+
+- Script: `scripts/build_osu_beneficios_tributarios.py`
+- Excel: `output/osu_beneficios_tributarios_2003_2025_ipca.xlsx`
+- Resumo: `output/osu_beneficios_tributarios_2003_2025_ipca.md`
+
+```bash
+python3 scripts/build_osu_beneficios_tributarios.py
+```
+
+## OSU 2025 — Fundos Constitucionais creditícios (FNE + FNO + FCO)
+
+Benefício **creditício** implícito agregado dos fundos constitucionais, 2003–2024 (distinto do gasto tributário “Fundos Constitucionais” acima).
 
 - Script: `scripts/build_osu_fundos_constitucionais.py`
 - Excel: `output/osu_2025_fundos_constitucionais.xlsx`
@@ -13,5 +35,3 @@ Extração dos anexos do Orçamento de Subsídios da União (MPO): benefício cr
 ```bash
 python3 scripts/build_osu_fundos_constitucionais.py
 ```
-
-**Atenção:** a série mede *custo de subsídio*, não volume contratado. O rateio regional do OSU usa chave fixa 20% Norte / 60% Nordeste / 20% Centro-Oeste.
