@@ -334,10 +334,10 @@ def write_outputs(tables: dict[str, pd.DataFrame]) -> None:
     )
 
     with pd.ExcelWriter(OUT_XLSX, engine="openpyxl") as writer:
-        demo.to_excel(writer, sheet_name="Demonstrativo_reversao_IGPDI", index=False)
+        demo.to_excel(writer, sheet_name="Reversao_IGPDI", index=False)
         bi_rev.to_excel(writer, sheet_name="Reversao_R$_bi", index=False)
-        alt.to_excel(writer, sheet_name="Alternativa_grafico_como_corrente", index=False)
-        bi_alt.to_excel(writer, sheet_name="Alternativa_R$_bi", index=False)
+        alt.to_excel(writer, sheet_name="Alt_grafico_corrente", index=False)
+        bi_alt.to_excel(writer, sheet_name="Alt_R$_bi", index=False)
         tables["oficial"].to_excel(writer, sheet_name="Oficial_parcial_IPCA", index=False)
         tables["confront"].to_excel(writer, sheet_name="Confronto_oficial", index=False)
         tables["metodologia"].to_excel(writer, sheet_name="Metodologia", index=False)
