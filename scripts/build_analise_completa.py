@@ -66,6 +66,7 @@ def q1_dbgg_fatores():
     emis = parse_dbgg_sheet("PrimarioR$")
     dbgg_pib = load_bcb_json(RAW / "bcb_series" / "13762_dbgg_pib.json")
     dbgg_rm = load_bcb_json(RAW / "bcb_series" / "13761_dbgg_rm.json")
+    dbgg_pib_old = load_bcb_json(RAW / "bcb_series" / "4537_dbgg_pib_ate2007.json")
 
     dec = stock[stock["month"] == 12].copy()
     jun2026 = stock[(stock["year"] == 2026) & (stock["month"] == 6)]
@@ -103,6 +104,14 @@ def q1_dbgg_fatores():
     pib_ye = pd.concat([pib_dec, pib_jun26], ignore_index=True).drop_duplicates(
         "year", keep="last"
     )
+    # Pre-2007 methodology (% PIB only)
+    old = dbgg_pib_old.copy()
+    old["year"] = old["date"].dt.year
+    old["month"] = old["date"].dt.month
+    old_dec = old[old["month"] == 12][["year", "value"]].rename(columns={"value": "dbgg_pct_pib_old"})
+    pib_ye = pib_ye.merge(old_dec, on="year", how="outer")
+    pib_ye["dbgg_pct_pib"] = pib_ye["dbgg_pct_pib"].fillna(pib_ye["dbgg_pct_pib_old"])
+    pib_ye = pib_ye.drop(columns=["dbgg_pct_pib_old"])
 
     base = pd.DataFrame({"year": list(range(2002, 2027))})
     base = base.merge(sgs_ye, on="year", how="left")
@@ -161,7 +170,7 @@ def q1_dbgg_fatores():
         "Identidade em R$: dDBGG = juros + emissoes liquidas + demais. "
         "Em p.p. do PIB: juros e emissoes / PIB implicito; efeito PIB = "
         "-DBGG/PIB(t-1)*dPIB/PIB(t); demais fecha a variacao DBGG/PIB. "
-        "Fluxos detalhados a partir de 2007 (Dbggindexp desde dez/2006). "
+        "Fluxos detalhados a partir de 2007 (Dbggindexp desde dez/2006). DBGG % PIB 2002-2006: serie SGS 4537 (metodologia ate 2007); a partir de 2006-12: SGS 13762 (metodologia a partir de 2008). "
         "2026 usa o ultimo mes disponivel (nao e fechamento de ano)."
     )
     monthly = stock.merge(
