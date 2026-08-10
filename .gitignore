@@ -1,0 +1,11 @@
+data/raw/
+data/bndes/
+data/cvm/
+data/fne/pdfs/
+data/fne/pdfs_resultados/
+data/fne/extra/
+data/fne/txt/
+data/fne/txt_resultados/
+__pycache__/
+*.pyc
+.DS_Store
