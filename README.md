@@ -24,6 +24,11 @@ Poverty rates at national and international poverty lines, income/consumption di
 
 Population dynamics, education, labor, health, and gender indicators.
 
+### Environment set
+`world_bank_featured_indicators_environment.xlsx`
+
+Agriculture, climate, energy & mining, environment, urban and rural development, water and sanitation.
+
 ## Workbook layout
 
 Each file contains:
@@ -55,4 +60,5 @@ python3 fetch_world_bank_indicators.py --set growth-macro
 python3 fetch_world_bank_indicators.py --set business-infra
 python3 fetch_world_bank_indicators.py --set poverty
 python3 fetch_world_bank_indicators.py --set social
+python3 fetch_world_bank_indicators.py --set environment
 ```

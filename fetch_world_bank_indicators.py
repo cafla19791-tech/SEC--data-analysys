@@ -634,6 +634,132 @@ INDICATORS_SOCIAL: list[tuple[str, str, str]] = [
     ),
 ]
 
+INDICATORS_ENVIRONMENT: list[tuple[str, str, str]] = [
+    # Agriculture
+    ("Agriculture", "Agricultural land (% of land area)", "AG.LND.AGRI.ZS"),
+    ("Agriculture", "Land under cereal production (hectares)", "AG.LND.CREL.HA"),
+    ("Agriculture", "Cereal yield (kg per hectare)", "AG.YLD.CREL.KG"),
+    (
+        "Agriculture",
+        "Agriculture, value added per worker (constant 2010 US$)",
+        "NV.AGR.EMPL.KD",
+    ),
+    # Climate
+    ("Climate", "CO2 emissions (metric tons per capita)", "EN.ATM.CO2E.PC"),
+    (
+        "Climate",
+        "PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)",
+        "EN.ATM.PM25.MC.M3",
+    ),
+    (
+        "Climate",
+        "PM2.5 air pollution, population exposed to levels exceeding WHO guideline value (% of total)",
+        "EN.ATM.PM25.MC.ZS",
+    ),
+    ("Climate", "Average precipitation in depth (mm per year)", "AG.LND.PRCP.MM"),
+    # Energy & mining
+    (
+        "Energy & mining",
+        "Energy intensity level of primary energy (MJ/$2017 PPP GDP)",
+        "EG.EGY.PRIM.PP.KD",
+    ),
+    (
+        "Energy & mining",
+        "Renewable energy consumption (% of total final energy consumption)",
+        "EG.FEC.RNEW.ZS",
+    ),
+    (
+        "Energy & mining",
+        "Renewable electricity output (% of total electricity output)",
+        "EG.ELC.RNEW.ZS",
+    ),
+    ("Energy & mining", "Access to electricity (% of population)", "EG.ELC.ACCS.ZS"),
+    (
+        "Energy & mining",
+        "Access to clean fuels and technologies for cooking (% of population)",
+        "EG.CFT.ACCS.ZS",
+    ),
+    # Environment
+    ("Environment", "Forest area (% of land area)", "AG.LND.FRST.ZS"),
+    (
+        "Environment",
+        "Total natural resources rents (% of GDP)",
+        "NY.GDP.TOTL.RT.ZS",
+    ),
+    (
+        "Environment",
+        "Terrestrial protected areas (% of total land area)",
+        "ER.LND.PTLD.ZS",
+    ),
+    (
+        "Environment",
+        "Terrestrial and marine protected areas (% of total territorial area)",
+        "ER.PTD.TOTL.ZS",
+    ),
+    (
+        "Environment",
+        "Marine protected areas (% of territorial waters)",
+        "ER.MRN.PTMR.ZS",
+    ),
+    # Urban and rural development
+    (
+        "Urban and rural development",
+        "Access to electricity, urban (% of urban population)",
+        "EG.ELC.ACCS.UR.ZS",
+    ),
+    (
+        "Urban and rural development",
+        "People using at least basic drinking water services, urban (% of urban population)",
+        "SH.H2O.BASW.UR.ZS",
+    ),
+    (
+        "Urban and rural development",
+        "People using at least basic sanitation services, urban (% of urban population)",
+        "SH.STA.BASS.UR.ZS",
+    ),
+    (
+        "Urban and rural development",
+        "Access to electricity, rural (% of rural population)",
+        "EG.ELC.ACCS.RU.ZS",
+    ),
+    (
+        "Urban and rural development",
+        "People using at least basic sanitation services, rural (% of rural population)",
+        "SH.STA.BASS.RU.ZS",
+    ),
+    (
+        "Urban and rural development",
+        "People using at least basic drinking water services, rural (% of rural population)",
+        "SH.H2O.BASW.RU.ZS",
+    ),
+    # Water and sanitation
+    (
+        "Water and sanitation",
+        "Renewable internal freshwater resources per capita (cubic meters)",
+        "ER.H2O.INTR.PC",
+    ),
+    (
+        "Water and sanitation",
+        "Annual freshwater withdrawals, total (% of internal resources)",
+        "ER.H2O.FWTL.ZS",
+    ),
+    (
+        "Water and sanitation",
+        "Water productivity, total (constant 2010 US$ GDP per cubic meter of total freshwater withdrawal)",
+        "ER.GDP.FWTL.M3.KD",
+    ),
+    (
+        "Water and sanitation",
+        "People using safely managed drinking water services (% of population)",
+        "SH.H2O.SMDW.ZS",
+    ),
+    (
+        "Water and sanitation",
+        "People using safely managed sanitation services (% of population)",
+        "SH.STA.SMSS.ZS",
+    ),
+]
+
 WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "growth-macro": (
         Path("world_bank_featured_indicators.xlsx"),
@@ -650,6 +776,10 @@ WORKBOOKS: dict[str, tuple[Path, list[tuple[str, str, str]]]] = {
     "social": (
         Path("world_bank_featured_indicators_social.xlsx"),
         INDICATORS_SOCIAL,
+    ),
+    "environment": (
+        Path("world_bank_featured_indicators_environment.xlsx"),
+        INDICATORS_ENVIRONMENT,
     ),
 }
 
