@@ -2,17 +2,25 @@
 
 Repositório de análises e demonstrativos econômicos/fiscais.
 
-## Desembolsos BNDES mensais — Direta × Indireta (jan/1995–jun/2026)
+## Operações de Financiamento BNDES (Dados Abertos) — mensal
 
-Discriminativo mensal a partir das Bases de Desembolso do Sistema BNDES, com valores correntes e atualizados pelo IPCA (Ipeadata) até jun/2026.
+Fonte: [Operações de Financiamento](https://dadosabertos.bndes.gov.br/dataset/operacoes-financiamento) (a partir de 2002).
 
-Colunas:
+Discriminativo mensal direta × indireta (valor contratado), corrente e IPCA jun/2026.
 
-| Mês/ano | Direta corrente | Direta atual IPCA | Indireta corrente | Indireta atual IPCA |
+- Script: `scripts/build_bndes_operacoes_financiamento_mensal.py`
+- Excel: `output/bndes_operacoes_financiamento_mensal_ipca.xlsx`
+
+```bash
+python3 scripts/build_bndes_operacoes_financiamento_mensal.py
+```
+
+## Desembolsos BNDES mensais — Bases de Desembolso (jan/1995–jun/2026)
+
+Discriminativo mensal a partir das Bases de Desembolso do Sistema BNDES.
 
 - Script: `scripts/build_bndes_desembolsos_mensal.py`
 - Excel: `output/bndes_desembolsos_mensal_direta_indireta_ipca.xlsx`
-- Resumo: `output/bndes_desembolsos_mensal_direta_indireta_ipca.md`
 
 ```bash
 python3 scripts/build_bndes_desembolsos_mensal.py
