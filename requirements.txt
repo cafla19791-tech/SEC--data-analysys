@@ -1,0 +1,7 @@
+# Python data-analysis stack for SEC--data-analysys.
+# Pinned to the versions validated in the Cloud Agent environment so the
+# dashboard-managed install reproduces a known-good setup.
+pandas==3.0.3
+numpy==2.4.4
+openpyxl==3.1.5
+tabulate==0.10.0
