@@ -1,0 +1,12 @@
+data/raw/
+data/bndes/raw/
+data/bndes/dados_abertos/
+data/bndes/*.xlsx
+data/bndes/*.csv
+data/cvm/
+data/fne/
+data/fno/
+data/osu/
+__pycache__/
+*.pyc
+.DS_Store
