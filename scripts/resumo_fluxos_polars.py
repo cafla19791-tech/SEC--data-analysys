@@ -427,6 +427,7 @@ def carregar_fluxos_polars(pasta: Path) -> pl.DataFrame:
 
     print(f"Carregando {len(xlsxs)} Excel(s) com Polars...")
     partes: list[pl.DataFrame] = []
+    offset_contrato = 0
     for path in xlsxs:
         try:
             try:
@@ -440,7 +441,16 @@ def carregar_fluxos_polars(pasta: Path) -> pl.DataFrame:
                     print(f"  Ignorando {path.name}: sem colunas de parcelas")
                     continue
             print(f"  Lendo: {path.name} ({part.height:,} linhas)")
-            partes.append(_normalizar_colunas_fluxos(part))
+            part = _normalizar_colunas_fluxos(part)
+            # IDs de contrato reiniciam em cada arquivo — desloca para unicidade global
+            if "contrato" in part.columns:
+                part = part.with_columns(
+                    (pl.col("contrato").cast(pl.Int64) + offset_contrato).alias(
+                        "contrato"
+                    )
+                )
+                offset_contrato = int(part["contrato"].max()) + 1
+            partes.append(part)
         except Exception as exc:
             print(f"  Ignorando {path.name}: {exc}")
     if not partes:
