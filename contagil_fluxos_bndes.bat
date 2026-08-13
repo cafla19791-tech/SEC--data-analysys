@@ -1,49 +1,41 @@
 @echo off
-REM ContAgil / WinPython — fluxos BNDES (indiretas e/ou OPERACOES DIRETAS)
-REM Execute a partir da pasta do repositório (onde estão scripts\ e contagil_fluxos.py)
-REM ou copie este .bat + scripts\ + contagil_fluxos.py para a pasta winpython.
-REM
-REM Uso:
-REM   contagil_fluxos_bndes.bat              → massa dados\ (INDIRETAS)
-REM   contagil_fluxos_bndes.bat diretas      → OPERACOES DIRETAS.xlsx
+REM ContAgil / WinPython - fluxos BNDES indiretos
+REM Execute este .bat no cmd (NAO use: python este.bat)
+setlocal EnableExtensions
+cd /d "%~dp0"
 
-setlocal
-set "WINPY=C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
+set "WINPY=%CD%"
 set "DADOS=%WINPY%\dados"
 set "SAIDA=%WINPY%\saida"
 set "FATORES=%WINPY%\fator_acumulado_SELIC_TJLP_TLP.xlsx"
-set "DIREITAS=%WINPY%\OPERACOES DIRETAS.xlsx"
-set "MODO=%~1"
-set "PYSCRIPT="
+set "SCRIPT=%WINPY%\scripts\contagil_fluxos.py"
 
-if exist "scripts\contagil_fluxos.py" set "PYSCRIPT=scripts\contagil_fluxos.py"
-if not defined PYSCRIPT if exist "contagil_fluxos.py" set "PYSCRIPT=contagil_fluxos.py"
-if not defined PYSCRIPT (
-  echo [ERRO] contagil_fluxos.py nao encontrado.
-  echo Clone/atualize o repo SEC--data-analysys ou copie scripts\ para esta pasta.
+REM Localiza python.exe do WinPython (evita stub da Microsoft Store)
+set "PY="
+if exist "%WINPY%\python.exe" set "PY=%WINPY%\python.exe"
+if not defined PY if exist "%WINPY%\python\python.exe" set "PY=%WINPY%\python\python.exe"
+for /d %%D in ("%WINPY%\python-*") do (
+  if exist "%%~D\python.exe" set "PY=%%~D\python.exe"
+)
+if not defined PY if exist "%WINPY%\..\python.exe" set "PY=%WINPY%\..\python.exe"
+
+if not defined PY (
+  echo [ERRO] python.exe do WinPython nao encontrado em "%WINPY%"
+  echo Procure com: dir /s /b "%WINPY%\python.exe"
   exit /b 1
 )
 
-if not exist "%FATORES%" (
-  echo [ERRO] Arquivo de fatores nao encontrado: "%FATORES%"
+if not exist "%SCRIPT%" (
+  echo [ERRO] Nao achei "%SCRIPT%"
+  echo Rode antes: baixar_e_rodar_fluxos.ps1
+  exit /b 1
+)
+if not exist "%WINPY%\scripts\gerar_fluxos.py" (
+  echo [ERRO] Falta scripts\gerar_fluxos.py - rode baixar_e_rodar_fluxos.ps1
   exit /b 1
 )
 
-if /I "%MODO%"=="diretas" goto :DIREITAS
-if /I "%MODO%"=="direta" goto :DIREITAS
-if /I "%MODO%"=="--diretas" goto :DIREITAS
-
-if not exist "%DADOS%" (
-  echo [ERRO] Massa de dados nao encontrada: "%DADOS%"
-  exit /b 1
-)
-python "%PYSCRIPT%" --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --fatores "%FATORES%"
-exit /b %ERRORLEVEL%
-
-:DIREITAS
-if not exist "%DIREITAS%" (
-  echo [ERRO] Arquivo nao encontrado: "%DIREITAS%"
-  exit /b 1
-)
-python "%PYSCRIPT%" --excel "%DIREITAS%" --pasta-saida "%SAIDA%" --fatores "%FATORES%"
+echo Python: %PY%
+"%PY%" "%SCRIPT%" --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" --arquivo-fatores "%FATORES%"
+endlocal
 exit /b %ERRORLEVEL%

@@ -1,88 +1,89 @@
 #!/usr/bin/env python3
-"""
-Entrypoint no estilo do script ContAgil/RFB (WinPython):
+# -*- coding: utf-8 -*-
+"""Entrypoint ContAgil/RFB (WinPython) - calculo de fluxos BNDES indiretos.
 
-  massa_dados / pasta_dados = .../python_jep/winpython/dados
-  pasta_saida               = .../python_jep/winpython/saida
-  arquivo_selic / --fatores = STP-*.xlsx  OU  fator_acumulado_SELIC_TJLP_TLP.xlsx
+Este arquivo e PYTHON. Nao cole aqui o conteudo de contagil_fluxos_bndes.bat
+(linhas REM / @echo off). O .bat fica na raiz do projeto e so chama este script.
 
-Processa todos os .xlsx da massa de dados, gera fluxos (SAC + carência corrigida)
-e impacto fiscal ContAgil (fatores mensais ou col D STP).
-
-Correções vs script ContAgil original (colado/corrompido):
-  - sintaxe Python válida (True/values/method='nearest'/etc.)
-  - gerar_fluxos(df, df) = df_original (instituição); gerar_fluxos(df, selic) = fatores
-  - carência: cronograma cobre (carência + n) meses
-  - taxa_contrato_efetiva: TAXA FIXA / TJLP/TLP com composição mensal
-  - dual balance: saldo_fiscal (principal) + saldo_contrato (com juros)
-  - fator SELIC mensal (--fatores) ou col D STP; idx = nearest(data_parcela)
-
-Uso (ContAgil / WinPython) — capitalização mensal:
-  python3 scripts/contagil_fluxos.py \\
-    --massa-dados "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\dados" \\
-    --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
-    --fatores "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\fator_acumulado_SELIC_TJLP_TLP.xlsx"
-
-  # OPERACOES DIRETAS (arquivo único na pasta winpython):
-  python3 scripts/contagil_fluxos.py \\
-    --excel "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\OPERACOES DIRETAS.xlsx" \\
-    --pasta-saida "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida" \\
-    --fatores "C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\fator_acumulado_SELIC_TJLP_TLP.xlsx"
-
-  # STP diário (legado ContAgil col D):
-  python3 scripts/contagil_fluxos.py \\
-    --massa-dados "...\\dados" --pasta-saida "...\\saida" \\
-    --arquivo-selic "...\\STP-20260716182715078 (1).xlsx"
-
-  # Sem args: usa defaults WinPython se existirem
-  python3 scripts/contagil_fluxos.py
-
-  # Mesmo comando ContAgil sem WinPython local (Linux/cloud):
-  # cai para data/contagil_winpython/{dados,saida} + SELIC Bacen
-
-  # Repo local: pasta data/ → output/
-  python3 scripts/contagil_fluxos.py --pasta-dados data --pasta-saida output \\
-      --input data/sample_operacoes_com_agente.csv
-
-  # Um arquivo / download BNDES
-  python3 scripts/contagil_fluxos.py --input data/sample_operacoes_com_agente.csv
-  python3 scripts/contagil_fluxos.py --download
-  python3 scripts/contagil_fluxos.py --teste-contrato0
+Uso (uma linha, sem ^):
+  python scripts/contagil_fluxos.py --massa-dados dados --pasta-saida saida --arquivo-fatores fator_acumulado_SELIC_TJLP_TLP.xlsx
 """
 
 from __future__ import annotations
 
 import argparse
 import glob
+import importlib.util
 import os
 import sys
+import types
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+# WinPython: carrega irmãos por caminho de arquivo (nao depende de pacote scripts).
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+ROOT = _SCRIPTS_DIR.parent
+_CONTAGIL_BUILD = "importlib-20260725c-progresso-lotes"
+
+
+def _load_sibling(mod_name: str):
+    """Carrega ``scripts/<mod_name>.py`` via importlib (ContAgil/WinPython)."""
+    full = f"scripts.{mod_name}"
+    if full in sys.modules:
+        return sys.modules[full]
+    path = _SCRIPTS_DIR / f"{mod_name}.py"
+    if not path.is_file():
+        print(f"ERRO [{_CONTAGIL_BUILD}]: falta o arquivo:")
+        print(f"  {path}")
+        print("No PowerShell (so isto):")
+        b = (
+            "https://raw.githubusercontent.com/cafla19791-tech/"
+            "SEC--data-analysys/cursor/normalizar-colunas-6f97"
+        )
+        print(f'  $b="{b}"')
+        print(f'  Invoke-WebRequest "$b/scripts/{mod_name}.py" -OutFile scripts\\{mod_name}.py')
+        raise SystemExit(2)
+    if "scripts" not in sys.modules:
+        pkg = types.ModuleType("scripts")
+        pkg.__path__ = [str(_SCRIPTS_DIR)]
+        pkg.__package__ = "scripts"
+        sys.modules["scripts"] = pkg
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    spec = importlib.util.spec_from_file_location(full, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Nao foi possivel carregar {path}")
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[full] = mod
+    sys.modules[mod_name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_gf = _load_sibling("gerar_fluxos")
 
 import pandas as pd
 
-from scripts.gerar_fluxos import (
-    CONTAGIL_PASTA_DADOS,
-    CONTAGIL_PASTA_SAIDA,
-    CONTAGIL_SELIC_DEFAULT,
-    CONTAGIL_WINPYTHON,
-    DATA_DIR,
-    DATA_IMPACTO,
-    OUTPUT_DIR,
-    SelicSerie,
-    calcular_impacto_fiscal_real,
-    carregar_selic_serie,
-    gerar_fluxos,
-    load_from_csv,
-    load_from_excel,
-    main as gerar_fluxos_main,
-    resolver_arquivo_selic,
-    resolver_excel_operacoes,
-)
+CONTAGIL_PASTA_DADOS = _gf.CONTAGIL_PASTA_DADOS
+CONTAGIL_PASTA_SAIDA = _gf.CONTAGIL_PASTA_SAIDA
+CONTAGIL_SELIC_DEFAULT = _gf.CONTAGIL_SELIC_DEFAULT
+CONTAGIL_WINPYTHON = _gf.CONTAGIL_WINPYTHON
+DATA_DIR = _gf.DATA_DIR
+DATA_IMPACTO = _gf.DATA_IMPACTO
+OUTPUT_DIR = _gf.OUTPUT_DIR
+SelicSerie = _gf.SelicSerie
+calcular_impacto_fiscal_real = _gf.calcular_impacto_fiscal_real
+carregar_selic_serie = _gf.carregar_selic_serie
+gerar_fluxos = _gf.gerar_fluxos
+load_from_csv = _gf.load_from_csv
+load_from_excel = _gf.load_from_excel
+gerar_fluxos_main = _gf.main
+normalizar_colunas = _gf.normalizar_colunas
+resolver_arquivo_selic = _gf.resolver_arquivo_selic
+resolver_excel_operacoes = _gf.resolver_excel_operacoes
+
+# Reexporta para scripts ContAgil que fazem ``from scripts.contagil_fluxos import normalizar_colunas``
+__all__ = ["main", "normalizar_colunas", "parse_args", "carregar_selic"]
 
 
 def listar_excels(pasta: Path) -> list[Path]:
@@ -92,7 +93,7 @@ def listar_excels(pasta: Path) -> list[Path]:
 
 def teste_contrato0(serie: SelicSerie) -> float:
     """Validação ContAgil: subsidio=1886.11 em 15/02/2009."""
-    from scripts.gerar_fluxos import FATOR_30_06_2026
+    FATOR_30_06_2026 = _gf.FATOR_30_06_2026
 
     subsidio = 1886.11
     data_parcela = datetime(2009, 2, 15)
@@ -131,7 +132,7 @@ def _parece_fatores_mensais(path: Path) -> bool:
 
 def carregar_selic(arquivo_selic: Path | None, baixar: bool) -> SelicSerie | None:
     """Carrega fatores mensais (--fatores), STP ContAgil (col D) ou Bacen."""
-    from scripts.contagil_fluxos_seguro import carregar_fatores_mensais
+    carregar_fatores_mensais = _load_sibling("contagil_fluxos_seguro").carregar_fatores_mensais
 
     # Preferência: caminho explícito → auto ContAgil/data → Bacen se baixar
     if arquivo_selic is not None:
@@ -198,6 +199,12 @@ def processar_arquivo(
         pasta_saida / f"fluxos_diarios_{arquivo.stem}.xlsx" if fluxo_diario else None
     )
     selic_arg = selic_serie if selic_serie is not None else 0.145
+    # Arquivos grandes: grava CSV em lotes (evita "travar" sem log / OOM).
+    if len(df) >= 5_000 and not fluxo_diario:
+        gerar_e_gravar = _gf.gerar_e_gravar_fluxos
+        gerar_e_gravar(df, selic_arg, saida_xlsx=nome_saida, lote=2_000)
+        return nome_saida
+
     df_fluxos = gerar_fluxos(
         df,
         selic_arg,
@@ -327,13 +334,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--arquivo-selic",
         "--fatores",
+        "--arquivo-fatores",
         dest="arquivo_selic",
         type=Path,
         default=None,
         metavar="FILE",
         help=(
             "Fatores ContAgil: fator_acumulado_SELIC_TJLP_TLP.xlsx (mensal) "
-            f"ou STP (col D). Alias: --fatores. Default auto: "
+            f"ou STP (col D). Aliases: --fatores, --arquivo-fatores. Default auto: "
             f"{CONTAGIL_SELIC_DEFAULT.name} / Bacen."
         ),
     )
@@ -422,6 +430,33 @@ def _resolver_pastas(args: argparse.Namespace) -> tuple[Path | None, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    # Identifica build no log (confirma que o .py atualizado foi baixado)
+    print(f"[contagil_fluxos {_CONTAGIL_BUILD}]")
+
+    # ContAgil WinPython: --massa-dados + --arquivo-fatores/--fatores mensal
+    # → pipeline seguro (define normalizar_colunas + banner BNDES INDIRETOS)
+    mensal = (
+        args.arquivo_selic is not None
+        and _parece_fatores_mensais(Path(args.arquivo_selic))
+        and not args.teste_contrato0
+        and not args.download
+        and not args.fluxo_diario
+        and args.excel is None
+    )
+    if mensal and (args.pasta_dados is not None or args.input is not None):
+        seguro_main = _load_sibling("contagil_fluxos_seguro").main
+
+        cli: list[str] = ["--arquivo-fatores", str(args.arquivo_selic)]
+        if args.pasta_dados is not None:
+            cli += ["--massa-dados", str(args.pasta_dados)]
+        if args.pasta_saida is not None:
+            cli += ["--pasta-saida", str(args.pasta_saida)]
+        if args.max_contratos is not None:
+            cli += ["--max-contratos", str(args.max_contratos)]
+        if args.input is not None:
+            cli += ["--input", str(args.input)]
+        return seguro_main(cli)
+
     print("🚀 Processando arquivos ContAgil (fluxos + impacto fiscal)...")
 
     baixar_selic = args.baixar_selic or not args.sem_selic_fatores
@@ -462,6 +497,22 @@ def main(argv: list[str] | None = None) -> int:
 
     # Modo ContAgil: todos os arquivos do diretório de dados
     if pasta_dados is not None and args.excel is None and args.input is None:
+        # Fatores mensais já carregados (auto-descoberta): pipeline seguro
+        if serie is not None and "mensal:" in (serie.origem or ""):
+            seguro_main = _load_sibling("contagil_fluxos_seguro").main
+
+            cli = [
+                "--massa-dados",
+                str(pasta_dados),
+                "--pasta-saida",
+                str(pasta_saida),
+            ]
+            if args.arquivo_selic is not None:
+                cli += ["--arquivo-fatores", str(args.arquivo_selic)]
+            if args.max_contratos is not None:
+                cli += ["--max-contratos", str(args.max_contratos)]
+            return seguro_main(cli)
+
         print(f"Massa de dados: {pasta_dados}")
         print(f"Pasta de saída: {pasta_saida}")
         saidas = processar_pasta_dados(

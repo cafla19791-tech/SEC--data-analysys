@@ -19,12 +19,17 @@ Uso:
   python3 scripts/impacto_fiscal_por_ano.py --baixar-selic
   python3 scripts/impacto_fiscal_por_ano.py --arquivo-selic "STP-....xlsx"
   python3 scripts/impacto_fiscal_por_ano.py --modo coluna --fluxos output/fluxos_completos_final.csv
+
+  # Massa ContAgil (~dezenas de milhões de parcelas) — streaming, sem OOM:
+  python3 scripts/agregar_impacto_fluxos.py --pasta saida --modo coluna
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import sys
+import types
 from datetime import datetime
 from pathlib import Path
 
@@ -32,15 +37,43 @@ import numpy as np
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
-from scripts.gerar_fluxos import (
-    DATA_IMPACTO,
-    OUTPUT_DIR,
-    SELIC_BACEN_CACHE,
-    TAXA_SELIC_ANUAL,
-    SelicSerie,
-    resolver_arquivo_selic,
-    taxa_mensal_composta,
-)
+# WinPython ContAgil: resolve irmão gerar_fluxos.py sem pacote instalado.
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+_ROOT = _SCRIPTS_DIR.parent
+
+
+def _load_gerar_fluxos():
+    full = "scripts.gerar_fluxos"
+    if full in sys.modules:
+        return sys.modules[full]
+    path = _SCRIPTS_DIR / "gerar_fluxos.py"
+    if not path.is_file():
+        raise ImportError(f"Arquivo ausente: {path}")
+    if "scripts" not in sys.modules:
+        pkg = types.ModuleType("scripts")
+        pkg.__path__ = [str(_SCRIPTS_DIR)]
+        pkg.__package__ = "scripts"
+        sys.modules["scripts"] = pkg
+    if str(_ROOT) not in sys.path:
+        sys.path.insert(0, str(_ROOT))
+    spec = importlib.util.spec_from_file_location(full, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Nao foi possivel carregar {path}")
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[full] = mod
+    sys.modules["gerar_fluxos"] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_gf = _load_gerar_fluxos()
+DATA_IMPACTO = _gf.DATA_IMPACTO
+OUTPUT_DIR = _gf.OUTPUT_DIR
+SELIC_BACEN_CACHE = _gf.SELIC_BACEN_CACHE
+TAXA_SELIC_ANUAL = _gf.TAXA_SELIC_ANUAL
+SelicSerie = _gf.SelicSerie
+resolver_arquivo_selic = _gf.resolver_arquivo_selic
+taxa_mensal_composta = _gf.taxa_mensal_composta
 
 DATA_REFERENCIA = DATA_IMPACTO  # 30/06/2026
 

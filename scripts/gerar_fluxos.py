@@ -7,9 +7,9 @@ Metodologia ContAgil (lógica corrigida) + carência corrigida:
   - taxa_contrato_efetiva (mensal):
       * TAXA FIXA / demais: (1 + juros)^(1/12) − 1
       * TJLP / TLP: (1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1
-  - gerar_fluxos(df, df) -> df_original (Instituição); gerar_fluxos(df, selic) -> fatores
+  - gerar_fluxos(df, df) → df_original (Instituição); gerar_fluxos(df, selic) → fatores
   - Aceita planilha bruta ContAgil (header=5, colunas em português)
-  - Fluxos em TODOS os meses (carência + amortização) - corrige bug p=1..n
+  - Fluxos em TODOS os meses (carência + amortização) — corrige bug p=1..n
   - Amortização constante só após a carência
   - Dual balance: saldo_fiscal (principal) e saldo_contrato (com juros)
   - spread = (1 + (SELIC_m − taxa_contrato_m))^n
@@ -21,7 +21,7 @@ Metodologia ContAgil (lógica corrigida) + carência corrigida:
 
 Entrada:
   - Excel do portal (header=5), ou
-  - CSV aberto do BNDES (download automático 2009-2010)
+  - CSV aberto do BNDES (download automático 2009–2010)
   - (opcional) Excel SELIC ContAgil STP-*.xlsx ou --baixar-selic (Bacen SGS 11)
 
 Saídas:
@@ -103,15 +103,15 @@ def taxa_contrato_efetiva(
     ContAgil ``taxa_contrato_efetiva(row)`` (Series/dict com
     ``Custo financeiro`` / ``Juros``).
 
-    ``juros_pct`` vem da coluna Juros em % a.a. (ex.: 6.0 -> 6%).
+    ``juros_pct`` vem da coluna Juros em % a.a. (ex.: 6.0 → 6%).
 
     - TAXA FIXA / demais: ``(1 + juros)^(1/12) − 1``
     - TJLP / TLP: ``(1 + 0,06)^(1/12) × (1 + juros)^(1/12) − 1``
 
     Nota: o rascunho ContAgil às vezes escreve
     ``(1,06)^(1/12)×(1+juros)−1`` (juros anual sem mensalizar). Aqui ambos
-    os fatores anuais são compostos mensalmente - caso contrário a taxa
-    mensal fica ~2-3%/mês e o subsídio vira fortemente negativo.
+    os fatores anuais são compostos mensalmente — caso contrário a taxa
+    mensal fica ~2–3%/mês e o subsídio vira fortemente negativo.
     """
     # ContAgil paste: taxa_contrato_efetiva(row)
     if juros_pct is None and custo_financeiro is not None and not isinstance(
@@ -169,7 +169,7 @@ class SelicSerie:
         Preferência:
           1) coluna nomeada 'fator_acumulado' (cache Bacen)
           2) coluna nomeada 'fator'
-          3) coluna D (índice 3) - layout ContAgil corrigido / script RFB
+          3) coluna D (índice 3) — layout ContAgil corrigido / script RFB
           4) última coluna numérica com valores > 0
         """
         datas = pd.to_datetime(selic.iloc[:, 0], dayfirst=True, errors="coerce").values.astype(
@@ -271,7 +271,7 @@ class SelicSerie:
                     resp.raise_for_status()
                     rows = resp.json()
                     break
-                except Exception as exc:  # noqa: BLE001 - retries em rede/Bacen
+                except Exception as exc:  # noqa: BLE001 — retries em rede/Bacen
                     last_err = exc
                     wait = min(2**attempt, 32)
                     print(f"  {year}: falha tentativa {attempt}/5 ({exc}); retry {wait}s")
@@ -363,7 +363,7 @@ def calcular_impacto_fiscal_real(
     data_impacto: datetime = DATA_IMPACTO,
 ) -> float:
     """
-    ContAgil (fator Selic correto - coluna D):
+    ContAgil (fator Selic correto — coluna D):
 
       idx = nearest(data_parcela)           # própria data da parcela
       fator_parcela = fatores_coluna_d[idx]
@@ -497,57 +497,50 @@ OUTPUT_DIR = ROOT / "output"
 EXCEL_COLUMNS = {
     "Data da contratação": "data_contratacao",
     "Data da Contratação": "data_contratacao",
+    "Data da contratacao": "data_contratacao",
     "Valor Desembolsado R$ (*)": "valor_desembolsado",
     "Valor desembolsado Reais": "valor_desembolsado",
     "Valor Desembolsado Reais": "valor_desembolsado",
     "Valor da operação em Reais": "valor_desembolsado",
     "Valor da Operação em Reais": "valor_desembolsado",
-    # OPERACOES DIRETAS / não automáticas (portal ContAgil)
-    "Valor contratado Reais": "valor_contratado",
-    "Valor Contratado Reais": "valor_contratado",
-    "Valor contratado em Reais": "valor_contratado",
-    "Valor Contratado em Reais": "valor_contratado",
+    # ContAgil BNDES INDIRETAS (massa winpython/dados)
+    "Valor histórico": "valor_desembolsado",
+    "Valor Histórico": "valor_desembolsado",
+    "Valor  Histórico": "valor_desembolsado",
+    "Valor Histórico R$ (*)": "valor_desembolsado",
+    "Valor Histórico R$ ": "valor_desembolsado",
+    "Valor Histórico R$": "valor_desembolsado",
+    "Valor Histórico em R$": "valor_desembolsado",
     "Juros": "juros",
     "Prazo - Carência (meses)": "prazo_carencia",
     "Prazo de Carência (meses)": "prazo_carencia",
-    "Prezo - carencia (meses)": "prazo_carencia",
-    "Prezo - Carencia (meses)": "prazo_carencia",
+    "Prazo - Carencia (meses)": "prazo_carencia",
     "Prazo - Amortização (meses)": "prazo_amortizacao",
     "Prazo de Amortização (meses)": "prazo_amortizacao",
-    "Prazo - amortizaca (meses)": "prazo_amortizacao",
-    "Prazo - Amortizaca (meses)": "prazo_amortizacao",
-    "Valor desembolsado R$": "valor_desembolsado",
-    # ContAgil "Operações Indiretas AAAA.xlsx" (valor nominal na contratação)
-    "Valor histórico": "valor_desembolsado",
-    "Valor Historico": "valor_desembolsado",
-    "Valor Histórico": "valor_desembolsado",
-    "Data da contratacao": "data_contratacao",
+    "Prazo - Amortizacao (meses)": "prazo_amortizacao",
+    "Prazo - Amortizacao(meses)": "prazo_amortizacao",
     "Instituição Financeira Credenciada": "agente",
     "Instituicao Financeira Credenciada": "agente",
     "Custo financeiro": "custo_financeiro",
     "Custo Financeiro": "custo_financeiro",
-    "Forma de apoio": "forma_de_apoio",
-    "Forma de Apoio": "forma_de_apoio",
-    "Número do contrato": "numero_contrato",
-    "Numero do contrato": "numero_contrato",
+    "Encargo financeiro": "custo_financeiro",
+    "Encargo Financeiro": "custo_financeiro",
+    "encargo financeiro": "custo_financeiro",
 }
 
 CSV_COLUMNS = {
     "data_da_contratacao": "data_contratacao",
     "valor_desembolsado_reais": "valor_desembolsado",
     "valor_da_operacao_em_reais": "valor_desembolsado",
-    "valor_contratado_reais": "valor_contratado",
     "juros": "juros",
     "prazo_carencia_meses": "prazo_carencia",
     "prazo_amortizacao_meses": "prazo_amortizacao",
     "instituicao_financeira_credenciada": "agente",
     "custo_financeiro": "custo_financeiro",
-    "forma_de_apoio": "forma_de_apoio",
-    "numero_do_contrato": "numero_contrato",
 }
 
 # Aliases após normalização (minúsculas, sem acento/símbolos).
-# Cobre ContAgil, portal BNDES, INDIRETAS e OPERACOES DIRETAS.
+# Cobre ContAgil, portal BNDES e variações "BNDES INDIRETAS *.xlsx".
 NORM_COLUMN_ALIASES: dict[str, str] = {
     "data_da_contratacao": "data_contratacao",
     "data_contratacao": "data_contratacao",
@@ -558,55 +551,31 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "valor_da_operacao_em_reais": "valor_desembolsado",
     "valor_da_operacao_reais": "valor_desembolsado",
     "valor_da_operacao": "valor_desembolsado",
-    # ContAgil Operações Indiretas: coluna "Valor histórico"
+    # ContAgil BNDES INDIRETAS: "Valor histórico" / "Valor Histórico R$ (*)"
     "valor_historico": "valor_desembolsado",
-    "valor_historico_reais": "valor_desembolsado",
     "valor_historico_r": "valor_desembolsado",
-    "valor_contratado_reais": "valor_contratado",
-    "valor_contratado_em_reais": "valor_contratado",
-    "valor_contratado": "valor_contratado",
+    "valor_historico_em_r": "valor_desembolsado",
+    "valor_historico_reais": "valor_desembolsado",
     "juros": "juros",
     "taxa_juros": "juros",
     "prazo_carencia_meses": "prazo_carencia",
     "prazo_carencia": "prazo_carencia",
     "prazo_de_carencia_meses": "prazo_carencia",
     "carencia_meses": "prazo_carencia",
-    # ContAgil OPERACOES DIRETAS: typo "Prezo - carencia (meses)"
-    "prezo_carencia_meses": "prazo_carencia",
-    "prezo_carencia": "prazo_carencia",
     "prazo_amortizacao_meses": "prazo_amortizacao",
     "prazo_amortizacao": "prazo_amortizacao",
     "prazo_de_amortizacao_meses": "prazo_amortizacao",
     "amortizacao_meses": "prazo_amortizacao",
-    # ContAgil OPERACOES DIRETAS: typo "Prazo - amortizaca (meses)"
-    "prazo_amortizaca_meses": "prazo_amortizacao",
-    "prazo_amortizaca": "prazo_amortizacao",
-    "amortizaca_meses": "prazo_amortizacao",
     "instituicao_financeira_credenciada": "agente",
     "instituicao_financeira": "agente",
     "agente_financeiro": "agente",
     "agente": "agente",
     "custo_financeiro": "custo_financeiro",
     "custo_financeiro_da_operacao": "custo_financeiro",
-    "forma_de_apoio": "forma_de_apoio",
+    "encargo_financeiro": "custo_financeiro",
     "numero_do_contrato": "numero_contrato",
     "numero_contrato": "numero_contrato",
-}
-
-AGENTE_BNDES_DIRETA = "BNDES"
-_AGENTE_PLACEHOLDER = {
-    "",
-    "-",
-    "--",
-    "---",
-    "----------",
-    "nan",
-    "none",
-    "nat",
-    "n/a",
-    "na",
-    "nao informado",
-    "não informado",
+    "n_do_contrato": "numero_contrato",
 }
 
 
@@ -630,11 +599,7 @@ def _normalize_nome_coluna(name: object) -> str:
 
 
 def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, str]]:
-    """Renomeia colunas ContAgil/BNDES -> canônicas (exato + normalizado).
-
-    OPERACOES DIRETAS: preferem ``valor_desembolsado``; se ausente, usam
-    ``valor_contratado`` como principal.
-    """
+    """Renomeia colunas ContAgil/BNDES → canônicas (exato + normalizado)."""
     rename: dict[str, str] = {}
     used_targets: set[str] = set()
 
@@ -649,55 +614,29 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
         key = _normalize_nome_coluna(col)
         target = NORM_COLUMN_ALIASES.get(key)
         if target is None:
-            # ContAgil: "Valor Desembolsado R$ (*)" -> valor_desembolsado_r_*
+            # ContAgil: "Valor Desembolsado R$ (*)" → valor_desembolsado_r_*
             if key.startswith("valor_desembolsado"):
                 target = "valor_desembolsado"
-            elif key.startswith("valor_contratado"):
-                target = "valor_contratado"
             elif key.startswith("valor_da_operacao"):
                 target = "valor_desembolsado"
-            elif key.startswith("valor_histor") or (
-                key.startswith("valor") and "histor" in key
-            ):
-                # "Valor histórico" / mojibake "Valor hist¾rico"
+            elif key.startswith("valor_historico"):
+                # BNDES INDIRETAS ContAgil: Valor histórico / Valor Histórico R$ (*)
                 target = "valor_desembolsado"
-            elif "carencia" in key and (
-                "prazo" in key or "prezo" in key or key.startswith("carencia")
-            ):
-                # inclui typo ContAgil "Prezo - carencia (meses)"
+            elif "prazo" in key and "carencia" in key:
                 target = "prazo_carencia"
-            elif ("prazo" in key or "prezo" in key) and (
-                "amortizacao" in key or "amortizaca" in key
-            ):
-                # inclui typo ContAgil "Prazo - amortizaca (meses)"
+            elif "prazo" in key and "amortizacao" in key:
                 target = "prazo_amortizacao"
             elif "instituicao" in key and "financeira" in key:
                 target = "agente"
-            elif key.startswith("custo_financeiro"):
+            elif key.startswith("custo_financeiro") or key.startswith("encargo_financeiro"):
                 target = "custo_financeiro"
-            elif key.startswith("forma_de_apoio"):
-                target = "forma_de_apoio"
             elif "numero" in key and "contrato" in key:
                 target = "numero_contrato"
         if target is not None and target not in used_targets:
             rename[col] = target
             used_targets.add(target)
 
-    mapped = df.rename(columns=rename)
-    # Diretas / indiretas ContAgil: promove valor contratado ou histórico
-    if "valor_desembolsado" not in mapped.columns and "valor_contratado" in mapped.columns:
-        mapped = mapped.rename(columns={"valor_contratado": "valor_desembolsado"})
-        rename = {**rename, "valor_contratado": "valor_desembolsado"}
-    if "valor_desembolsado" not in mapped.columns:
-        for col in list(mapped.columns):
-            key = _normalize_nome_coluna(col)
-            if key.startswith("valor_histor") or (
-                key.startswith("valor") and "histor" in key
-            ):
-                mapped = mapped.rename(columns={col: "valor_desembolsado"})
-                rename = {**rename, col: "valor_desembolsado"}
-                break
-    return mapped, rename
+    return df.rename(columns=rename), rename
 
 
 def limpar_valor(series: pd.Series) -> pd.Series:
@@ -807,7 +746,7 @@ def _stream_download(url: str, dest: Path, retries: int = 4) -> Path:
             tmp.replace(dest)
             print(f"CSV bruto salvo: {dest} ({dest.stat().st_size:,} bytes)")
             return dest
-        except Exception as exc:  # noqa: BLE001 - retries em rede
+        except Exception as exc:  # noqa: BLE001 — retries em rede
             last_err = exc
             print(f"  falha: {exc}")
             time.sleep(min(2**attempt, 32))
@@ -894,6 +833,23 @@ def _excel_tem_colunas_contratos(df: pd.DataFrame) -> bool:
     return hits >= 3
 
 
+def normalizar_colunas(df: pd.DataFrame, *, preparar: bool = True) -> pd.DataFrame:
+    """Normaliza colunas de contratos ContAgil / BNDES INDIRETAS.
+
+    Mapeia headers em português/CSV (com acentos, aliases e variações) para
+    nomes canônicos (``data_contratacao``, ``valor_desembolsado``, etc.).
+
+    Usada pelo script ContAgil WinPython após ``read_excel`` — a ausência
+    desta função gerava ``NameError: name 'normalizar_colunas' is not defined``.
+    """
+    mapped, rename = _mapear_colunas_contratos(df)
+    if rename:
+        print(f"    Colunas mapeadas: {rename}")
+    if not preparar:
+        return mapped
+    return _prepare_contracts(mapped)
+
+
 def load_from_excel(
     path: Path,
     sheet_name: str | int = "operacoes_indiretas_automaticas",
@@ -923,7 +879,7 @@ def load_from_excel(
     for h in candidatos:
         try:
             candidato = _read(h)
-        except Exception:  # noqa: BLE001 - tenta próximo header
+        except Exception:  # noqa: BLE001 — tenta próximo header
             continue
         if _excel_tem_colunas_contratos(candidato):
             df = candidato
@@ -951,36 +907,20 @@ def load_from_csv(path: Path) -> pd.DataFrame:
     return _prepare_contracts(df)
 
 
-def _normalizar_agente(
-    series: pd.Series,
-    forma_de_apoio: pd.Series | None = None,
-) -> pd.Series:
-    """Normaliza agente; em operações DIRETAS, placeholders viram BNDES."""
+def _normalizar_agente(series: pd.Series) -> pd.Series:
     s = series.astype(str).str.strip()
-    low = s.str.lower()
-    placeholder = low.isin(_AGENTE_PLACEHOLDER) | s.str.fullmatch(r"-+", na=False)
-    out = s.mask(placeholder, other=pd.NA)
-
-    if forma_de_apoio is not None:
-        forma = forma_de_apoio.astype(str).str.upper()
-        direta = forma.str.contains("DIRETA", na=False) & ~forma.str.contains(
-            "INDIRETA", na=False
-        )
-        out = out.mask(out.isna() & direta, other=AGENTE_BNDES_DIRETA)
-
-    return out.fillna(AGENTE_NAO_INFORMADO)
+    s = s.replace(
+        {
+            "": AGENTE_NAO_INFORMADO,
+            "nan": AGENTE_NAO_INFORMADO,
+            "None": AGENTE_NAO_INFORMADO,
+            "NaT": AGENTE_NAO_INFORMADO,
+        }
+    )
+    return s.fillna(AGENTE_NAO_INFORMADO)
 
 
 def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
-    # Diretas: preenche desembolsado com contratado quando faltar
-    work = df.copy()
-    if "valor_desembolsado" not in work.columns and "valor_contratado" in work.columns:
-        work["valor_desembolsado"] = work["valor_contratado"]
-    elif "valor_desembolsado" in work.columns and "valor_contratado" in work.columns:
-        vd = limpar_valor(work["valor_desembolsado"])
-        vc = limpar_valor(work["valor_contratado"])
-        work["valor_desembolsado"] = vd.fillna(vc)
-
     required = [
         "data_contratacao",
         "valor_desembolsado",
@@ -988,46 +928,41 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
         "prazo_carencia",
         "prazo_amortizacao",
     ]
-    missing = [c for c in required if c not in work.columns]
+    missing = [c for c in required if c not in df.columns]
     if missing:
         raise ValueError(f"Colunas ausentes: {missing}. Disponíveis: {list(df.columns)}")
 
-    forma = work["forma_de_apoio"] if "forma_de_apoio" in work.columns else None
-    if "agente" in work.columns:
-        agente = _normalizar_agente(work["agente"], forma_de_apoio=forma)
-    elif forma is not None:
-        # Sem coluna de agente: DIRETA -> BNDES
-        forma_u = forma.astype(str).str.upper()
-        direta = forma_u.str.contains("DIRETA", na=False) & ~forma_u.str.contains(
-            "INDIRETA", na=False
-        )
-        agente = pd.Series(
-            [AGENTE_BNDES_DIRETA if d else AGENTE_NAO_INFORMADO for d in direta],
-            index=work.index,
-        )
+    if "agente" in df.columns:
+        agente = _normalizar_agente(df["agente"])
     else:
-        agente = pd.Series([AGENTE_NAO_INFORMADO] * len(work), index=work.index)
+        agente = pd.Series([AGENTE_NAO_INFORMADO] * len(df), index=df.index)
 
-    if "custo_financeiro" in work.columns:
-        custo = work["custo_financeiro"].astype(str).fillna("")
+    if "custo_financeiro" in df.columns:
+        custo = df["custo_financeiro"].astype(str).fillna("")
     else:
-        custo = pd.Series([""] * len(work), index=work.index)
+        custo = pd.Series([""] * len(df), index=df.index)
 
     out = pd.DataFrame(
         {
-            "data_contratacao": parse_datas(work["data_contratacao"]),
-            "valor_desembolsado": limpar_valor(work["valor_desembolsado"]),
-            "juros": limpar_valor(work["juros"]),
-            "prazo_carencia": limpar_valor(work["prazo_carencia"]).fillna(0),
-            "prazo_amortizacao": limpar_valor(work["prazo_amortizacao"]),
+            "data_contratacao": parse_datas(df["data_contratacao"]),
+            "valor_desembolsado": limpar_valor(df["valor_desembolsado"]),
+            "juros": limpar_valor(df["juros"]),
+            "prazo_carencia": limpar_valor(df["prazo_carencia"]).fillna(0),
+            "prazo_amortizacao": limpar_valor(df["prazo_amortizacao"]),
             "agente": agente.values,
             "custo_financeiro": custo.values,
         }
     )
-    if "numero_contrato" in work.columns:
-        out["numero_contrato"] = work["numero_contrato"].astype(str).values
-    if forma is not None:
-        out["forma_de_apoio"] = forma.astype(str).values
+    # Preserva numeração N-AAAA (planilha BNDES_INDIRETAS_NUMERADOS)
+    num_src = None
+    if "numero_contrato" in df.columns:
+        num_src = df["numero_contrato"]
+    elif "Número do contrato" in df.columns:
+        num_src = df["Número do contrato"]
+    if num_src is not None:
+        if isinstance(num_src, pd.DataFrame):
+            num_src = num_src.iloc[:, 0]
+        out["numero_contrato"] = num_src.astype(str).to_numpy()
 
     before = len(out)
     out = out.dropna(
@@ -1036,42 +971,11 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
     out = out[(out["valor_desembolsado"] > 0) & (out["prazo_amortizacao"] > 0)]
     out = out.reset_index(drop=True)
     out["contrato"] = out.index
-    # Indiretas: número único por ano (1-2002, 2-2002, ...). Diretas: preserva o original.
-    if _contratos_sao_indiretas(out):
-        out["numero_contrato"] = _numerar_contratos_por_ano(out["data_contratacao"])
-    elif "numero_contrato" not in out.columns:
-        out["numero_contrato"] = _numerar_contratos_por_ano(out["data_contratacao"])
 
     print(f"Contratos na entrada: {before:,}")
     print(f"Contratos válidos: {len(out):,}")
     print(f"Agentes distintos: {out['agente'].nunique():,}")
     return out
-
-
-def _contratos_sao_indiretas(df: pd.DataFrame) -> bool:
-    """True se a massa for de operações indiretas (ou sem marcação DIRETA)."""
-    if "forma_de_apoio" not in df.columns or df.empty:
-        # Massa BNDES INDIRETAS tipicamente sem coluna; default = indireta
-        return True
-    forma = df["forma_de_apoio"].astype(str).str.upper()
-    tem_indireta = forma.str.contains("INDIRETA", na=False)
-    so_direta = forma.str.contains("DIRETA", na=False) & ~tem_indireta
-    if bool(so_direta.all()):
-        return False
-    if bool(tem_indireta.any()):
-        return True
-    return True
-
-
-def _numerar_contratos_por_ano(datas: pd.Series) -> pd.Series:
-    """1-AAAA, 2-AAAA... reiniciando a cada ano civil da contratação."""
-    s = pd.Series(pd.to_datetime(datas, errors="coerce"), index=getattr(datas, "index", None))
-    anos = s.dt.year.astype("Int64")
-    if anos.isna().any():
-        seq = pd.Series(range(1, len(s) + 1), index=s.index)
-        return seq.astype(str) + "-0000"
-    seq = s.groupby(anos, sort=False).cumcount() + 1
-    return seq.astype(str) + "-" + anos.astype(str)
 
 
 def _coluna_impacto(df: pd.DataFrame) -> str:
@@ -1087,7 +991,7 @@ def agregar_por_agente(df_fluxos: pd.DataFrame, contratos: pd.DataFrame) -> pd.D
     Resume fluxos por Agente Financeiro (Instituição Financeira Credenciada).
 
     Correção vs script com merge por índice: o CSV de fluxos é por parcela;
-    o vínculo correto é contrato -> agente (não left_index/right_index).
+    o vínculo correto é contrato → agente (não left_index/right_index).
     """
     df = df_fluxos.copy()
     impacto_col = _coluna_impacto(df)
@@ -1157,6 +1061,7 @@ def gerar_fluxos_contrato(
     selic_serie: SelicSerie | None = None,
     custo_financeiro: str | None = None,
     juros_pct: float | None = None,
+    numero_contrato: str | None = None,
 ) -> list[dict]:
     """
     Gera fluxos detalhados de UM contrato (carência + amortização).
@@ -1212,27 +1117,33 @@ def gerar_fluxos_contrato(
             meses = meses_ate_impacto(data_fluxo.to_pydatetime(), data_impacto)
             impacto = round(subsidio * ((1.0 + taxa_selic_mensal) ** meses), 2)
 
-        fluxos.append(
-            {
-                "contrato": contrato_id,
-                "Instituição Financeira": instituicao,
-                "mes": p,
-                "data_fluxo": data_fluxo.date(),
-                "saldo_fiscal": round(saldo_fiscal, 2),
-                "saldo_contrato": round(saldo_contrato, 2),
-                "saldo": round(saldo_fiscal, 2),  # alias compat
-                "amortizacao": round(amort, 2),
-                "taxa_selic_mensal": round(taxa_selic_mensal, 8),
-                # ContAgil: taxa do contrato só na 1ª parcela do cronograma
-                "taxa_contrato_mensal": (
-                    round(taxa_contrato_mensal, 8) if p == 1 else None
-                ),
-                "spread": round(spread, 6),
-                "subsidio": round(subsidio, 2),
-                "impacto_fiscal": impacto,
-                "em_carencia": em_carencia,
-            }
-        )
+        row_out = {
+            "contrato": contrato_id,
+            "Instituição Financeira": instituicao,
+            "mes": p,
+            # Discriminativo: todas as parcelas ficam no ano da contratação
+            # (impacto fiscal continua capitalizado na data_fluxo).
+            "data_contratacao": data_contr.date(),
+            "ano_contrato": int(data_contr.year),
+            "data_fluxo": data_fluxo.date(),
+            "ano_fluxo": int(data_fluxo.year),
+            "saldo_fiscal": round(saldo_fiscal, 2),
+            "saldo_contrato": round(saldo_contrato, 2),
+            "saldo": round(saldo_fiscal, 2),  # alias compat
+            "amortizacao": round(amort, 2),
+            "taxa_selic_mensal": round(taxa_selic_mensal, 8),
+            # ContAgil: taxa do contrato só na 1ª parcela do cronograma
+            "taxa_contrato_mensal": (
+                round(taxa_contrato_mensal, 8) if p == 1 else None
+            ),
+            "spread": round(spread, 6),
+            "subsidio": round(subsidio, 2),
+            "impacto_fiscal": impacto,
+            "em_carencia": em_carencia,
+        }
+        if numero_contrato:
+            row_out["numero_contrato"] = str(numero_contrato)
+        fluxos.append(row_out)
 
         # Atualização dos saldos
         if not em_carencia:
@@ -1260,10 +1171,11 @@ def gerar_fluxos_diarios_contrato(
     selic_serie: SelicSerie | None = None,
     custo_financeiro: str | None = None,
     juros_pct: float | None = None,
+    numero_contrato: str | None = None,
 ) -> list[dict]:
     """Expande o cronograma mensal em linhas dia a dia (entre parcelas ContAgil).
 
-    Em cada período mensal (data da parcela -> véspera da próxima):
+    Em cada período mensal (data da parcela → véspera da próxima):
       - saldo fiscal constante (SAC ContAgil)
       - amortização só no dia da parcela
       - subsídio diário = saldo_fiscal × (SELIC_d − taxa_contrato_d)
@@ -1282,6 +1194,7 @@ def gerar_fluxos_diarios_contrato(
         selic_serie=selic_serie,
         custo_financeiro=custo_financeiro,
         juros_pct=juros_pct,
+        numero_contrato=numero_contrato,
     )
     if not mensais:
         return []
@@ -1319,26 +1232,30 @@ def gerar_fluxos_diarios_contrato(
                 meses = meses_ate_impacto(dia.to_pydatetime(), data_impacto)
                 impacto = round(subsidio * ((1.0 + taxa_selic_mensal) ** meses), 2)
 
-            diarios.append(
-                {
-                    "contrato": contrato_id,
-                    "Instituição Financeira": instituicao,
-                    "mes": mes,
-                    "data_fluxo": dia.date(),
-                    "saldo_fiscal": round(saldo_fiscal, 2),
-                    "saldo": round(saldo_fiscal, 2),  # alias compat
-                    "amortizacao": round(amort, 2),
-                    "taxa_selic_diaria": round(taxa_selic_diaria, 10),
-                    "taxa_contrato_diaria": round(taxa_contrato_diaria, 10),
-                    "taxa_selic_mensal": round(taxa_selic_mensal, 8),
-                    "taxa_contrato_mensal": round(taxa_contrato_mensal, 8),
-                    "spread": round(spread, 6),
-                    "subsidio": round(subsidio, 4),
-                    "impacto_fiscal": impacto,
-                    "em_carencia": em_carencia,
-                    "dia_parcela": dia == data_ini,
-                }
-            )
+            drow = {
+                "contrato": contrato_id,
+                "Instituição Financeira": instituicao,
+                "mes": mes,
+                "data_contratacao": data_contr.date(),
+                "ano_contrato": int(data_contr.year),
+                "data_fluxo": dia.date(),
+                "ano_fluxo": int(dia.year),
+                "saldo_fiscal": round(saldo_fiscal, 2),
+                "saldo": round(saldo_fiscal, 2),  # alias compat
+                "amortizacao": round(amort, 2),
+                "taxa_selic_diaria": round(taxa_selic_diaria, 10),
+                "taxa_contrato_diaria": round(taxa_contrato_diaria, 10),
+                "taxa_selic_mensal": round(taxa_selic_mensal, 8),
+                "taxa_contrato_mensal": round(taxa_contrato_mensal, 8),
+                "spread": round(spread, 6),
+                "subsidio": round(subsidio, 4),
+                "impacto_fiscal": impacto,
+                "em_carencia": em_carencia,
+                "dia_parcela": dia == data_ini,
+            }
+            if numero_contrato:
+                drow["numero_contrato"] = str(numero_contrato)
+            diarios.append(drow)
             dia += timedelta(days=1)
 
     return diarios
@@ -1361,12 +1278,12 @@ def salvar_fluxos_diarios(
         amostra = df.head(excel_limit)
         amostra.to_excel(out, index=False)
         print(
-            f"[AVISO] Fluxos diários: {len(df):,} linhas > limite Excel; "
+            f"⚠️  Fluxos diários: {len(df):,} linhas > limite Excel; "
             f"CSV completo em {csv_path} e amostra Excel em {out}"
         )
     else:
         df.to_excel(out, index=False)
-        print(f"[OK] Fluxos diários: {out} ({len(df):,} linhas)")
+        print(f"✅ Fluxos diários: {out} ({len(df):,} linhas)")
     return out
 
 
@@ -1478,15 +1395,8 @@ def _resolver_segundo_arg(
     Aceita o rascunho ContAgil ``gerar_fluxos(df, df)`` (df_original para
     Instituição Financeira) e também ``gerar_fluxos(df, selic_df)``.
     """
-    # Duck-typing: ContAgil pode carregar gerar_fluxos.py duas vezes (scripts/ vs
-    # sec_scripts/), gerando classes SelicSerie distintas — isinstance falha.
-    if isinstance(segundo, SelicSerie) or (
-        hasattr(segundo, "fatores")
-        and hasattr(segundo, "fator_referencia")
-        and hasattr(segundo, "origem")
-        and not isinstance(segundo, pd.DataFrame)
-    ):
-        return TAXA_SELIC_ANUAL, segundo, None  # type: ignore[return-value]
+    if isinstance(segundo, SelicSerie):
+        return TAXA_SELIC_ANUAL, segundo, None
     if isinstance(segundo, pd.DataFrame):
         if _parece_dataframe_selic(segundo):
             return (
@@ -1508,6 +1418,19 @@ def _resolver_segundo_arg(
     return float(segundo), selic_serie, None
 
 
+def _progresso_intervalo(n: int, progress_every: int | None) -> int | None:
+    """Define intervalo de log de progresso (None = sem log intermediário)."""
+    if progress_every is not None:
+        return max(1, int(progress_every)) if progress_every > 0 else None
+    if n >= 50_000:
+        return 2_000
+    if n >= 5_000:
+        return 1_000
+    if n >= 500:
+        return 100
+    return None
+
+
 def gerar_fluxos(
     df: pd.DataFrame,
     selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
@@ -1515,6 +1438,8 @@ def gerar_fluxos(
     selic_serie: SelicSerie | None = None,
     fluxo_diario: bool = False,
     saida_diario: Path | str | None = None,
+    progress_every: int | None = None,
+    quiet: bool = False,
 ) -> pd.DataFrame:
     """Gera DataFrame completo de fluxos (parcelas mensais).
 
@@ -1529,15 +1454,24 @@ def gerar_fluxos(
 
     Com fluxo_diario=True, também gera a tabela dia a dia em
     output/fluxos_diarios_detalhados.xlsx (ou saida_diario).
+
+    Para massas grandes (>~5k contratos), prefira ``gerar_e_gravar_fluxos``
+    (grava CSV em lotes e evita estourar memória).
     """
-    print("Gerando fluxos com lógica corrigida...")
     selic_aa, selic_serie, df_original = _resolver_segundo_arg(selic_aa, selic_serie)
     contratos = _as_contratos(df)
+    n = len(contratos)
+    step = None if quiet else _progresso_intervalo(n, progress_every)
+    if not quiet:
+        print(f"🚀 Gerando fluxos com lógica corrigida... ({n:,} contratos)")
+        sys.stdout.flush()
+
     records: list[dict] = []
     fluxos_diarios: list[dict] = []
     skipped = 0
+    t0 = time.time()
 
-    for pos, row in enumerate(contratos.itertuples(index=False)):
+    for pos, row in enumerate(contratos.itertuples(index=False), start=1):
         try:
             data_contr = pd.Timestamp(row.data_contratacao)
             if pd.isna(data_contr):
@@ -1547,10 +1481,13 @@ def gerar_fluxos(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
             )
             instituicao = _instituicao_de_original(
-                df_original, pos, fallback_agente
+                df_original, pos - 1, fallback_agente
             )
             custo = getattr(row, "custo_financeiro", "")
             juros_pct = float(row.juros)
+            num = getattr(row, "numero_contrato", None)
+            if num is not None and str(num) in {"", "nan", "None"}:
+                num = None
             kwargs = dict(
                 data_contr=data_contr,
                 valor=float(row.valor_desembolsado),
@@ -1564,6 +1501,7 @@ def gerar_fluxos(
                 selic_serie=selic_serie,
                 custo_financeiro=custo,
                 juros_pct=juros_pct,
+                numero_contrato=str(num) if num is not None else None,
             )
             records.extend(gerar_fluxos_contrato(**kwargs))
             if fluxo_diario:
@@ -1572,7 +1510,18 @@ def gerar_fluxos(
             skipped += 1
             continue
 
-    if skipped:
+        if step is not None and (pos % step == 0 or pos == n):
+            elapsed = max(time.time() - t0, 1e-6)
+            rate = pos / elapsed
+            eta = (n - pos) / rate if rate > 0 else 0.0
+            print(
+                f"  progresso {pos:,}/{n:,} ({100.0 * pos / n:.1f}%) "
+                f"| {rate:,.0f} contr/s | ETA ~{eta / 60:.1f} min "
+                f"| parcelas={len(records):,}"
+            )
+            sys.stdout.flush()
+
+    if skipped and not quiet:
         print(f"Contratos ignorados por erro: {skipped:,}")
 
     if fluxo_diario:
@@ -1580,6 +1529,118 @@ def gerar_fluxos(
         salvar_fluxos_diarios(fluxos_diarios, path)
 
     return pd.DataFrame(records)
+
+
+def gerar_e_gravar_fluxos(
+    df: pd.DataFrame,
+    selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
+    *,
+    saida_xlsx: Path | str,
+    lote: int = 2_000,
+    excel_max_linhas: int = 1_000_000,
+    data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
+) -> dict:
+    """Gera fluxos em lotes e grava CSV completo (+ Excel amostra se >1M linhas).
+
+    Evita manter dezenas de milhões de parcelas em memória (massa BNDES ~100k–1M
+    contratos). Retorna estatísticas do processamento.
+    """
+    saida_xlsx = Path(saida_xlsx)
+    saida_xlsx.parent.mkdir(parents=True, exist_ok=True)
+    csv_path = saida_xlsx.with_suffix(".csv")
+
+    contratos = _as_contratos(df)
+    n = len(contratos)
+    lote = max(1, int(lote))
+    print(
+        f"🚀 Gerando fluxos com lógica corrigida... "
+        f"({n:,} contratos, lote={lote:,}, grava CSV em streaming)"
+    )
+    sys.stdout.flush()
+
+    if csv_path.exists():
+        csv_path.unlink()
+
+    total_parcelas = 0
+    skipped = 0
+    amostra: list[pd.DataFrame] = []
+    amostra_linhas = 0
+    t0 = time.time()
+    header = True
+
+    for start in range(0, n, lote):
+        chunk = contratos.iloc[start : start + lote]
+        try:
+            fluxos = gerar_fluxos(
+                chunk,
+                selic_aa,
+                data_impacto=data_impacto,
+                selic_serie=selic_serie,
+                quiet=True,
+            )
+        except Exception as exc:  # noqa: BLE001 — lote isolado não derruba a massa
+            skipped += len(chunk)
+            print(
+                f"  [AVISO] lote {start:,}-{min(start + lote, n):,} falhou "
+                f"({type(exc).__name__}: {exc}); {len(chunk)} contratos pulados"
+            )
+            sys.stdout.flush()
+            fluxos = pd.DataFrame()
+
+        if not fluxos.empty:
+            fluxos.to_csv(csv_path, mode="a", index=False, header=header)
+            header = False
+            total_parcelas += len(fluxos)
+            if amostra_linhas < excel_max_linhas:
+                falta = excel_max_linhas - amostra_linhas
+                amostra.append(fluxos.head(falta))
+                amostra_linhas += min(len(fluxos), falta)
+
+        feitos = min(start + lote, n)
+        elapsed = max(time.time() - t0, 1e-6)
+        rate = feitos / elapsed
+        eta = (n - feitos) / rate if rate > 0 else 0.0
+        print(
+            f"  lote {start:,}-{feitos:,}/{n:,} ({100.0 * feitos / n:.1f}%) "
+            f"| {rate:,.0f} contr/s | ETA ~{eta / 60:.1f} min "
+            f"| parcelas={total_parcelas:,}"
+        )
+        sys.stdout.flush()
+
+    if total_parcelas == 0:
+        raise ValueError("Nenhuma parcela gerada (todos os contratos falharam?).")
+
+    if amostra:
+        amostra_df = pd.concat(amostra, ignore_index=True)
+    else:
+        amostra_df = pd.read_csv(csv_path, nrows=excel_max_linhas)
+
+    amostra_df.to_excel(saida_xlsx, index=False)
+
+    stats = {
+        "contratos": n,
+        "parcelas": total_parcelas,
+        "skipped": skipped,
+        "csv": str(csv_path),
+        "xlsx": str(saida_xlsx),
+        "xlsx_linhas": len(amostra_df),
+        "segundos": round(time.time() - t0, 1),
+    }
+    if total_parcelas > excel_max_linhas:
+        print(
+            f"    → CSV completo: {csv_path} ({total_parcelas:,} parcelas)"
+        )
+        print(
+            f"    → Excel (amostra {len(amostra_df):,}): {saida_xlsx}"
+        )
+    else:
+        # Massa cabe no Excel: CSV auxiliar pode ser removido pelo usuário
+        print(f"    → Salvo: {saida_xlsx} ({total_parcelas:,} parcelas)")
+        print(f"    → CSV: {csv_path}")
+    if skipped:
+        print(f"    Contratos/lotes com erro: {skipped:,}")
+    return stats
 
 
 def processar_em_lotes(
@@ -1701,13 +1762,13 @@ def processar_em_lotes(
         fluxos_df.to_csv(csv_path, mode="a", index=False, header=not wrote_header)
         wrote_header = True
         print(
-            f"  lote {start:,}-{start + len(chunk):,} -> +{len(fluxos_df):,} "
+            f"  lote {start:,}-{start + len(chunk):,} → +{len(fluxos_df):,} "
             f"(acum {n_parcelas:,})"
         )
 
     diario_path: str | None = None
     if fluxo_diario and wrote_diario_header and diario_csv.exists():
-        # Monta o Excel a partir do CSV acumulado (lista de dicts -> DataFrame)
+        # Monta o Excel a partir do CSV acumulado (lista de dicts → DataFrame)
         df_diario = pd.read_csv(diario_csv)
         salvar_fluxos_diarios(df_diario.to_dict(orient="records"), diario_xlsx)
         diario_path = str(diario_xlsx)
@@ -1816,7 +1877,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--download",
         action="store_true",
-        help="Baixa/filtra CSV aberto do BNDES (2009-2010 por padrão).",
+        help="Baixa/filtra CSV aberto do BNDES (2009–2010 por padrão).",
     )
     p.add_argument("--start", default="2009-01-01")
     p.add_argument("--end", default="2010-12-31")
@@ -1870,7 +1931,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def carregar_selic_serie(args: argparse.Namespace) -> SelicSerie | None:
-    """Resolve série de fatores: STP -> cache -> Bacen (padrão ContAgil)."""
+    """Resolve série de fatores: STP → cache → Bacen (padrão ContAgil)."""
     if args.sem_selic_fatores:
         print("Impacto fiscal: SELIC composta constante (14,5% a.a.)")
         return None
@@ -1957,13 +2018,13 @@ def main(argv: list[str] | None = None) -> int:
     with stats_path.open("w", encoding="utf-8") as f:
         json.dump(printable, f, indent=2)
 
-    print(f"[OK] CSV detalhado: {csv_path}")
-    print(f"[OK] Excel resumo:  {xlsx_path}")
-    print(f"[OK] Resumo agente: {agente_csv}")
-    print(f"[OK] Resumo agente: {agente_xlsx}")
-    print(f"[OK] Stats JSON:    {stats_path}")
+    print(f"✅ CSV detalhado: {csv_path}")
+    print(f"✅ Excel resumo:  {xlsx_path}")
+    print(f"✅ Resumo agente: {agente_csv}")
+    print(f"✅ Resumo agente: {agente_xlsx}")
+    print(f"✅ Stats JSON:    {stats_path}")
     if args.fluxo_diario and stats.get("fluxos_diarios"):
-        print(f"[OK] Fluxos diários: {stats['fluxos_diarios']}")
+        print(f"✅ Fluxos diários: {stats['fluxos_diarios']}")
     return 0
 
 

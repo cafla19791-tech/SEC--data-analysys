@@ -10,12 +10,14 @@ import pandas as pd
 from scripts.contagil_fluxos_seguro import (
     carregar_fatores_mensais,
     main,
+    normalizar_colunas,
     processar_arquivo,
 )
 from scripts.gerar_fluxos import (
     _excel_tem_colunas_contratos,
     _mapear_colunas_contratos,
     load_from_excel,
+    normalizar_colunas as normalizar_colunas_gf,
 )
 
 
@@ -62,6 +64,32 @@ def _df_variante_bndes() -> pd.DataFrame:
     )
 
 
+def test_normalizar_colunas_definida_e_funciona():
+    """Regressão: NameError 'normalizar_colunas' is not defined no WinPython."""
+    assert normalizar_colunas is normalizar_colunas_gf
+    df = normalizar_colunas(_df_variante_bndes())
+    assert "data_contratacao" in df.columns
+    assert "valor_desembolsado" in df.columns
+    assert len(df) == 1
+    assert float(df.iloc[0]["valor_desembolsado"]) == 100000.0
+
+
+def test_parse_args_arquivo_fatores():
+    from scripts.contagil_fluxos_seguro import parse_args
+
+    args = parse_args(
+        [
+            "--massa-dados",
+            "dados",
+            "--pasta-saida",
+            "saida",
+            "--arquivo-fatores",
+            "fator_acumulado_SELIC_TJLP_TLP.xlsx",
+        ]
+    )
+    assert args.fatores.name == "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+
+
 def test_mapear_colunas_portal_pt():
     mapped, rename = _mapear_colunas_contratos(_df_portal_pt())
     assert "data_contratacao" in mapped.columns
@@ -89,83 +117,51 @@ def test_mapear_colunas_variante_bndes_indiretas():
     assert "data_contratacao" in rename.values()
 
 
-def test_mapear_valor_historico_operacoes_indiretas():
-    """ContAgil 'Operações Indiretas 2002.xlsx' usa 'Valor histórico'."""
+def test_mapear_colunas_valor_historico_contagil():
+    """Massa ContAgil BNDES INDIRETAS usa 'Valor histórico' em vez de desembolsado."""
+    valor_cols = [
+        "Valor histórico",
+        "Valor  Histórico",
+        "Valor Histórico R$ (*)",
+        "Valor Histórico R$ ",
+        "Valor Histórico em R$",
+    ]
+    for valor_col in valor_cols:
+        df = pd.DataFrame(
+            {
+                valor_col: [100000.0],
+                "Data da contratacao": ["15/03/2009"],
+                "Juros": [6.0],
+                "Prazo - Carencia (meses)": [6],
+                "Prazo - Amortizacao (meses)": [12],
+                "Instituição Financeira Credenciada": ["BANCO DO BRASIL SA"],
+                "Encargo Financeiro": ["TJLP"],
+            }
+        )
+        assert _excel_tem_colunas_contratos(df), valor_col
+        mapped, _rename = _mapear_colunas_contratos(df)
+        assert "valor_desembolsado" in mapped.columns, valor_col
+        assert "custo_financeiro" in mapped.columns, valor_col
+        assert float(mapped["valor_desembolsado"].iloc[0]) == 100000.0, valor_col
+
+
+def test_mapear_prefere_valor_historico_sobre_ipca():
+    """Se houver Valor histórico e valor IPCA, usa o histórico como principal."""
     df = pd.DataFrame(
         {
-            "CNPJ do Agente Financeiro": ["00.000.000/0001-00"],
-            "Instituição Financeira Credenciada": ["BANCO TESTE"],
-            "Cliente": ["EMPRESA X"],
-            "Data da contratação": ["15/03/2002"],
-            " Fonte de recurso (desembolsos) ": ["FAT"],
-            "Custo financeiro": ["TJLP"],
-            "Juros": [2.5],
-            "Prazo - Carência (meses)": [6],
-            "Prazo - Amortização (meses)": [48],
-            "Valor histórico": [250000.0],
-            "Valor atualizado pelo IPCA até 31/7/2025": [400000.0],
+            "Data da contratação": ["15/03/2009"],
+            "Valor histórico": [50000.0],
+            "Valor atualizado pelo IPCA até 31/7/2025": [99999.0],
+            "Juros": [6.0],
+            "Prazo - Carencia (meses)": [6],
+            "Prazo - Amortizacao (meses)": [12],
+            "Instituição Financeira Credenciada": ["BB"],
+            "encargo financeiro": ["TAXA FIXA"],
         }
     )
     mapped, rename = _mapear_colunas_contratos(df)
-    assert "valor_desembolsado" in mapped.columns
-    assert float(mapped["valor_desembolsado"].iloc[0]) == 250000.0
-    assert _excel_tem_colunas_contratos(df)
-
-
-def _df_operacoes_diretas() -> pd.DataFrame:
-    """Layout portal/ContAgil OPERACOES DIRETAS.xlsx (não automáticas)."""
-    return pd.DataFrame(
-        {
-            "data_da_contratacao": ["2002-01-02", "2002-01-03", "2009-03-15"],
-            "valor_contratado_reais": [9090000.0, 706600.0, 100000.0],
-            "valor_desembolsado_reais": [9007445.1, 745030.36, None],
-            "custo_financeiro": ["TJLP", "SEM CUSTO", "TAXA FIXA"],
-            "juros": [2.5, 0.0, 6.0],
-            "prazo_carencia_meses": [24, 0, 6],
-            "prazo_amortizacao_meses": [72, 0, 48],  # 0 = não reembolsável
-            "forma_de_apoio": ["DIRETA", "DIRETA", "DIRETA"],
-            "instituicao_financeira_credenciada": ["----------", "----------", "----------"],
-            "numero_do_contrato": ["100", "101", "102"],
-        }
-    )
-
-
-def test_mapear_e_carregar_operacoes_diretas(tmp_path: Path):
-    from scripts.gerar_fluxos import AGENTE_BNDES_DIRETA
-
-    df_raw = _df_operacoes_diretas()
-    assert _excel_tem_colunas_contratos(df_raw)
-    mapped, _ = _mapear_colunas_contratos(df_raw)
-    assert "valor_desembolsado" in mapped.columns
-
-    path = tmp_path / "OPERACOES DIRETAS.xlsx"
-    df_raw.to_excel(path, index=False)
-    df = load_from_excel(path)
-    # linha com prazo_amortizacao=0 (não reembolsável) é descartada
-    assert len(df) == 2
-    assert set(df["agente"]) == {AGENTE_BNDES_DIRETA}
-    # desembolsado nulo usa valor contratado
-    row = df.loc[df["numero_contrato"] == "102"].iloc[0]
-    assert row["valor_desembolsado"] == 100000.0
-
-
-def test_operacoes_diretas_so_valor_contratado(tmp_path: Path):
-    path = tmp_path / "OPERACOES DIRETAS.xlsx"
-    pd.DataFrame(
-        {
-            "Data da Contratação": ["15/03/2009"],
-            "Valor contratado Reais": [250000.0],
-            "Juros": [4.0],
-            "Prazo de Carência (meses)": [3],
-            "Prazo de Amortização (meses)": [24],
-            "Forma de Apoio": ["DIRETA"],
-            "Custo Financeiro": ["TJLP"],
-        }
-    ).to_excel(path, index=False)
-    df = load_from_excel(path)
-    assert len(df) == 1
-    assert df.iloc[0]["valor_desembolsado"] == 250000.0
-    assert df.iloc[0]["agente"] == "BNDES"
+    assert rename.get("Valor histórico") == "valor_desembolsado"
+    assert float(mapped["valor_desembolsado"].iloc[0]) == 50000.0
 
 
 def test_load_from_excel_header_offset(tmp_path: Path):
@@ -215,6 +211,19 @@ def test_carregar_fatores_mensais(tmp_path: Path):
     assert serie.fator_referencia == 1.06
 
 
+def _fatores_mensais(path: Path) -> None:
+    datas = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
+    taxa = 0.009
+    fator = (1 + taxa) ** pd.Series(range(1, len(datas) + 1))
+    pd.DataFrame(
+        {
+            "Data": datas,
+            "Taxa_Mensal_%": [0.9] * len(datas),
+            "Fator_Acumulado": fator.values,
+        }
+    ).to_excel(path, index=False)
+
+
 def test_processar_arquivo_seguro(tmp_path: Path):
     dados = tmp_path / "dados"
     saida = tmp_path / "saida"
@@ -225,17 +234,7 @@ def test_processar_arquivo_seguro(tmp_path: Path):
     _df_variante_bndes().to_excel(contratos, index=False)
 
     fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
-    # Série longa o suficiente para capitalizar até 2026
-    datas = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
-    taxa = 0.009
-    fator = (1 + taxa) ** pd.Series(range(1, len(datas) + 1))
-    pd.DataFrame(
-        {
-            "Data": datas,
-            "Taxa_Mensal_%": [0.9] * len(datas),
-            "Fator_Acumulado": fator.values,
-        }
-    ).to_excel(fatores, index=False)
+    _fatores_mensais(fatores)
 
     serie = carregar_fatores_mensais(fatores)
     out = processar_arquivo(contratos, saida, serie)
@@ -244,6 +243,35 @@ def test_processar_arquivo_seguro(tmp_path: Path):
     fluxos = pd.read_excel(out)
     assert len(fluxos) > 0
     assert "impacto_fiscal" in fluxos.columns or "impacto" in fluxos.columns
+
+
+def test_processar_arquivo_grande_usa_streaming(tmp_path: Path, monkeypatch):
+    """Arquivos com muitos contratos devem gravar via gerar_e_gravar_fluxos."""
+    import scripts.contagil_fluxos_seguro as seguro
+
+    monkeypatch.setattr(seguro, "LIMITE_MEMORIA_CONTRATOS", 5)
+    monkeypatch.setattr(seguro, "LOTE_FLUXOS", 3)
+
+    dados = tmp_path / "dados"
+    saida = tmp_path / "saida"
+    dados.mkdir()
+    saida.mkdir()
+
+    base = _df_variante_bndes()
+    rows = pd.concat([base] * 12, ignore_index=True)
+    contratos = dados / "BNDES INDIRETAS 20112016.xlsx"
+    rows.to_excel(contratos, index=False)
+
+    fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    _fatores_mensais(fatores)
+    serie = carregar_fatores_mensais(fatores)
+
+    out = processar_arquivo(contratos, saida, serie)
+    assert out is not None
+    assert out.exists()
+    csv_path = out.with_suffix(".csv")
+    assert csv_path.exists()
+    assert len(pd.read_csv(csv_path)) > 0
 
 
 def test_main_massa_segura(tmp_path: Path, monkeypatch):
