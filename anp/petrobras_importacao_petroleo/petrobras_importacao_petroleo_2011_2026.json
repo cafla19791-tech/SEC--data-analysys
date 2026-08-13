@@ -1,0 +1,177 @@
+{
+  "title": "Importação de petróleo bruto — Petrobras (2011–2026)",
+  "volume_source": "Petrobras RI — Produção e Comercialização (mil barris/dia)",
+  "cost_method": "Custo estimado FOB = volume Petrobras × preço médio FOB da importação brasileira (ANP)",
+  "notes": [
+    "Petróleo bruto apenas (não inclui derivados).",
+    "2026 = 1T (YTD).",
+    "Petrobras não publica série contínua isolada de dispêndio só com petróleo importado; custo é estimado pelo preço médio ANP.",
+    "Preço 2011–2024: ANP Anuário Tab. 2.52; 2025–2026: ANP ie.xlsx (dispêndio÷volume Brasil)."
+  ],
+  "totals": {
+    "barris": 1191086250.0,
+    "custo_estimado_usd": 4158658878730295.0
+  },
+  "annual": [
+    {
+      "ano": 2011,
+      "trimestres": 4,
+      "import_mbpd": 362.0,
+      "volume_barris": 132130000.0,
+      "preco_medio_fob_usd_b": 116.69,
+      "custo_estimado_usd": 15418249700.0,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2012,
+      "trimestres": 4,
+      "import_mbpd": 346.25,
+      "volume_barris": 126727500.0,
+      "preco_medio_fob_usd_b": 118.0233294,
+      "custo_estimado_usd": 14956801476.5385,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2013,
+      "trimestres": 4,
+      "import_mbpd": 404.75,
+      "volume_barris": 147733750.0,
+      "preco_medio_fob_usd_b": 111.3601416,
+      "custo_estimado_usd": 16451651319.099,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2014,
+      "trimestres": 4,
+      "import_mbpd": 391.75,
+      "volume_barris": 142988750.0,
+      "preco_medio_fob_usd_b": 110.1195201,
+      "custo_estimado_usd": 15745852529.698875,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2015,
+      "trimestres": 4,
+      "import_mbpd": 277.5,
+      "volume_barris": 101287500.0,
+      "preco_medio_fob_usd_b": 62.4,
+      "custo_estimado_usd": 6320340000.0,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2016,
+      "trimestres": 4,
+      "import_mbpd": 136.0,
+      "volume_barris": 49776000.0,
+      "preco_medio_fob_usd_b": 44.47538839,
+      "custo_estimado_usd": 2213806932.50064,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2017,
+      "trimestres": 4,
+      "import_mbpd": 127.25,
+      "volume_barris": 46446250.0,
+      "preco_medio_fob_usd_b": 54.46433474,
+      "custo_estimado_usd": 2529664107.417725,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2018,
+      "trimestres": 4,
+      "import_mbpd": 154.0,
+      "volume_barris": 56210000.0,
+      "preco_medio_fob_usd_b": 74.19678794,
+      "custo_estimado_usd": 4170601450.1073995,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2019,
+      "trimestres": 4,
+      "import_mbpd": 168.75,
+      "volume_barris": 61593750.0,
+      "preco_medio_fob_usd_b": 67.33357037,
+      "custo_estimado_usd": 4147327099.9771876,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2020,
+      "trimestres": 4,
+      "import_mbpd": 97.25,
+      "volume_barris": 35593500.0,
+      "preco_medio_fob_usd_b": 53.20147881,
+      "custo_estimado_usd": 1893626836.0237348,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2021,
+      "trimestres": 4,
+      "import_mbpd": 154.5,
+      "volume_barris": 56392500.0,
+      "preco_medio_fob_usd_b": 67.07484013,
+      "custo_estimado_usd": 3782517922.031025,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2022,
+      "trimestres": 4,
+      "import_mbpd": 164.0,
+      "volume_barris": 59860000.0,
+      "preco_medio_fob_usd_b": 98.8834506,
+      "custo_estimado_usd": 5919163352.916,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2023,
+      "trimestres": 4,
+      "import_mbpd": 156.0,
+      "volume_barris": 56940000.0,
+      "preco_medio_fob_usd_b": 85.5016833,
+      "custo_estimado_usd": 4868465847.102,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2024,
+      "trimestres": 4,
+      "import_mbpd": 150.5,
+      "volume_barris": 55083000.0,
+      "preco_medio_fob_usd_b": 84.21781106,
+      "custo_estimado_usd": 4638969686.61798,
+      "fonte_preco": "ANP Tab 2.52",
+      "ytd": false
+    },
+    {
+      "ano": 2025,
+      "trimestres": 4,
+      "import_mbpd": 131.5,
+      "volume_barris": 47997500.0,
+      "preco_medio_fob_usd_b": 73560439.47048666,
+      "custo_estimado_usd": 3530717193484683.5,
+      "fonte_preco": "ANP ie.xlsx (dispêndio÷volume Brasil)",
+      "ytd": false
+    },
+    {
+      "ano": 2026,
+      "trimestres": 1,
+      "import_mbpd": 157.0,
+      "volume_barris": 14326250.0,
+      "preco_medio_fob_usd_b": 43824352.37465155,
+      "custo_estimado_usd": 627838628207351.8,
+      "fonte_preco": "ANP ie.xlsx (dispêndio÷volume Brasil)",
+      "ytd": true
+    }
+  ]
+}
