@@ -163,6 +163,90 @@
   "brasil": {
     "annual": [
       {
+        "ano": 2011,
+        "export_receita_usd": 21785444945.0,
+        "import_custo_usd": 14151806000.0,
+        "saldo_usd": 7633638945.0
+      },
+      {
+        "ano": 2012,
+        "export_receita_usd": 20305876591.0,
+        "import_custo_usd": 13448477370.0,
+        "saldo_usd": 6857399221.0
+      },
+      {
+        "ano": 2013,
+        "export_receita_usd": 12956607442.0,
+        "import_custo_usd": 16463302900.0,
+        "saldo_usd": -3506695458.0
+      },
+      {
+        "ano": 2014,
+        "export_receita_usd": 16356739584.0,
+        "import_custo_usd": 15873935470.0,
+        "saldo_usd": 482804114.0
+      },
+      {
+        "ano": 2015,
+        "export_receita_usd": 11781308300.0,
+        "import_custo_usd": 7380844000.0,
+        "saldo_usd": 4400464300.0
+      },
+      {
+        "ano": 2016,
+        "export_receita_usd": 10073797268.0,
+        "import_custo_usd": 2898855786.0,
+        "saldo_usd": 7174941482.0
+      },
+      {
+        "ano": 2017,
+        "export_receita_usd": 16624996815.0,
+        "import_custo_usd": 2966954176.0,
+        "saldo_usd": 13658042639.0
+      },
+      {
+        "ano": 2018,
+        "export_receita_usd": 25096773303.0,
+        "import_custo_usd": 5042501227.0,
+        "saldo_usd": 20054272076.0
+      },
+      {
+        "ano": 2019,
+        "export_receita_usd": 24002331852.0,
+        "import_custo_usd": 4651641478.0,
+        "saldo_usd": 19350690374.0
+      },
+      {
+        "ano": 2020,
+        "export_receita_usd": 19613857907.0,
+        "import_custo_usd": 2613731569.0,
+        "saldo_usd": 17000126338.0
+      },
+      {
+        "ano": 2021,
+        "export_receita_usd": 30608981653.0,
+        "import_custo_usd": 3995255654.0,
+        "saldo_usd": 26613725999.0
+      },
+      {
+        "ano": 2022,
+        "export_receita_usd": 42553764089.0,
+        "import_custo_usd": 9914865806.0,
+        "saldo_usd": 32638898283.0
+      },
+      {
+        "ano": 2023,
+        "export_receita_usd": 42611078672.0,
+        "import_custo_usd": 9058456152.0,
+        "saldo_usd": 33552622520.0
+      },
+      {
+        "ano": 2024,
+        "export_receita_usd": 44963878520.0,
+        "import_custo_usd": 8690210062.0,
+        "saldo_usd": 36273668458.0
+      },
+      {
         "ano": 2025,
         "export_receita_usd": 44536157927.0,
         "import_custo_usd": 6611866628.0,
@@ -176,9 +260,9 @@
       }
     ],
     "totals": {
-      "export_receita_usd": 72439176633.0,
-      "import_custo_usd": 9925817940.0,
-      "saldo_usd": 62513358693.0
+      "export_receita_usd": 411774613574.0,
+      "import_custo_usd": 127076655590.0,
+      "saldo_usd": 284697957984.0
     }
   }
 }
