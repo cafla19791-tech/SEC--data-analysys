@@ -1106,7 +1106,12 @@ def gerar_fluxos_contrato(
                 "contrato": contrato_id,
                 "Instituição Financeira": instituicao,
                 "mes": p,
+                # Discriminativo: todas as parcelas ficam no ano da contratação
+                # (impacto fiscal continua capitalizado na data_fluxo).
+                "data_contratacao": data_contr.date(),
+                "ano_contrato": int(data_contr.year),
                 "data_fluxo": data_fluxo.date(),
+                "ano_fluxo": int(data_fluxo.year),
                 "saldo_fiscal": round(saldo_fiscal, 2),
                 "saldo_contrato": round(saldo_contrato, 2),
                 "saldo": round(saldo_fiscal, 2),  # alias compat
@@ -1213,7 +1218,10 @@ def gerar_fluxos_diarios_contrato(
                     "contrato": contrato_id,
                     "Instituição Financeira": instituicao,
                     "mes": mes,
+                    "data_contratacao": data_contr.date(),
+                    "ano_contrato": int(data_contr.year),
                     "data_fluxo": dia.date(),
+                    "ano_fluxo": int(dia.year),
                     "saldo_fiscal": round(saldo_fiscal, 2),
                     "saldo": round(saldo_fiscal, 2),  # alias compat
                     "amortizacao": round(amort, 2),

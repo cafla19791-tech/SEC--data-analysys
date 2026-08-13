@@ -76,6 +76,13 @@ python3 scripts/agregar_impacto_fluxos.py \
 # Ou no WinPython: powershell -File .\agregar_impacto_saida.ps1
 # Saídas: resumo_impacto_bndes.xlsx, impacto_fiscal_por_ano.xlsx, resumo_por_agente.xlsx
 
+# Discriminativo INDIRETAS por ANO DO CONTRATO (não do fluxo):
+# Ex.: contrato 12/12/2022 com 180 parcelas → as 180 linhas na pasta/aba 2022.
+# Impacto fiscal de cada parcela continua capitalizado na data_fluxo.
+python3 scripts/discriminativos_indiretas_ano_contrato.py --pasta saida
+# ContAgil: discriminativos_indiretas_ano_contrato.bat
+# Saída: saida/discriminativos_ano_contrato/fluxos_ano_contrato_YYYY.csv
+
 # Resumo por contrato + por ano (script ContAgil / WinPython saida/fluxos_0.csv)
 python3 scripts/resumo_fluxos.py \
   --fluxos "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida\fluxos_0.csv"
