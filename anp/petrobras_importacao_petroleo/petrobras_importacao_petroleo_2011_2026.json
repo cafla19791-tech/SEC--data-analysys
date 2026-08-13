@@ -1,16 +1,15 @@
 {
   "title": "Importação de petróleo bruto — Petrobras (2011–2026)",
-  "volume_source": "Petrobras RI — Produção e Comercialização (mil barris/dia)",
-  "cost_method": "Custo estimado FOB = volume Petrobras × preço médio FOB da importação brasileira (ANP)",
+  "volume_source": "Petrobras RI — Produção e Comercialização",
+  "cost_method": "Custo estimado FOB = volume Petrobras × preço médio FOB importação Brasil (ANP)",
   "notes": [
-    "Petróleo bruto apenas (não inclui derivados).",
-    "2026 = 1T (YTD).",
-    "Petrobras não publica série contínua isolada de dispêndio só com petróleo importado; custo é estimado pelo preço médio ANP.",
-    "Preço 2011–2024: ANP Anuário Tab. 2.52; 2025–2026: ANP ie.xlsx (dispêndio÷volume Brasil)."
+    "Petróleo bruto apenas",
+    "2026=1T YTD",
+    "Custo estimado (sem linha contábil isolada contínua da Petrobras)"
   ],
   "totals": {
     "barris": 1191086250.0,
-    "custo_estimado_usd": 4158658878730295.0
+    "custo_estimado_usd": 107215594081.72209
   },
   "annual": [
     {
@@ -158,9 +157,9 @@
       "trimestres": 4,
       "import_mbpd": 131.5,
       "volume_barris": 47997500.0,
-      "preco_medio_fob_usd_b": 73560439.47048666,
-      "custo_estimado_usd": 3530717193484683.5,
-      "fonte_preco": "ANP ie.xlsx (dispêndio÷volume Brasil)",
+      "preco_medio_fob_usd_b": 73.56043947048666,
+      "custo_estimado_usd": 3530717193.4846835,
+      "fonte_preco": "ANP ie.xlsx dispêndio÷volume",
       "ytd": false
     },
     {
@@ -168,9 +167,9 @@
       "trimestres": 1,
       "import_mbpd": 157.0,
       "volume_barris": 14326250.0,
-      "preco_medio_fob_usd_b": 43824352.37465155,
-      "custo_estimado_usd": 627838628207351.8,
-      "fonte_preco": "ANP ie.xlsx (dispêndio÷volume Brasil)",
+      "preco_medio_fob_usd_b": 43.82435237465155,
+      "custo_estimado_usd": 627838628.2073518,
+      "fonte_preco": "ANP ie.xlsx dispêndio÷volume",
       "ytd": true
     }
   ]

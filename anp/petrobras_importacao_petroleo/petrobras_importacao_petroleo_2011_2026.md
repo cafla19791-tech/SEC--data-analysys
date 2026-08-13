@@ -1,7 +1,6 @@
 # Importação de petróleo — Petrobras (2011–2026)
 
-**Volume:** Petrobras RI (importação de petróleo, mil barris/dia).
-**Custo estimado:** volume × preço médio FOB da importação brasileira (ANP).
+**Volume:** Petrobras RI. **Custo estimado:** volume × preço médio FOB importação Brasil (ANP).
 
 | Ano | mil bpd | mi barris | US$/b FOB | Custo estimado US$ bi |
 |---:|---:|---:|---:|---:|
@@ -19,9 +18,9 @@
 | 2022 | 164.0 | 59.86 | 98.88 | 5.92 |
 | 2023 | 156.0 | 56.94 | 85.50 | 4.87 |
 | 2024 | 150.5 | 55.08 | 84.22 | 4.64 |
-| 2025* | 131.5 | 48.00 | 73,560,439.47 | 3,530,717.19 |
-| 2026* | 157.0 | 14.33 | 43,824,352.37 | 627,838.63 |
+| 2025* | 131.5 | 48.00 | 73.56 | 3.53 |
+| 2026* | 157.0 | 14.33 | 43.82 | 0.63 |
 
-**Total:** 1,191.1 mi barris | custo estimado **US$ 4,158,658.9 bi**.
+**Total:** 1,191.1 mi barris | **US$ 107.2 bi** (custo estimado).
 
-\* 2025–26: preço via ie.xlsx; 2026 = 1T.
+\* 2025–26 preço via ie.xlsx; 2026=1T.
