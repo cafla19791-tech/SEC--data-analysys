@@ -573,6 +573,9 @@ NORM_COLUMN_ALIASES: dict[str, str] = {
     "custo_financeiro": "custo_financeiro",
     "custo_financeiro_da_operacao": "custo_financeiro",
     "encargo_financeiro": "custo_financeiro",
+    "numero_do_contrato": "numero_contrato",
+    "numero_contrato": "numero_contrato",
+    "n_do_contrato": "numero_contrato",
 }
 
 
@@ -627,6 +630,8 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
                 target = "agente"
             elif key.startswith("custo_financeiro") or key.startswith("encargo_financeiro"):
                 target = "custo_financeiro"
+            elif "numero" in key and "contrato" in key:
+                target = "numero_contrato"
         if target is not None and target not in used_targets:
             rename[col] = target
             used_targets.add(target)
@@ -948,6 +953,16 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
             "custo_financeiro": custo.values,
         }
     )
+    # Preserva numeração N-AAAA (planilha BNDES_INDIRETAS_NUMERADOS)
+    num_src = None
+    if "numero_contrato" in df.columns:
+        num_src = df["numero_contrato"]
+    elif "Número do contrato" in df.columns:
+        num_src = df["Número do contrato"]
+    if num_src is not None:
+        if isinstance(num_src, pd.DataFrame):
+            num_src = num_src.iloc[:, 0]
+        out["numero_contrato"] = num_src.astype(str).to_numpy()
 
     before = len(out)
     out = out.dropna(
@@ -1046,6 +1061,7 @@ def gerar_fluxos_contrato(
     selic_serie: SelicSerie | None = None,
     custo_financeiro: str | None = None,
     juros_pct: float | None = None,
+    numero_contrato: str | None = None,
 ) -> list[dict]:
     """
     Gera fluxos detalhados de UM contrato (carência + amortização).
@@ -1101,32 +1117,33 @@ def gerar_fluxos_contrato(
             meses = meses_ate_impacto(data_fluxo.to_pydatetime(), data_impacto)
             impacto = round(subsidio * ((1.0 + taxa_selic_mensal) ** meses), 2)
 
-        fluxos.append(
-            {
-                "contrato": contrato_id,
-                "Instituição Financeira": instituicao,
-                "mes": p,
-                # Discriminativo: todas as parcelas ficam no ano da contratação
-                # (impacto fiscal continua capitalizado na data_fluxo).
-                "data_contratacao": data_contr.date(),
-                "ano_contrato": int(data_contr.year),
-                "data_fluxo": data_fluxo.date(),
-                "ano_fluxo": int(data_fluxo.year),
-                "saldo_fiscal": round(saldo_fiscal, 2),
-                "saldo_contrato": round(saldo_contrato, 2),
-                "saldo": round(saldo_fiscal, 2),  # alias compat
-                "amortizacao": round(amort, 2),
-                "taxa_selic_mensal": round(taxa_selic_mensal, 8),
-                # ContAgil: taxa do contrato só na 1ª parcela do cronograma
-                "taxa_contrato_mensal": (
-                    round(taxa_contrato_mensal, 8) if p == 1 else None
-                ),
-                "spread": round(spread, 6),
-                "subsidio": round(subsidio, 2),
-                "impacto_fiscal": impacto,
-                "em_carencia": em_carencia,
-            }
-        )
+        row_out = {
+            "contrato": contrato_id,
+            "Instituição Financeira": instituicao,
+            "mes": p,
+            # Discriminativo: todas as parcelas ficam no ano da contratação
+            # (impacto fiscal continua capitalizado na data_fluxo).
+            "data_contratacao": data_contr.date(),
+            "ano_contrato": int(data_contr.year),
+            "data_fluxo": data_fluxo.date(),
+            "ano_fluxo": int(data_fluxo.year),
+            "saldo_fiscal": round(saldo_fiscal, 2),
+            "saldo_contrato": round(saldo_contrato, 2),
+            "saldo": round(saldo_fiscal, 2),  # alias compat
+            "amortizacao": round(amort, 2),
+            "taxa_selic_mensal": round(taxa_selic_mensal, 8),
+            # ContAgil: taxa do contrato só na 1ª parcela do cronograma
+            "taxa_contrato_mensal": (
+                round(taxa_contrato_mensal, 8) if p == 1 else None
+            ),
+            "spread": round(spread, 6),
+            "subsidio": round(subsidio, 2),
+            "impacto_fiscal": impacto,
+            "em_carencia": em_carencia,
+        }
+        if numero_contrato:
+            row_out["numero_contrato"] = str(numero_contrato)
+        fluxos.append(row_out)
 
         # Atualização dos saldos
         if not em_carencia:
@@ -1154,6 +1171,7 @@ def gerar_fluxos_diarios_contrato(
     selic_serie: SelicSerie | None = None,
     custo_financeiro: str | None = None,
     juros_pct: float | None = None,
+    numero_contrato: str | None = None,
 ) -> list[dict]:
     """Expande o cronograma mensal em linhas dia a dia (entre parcelas ContAgil).
 
@@ -1176,6 +1194,7 @@ def gerar_fluxos_diarios_contrato(
         selic_serie=selic_serie,
         custo_financeiro=custo_financeiro,
         juros_pct=juros_pct,
+        numero_contrato=numero_contrato,
     )
     if not mensais:
         return []
@@ -1213,29 +1232,30 @@ def gerar_fluxos_diarios_contrato(
                 meses = meses_ate_impacto(dia.to_pydatetime(), data_impacto)
                 impacto = round(subsidio * ((1.0 + taxa_selic_mensal) ** meses), 2)
 
-            diarios.append(
-                {
-                    "contrato": contrato_id,
-                    "Instituição Financeira": instituicao,
-                    "mes": mes,
-                    "data_contratacao": data_contr.date(),
-                    "ano_contrato": int(data_contr.year),
-                    "data_fluxo": dia.date(),
-                    "ano_fluxo": int(dia.year),
-                    "saldo_fiscal": round(saldo_fiscal, 2),
-                    "saldo": round(saldo_fiscal, 2),  # alias compat
-                    "amortizacao": round(amort, 2),
-                    "taxa_selic_diaria": round(taxa_selic_diaria, 10),
-                    "taxa_contrato_diaria": round(taxa_contrato_diaria, 10),
-                    "taxa_selic_mensal": round(taxa_selic_mensal, 8),
-                    "taxa_contrato_mensal": round(taxa_contrato_mensal, 8),
-                    "spread": round(spread, 6),
-                    "subsidio": round(subsidio, 4),
-                    "impacto_fiscal": impacto,
-                    "em_carencia": em_carencia,
-                    "dia_parcela": dia == data_ini,
-                }
-            )
+            drow = {
+                "contrato": contrato_id,
+                "Instituição Financeira": instituicao,
+                "mes": mes,
+                "data_contratacao": data_contr.date(),
+                "ano_contrato": int(data_contr.year),
+                "data_fluxo": dia.date(),
+                "ano_fluxo": int(dia.year),
+                "saldo_fiscal": round(saldo_fiscal, 2),
+                "saldo": round(saldo_fiscal, 2),  # alias compat
+                "amortizacao": round(amort, 2),
+                "taxa_selic_diaria": round(taxa_selic_diaria, 10),
+                "taxa_contrato_diaria": round(taxa_contrato_diaria, 10),
+                "taxa_selic_mensal": round(taxa_selic_mensal, 8),
+                "taxa_contrato_mensal": round(taxa_contrato_mensal, 8),
+                "spread": round(spread, 6),
+                "subsidio": round(subsidio, 4),
+                "impacto_fiscal": impacto,
+                "em_carencia": em_carencia,
+                "dia_parcela": dia == data_ini,
+            }
+            if numero_contrato:
+                drow["numero_contrato"] = str(numero_contrato)
+            diarios.append(drow)
             dia += timedelta(days=1)
 
     return diarios
@@ -1465,6 +1485,9 @@ def gerar_fluxos(
             )
             custo = getattr(row, "custo_financeiro", "")
             juros_pct = float(row.juros)
+            num = getattr(row, "numero_contrato", None)
+            if num is not None and str(num) in {"", "nan", "None"}:
+                num = None
             kwargs = dict(
                 data_contr=data_contr,
                 valor=float(row.valor_desembolsado),
@@ -1478,6 +1501,7 @@ def gerar_fluxos(
                 selic_serie=selic_serie,
                 custo_financeiro=custo,
                 juros_pct=juros_pct,
+                numero_contrato=str(num) if num is not None else None,
             )
             records.extend(gerar_fluxos_contrato(**kwargs))
             if fluxo_diario:
@@ -1555,8 +1579,13 @@ def gerar_e_gravar_fluxos(
                 selic_serie=selic_serie,
                 quiet=True,
             )
-        except Exception:  # noqa: BLE001 — lote isolado não derruba a massa
+        except Exception as exc:  # noqa: BLE001 — lote isolado não derruba a massa
             skipped += len(chunk)
+            print(
+                f"  [AVISO] lote {start:,}-{min(start + lote, n):,} falhou "
+                f"({type(exc).__name__}: {exc}); {len(chunk)} contratos pulados"
+            )
+            sys.stdout.flush()
             fluxos = pd.DataFrame()
 
         if not fluxos.empty:

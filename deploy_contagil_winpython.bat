@@ -41,6 +41,7 @@ copy /Y "%REPO%\scripts\calcular_diretas_ipca_selic.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\atualizar_desembolsos_ipca_1995_2001.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\numerar_contratos_indiretas.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\discriminativos_indiretas_ano_contrato.py" "%WINPY%\scripts\" >nul
+copy /Y "%REPO%\scripts\fluxos_por_ano_contrato_numerados.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\agregar_impacto_fluxos.py" "%WINPY%\scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
@@ -58,6 +59,8 @@ copy /Y "%REPO%\atualizar_desembolsos_1995_2001.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\numerar_contratos_indiretas.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\discriminativos_indiretas_ano_contrato.py" "%WINPY%\" >nul
 copy /Y "%REPO%\discriminativos_indiretas_ano_contrato.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\fluxos_por_ano_contrato_numerados.py" "%WINPY%\" >nul
+copy /Y "%REPO%\fluxos_por_ano_contrato_numerados.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\requirements.txt" "%WINPY%\requirements_sec.txt" >nul
 
 echo OK. Arquivos copiados.
@@ -65,9 +68,9 @@ echo.
 echo Dependencias ^(na WinPython^):
 echo   python -m pip install -r requirements_sec.txt
 echo.
-echo Fluxos + discriminativo por ano do contrato:
-echo   contagil_fluxos_bndes.bat
-echo   discriminativos_indiretas_ano_contrato.bat
+echo Fluxos a partir de BNDES_INDIRETAS_NUMERADOS.xlsx ^(uma aba por ano^):
+echo   numerar_contratos_indiretas.bat
+echo   fluxos_por_ano_contrato_numerados.bat
 echo.
 echo Relatorio:
 echo   resumo_fluxos_contagil.bat
