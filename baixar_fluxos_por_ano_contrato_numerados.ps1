@@ -71,6 +71,13 @@ if ($gfTxt -match [char]0x1F680) {
 }
 Write-Host "Versao gerar_fluxos.py: OK (sem emoji no console)"
 
+$bat = Join-Path $Root "fluxos_por_ano_contrato_numerados.bat"
+$batTxt = Get-Content -LiteralPath $bat -Raw
+if ($batTxt -match "chcp\s+65001") {
+    throw "fluxos_por_ano_contrato_numerados.bat ainda tem chcp 65001 (causa erro 'M' no cmd). Rode o baixar de novo."
+}
+Write-Host "Versao fluxos_por_ano_contrato_numerados.bat: OK (sem chcp 65001)"
+
 $py = $Python
 if (-not $py) {
     $localPy = Join-Path $Root "python.exe"

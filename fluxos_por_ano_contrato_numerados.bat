@@ -1,6 +1,6 @@
 @echo off
 REM Gera fluxos por aba de ano a partir de saida\BNDES_INDIRETAS_NUMERADOS.xlsx
-REM Cada aba YYYY de contratos → CSV YYYY (e amostra no Excel consolidado)
+REM Cada aba YYYY de contratos -> CSV YYYY (e amostra no Excel consolidado)
 REM Rode de novo para retomar anos que ainda nao tem CSV.
 setlocal EnableExtensions
 cd /d "%~dp0"
@@ -10,7 +10,6 @@ set "PYTHON=%WINPY%\python.exe"
 if not exist "%PYTHON%" set "PYTHON=python"
 set "PYTHONUTF8=1"
 set "PYTHONIOENCODING=utf-8"
-chcp 65001 >nul
 set "SAIDA=%WINPY%\saida"
 set "NUMERADOS=%SAIDA%\BNDES_INDIRETAS_NUMERADOS.xlsx"
 set "FATORES=%WINPY%\fator_acumulado_SELIC_TJLP_TLP.xlsx"
