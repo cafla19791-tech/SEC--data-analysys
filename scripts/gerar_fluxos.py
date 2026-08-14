@@ -45,6 +45,24 @@ import numpy as np
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
+
+def _configure_stdio() -> None:
+    """WinPython/ContAgil usa cp1252: evita UnicodeEncodeError em prints."""
+    for stream in (sys.stdout, sys.stderr):
+        reconf = getattr(stream, "reconfigure", None)
+        if reconf is None:
+            continue
+        try:
+            reconf(encoding="utf-8", errors="replace")
+        except Exception:
+            try:
+                reconf(errors="replace")
+            except Exception:
+                pass
+
+
+_configure_stdio()
+
 # ===================== CONFIGURAÇÕES =====================
 TAXA_SELIC_ANUAL = 0.145  # 14,5% a.a.
 TJLP_TLP_BASE = 0.06  # ContAgil: TJLP/TLP = 6% + juros do contrato
@@ -1278,12 +1296,12 @@ def salvar_fluxos_diarios(
         amostra = df.head(excel_limit)
         amostra.to_excel(out, index=False)
         print(
-            f"⚠️  Fluxos diários: {len(df):,} linhas > limite Excel; "
+            f"[AVISO] Fluxos diarios: {len(df):,} linhas > limite Excel; "
             f"CSV completo em {csv_path} e amostra Excel em {out}"
         )
     else:
         df.to_excel(out, index=False)
-        print(f"✅ Fluxos diários: {out} ({len(df):,} linhas)")
+        print(f"[OK] Fluxos diarios: {out} ({len(df):,} linhas)")
     return out
 
 
@@ -1463,7 +1481,7 @@ def gerar_fluxos(
     n = len(contratos)
     step = None if quiet else _progresso_intervalo(n, progress_every)
     if not quiet:
-        print(f"🚀 Gerando fluxos com lógica corrigida... ({n:,} contratos)")
+        print(f"[INFO] Gerando fluxos com logica corrigida... ({n:,} contratos)")
         sys.stdout.flush()
 
     records: list[dict] = []
@@ -1566,7 +1584,7 @@ def gerar_e_gravar_fluxos(
     n = len(contratos)
     lote = max(1, int(lote))
     print(
-        f"🚀 Gerando fluxos com lógica corrigida... "
+        f"[INFO] Gerando fluxos com logica corrigida... "
         f"({n:,} contratos, lote={lote:,}, grava CSV em streaming"
         f"{'' if gravar_excel else ', sem Excel por ano'})"
     )
@@ -1643,9 +1661,9 @@ def gerar_e_gravar_fluxos(
         "xlsx_linhas": xlsx_linhas,
         "segundos": round(time.time() - t0, 1),
     }
-    print(f"    → CSV: {csv_path} ({total_parcelas:,} parcelas)")
+    print(f"    -> CSV: {csv_path} ({total_parcelas:,} parcelas)")
     if gravar_excel:
-        print(f"    → Excel: {xlsx_path} ({xlsx_linhas:,} linhas)")
+        print(f"    -> Excel: {xlsx_path} ({xlsx_linhas:,} linhas)")
     if skipped:
         print(f"    Contratos/lotes com erro: {skipped:,}")
     return stats
@@ -1770,7 +1788,7 @@ def processar_em_lotes(
         fluxos_df.to_csv(csv_path, mode="a", index=False, header=not wrote_header)
         wrote_header = True
         print(
-            f"  lote {start:,}-{start + len(chunk):,} → +{len(fluxos_df):,} "
+            f"  lote {start:,}-{start + len(chunk):,} -> +{len(fluxos_df):,} "
             f"(acum {n_parcelas:,})"
         )
 
@@ -2026,13 +2044,13 @@ def main(argv: list[str] | None = None) -> int:
     with stats_path.open("w", encoding="utf-8") as f:
         json.dump(printable, f, indent=2)
 
-    print(f"✅ CSV detalhado: {csv_path}")
-    print(f"✅ Excel resumo:  {xlsx_path}")
-    print(f"✅ Resumo agente: {agente_csv}")
-    print(f"✅ Resumo agente: {agente_xlsx}")
-    print(f"✅ Stats JSON:    {stats_path}")
+    print(f"[OK] CSV detalhado: {csv_path}")
+    print(f"[OK] Excel resumo:  {xlsx_path}")
+    print(f"[OK] Resumo agente: {agente_csv}")
+    print(f"[OK] Resumo agente: {agente_xlsx}")
+    print(f"[OK] Stats JSON:    {stats_path}")
     if args.fluxo_diario and stats.get("fluxos_diarios"):
-        print(f"✅ Fluxos diários: {stats['fluxos_diarios']}")
+        print(f"[OK] Fluxos diarios: {stats['fluxos_diarios']}")
     return 0
 
 

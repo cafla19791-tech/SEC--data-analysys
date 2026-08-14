@@ -44,6 +44,23 @@ for _p in (str(ROOT), str(_SCRIPTS)):
         sys.path.insert(0, _p)
 
 
+def _configure_stdio() -> None:
+    for stream in (sys.stdout, sys.stderr):
+        reconf = getattr(stream, "reconfigure", None)
+        if reconf is None:
+            continue
+        try:
+            reconf(encoding="utf-8", errors="replace")
+        except Exception:
+            try:
+                reconf(errors="replace")
+            except Exception:
+                pass
+
+
+_configure_stdio()
+
+
 def _load_mod(name: str):
     import importlib.util
 
@@ -73,7 +90,7 @@ EXCEL_MAX = 1_000_000
 # Amostra por aba no Excel consolidado (CSV completo fica em fluxos_por_ano_contrato/)
 EXCEL_AMOSTRA_ABA = 50_000
 _ANO_SHEET = re.compile(r"^(19|20)\d{2}$")
-MARKER = "fluxos-por-ano-contrato-numerados-20260814"
+MARKER = "fluxos-por-ano-contrato-numerados-20260814b"
 
 
 def resolver_numerados(path: Optional[Path]) -> Path:
@@ -111,7 +128,7 @@ def resolver_fatores(path: Optional[Path]):
         if c.exists():
             print(f"[INFO] Fatores: {c}")
             return _seg.carregar_fatores_mensais(c)
-    print("[AVISO] Sem arquivo de fatores — usando SELIC 14,5% a.a. composta.")
+    print("[AVISO] Sem arquivo de fatores - usando SELIC 14,5% a.a. composta.")
     return 0.145
 
 
@@ -261,7 +278,7 @@ def processar(
         if retomar:
             n_exist = _contar_linhas_csv(csv_ano)
             if n_exist > 0:
-                print(f"  [RETOMAR] já existe {csv_ano.name} com {n_exist:,} parcelas — pulando")
+                print(f"  [RETOMAR] ja existe {csv_ano.name} com {n_exist:,} parcelas - pulando")
                 resumo_rows.append(
                     {
                         "ano_contrato": ano,
@@ -277,7 +294,7 @@ def processar(
         try:
             bruto = pd.read_excel(numerados, sheet_name=aba)
             if bruto.empty:
-                print("  [AVISO] aba vazia — pulando")
+                print("  [AVISO] aba vazia - pulando")
                 resumo_rows.append(
                     {
                         "ano_contrato": ano,
@@ -292,7 +309,7 @@ def processar(
 
             contratos = normalizar_colunas(bruto)
             if contratos.empty:
-                print("  [AVISO] nenhum contrato válido — pulando")
+                print("  [AVISO] nenhum contrato valido - pulando")
                 resumo_rows.append(
                     {
                         "ano_contrato": ano,
@@ -361,9 +378,9 @@ def processar(
     print(f"[OK] CSVs por ano: {pasta_csv}")
     print(f"[OK] Anos com fluxo: {len(feitos)} | erros: {len(erros)}")
     if feitos:
-        print("     → " + ", ".join(str(r["ano_contrato"]) for r in feitos))
+        print("     -> " + ", ".join(str(r["ano_contrato"]) for r in feitos))
     if erros:
-        print("     → falhas: " + ", ".join(str(r["ano_contrato"]) for r in erros))
+        print("     -> falhas: " + ", ".join(str(r["ano_contrato"]) for r in erros))
     return xlsx_out
 
 

@@ -56,13 +56,20 @@ foreach ($item in $map) {
 
 $pyMod = Join-Path $Root "sec_scripts\fluxos_por_ano_contrato_numerados.py"
 $txt = Get-Content -LiteralPath $pyMod -Raw
-if ($txt -notmatch "fluxos-por-ano-contrato-numerados-") {
-    throw "Download incompleto: falta MARKER em fluxos_por_ano_contrato_numerados.py"
+if ($txt -notmatch "fluxos-por-ano-contrato-numerados-20260814b") {
+    throw "Download incompleto/antigo: falta MARKER 20260814b (fix cp1252). Rode o baixar de novo."
 }
-if ($txt -notmatch "retomar") {
+if ($txt -match "retomar") {
+    Write-Host "Versao fluxos_por_ano_contrato_numerados.py: OK (retomar/CSV-first)"
+} else {
     throw "Download trouxe versao ANTIGA (sem retomar). Rode o baixar de novo."
 }
-Write-Host "Versao fluxos_por_ano_contrato_numerados.py: OK (retomar/CSV-first)"
+$gf = Join-Path $Root "sec_scripts\gerar_fluxos.py"
+$gfTxt = Get-Content -LiteralPath $gf -Raw
+if ($gfTxt -match [char]0x1F680) {
+    throw "gerar_fluxos.py ainda tem emoji foguete - download antigo. Rode o baixar de novo."
+}
+Write-Host "Versao gerar_fluxos.py: OK (sem emoji no console)"
 
 $py = $Python
 if (-not $py) {

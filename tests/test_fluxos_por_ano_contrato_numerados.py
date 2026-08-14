@@ -95,6 +95,22 @@ def test_retomar_pula_ano_existente(tmp_path: Path):
     assert set(resumo["status"]) == {"retomado"}
 
 
+def test_prints_cp1252_safe():
+    """ContAgil WinPython usa cp1252; emoji no print derruba a massa."""
+    import scripts.gerar_fluxos as gf
+    import scripts.fluxos_por_ano_contrato_numerados as fa
+
+    for path in (Path(gf.__file__), Path(fa.__file__)):
+        text = path.read_text(encoding="utf-8")
+        for i, line in enumerate(text.splitlines(), 1):
+            if "print(" not in line:
+                continue
+            try:
+                line.encode("cp1252")
+            except UnicodeEncodeError as exc:
+                raise AssertionError(f"{path.name}:{i} nao e cp1252-safe: {line!r}") from exc
+
+
 def test_normalizar_preserva_numero():
     bruto = pd.DataFrame(
         {
