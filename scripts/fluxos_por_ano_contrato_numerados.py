@@ -4,13 +4,16 @@
 Para cada aba de contratos (2002, 2003, … com números ``N-AAAA``), gera as
 parcelas correspondentes e grava:
 
-  - CSV completo: ``saida/fluxos_por_ano_contrato/YYYY.csv``
-  - Excel espelho (uma aba por ano, se couber em ~1M linhas):
+  - CSV completo: ``saida/fluxos_por_ano_contrato/YYYY.csv``  ← fonte da verdade
+  - Excel consolidado (amostra por ano + RESUMO):
     ``saida/FLUXOS_BNDES_INDIRETAS_POR_ANO_CONTRATO.xlsx``
 
 Regra: todas as parcelas de um contrato ficam na aba/arquivo do **ano do
 contrato** (ano da aba de origem). Impacto fiscal continua capitalizado na
 ``data_fluxo``.
+
+Por padrão só grava CSV por ano (Excel por ano trava o ContAgil em massas
+grandes). Rode de novo para **retomar** anos ainda sem CSV.
 
 Uso ContAgil::
 
@@ -67,8 +70,10 @@ gerar_fluxos = _gf.gerar_fluxos
 gerar_e_gravar_fluxos = _gf.gerar_e_gravar_fluxos
 
 EXCEL_MAX = 1_000_000
+# Amostra por aba no Excel consolidado (CSV completo fica em fluxos_por_ano_contrato/)
+EXCEL_AMOSTRA_ABA = 50_000
 _ANO_SHEET = re.compile(r"^(19|20)\d{2}$")
-MARKER = "fluxos-por-ano-contrato-numerados-20260813"
+MARKER = "fluxos-por-ano-contrato-numerados-20260814"
 
 
 def resolver_numerados(path: Optional[Path]) -> Path:
@@ -140,6 +145,72 @@ def _escrever_aba_excel(wb: Workbook, nome: str, df: pd.DataFrame, *, first: boo
     ws.freeze_panes = "A2"
 
 
+def _contar_linhas_csv(path: Path) -> int:
+    """Linhas de dados (sem cabeçalho)."""
+    if not path.exists() or path.stat().st_size == 0:
+        return 0
+    with path.open("r", encoding="utf-8", errors="ignore") as f:
+        n = sum(1 for _ in f)
+    return max(0, n - 1)
+
+
+def _salvar_consolidado(
+    pasta_saida: Path,
+    pasta_csv: Path,
+    resumo_rows: list[dict],
+    *,
+    amostra_por_aba: int,
+) -> Path:
+    xlsx_out = pasta_saida / "FLUXOS_BNDES_INDIRETAS_POR_ANO_CONTRATO.xlsx"
+    wb = Workbook()
+    first_sheet = True
+
+    for row in resumo_rows:
+        if row.get("status") not in ("ok", "retomado"):
+            continue
+        csv_ano = Path(row["csv"])
+        if not csv_ano.exists():
+            continue
+        n_parc = int(row.get("qtd_parcelas") or 0)
+        df_aba = pd.read_csv(csv_ano, nrows=amostra_por_aba)
+        if n_parc > amostra_por_aba:
+            print(
+                f"  [INFO] Aba Excel {row['ano_contrato']}: amostra "
+                f"{len(df_aba):,}/{n_parc:,}; CSV completo em {csv_ano.name}"
+            )
+        _escrever_aba_excel(wb, str(row["ano_contrato"]), df_aba, first=first_sheet)
+        first_sheet = False
+
+    if first_sheet:
+        wb.active.title = "vazio"
+    else:
+        ws = wb.create_sheet("RESUMO", 0)
+        fill = PatternFill("solid", fgColor="1F4E79")
+        font = Font(color="FFFFFF", bold=True)
+        headers = list(resumo_rows[0].keys()) if resumo_rows else []
+        ws.append(headers)
+        for col in range(1, len(headers) + 1):
+            cell = ws.cell(1, col)
+            cell.fill = fill
+            cell.font = font
+        for row in resumo_rows:
+            ws.append([row.get(h) for h in headers])
+        ws2 = wb.create_sheet("NOTA")
+        ws2["A1"] = (
+            "Cada aba YYYY é amostra dos fluxos dos contratos da aba YYYY de "
+            "BNDES_INDIRETAS_NUMERADOS.xlsx (numeração N-AAAA). "
+            "CSVs COMPLETOS: pasta fluxos_por_ano_contrato\\YYYY.csv. "
+            "Todas as parcelas de um contrato ficam no ano do contrato; "
+            "o impacto fiscal continua capitalizado na data_fluxo. "
+            f"Pasta: {pasta_csv}"
+        )
+        ws2.column_dimensions["A"].width = 110
+
+    pasta_saida.mkdir(parents=True, exist_ok=True)
+    wb.save(xlsx_out)
+    return xlsx_out
+
+
 def processar(
     numerados: Path,
     pasta_saida: Path,
@@ -149,19 +220,29 @@ def processar(
     ano_max: Optional[int] = None,
     lote: int = 2_000,
     excel_max: int = EXCEL_MAX,
+    amostra_excel: int = EXCEL_AMOSTRA_ABA,
+    retomar: bool = True,
+    gravar_excel_ano: bool = False,
 ) -> Path:
+    """Gera um CSV por ano de contrato; Excel consolidado com amostra.
+
+    Por padrão NÃO grava Excel por ano (só CSV) — gravar ~1M linhas em .xlsx
+    após 2002 costumava travar o ContAgil e parecer que "só gerou 2002".
+    Com ``retomar=True``, anos que já têm CSV com linhas são pulados.
+    """
+    del excel_max  # mantido na assinatura por compatibilidade
     pasta_saida = Path(pasta_saida)
     pasta_csv = pasta_saida / "fluxos_por_ano_contrato"
     pasta_csv.mkdir(parents=True, exist_ok=True)
-    xlsx_out = pasta_saida / "FLUXOS_BNDES_INDIRETAS_POR_ANO_CONTRATO.xlsx"
 
     abas = listar_abas_ano(numerados)
-    wb = Workbook()
-    first_sheet = True
-    resumo_rows = []
+    resumo_rows: list[dict] = []
 
     print(f"[{MARKER}] numerados={numerados}")
-    print(f"[{MARKER}] abas={abas}")
+    print(f"[{MARKER}] abas encontradas ({len(abas)}): {abas}")
+    print(f"[{MARKER}] saida CSV: {pasta_csv}")
+    print(f"[{MARKER}] retomar={retomar} | excel_por_ano={gravar_excel_ano}")
+    sys.stdout.flush()
 
     for aba in abas:
         m = re.search(r"(19|20)\d{2}", str(aba))
@@ -173,92 +254,116 @@ def processar(
         if ano_max is not None and ano > ano_max:
             continue
 
-        print(f"\n=== Ano {ano} (aba '{aba}') ===")
-        bruto = pd.read_excel(numerados, sheet_name=aba)
-        if bruto.empty:
-            print("  [AVISO] aba vazia — pulando")
-            continue
-
-        contratos = normalizar_colunas(bruto)
-        if contratos.empty:
-            print("  [AVISO] nenhum contrato válido — pulando")
-            continue
-
         csv_ano = pasta_csv / f"{ano}.csv"
-        xlsx_ano = pasta_csv / f"{ano}.xlsx"
-        t0 = time.time()
-        stats = gerar_e_gravar_fluxos(
-            contratos,
-            fatores,
-            saida_xlsx=xlsx_ano,
-            lote=lote,
-            excel_max_linhas=excel_max,
-        )
-        # Padroniza nome CSV ano
-        csv_gerado = Path(stats["csv"])
-        if csv_gerado.exists() and csv_gerado.resolve() != csv_ano.resolve():
-            if csv_ano.exists():
-                csv_ano.unlink()
-            csv_gerado.replace(csv_ano)
-            stats["csv"] = str(csv_ano)
+        print(f"\n=== Ano {ano} (aba '{aba}') ===")
+        sys.stdout.flush()
 
-        n_parc = int(stats["parcelas"])
-        print(
-            f"  OK ano {ano}: {stats['contratos']:,} contratos | "
-            f"{n_parc:,} parcelas | {time.time() - t0:.1f}s"
-        )
-        resumo_rows.append(
-            {
-                "ano_contrato": ano,
-                "qtd_contratos": stats["contratos"],
-                "qtd_parcelas": n_parc,
-                "csv": str(csv_ano),
-                "xlsx_ano": str(xlsx_ano),
-            }
-        )
-
-        # Aba no workbook consolidado (amostra/completo se couber)
-        if csv_ano.exists():
-            if n_parc <= excel_max:
-                df_aba = pd.read_csv(csv_ano)
-            else:
-                df_aba = pd.read_csv(csv_ano, nrows=excel_max)
-                print(
-                    f"  [AVISO] Ano {ano} tem {n_parc:,} parcelas > {excel_max:,}; "
-                    f"aba Excel com amostra; CSV completo em {csv_ano.name}"
+        if retomar:
+            n_exist = _contar_linhas_csv(csv_ano)
+            if n_exist > 0:
+                print(f"  [RETOMAR] já existe {csv_ano.name} com {n_exist:,} parcelas — pulando")
+                resumo_rows.append(
+                    {
+                        "ano_contrato": ano,
+                        "qtd_contratos": "",
+                        "qtd_parcelas": n_exist,
+                        "status": "retomado",
+                        "csv": str(csv_ano),
+                        "erro": "",
+                    }
                 )
-            _escrever_aba_excel(wb, str(ano), df_aba, first=first_sheet)
-            first_sheet = False
+                continue
 
-    if first_sheet:
-        wb.active.title = "vazio"
-    else:
-        # aba resumo
-        ws = wb.create_sheet("RESUMO", 0)
-        fill = PatternFill("solid", fgColor="1F4E79")
-        font = Font(color="FFFFFF", bold=True)
-        headers = list(resumo_rows[0].keys()) if resumo_rows else []
-        ws.append(headers)
-        for col in range(1, len(headers) + 1):
-            cell = ws.cell(1, col)
-            cell.fill = fill
-            cell.font = font
-        for row in resumo_rows:
-            ws.append([row[h] for h in headers])
-        ws2 = wb.create_sheet("NOTA")
-        ws2["A1"] = (
-            "Cada aba YYYY contém as parcelas dos contratos da aba YYYY de "
-            "BNDES_INDIRETAS_NUMERADOS.xlsx (numeração N-AAAA). "
-            "Todas as parcelas de um contrato ficam no ano do contrato; "
-            "o impacto fiscal de cada parcela continua capitalizado na data_fluxo. "
-            f"CSVs completos em: {pasta_csv}"
-        )
-        ws2.column_dimensions["A"].width = 110
+        try:
+            bruto = pd.read_excel(numerados, sheet_name=aba)
+            if bruto.empty:
+                print("  [AVISO] aba vazia — pulando")
+                resumo_rows.append(
+                    {
+                        "ano_contrato": ano,
+                        "qtd_contratos": 0,
+                        "qtd_parcelas": 0,
+                        "status": "vazio",
+                        "csv": str(csv_ano),
+                        "erro": "aba vazia",
+                    }
+                )
+                continue
 
-    pasta_saida.mkdir(parents=True, exist_ok=True)
-    wb.save(xlsx_out)
-    print(f"\n[OK] Excel consolidado: {xlsx_out}")
+            contratos = normalizar_colunas(bruto)
+            if contratos.empty:
+                print("  [AVISO] nenhum contrato válido — pulando")
+                resumo_rows.append(
+                    {
+                        "ano_contrato": ano,
+                        "qtd_contratos": 0,
+                        "qtd_parcelas": 0,
+                        "status": "vazio",
+                        "csv": str(csv_ano),
+                        "erro": "sem contratos válidos",
+                    }
+                )
+                continue
+
+            t0 = time.time()
+            stats = gerar_e_gravar_fluxos(
+                contratos,
+                fatores,
+                saida_csv=csv_ano,
+                saida_xlsx=(pasta_csv / f"{ano}.xlsx") if gravar_excel_ano else None,
+                lote=lote,
+                gravar_excel=gravar_excel_ano,
+            )
+            n_parc = int(stats["parcelas"])
+            print(
+                f"  OK ano {ano}: {stats['contratos']:,} contratos | "
+                f"{n_parc:,} parcelas | {time.time() - t0:.1f}s"
+            )
+            resumo_rows.append(
+                {
+                    "ano_contrato": ano,
+                    "qtd_contratos": stats["contratos"],
+                    "qtd_parcelas": n_parc,
+                    "status": "ok",
+                    "csv": str(csv_ano),
+                    "erro": "",
+                }
+            )
+        except Exception as exc:  # noqa: BLE001 — um ano não derruba os demais
+            print(f"  [ERRO] ano {ano}: {type(exc).__name__}: {exc}")
+            sys.stdout.flush()
+            resumo_rows.append(
+                {
+                    "ano_contrato": ano,
+                    "qtd_contratos": "",
+                    "qtd_parcelas": 0,
+                    "status": "erro",
+                    "csv": str(csv_ano),
+                    "erro": f"{type(exc).__name__}: {exc}",
+                }
+            )
+            continue
+
+    # RESUMO parcial em CSV (visível mesmo se Excel falhar)
+    resumo_csv = pasta_csv / "RESUMO.csv"
+    pd.DataFrame(resumo_rows).to_csv(resumo_csv, index=False)
+    print(f"\n[OK] Resumo: {resumo_csv}")
+
+    xlsx_out = _salvar_consolidado(
+        pasta_saida,
+        pasta_csv,
+        resumo_rows,
+        amostra_por_aba=amostra_excel,
+    )
+    feitos = [r for r in resumo_rows if r.get("status") in ("ok", "retomado")]
+    erros = [r for r in resumo_rows if r.get("status") == "erro"]
+    print(f"[OK] Excel consolidado: {xlsx_out}")
     print(f"[OK] CSVs por ano: {pasta_csv}")
+    print(f"[OK] Anos com fluxo: {len(feitos)} | erros: {len(erros)}")
+    if feitos:
+        print("     → " + ", ".join(str(r["ano_contrato"]) for r in feitos))
+    if erros:
+        print("     → falhas: " + ", ".join(str(r["ano_contrato"]) for r in erros))
     return xlsx_out
 
 
@@ -280,6 +385,22 @@ def main(argv: Optional[list[str]] = None) -> int:
     p.add_argument("--ano-min", type=int, default=None)
     p.add_argument("--ano-max", type=int, default=None)
     p.add_argument("--lote", type=int, default=2_000)
+    p.add_argument(
+        "--sem-retomar",
+        action="store_true",
+        help="Refaz todos os anos mesmo se o CSV já existir",
+    )
+    p.add_argument(
+        "--excel-por-ano",
+        action="store_true",
+        help="Também grava YYYY.xlsx por ano (lento; padrão é só CSV)",
+    )
+    p.add_argument(
+        "--amostra-excel",
+        type=int,
+        default=EXCEL_AMOSTRA_ABA,
+        help="Linhas por aba no Excel consolidado (default 50000)",
+    )
     args = p.parse_args(argv)
 
     numerados = resolver_numerados(args.numerados)
@@ -299,6 +420,9 @@ def main(argv: Optional[list[str]] = None) -> int:
         ano_min=args.ano_min,
         ano_max=args.ano_max,
         lote=args.lote,
+        retomar=not args.sem_retomar,
+        gravar_excel_ano=args.excel_por_ano,
+        amostra_excel=args.amostra_excel,
     )
     return 0
 

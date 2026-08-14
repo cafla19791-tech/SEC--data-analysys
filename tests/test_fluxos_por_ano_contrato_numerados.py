@@ -83,6 +83,18 @@ def test_processar_cria_abas_e_csv(tmp_path: Path):
     assert set(df3["numero_contrato"]) == {"1-2003"}
 
 
+def test_retomar_pula_ano_existente(tmp_path: Path):
+    numerados = _make_numerados(tmp_path / "BNDES_INDIRETAS_NUMERADOS.xlsx")
+    saida = tmp_path / "saida"
+    processar(numerados, saida, fatores=0.145, lote=10)
+    csv2002 = saida / "fluxos_por_ano_contrato" / "2002.csv"
+    mtime = csv2002.stat().st_mtime
+    processar(numerados, saida, fatores=0.145, lote=10, retomar=True)
+    assert csv2002.stat().st_mtime == mtime
+    resumo = pd.read_csv(saida / "fluxos_por_ano_contrato" / "RESUMO.csv")
+    assert set(resumo["status"]) == {"retomado"}
+
+
 def test_normalizar_preserva_numero():
     bruto = pd.DataFrame(
         {

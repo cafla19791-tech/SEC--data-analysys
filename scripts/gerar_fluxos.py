@@ -1535,27 +1535,40 @@ def gerar_e_gravar_fluxos(
     df: pd.DataFrame,
     selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
     *,
-    saida_xlsx: Path | str,
+    saida_xlsx: Path | str | None = None,
+    saida_csv: Path | str | None = None,
     lote: int = 2_000,
     excel_max_linhas: int = 1_000_000,
+    gravar_excel: bool = True,
     data_impacto: datetime = DATA_IMPACTO,
     selic_serie: SelicSerie | None = None,
 ) -> dict:
-    """Gera fluxos em lotes e grava CSV completo (+ Excel amostra se >1M linhas).
+    """Gera fluxos em lotes e grava CSV completo (+ Excel opcional).
 
     Evita manter dezenas de milhões de parcelas em memória (massa BNDES ~100k–1M
     contratos). Retorna estatísticas do processamento.
+
+    Com ``gravar_excel=False`` só grava o CSV (recomendado para anos grandes no
+    ContAgil — o Excel de ~1M linhas costuma travar a máquina).
     """
-    saida_xlsx = Path(saida_xlsx)
-    saida_xlsx.parent.mkdir(parents=True, exist_ok=True)
-    csv_path = saida_xlsx.with_suffix(".csv")
+    if saida_csv is None and saida_xlsx is None:
+        raise ValueError("Informe saida_csv e/ou saida_xlsx.")
+    if saida_csv is not None:
+        csv_path = Path(saida_csv)
+    else:
+        csv_path = Path(saida_xlsx).with_suffix(".csv")
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    xlsx_path = Path(saida_xlsx) if saida_xlsx is not None else csv_path.with_suffix(".xlsx")
+    if gravar_excel:
+        xlsx_path.parent.mkdir(parents=True, exist_ok=True)
 
     contratos = _as_contratos(df)
     n = len(contratos)
     lote = max(1, int(lote))
     print(
         f"🚀 Gerando fluxos com lógica corrigida... "
-        f"({n:,} contratos, lote={lote:,}, grava CSV em streaming)"
+        f"({n:,} contratos, lote={lote:,}, grava CSV em streaming"
+        f"{'' if gravar_excel else ', sem Excel por ano'})"
     )
     sys.stdout.flush()
 
@@ -1568,6 +1581,7 @@ def gerar_e_gravar_fluxos(
     amostra_linhas = 0
     t0 = time.time()
     header = True
+    lim_amostra = excel_max_linhas if gravar_excel else 0
 
     for start in range(0, n, lote):
         chunk = contratos.iloc[start : start + lote]
@@ -1592,8 +1606,8 @@ def gerar_e_gravar_fluxos(
             fluxos.to_csv(csv_path, mode="a", index=False, header=header)
             header = False
             total_parcelas += len(fluxos)
-            if amostra_linhas < excel_max_linhas:
-                falta = excel_max_linhas - amostra_linhas
+            if lim_amostra and amostra_linhas < lim_amostra:
+                falta = lim_amostra - amostra_linhas
                 amostra.append(fluxos.head(falta))
                 amostra_linhas += min(len(fluxos), falta)
 
@@ -1611,33 +1625,27 @@ def gerar_e_gravar_fluxos(
     if total_parcelas == 0:
         raise ValueError("Nenhuma parcela gerada (todos os contratos falharam?).")
 
-    if amostra:
-        amostra_df = pd.concat(amostra, ignore_index=True)
-    else:
-        amostra_df = pd.read_csv(csv_path, nrows=excel_max_linhas)
-
-    amostra_df.to_excel(saida_xlsx, index=False)
+    xlsx_linhas = 0
+    if gravar_excel:
+        if amostra:
+            amostra_df = pd.concat(amostra, ignore_index=True)
+        else:
+            amostra_df = pd.read_csv(csv_path, nrows=excel_max_linhas)
+        amostra_df.to_excel(xlsx_path, index=False)
+        xlsx_linhas = len(amostra_df)
 
     stats = {
         "contratos": n,
         "parcelas": total_parcelas,
         "skipped": skipped,
         "csv": str(csv_path),
-        "xlsx": str(saida_xlsx),
-        "xlsx_linhas": len(amostra_df),
+        "xlsx": str(xlsx_path) if gravar_excel else "",
+        "xlsx_linhas": xlsx_linhas,
         "segundos": round(time.time() - t0, 1),
     }
-    if total_parcelas > excel_max_linhas:
-        print(
-            f"    → CSV completo: {csv_path} ({total_parcelas:,} parcelas)"
-        )
-        print(
-            f"    → Excel (amostra {len(amostra_df):,}): {saida_xlsx}"
-        )
-    else:
-        # Massa cabe no Excel: CSV auxiliar pode ser removido pelo usuário
-        print(f"    → Salvo: {saida_xlsx} ({total_parcelas:,} parcelas)")
-        print(f"    → CSV: {csv_path}")
+    print(f"    → CSV: {csv_path} ({total_parcelas:,} parcelas)")
+    if gravar_excel:
+        print(f"    → Excel: {xlsx_path} ({xlsx_linhas:,} linhas)")
     if skipped:
         print(f"    Contratos/lotes com erro: {skipped:,}")
     return stats
