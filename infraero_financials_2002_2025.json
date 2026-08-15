@@ -1,0 +1,43 @@
+{
+  "entity": "INFRAERO - Empresa Brasileira de Infraestrutura Aeroportuária",
+  "currency_unit": "R$ millions (BRL mi)",
+  "statement_basis": "Individual financial statements (controladora) with equity-method pickup of SPE airport concessions; not full IFRS consolidation of SPEs. Bottom-line after Obras em Bens da União (OBU).",
+  "primary_source": "https://transparencia.infraero.gov.br/relatorios-anuais/",
+  "notes": [
+    "Cash interest paid ('Juros pagos' / 'Empréstimos - Juros') is NOT disclosed as a separate DFC line in any year 2002-2025 reviewed.",
+    "Bank/finance debt is negligible for nearly the entire period. DFC financing cash flows are almost exclusively capital contributions, JSCP/dividends, and (rarely) capital reductions.",
+    "Only material bank loan identified: Santander working-capital facility R$54.4 mi drawn Oct/2020 (CDI+3.5% a.a., 7-month grace), principal repaid in 2021 (DFC 'Empréstimo Bancário' -54.4). Accrual interest expense 'Juros' = R$9.034 mi in 2021; R$0 thereafter.",
+    "Accrual financial expenses are dominated by monetary restatement (SELIC on União capital advances/AFAC), not bank interest.",
+    "Small accrual 'Juros' lines in 2017 (0.141) and 2018 (2.567) exist but no corresponding loan balances or DFC loan-interest payments; treated as non-finance-debt / immaterial.",
+    "2008/2011/2012 management 'Lucro Líquido' sometimes shown before employee profit-sharing (PLR); table uses DRE bottom line after PLR when that is how the statement presents it.",
+    "2013 originally reported -2,654.766; restated in 2014 comparative to -2,767.167. Table uses restated figure.",
+    "2014 uses figure from 2015 comparative (-2,083.576)."
+  ],
+  "negligible_bank_debt": true,
+  "years": [
+    {"year": 2002, "net_income_brl_mi": 176.026, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "Relatório Anual 2002 DRE LUCRO LÍQUIDO DO EXERCÍCIO R$176.026 mil; DFC has no loan-interest line / no bank debt"},
+    {"year": 2003, "net_income_brl_mi": 188.735, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2003 DRE LUCRO LÍQUIDO DO EXERCÍCIO R$188.735 mil; no finance-debt interest in DFC"},
+    {"year": 2004, "net_income_brl_mi": 4.451, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2004 (scanned) DMPL/DRE after OBU R$4.451 mil (=264.630 before OBU - 260.179 OBU); DOAR era, no bank-loan interest"},
+    {"year": 2005, "net_income_brl_mi": -458.134, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "Confirmed via 2006 DRE comparative/DMPL Prejuízo do Exercício R$(458.134) mil; before OBU 24.458 - OBU 482.592"},
+    {"year": 2006, "net_income_brl_mi": -135.282, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2006 DRE PREJUÍZO LÍQUIDO DO EXERCÍCIO R$(135.282) mil; no loan interest in financing cash flows"},
+    {"year": 2007, "net_income_brl_mi": -76.28, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2007 DRE PREJUÍZO LÍQUIDO DO EXERCÍCIO R$(76.280) mil"},
+    {"year": 2008, "net_income_brl_mi": 154.046, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2008 DRE LUCRO LÍQUIDO DO EXERCÍCIO R$154.046 mil (after PLR; mgmt table 163.5 before PLR). DFC financing: capital/JSCP only"},
+    {"year": 2009, "net_income_brl_mi": 20.915, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2009 DRE LUCRO LÍQUIDO DO EXERCÍCIO R$20.915 mil"},
+    {"year": 2010, "net_income_brl_mi": 30.498, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2010 DRE LUCRO LÍQUIDO DO EXERCÍCIO R$30.498 mil"},
+    {"year": 2011, "net_income_brl_mi": 147.528, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2011 DRE LUCRO LÍQUIDO DO EXERCÍCIO R$147.528 mil (mgmt 156.8 before PLR)"},
+    {"year": 2012, "net_income_brl_mi": 107.746, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2012 DRE LUCRO LÍQUIDO DO EXERCÍCIO R$107.746 mil (mgmt 114.6 before PLR)"},
+    {"year": 2013, "net_income_brl_mi": -2767.167, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "Restated in RA 2014 DRE comparative R$(2.767.167) mil; originally reported in RA 2013 as R$(2.654.766) mil. DFC financing: capital/JSCP only"},
+    {"year": 2014, "net_income_brl_mi": -2083.576, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2015 DRE comparative / RA 2014 DRE Prejuízo/Lucro Líquido R$(2.083.576) mil; DFC financing capital only"},
+    {"year": 2015, "net_income_brl_mi": -3049.71, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2015 DRE Net Loss R$(3.049.710) mil; DFC financing = capital contributions only"},
+    {"year": 2016, "net_income_brl_mi": -751.654, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2016 DRE/DMPL Prejuízo líquido R$(751.654) mil; DFC financing = capital only"},
+    {"year": 2017, "net_income_brl_mi": -1830.563, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2017 DRE Prejuízo líquido R$(1.830.563) mil. Accrual note 'Juros' only R$0.141 mi (not bank-debt DFC interest)"},
+    {"year": 2018, "net_income_brl_mi": -687.609, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2018 DRE Resultado líquido R$(687.609) mil. Accrual 'Juros' R$2.567 mi; no loan principal/interest in DFC"},
+    {"year": 2019, "net_income_brl_mi": -149.575, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "RA 2019 DRE Resultado líquido do período R$(149.575) mil; DFC financing = capital increase only; accrual Juros expense = 0"},
+    {"year": 2020, "net_income_brl_mi": -2199.39, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "2021 DF comparative Resultado líquido R$(2.199.390) mil. Santander loan drawn Oct/2020 with 7-mo grace → cash interest ~0 in 2020; DFC shows +54.4 loan draw, no interest line"},
+    {"year": 2021, "net_income_brl_mi": -216.192, "interest_paid_brl_mi": 9.034, "interest_estimated": true, "source_note": "DF 2021 Resultado líquido R$(216.192) mil. DFC shows Empréstimo Bancário repayment (54.4) but no separate 'Juros pagos'. Accrual Despesas financeiras 'Juros' R$9.034 mi used as cash-interest proxy for Santander loan (estimated=true)"},
+    {"year": 2022, "net_income_brl_mi": 15.514, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "DF 2022 Resultado líquido R$15.514 mil; DFC financing nil; note Juros expense = 0 (loan fully repaid)"},
+    {"year": 2023, "net_income_brl_mi": 490.075, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "DF 2023 Resultado líquido R$490.075 mil; DFC financing = 0; no bank debt; fin. exp. = monetary update/IOF/losses only"},
+    {"year": 2024, "net_income_brl_mi": -228.789, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "DF 2024 Resultado líquido R$(228.789) mil; DFC financing = 0; no bank debt"},
+    {"year": 2025, "net_income_brl_mi": 316.204, "interest_paid_brl_mi": 0.0, "interest_estimated": false, "source_note": "DF 2025 Resultado líquido R$316.204 mil; DFC financing = capital increase 122.258 only; no bank-debt interest"}
+  ]
+}
