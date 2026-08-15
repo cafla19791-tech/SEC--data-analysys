@@ -56,8 +56,8 @@ foreach ($item in $map) {
 
 $pyMod = Join-Path $Root "sec_scripts\fluxos_por_ano_contrato_numerados.py"
 $txt = Get-Content -LiteralPath $pyMod -Raw
-if ($txt -notmatch "fluxos-por-ano-contrato-numerados-20260814b") {
-    throw "Download incompleto/antigo: falta MARKER 20260814b (fix cp1252). Rode o baixar de novo."
+if ($txt -notmatch "fluxos-por-ano-contrato-numerados-20260815a") {
+    throw "Download incompleto/antigo: falta MARKER 20260815a (diagnostico parcelas). Rode o baixar de novo."
 }
 if ($txt -match "retomar") {
     Write-Host "Versao fluxos_por_ano_contrato_numerados.py: OK (retomar/CSV-first)"

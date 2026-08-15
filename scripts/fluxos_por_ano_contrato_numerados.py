@@ -62,13 +62,32 @@ _configure_stdio()
 
 
 def _load_mod(name: str):
+    """Carrega sibling em scripts.* (mesmo nome que contagil_fluxos_seguro).
+
+    Importante: usar o mesmo ``sys.modules`` key evita duas classes SelicSerie
+    (isinstance falhava e virava ``float(SelicSerie)`` → zero parcelas).
+    """
     import importlib.util
+    import types
+
+    full = f"scripts.{name}"
+    if full in sys.modules:
+        return sys.modules[full]
 
     path = _SCRIPTS / f"{name}.py"
     if path.exists():
-        spec = importlib.util.spec_from_file_location(f"sec_{name}", path)
+        if "scripts" not in sys.modules:
+            pkg = types.ModuleType("scripts")
+            pkg.__path__ = [str(_SCRIPTS)]
+            pkg.__package__ = "scripts"
+            sys.modules["scripts"] = pkg
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        spec = importlib.util.spec_from_file_location(full, path)
         if spec is not None and spec.loader is not None:
             mod = importlib.util.module_from_spec(spec)
+            sys.modules[full] = mod
+            sys.modules[name] = mod
             spec.loader.exec_module(mod)
             return mod
     return __import__(f"scripts.{name}", fromlist=["*"])
@@ -90,7 +109,7 @@ EXCEL_MAX = 1_000_000
 # Amostra por aba no Excel consolidado (CSV completo fica em fluxos_por_ano_contrato/)
 EXCEL_AMOSTRA_ABA = 50_000
 _ANO_SHEET = re.compile(r"^(19|20)\d{2}$")
-MARKER = "fluxos-por-ano-contrato-numerados-20260814b"
+MARKER = "fluxos-por-ano-contrato-numerados-20260815a"
 
 
 def resolver_numerados(path: Optional[Path]) -> Path:
@@ -117,18 +136,31 @@ def resolver_numerados(path: Optional[Path]) -> Path:
 
 def resolver_fatores(path: Optional[Path]):
     if _seg is None:
+        print("[AVISO] contagil_fluxos_seguro indisponivel - SELIC 14,5% a.a.")
         return 0.145
-    if path is not None and Path(path).exists():
-        return _seg.carregar_fatores_mensais(Path(path))
-    for c in (
-        Path.cwd() / "fator_acumulado_SELIC_TJLP_TLP.xlsx",
-        CONTAGIL_WINPYTHON / "fator_acumulado_SELIC_TJLP_TLP.xlsx",
-        ROOT / "data" / "selic_taxas_contagil.xlsx",
-    ):
-        if c.exists():
+    candidatos: list[Path] = []
+    if path is not None:
+        candidatos.append(Path(path))
+    candidatos.extend(
+        [
+            Path.cwd() / "fator_acumulado_SELIC_TJLP_TLP.xlsx",
+            CONTAGIL_WINPYTHON / "fator_acumulado_SELIC_TJLP_TLP.xlsx",
+            ROOT / "data" / "selic_taxas_contagil.xlsx",
+        ]
+    )
+    for c in candidatos:
+        if not c.exists():
+            continue
+        try:
             print(f"[INFO] Fatores: {c}")
             return _seg.carregar_fatores_mensais(c)
-    print("[AVISO] Sem arquivo de fatores - usando SELIC 14,5% a.a. composta.")
+        except Exception as exc:  # noqa: BLE001 — cai para SELIC constante
+            print(
+                f"[AVISO] Falha ao carregar fatores {c}: "
+                f"{type(exc).__name__}: {exc}"
+            )
+            continue
+    print("[AVISO] Sem arquivo de fatores valido - usando SELIC 14,5% a.a. composta.")
     return 0.145
 
 

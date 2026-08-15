@@ -657,6 +657,25 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
     return df.rename(columns=rename), rename
 
 
+def _float_br(valor) -> float:
+    """Converte escalar BR/US/ND para float (raises ValueError se inválido)."""
+    if valor is None or (isinstance(valor, float) and np.isnan(valor)):
+        raise ValueError("valor numerico ausente")
+    if isinstance(valor, (int, float, np.integer, np.floating)):
+        out = float(valor)
+        if np.isnan(out):
+            raise ValueError("valor numerico ausente")
+        return out
+    text = str(valor).strip().replace("R$", "").replace("%", "").strip()
+    if not text or text.lower() in {"nan", "none", "nd", "n/d", "-", "#n/d"}:
+        raise ValueError(f"valor numerico invalido: {valor!r}")
+    if "," in text and "." in text:
+        text = text.replace(".", "").replace(",", ".")
+    elif "," in text:
+        text = text.replace(",", ".")
+    return float(text)
+
+
 def limpar_valor(series: pd.Series) -> pd.Series:
     """Converte BR (1.234,56), US (1234.56) ou já numérico."""
     if pd.api.types.is_numeric_dtype(series):
@@ -673,7 +692,7 @@ def limpar_valor(series: pd.Series) -> pd.Series:
         if v is None or (isinstance(v, float) and np.isnan(v)):
             return np.nan
         text = str(v).strip()
-        if not text or text.lower() in {"nan", "none"}:
+        if not text or text.lower() in {"nan", "none", "nd", "n/d"}:
             return np.nan
         if "," in text and "." in text:
             text = text.replace(".", "").replace(",", ".")
@@ -1404,6 +1423,18 @@ def _instituicao_de_original(
     return fallback
 
 
+def _eh_selic_serie(obj) -> bool:
+    """Duck-type SelicSerie (importlib pode criar duas classes com o mesmo nome)."""
+    if isinstance(obj, SelicSerie):
+        return True
+    return (
+        hasattr(obj, "fatores")
+        and hasattr(obj, "datas")
+        and callable(getattr(obj, "idx_proximo", None))
+        and callable(getattr(obj, "capitalizar", None))
+    )
+
+
 def _resolver_segundo_arg(
     segundo: float | SelicSerie | pd.DataFrame,
     selic_serie: SelicSerie | None,
@@ -1413,8 +1444,8 @@ def _resolver_segundo_arg(
     Aceita o rascunho ContAgil ``gerar_fluxos(df, df)`` (df_original para
     Instituição Financeira) e também ``gerar_fluxos(df, selic_df)``.
     """
-    if isinstance(segundo, SelicSerie):
-        return TAXA_SELIC_ANUAL, segundo, None
+    if _eh_selic_serie(segundo):
+        return TAXA_SELIC_ANUAL, segundo, None  # type: ignore[return-value]
     if isinstance(segundo, pd.DataFrame):
         if _parece_dataframe_selic(segundo):
             return (
@@ -1447,6 +1478,97 @@ def _progresso_intervalo(n: int, progress_every: int | None) -> int | None:
     if n >= 500:
         return 100
     return None
+
+
+def _suporta_numero_contrato() -> bool:
+    """True se gerar_fluxos_contrato aceita numero_contrato (evita TypeError ContAgil)."""
+    try:
+        import inspect
+
+        return "numero_contrato" in inspect.signature(gerar_fluxos_contrato).parameters
+    except (TypeError, ValueError):
+        return False
+
+
+_ACEITA_NUMERO_CONTRATO = None
+
+
+def _kwargs_contrato(
+    *,
+    data_contr,
+    valor,
+    juros_pct,
+    carencia,
+    n,
+    contrato_id,
+    instituicao,
+    selic_aa,
+    data_impacto,
+    selic_serie,
+    custo,
+    num,
+) -> dict:
+    global _ACEITA_NUMERO_CONTRATO
+    if _ACEITA_NUMERO_CONTRATO is None:
+        _ACEITA_NUMERO_CONTRATO = _suporta_numero_contrato()
+    kwargs = dict(
+        data_contr=data_contr,
+        valor=float(valor),
+        taxa_juros_aa=float(juros_pct) / 100.0,
+        carencia=int(carencia),
+        n=int(n),
+        contrato_id=int(contrato_id),
+        instituicao=instituicao,
+        selic_aa=selic_aa,
+        data_impacto=data_impacto,
+        selic_serie=selic_serie,
+        custo_financeiro=custo,
+        juros_pct=float(juros_pct),
+    )
+    if _ACEITA_NUMERO_CONTRATO and num is not None:
+        kwargs["numero_contrato"] = str(num)
+    return kwargs
+
+
+def _diagnosticar_contrato(
+    row,
+    selic_aa: float | SelicSerie | pd.DataFrame,
+    *,
+    data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
+    df_original: pd.DataFrame | None = None,
+) -> str:
+    """Tenta 1 contrato e devolve a mensagem de erro (para log ContAgil)."""
+    try:
+        selic_aa, selic_serie, df_original = _resolver_segundo_arg(selic_aa, selic_serie)
+        data_contr = pd.Timestamp(row.data_contratacao)
+        juros_pct = _float_br(row.juros)
+        valor = _float_br(row.valor_desembolsado)
+        carencia = int(_float_br(getattr(row, "prazo_carencia", 0) or 0))
+        n = int(_float_br(row.prazo_amortizacao))
+        num = getattr(row, "numero_contrato", None)
+        if num is not None and str(num) in {"", "nan", "None"}:
+            num = None
+        kwargs = _kwargs_contrato(
+            data_contr=data_contr,
+            valor=valor,
+            juros_pct=juros_pct,
+            carencia=carencia,
+            n=n,
+            contrato_id=int(row.contrato),
+            instituicao=str(getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO),
+            selic_aa=selic_aa,
+            data_impacto=data_impacto,
+            selic_serie=selic_serie,
+            custo=getattr(row, "custo_financeiro", ""),
+            num=num,
+        )
+        out = gerar_fluxos_contrato(**kwargs)
+        if not out:
+            return "gerar_fluxos_contrato retornou lista vazia (n<=0 ou valor<=0?)"
+        return f"ok ({len(out)} parcelas)"
+    except Exception as exc:  # noqa: BLE001
+        return f"{type(exc).__name__}: {exc}"
 
 
 def gerar_fluxos(
@@ -1487,6 +1609,7 @@ def gerar_fluxos(
     records: list[dict] = []
     fluxos_diarios: list[dict] = []
     skipped = 0
+    first_err: str | None = None
     t0 = time.time()
 
     for pos, row in enumerate(contratos.itertuples(index=False), start=1):
@@ -1494,6 +1617,8 @@ def gerar_fluxos(
             data_contr = pd.Timestamp(row.data_contratacao)
             if pd.isna(data_contr):
                 skipped += 1
+                if first_err is None:
+                    first_err = "data_contratacao invalida/NaT"
                 continue
             fallback_agente = str(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
@@ -1502,30 +1627,34 @@ def gerar_fluxos(
                 df_original, pos - 1, fallback_agente
             )
             custo = getattr(row, "custo_financeiro", "")
-            juros_pct = float(row.juros)
+            juros_pct = _float_br(row.juros)
+            valor = _float_br(row.valor_desembolsado)
+            carencia = int(_float_br(getattr(row, "prazo_carencia", 0) or 0))
+            n_parc = int(_float_br(row.prazo_amortizacao))
             num = getattr(row, "numero_contrato", None)
             if num is not None and str(num) in {"", "nan", "None"}:
                 num = None
-            kwargs = dict(
+            kwargs = _kwargs_contrato(
                 data_contr=data_contr,
-                valor=float(row.valor_desembolsado),
-                taxa_juros_aa=juros_pct / 100.0,
-                carencia=int(float(row.prazo_carencia or 0)),
-                n=int(float(row.prazo_amortizacao)),
+                valor=valor,
+                juros_pct=juros_pct,
+                carencia=carencia,
+                n=n_parc,
                 contrato_id=int(row.contrato),
                 instituicao=instituicao,
                 selic_aa=selic_aa,
                 data_impacto=data_impacto,
                 selic_serie=selic_serie,
-                custo_financeiro=custo,
-                juros_pct=juros_pct,
-                numero_contrato=str(num) if num is not None else None,
+                custo=custo,
+                num=num,
             )
             records.extend(gerar_fluxos_contrato(**kwargs))
             if fluxo_diario:
                 fluxos_diarios.extend(gerar_fluxos_diarios_contrato(**kwargs))
-        except (TypeError, ValueError, OverflowError):
+        except Exception as exc:  # noqa: BLE001 — 1 contrato nao derruba a massa
             skipped += 1
+            if first_err is None:
+                first_err = f"{type(exc).__name__}: {exc}"
             continue
 
         if step is not None and (pos % step == 0 or pos == n):
@@ -1541,12 +1670,18 @@ def gerar_fluxos(
 
     if skipped and not quiet:
         print(f"Contratos ignorados por erro: {skipped:,}")
+        if first_err and not records:
+            print(f"  1o erro: {first_err}")
 
     if fluxo_diario:
         path = Path(saida_diario) if saida_diario is not None else None
         salvar_fluxos_diarios(fluxos_diarios, path)
 
-    return pd.DataFrame(records)
+    out = pd.DataFrame(records)
+    if first_err:
+        out.attrs["primeiro_erro"] = first_err
+        out.attrs["contratos_ignorados"] = skipped
+    return out
 
 
 def gerar_e_gravar_fluxos(
@@ -1641,7 +1776,21 @@ def gerar_e_gravar_fluxos(
         sys.stdout.flush()
 
     if total_parcelas == 0:
-        raise ValueError("Nenhuma parcela gerada (todos os contratos falharam?).")
+        detalhe = ""
+        try:
+            if n > 0:
+                detalhe = _diagnosticar_contrato(
+                    contratos.iloc[0],
+                    selic_aa,
+                    data_impacto=data_impacto,
+                    selic_serie=selic_serie,
+                )
+        except Exception as exc:  # noqa: BLE001
+            detalhe = f"{type(exc).__name__}: {exc}"
+        msg = "Nenhuma parcela gerada (todos os contratos falharam?)."
+        if detalhe:
+            msg = f"{msg} Diagnostico 1o contrato: {detalhe}"
+        raise ValueError(msg)
 
     xlsx_linhas = 0
     if gravar_excel:
