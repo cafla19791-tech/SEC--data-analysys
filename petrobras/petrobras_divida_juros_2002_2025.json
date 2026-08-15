@@ -1,14 +1,15 @@
 {
   "company": "Petrobras (Petróleo Brasileiro S.A.)",
   "cik": "0001119639",
-  "period": "2002-2025",
+  "period": "2002-2026 (2026 YTD 1H)",
   "units": "US$ millions / billions",
   "notes": [
     "Dívida bruta = conceito Petrobras (dívida financeira + arrendamentos a partir de IFRS 16/2019).",
     "Juros pagos = caixa de juros da dívida financeira no 20-F (não inclui accrual puro nem juros de arrendamento, salvo quando a linha histórica não segregava).",
     "2002–2010: supplemental 'Cash paid for Interest, net of amount capitalized' (US$ mi).",
     "2011–2018: 'Repayment of interest' no DFC.",
-    "2019–2025: 'Repayment of interest - finance debt' / InterestPaidClassifiedAsFinancingActivities."
+    "2019–2025: 'Repayment of interest - finance debt' / InterestPaidClassifiedAsFinancingActivities.",
+    "2026 interest paid is YTD Jan–Jun only (US$ 1,070 mi)."
   ],
   "rows": [
     {
@@ -250,6 +251,16 @@
       "interest_paid_usd_mi": 1836.0,
       "interest_paid_source": "20-F CF: Repayment of interest - finance debt",
       "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm"
+    },
+    {
+      "year": 2026,
+      "gross_debt_usd_mi": 70806.0,
+      "gross_debt_usd_bi": 70.806,
+      "gross_debt_source": "Gross debt 06/30/2026",
+      "finance_debt_usd_mi": 25834.0,
+      "interest_paid_usd_mi": 1070.0,
+      "interest_paid_source": "6-K FS USD 2Q26: Repayment of interest - finance debt Jan–Jun/2026 (YTD)",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281426004133/pbrfs2q26usd_6k.htm"
     }
   ]
 }
