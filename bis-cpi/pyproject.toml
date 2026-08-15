@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bis-cpi"
+version = "0.1.0"
+description = "BIS WS_LONG_CPI Excel/PDF reports for ContAgil"
+requires-python = ">=3.10"
+dependencies = ["openpyxl>=3.1"]
+
+[project.scripts]
+bis-cpi-cli = "bis_cpi.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
