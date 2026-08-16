@@ -279,6 +279,12 @@ def carregar_fatores_mensais(path: Path) -> SelicSerie:
     mask = datas.notna() & fatores.notna() & (fatores > 0)
     datas_arr = datas[mask].to_numpy(dtype="datetime64[ns]")
     fatores_arr = fatores[mask].to_numpy(dtype=float)
+    if len(fatores_arr) == 0:
+        raise ValueError(
+            f"Nenhum fator acumulado valido em {path} "
+            f"(coluna data={data_col!r}, fator={fator_col!r}). "
+            "Use fator_acumulado_SELIC_TJLP_TLP.xlsx com Data + Fator_Acumulado."
+        )
 
     # Referência: 01/06/2026 (ou último fator ≤ data de impacto)
     data_ref = np.datetime64(DATA_REF_DEFAULT)

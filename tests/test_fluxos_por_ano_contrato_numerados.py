@@ -83,6 +83,34 @@ def test_processar_cria_abas_e_csv(tmp_path: Path):
     assert set(df3["numero_contrato"]) == {"1-2003"}
 
 
+def test_retomar_pula_ano_existente(tmp_path: Path):
+    numerados = _make_numerados(tmp_path / "BNDES_INDIRETAS_NUMERADOS.xlsx")
+    saida = tmp_path / "saida"
+    processar(numerados, saida, fatores=0.145, lote=10)
+    csv2002 = saida / "fluxos_por_ano_contrato" / "2002.csv"
+    mtime = csv2002.stat().st_mtime
+    processar(numerados, saida, fatores=0.145, lote=10, retomar=True)
+    assert csv2002.stat().st_mtime == mtime
+    resumo = pd.read_csv(saida / "fluxos_por_ano_contrato" / "RESUMO.csv")
+    assert set(resumo["status"]) == {"retomado"}
+
+
+def test_prints_cp1252_safe():
+    """ContAgil WinPython usa cp1252; emoji no print derruba a massa."""
+    import scripts.gerar_fluxos as gf
+    import scripts.fluxos_por_ano_contrato_numerados as fa
+
+    for path in (Path(gf.__file__), Path(fa.__file__)):
+        text = path.read_text(encoding="utf-8")
+        for i, line in enumerate(text.splitlines(), 1):
+            if "print(" not in line:
+                continue
+            try:
+                line.encode("cp1252")
+            except UnicodeEncodeError as exc:
+                raise AssertionError(f"{path.name}:{i} nao e cp1252-safe: {line!r}") from exc
+
+
 def test_normalizar_preserva_numero():
     bruto = pd.DataFrame(
         {
@@ -99,3 +127,76 @@ def test_normalizar_preserva_numero():
     out = normalizar_colunas(bruto)
     assert "numero_contrato" in out.columns
     assert out.loc[0, "numero_contrato"] == "1-2002"
+
+
+def test_selic_serie_duck_type_nao_vira_float():
+    """Regressao ContAgil: duas classes SelicSerie via importlib → float(serie)."""
+    import numpy as np
+
+    from scripts.gerar_fluxos import SelicSerie, _eh_selic_serie, _resolver_segundo_arg, gerar_e_gravar_fluxos
+
+    class FakeSerie:
+        def __init__(self):
+            self.datas = np.array(["2020-01-01", "2026-06-01"], dtype="datetime64[ns]")
+            self.fatores = np.array([1.0, 1.5], dtype=float)
+            self.fator_referencia = 1.5
+            self.origem = "fake"
+
+        def idx_proximo(self, data):
+            return 0
+
+        def capitalizar(self, valor, data_fluxo, data_impacto=None):
+            return round(float(valor) * 1.1, 2)
+
+    fake = FakeSerie()
+    assert _eh_selic_serie(fake)
+    taxa, serie, orig = _resolver_segundo_arg(fake, None)
+    assert serie is fake
+    assert orig is None
+    assert isinstance(taxa, float)
+
+    # Serie real tambem
+    real = SelicSerie(
+        np.array(["2000-01-01", "2026-06-01"], dtype="datetime64[ns]"),
+        np.array([1.0, 2.0], dtype=float),
+        origem="t",
+        fator_referencia=2.0,
+    )
+    bruto = pd.DataFrame(
+        {
+            "Número do contrato": ["1-2002"],
+            "Data da contratação": ["2002-01-10"],
+            "Valor desembolsado R$": [1000],
+            "Custo financeiro": ["TAXA FIXA"],
+            "Juros": [5],
+            "Prazo - Carência (meses)": [0],
+            "Prazo - Amortização (meses)": [3],
+        }
+    )
+    contratos = normalizar_colunas(bruto)
+    stats = gerar_e_gravar_fluxos(
+        contratos, real, saida_csv=Path("/tmp/test_duck_selic.csv"), gravar_excel=False
+    )
+    assert stats["parcelas"] > 0
+
+
+def test_processar_com_serie_contagil(tmp_path: Path):
+    """processar() + SelicSerie do contagil_fluxos_seguro (mesmo path ContAgil)."""
+    import numpy as np
+
+    from scripts.contagil_fluxos_seguro import carregar_fatores_mensais
+
+    fatores = tmp_path / "fator_acumulado_SELIC_TJLP_TLP.xlsx"
+    datas = pd.date_range("2000-01-01", "2026-07-01", freq="MS")
+    pd.DataFrame(
+        {"Data": datas, "Fator_Acumulado": np.cumprod(np.full(len(datas), 1.005))}
+    ).to_excel(fatores, index=False)
+    serie = carregar_fatores_mensais(fatores)
+
+    numerados = _make_numerados(tmp_path / "BNDES_INDIRETAS_NUMERADOS.xlsx")
+    saida = tmp_path / "saida"
+    xlsx = processar(numerados, saida, fatores=serie, lote=10)
+    assert xlsx.exists()
+    resumo = pd.read_csv(saida / "fluxos_por_ano_contrato" / "RESUMO.csv")
+    assert set(resumo["status"]) == {"ok"}
+    assert int(resumo["qtd_parcelas"].sum()) > 0

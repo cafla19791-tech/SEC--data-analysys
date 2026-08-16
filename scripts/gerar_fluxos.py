@@ -45,6 +45,24 @@ import numpy as np
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
+
+def _configure_stdio() -> None:
+    """WinPython/ContAgil usa cp1252: evita UnicodeEncodeError em prints."""
+    for stream in (sys.stdout, sys.stderr):
+        reconf = getattr(stream, "reconfigure", None)
+        if reconf is None:
+            continue
+        try:
+            reconf(encoding="utf-8", errors="replace")
+        except Exception:
+            try:
+                reconf(errors="replace")
+            except Exception:
+                pass
+
+
+_configure_stdio()
+
 # ===================== CONFIGURAÇÕES =====================
 TAXA_SELIC_ANUAL = 0.145  # 14,5% a.a.
 TJLP_TLP_BASE = 0.06  # ContAgil: TJLP/TLP = 6% + juros do contrato
@@ -639,6 +657,25 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
     return df.rename(columns=rename), rename
 
 
+def _float_br(valor) -> float:
+    """Converte escalar BR/US/ND para float (raises ValueError se inválido)."""
+    if valor is None or (isinstance(valor, float) and np.isnan(valor)):
+        raise ValueError("valor numerico ausente")
+    if isinstance(valor, (int, float, np.integer, np.floating)):
+        out = float(valor)
+        if np.isnan(out):
+            raise ValueError("valor numerico ausente")
+        return out
+    text = str(valor).strip().replace("R$", "").replace("%", "").strip()
+    if not text or text.lower() in {"nan", "none", "nd", "n/d", "-", "#n/d"}:
+        raise ValueError(f"valor numerico invalido: {valor!r}")
+    if "," in text and "." in text:
+        text = text.replace(".", "").replace(",", ".")
+    elif "," in text:
+        text = text.replace(",", ".")
+    return float(text)
+
+
 def limpar_valor(series: pd.Series) -> pd.Series:
     """Converte BR (1.234,56), US (1234.56) ou já numérico."""
     if pd.api.types.is_numeric_dtype(series):
@@ -655,7 +692,7 @@ def limpar_valor(series: pd.Series) -> pd.Series:
         if v is None or (isinstance(v, float) and np.isnan(v)):
             return np.nan
         text = str(v).strip()
-        if not text or text.lower() in {"nan", "none"}:
+        if not text or text.lower() in {"nan", "none", "nd", "n/d"}:
             return np.nan
         if "," in text and "." in text:
             text = text.replace(".", "").replace(",", ".")
@@ -1278,12 +1315,12 @@ def salvar_fluxos_diarios(
         amostra = df.head(excel_limit)
         amostra.to_excel(out, index=False)
         print(
-            f"⚠️  Fluxos diários: {len(df):,} linhas > limite Excel; "
+            f"[AVISO] Fluxos diarios: {len(df):,} linhas > limite Excel; "
             f"CSV completo em {csv_path} e amostra Excel em {out}"
         )
     else:
         df.to_excel(out, index=False)
-        print(f"✅ Fluxos diários: {out} ({len(df):,} linhas)")
+        print(f"[OK] Fluxos diarios: {out} ({len(df):,} linhas)")
     return out
 
 
@@ -1386,6 +1423,18 @@ def _instituicao_de_original(
     return fallback
 
 
+def _eh_selic_serie(obj) -> bool:
+    """Duck-type SelicSerie (importlib pode criar duas classes com o mesmo nome)."""
+    if isinstance(obj, SelicSerie):
+        return True
+    return (
+        hasattr(obj, "fatores")
+        and hasattr(obj, "datas")
+        and callable(getattr(obj, "idx_proximo", None))
+        and callable(getattr(obj, "capitalizar", None))
+    )
+
+
 def _resolver_segundo_arg(
     segundo: float | SelicSerie | pd.DataFrame,
     selic_serie: SelicSerie | None,
@@ -1395,8 +1444,8 @@ def _resolver_segundo_arg(
     Aceita o rascunho ContAgil ``gerar_fluxos(df, df)`` (df_original para
     Instituição Financeira) e também ``gerar_fluxos(df, selic_df)``.
     """
-    if isinstance(segundo, SelicSerie):
-        return TAXA_SELIC_ANUAL, segundo, None
+    if _eh_selic_serie(segundo):
+        return TAXA_SELIC_ANUAL, segundo, None  # type: ignore[return-value]
     if isinstance(segundo, pd.DataFrame):
         if _parece_dataframe_selic(segundo):
             return (
@@ -1431,6 +1480,97 @@ def _progresso_intervalo(n: int, progress_every: int | None) -> int | None:
     return None
 
 
+def _suporta_numero_contrato() -> bool:
+    """True se gerar_fluxos_contrato aceita numero_contrato (evita TypeError ContAgil)."""
+    try:
+        import inspect
+
+        return "numero_contrato" in inspect.signature(gerar_fluxos_contrato).parameters
+    except (TypeError, ValueError):
+        return False
+
+
+_ACEITA_NUMERO_CONTRATO = None
+
+
+def _kwargs_contrato(
+    *,
+    data_contr,
+    valor,
+    juros_pct,
+    carencia,
+    n,
+    contrato_id,
+    instituicao,
+    selic_aa,
+    data_impacto,
+    selic_serie,
+    custo,
+    num,
+) -> dict:
+    global _ACEITA_NUMERO_CONTRATO
+    if _ACEITA_NUMERO_CONTRATO is None:
+        _ACEITA_NUMERO_CONTRATO = _suporta_numero_contrato()
+    kwargs = dict(
+        data_contr=data_contr,
+        valor=float(valor),
+        taxa_juros_aa=float(juros_pct) / 100.0,
+        carencia=int(carencia),
+        n=int(n),
+        contrato_id=int(contrato_id),
+        instituicao=instituicao,
+        selic_aa=selic_aa,
+        data_impacto=data_impacto,
+        selic_serie=selic_serie,
+        custo_financeiro=custo,
+        juros_pct=float(juros_pct),
+    )
+    if _ACEITA_NUMERO_CONTRATO and num is not None:
+        kwargs["numero_contrato"] = str(num)
+    return kwargs
+
+
+def _diagnosticar_contrato(
+    row,
+    selic_aa: float | SelicSerie | pd.DataFrame,
+    *,
+    data_impacto: datetime = DATA_IMPACTO,
+    selic_serie: SelicSerie | None = None,
+    df_original: pd.DataFrame | None = None,
+) -> str:
+    """Tenta 1 contrato e devolve a mensagem de erro (para log ContAgil)."""
+    try:
+        selic_aa, selic_serie, df_original = _resolver_segundo_arg(selic_aa, selic_serie)
+        data_contr = pd.Timestamp(row.data_contratacao)
+        juros_pct = _float_br(row.juros)
+        valor = _float_br(row.valor_desembolsado)
+        carencia = int(_float_br(getattr(row, "prazo_carencia", 0) or 0))
+        n = int(_float_br(row.prazo_amortizacao))
+        num = getattr(row, "numero_contrato", None)
+        if num is not None and str(num) in {"", "nan", "None"}:
+            num = None
+        kwargs = _kwargs_contrato(
+            data_contr=data_contr,
+            valor=valor,
+            juros_pct=juros_pct,
+            carencia=carencia,
+            n=n,
+            contrato_id=int(row.contrato),
+            instituicao=str(getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO),
+            selic_aa=selic_aa,
+            data_impacto=data_impacto,
+            selic_serie=selic_serie,
+            custo=getattr(row, "custo_financeiro", ""),
+            num=num,
+        )
+        out = gerar_fluxos_contrato(**kwargs)
+        if not out:
+            return "gerar_fluxos_contrato retornou lista vazia (n<=0 ou valor<=0?)"
+        return f"ok ({len(out)} parcelas)"
+    except Exception as exc:  # noqa: BLE001
+        return f"{type(exc).__name__}: {exc}"
+
+
 def gerar_fluxos(
     df: pd.DataFrame,
     selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
@@ -1463,12 +1603,13 @@ def gerar_fluxos(
     n = len(contratos)
     step = None if quiet else _progresso_intervalo(n, progress_every)
     if not quiet:
-        print(f"🚀 Gerando fluxos com lógica corrigida... ({n:,} contratos)")
+        print(f"[INFO] Gerando fluxos com logica corrigida... ({n:,} contratos)")
         sys.stdout.flush()
 
     records: list[dict] = []
     fluxos_diarios: list[dict] = []
     skipped = 0
+    first_err: str | None = None
     t0 = time.time()
 
     for pos, row in enumerate(contratos.itertuples(index=False), start=1):
@@ -1476,6 +1617,8 @@ def gerar_fluxos(
             data_contr = pd.Timestamp(row.data_contratacao)
             if pd.isna(data_contr):
                 skipped += 1
+                if first_err is None:
+                    first_err = "data_contratacao invalida/NaT"
                 continue
             fallback_agente = str(
                 getattr(row, "agente", AGENTE_NAO_INFORMADO) or AGENTE_NAO_INFORMADO
@@ -1484,30 +1627,34 @@ def gerar_fluxos(
                 df_original, pos - 1, fallback_agente
             )
             custo = getattr(row, "custo_financeiro", "")
-            juros_pct = float(row.juros)
+            juros_pct = _float_br(row.juros)
+            valor = _float_br(row.valor_desembolsado)
+            carencia = int(_float_br(getattr(row, "prazo_carencia", 0) or 0))
+            n_parc = int(_float_br(row.prazo_amortizacao))
             num = getattr(row, "numero_contrato", None)
             if num is not None and str(num) in {"", "nan", "None"}:
                 num = None
-            kwargs = dict(
+            kwargs = _kwargs_contrato(
                 data_contr=data_contr,
-                valor=float(row.valor_desembolsado),
-                taxa_juros_aa=juros_pct / 100.0,
-                carencia=int(float(row.prazo_carencia or 0)),
-                n=int(float(row.prazo_amortizacao)),
+                valor=valor,
+                juros_pct=juros_pct,
+                carencia=carencia,
+                n=n_parc,
                 contrato_id=int(row.contrato),
                 instituicao=instituicao,
                 selic_aa=selic_aa,
                 data_impacto=data_impacto,
                 selic_serie=selic_serie,
-                custo_financeiro=custo,
-                juros_pct=juros_pct,
-                numero_contrato=str(num) if num is not None else None,
+                custo=custo,
+                num=num,
             )
             records.extend(gerar_fluxos_contrato(**kwargs))
             if fluxo_diario:
                 fluxos_diarios.extend(gerar_fluxos_diarios_contrato(**kwargs))
-        except (TypeError, ValueError, OverflowError):
+        except Exception as exc:  # noqa: BLE001 — 1 contrato nao derruba a massa
             skipped += 1
+            if first_err is None:
+                first_err = f"{type(exc).__name__}: {exc}"
             continue
 
         if step is not None and (pos % step == 0 or pos == n):
@@ -1523,39 +1670,58 @@ def gerar_fluxos(
 
     if skipped and not quiet:
         print(f"Contratos ignorados por erro: {skipped:,}")
+        if first_err and not records:
+            print(f"  1o erro: {first_err}")
 
     if fluxo_diario:
         path = Path(saida_diario) if saida_diario is not None else None
         salvar_fluxos_diarios(fluxos_diarios, path)
 
-    return pd.DataFrame(records)
+    out = pd.DataFrame(records)
+    if first_err:
+        out.attrs["primeiro_erro"] = first_err
+        out.attrs["contratos_ignorados"] = skipped
+    return out
 
 
 def gerar_e_gravar_fluxos(
     df: pd.DataFrame,
     selic_aa: float | SelicSerie | pd.DataFrame = TAXA_SELIC_ANUAL,
     *,
-    saida_xlsx: Path | str,
+    saida_xlsx: Path | str | None = None,
+    saida_csv: Path | str | None = None,
     lote: int = 2_000,
     excel_max_linhas: int = 1_000_000,
+    gravar_excel: bool = True,
     data_impacto: datetime = DATA_IMPACTO,
     selic_serie: SelicSerie | None = None,
 ) -> dict:
-    """Gera fluxos em lotes e grava CSV completo (+ Excel amostra se >1M linhas).
+    """Gera fluxos em lotes e grava CSV completo (+ Excel opcional).
 
     Evita manter dezenas de milhões de parcelas em memória (massa BNDES ~100k–1M
     contratos). Retorna estatísticas do processamento.
+
+    Com ``gravar_excel=False`` só grava o CSV (recomendado para anos grandes no
+    ContAgil — o Excel de ~1M linhas costuma travar a máquina).
     """
-    saida_xlsx = Path(saida_xlsx)
-    saida_xlsx.parent.mkdir(parents=True, exist_ok=True)
-    csv_path = saida_xlsx.with_suffix(".csv")
+    if saida_csv is None and saida_xlsx is None:
+        raise ValueError("Informe saida_csv e/ou saida_xlsx.")
+    if saida_csv is not None:
+        csv_path = Path(saida_csv)
+    else:
+        csv_path = Path(saida_xlsx).with_suffix(".csv")
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    xlsx_path = Path(saida_xlsx) if saida_xlsx is not None else csv_path.with_suffix(".xlsx")
+    if gravar_excel:
+        xlsx_path.parent.mkdir(parents=True, exist_ok=True)
 
     contratos = _as_contratos(df)
     n = len(contratos)
     lote = max(1, int(lote))
     print(
-        f"🚀 Gerando fluxos com lógica corrigida... "
-        f"({n:,} contratos, lote={lote:,}, grava CSV em streaming)"
+        f"[INFO] Gerando fluxos com logica corrigida... "
+        f"({n:,} contratos, lote={lote:,}, grava CSV em streaming"
+        f"{'' if gravar_excel else ', sem Excel por ano'})"
     )
     sys.stdout.flush()
 
@@ -1568,6 +1734,7 @@ def gerar_e_gravar_fluxos(
     amostra_linhas = 0
     t0 = time.time()
     header = True
+    lim_amostra = excel_max_linhas if gravar_excel else 0
 
     for start in range(0, n, lote):
         chunk = contratos.iloc[start : start + lote]
@@ -1592,8 +1759,8 @@ def gerar_e_gravar_fluxos(
             fluxos.to_csv(csv_path, mode="a", index=False, header=header)
             header = False
             total_parcelas += len(fluxos)
-            if amostra_linhas < excel_max_linhas:
-                falta = excel_max_linhas - amostra_linhas
+            if lim_amostra and amostra_linhas < lim_amostra:
+                falta = lim_amostra - amostra_linhas
                 amostra.append(fluxos.head(falta))
                 amostra_linhas += min(len(fluxos), falta)
 
@@ -1609,35 +1776,43 @@ def gerar_e_gravar_fluxos(
         sys.stdout.flush()
 
     if total_parcelas == 0:
-        raise ValueError("Nenhuma parcela gerada (todos os contratos falharam?).")
+        detalhe = ""
+        try:
+            if n > 0:
+                detalhe = _diagnosticar_contrato(
+                    contratos.iloc[0],
+                    selic_aa,
+                    data_impacto=data_impacto,
+                    selic_serie=selic_serie,
+                )
+        except Exception as exc:  # noqa: BLE001
+            detalhe = f"{type(exc).__name__}: {exc}"
+        msg = "Nenhuma parcela gerada (todos os contratos falharam?)."
+        if detalhe:
+            msg = f"{msg} Diagnostico 1o contrato: {detalhe}"
+        raise ValueError(msg)
 
-    if amostra:
-        amostra_df = pd.concat(amostra, ignore_index=True)
-    else:
-        amostra_df = pd.read_csv(csv_path, nrows=excel_max_linhas)
-
-    amostra_df.to_excel(saida_xlsx, index=False)
+    xlsx_linhas = 0
+    if gravar_excel:
+        if amostra:
+            amostra_df = pd.concat(amostra, ignore_index=True)
+        else:
+            amostra_df = pd.read_csv(csv_path, nrows=excel_max_linhas)
+        amostra_df.to_excel(xlsx_path, index=False)
+        xlsx_linhas = len(amostra_df)
 
     stats = {
         "contratos": n,
         "parcelas": total_parcelas,
         "skipped": skipped,
         "csv": str(csv_path),
-        "xlsx": str(saida_xlsx),
-        "xlsx_linhas": len(amostra_df),
+        "xlsx": str(xlsx_path) if gravar_excel else "",
+        "xlsx_linhas": xlsx_linhas,
         "segundos": round(time.time() - t0, 1),
     }
-    if total_parcelas > excel_max_linhas:
-        print(
-            f"    → CSV completo: {csv_path} ({total_parcelas:,} parcelas)"
-        )
-        print(
-            f"    → Excel (amostra {len(amostra_df):,}): {saida_xlsx}"
-        )
-    else:
-        # Massa cabe no Excel: CSV auxiliar pode ser removido pelo usuário
-        print(f"    → Salvo: {saida_xlsx} ({total_parcelas:,} parcelas)")
-        print(f"    → CSV: {csv_path}")
+    print(f"    -> CSV: {csv_path} ({total_parcelas:,} parcelas)")
+    if gravar_excel:
+        print(f"    -> Excel: {xlsx_path} ({xlsx_linhas:,} linhas)")
     if skipped:
         print(f"    Contratos/lotes com erro: {skipped:,}")
     return stats
@@ -1762,7 +1937,7 @@ def processar_em_lotes(
         fluxos_df.to_csv(csv_path, mode="a", index=False, header=not wrote_header)
         wrote_header = True
         print(
-            f"  lote {start:,}-{start + len(chunk):,} → +{len(fluxos_df):,} "
+            f"  lote {start:,}-{start + len(chunk):,} -> +{len(fluxos_df):,} "
             f"(acum {n_parcelas:,})"
         )
 
@@ -2018,13 +2193,13 @@ def main(argv: list[str] | None = None) -> int:
     with stats_path.open("w", encoding="utf-8") as f:
         json.dump(printable, f, indent=2)
 
-    print(f"✅ CSV detalhado: {csv_path}")
-    print(f"✅ Excel resumo:  {xlsx_path}")
-    print(f"✅ Resumo agente: {agente_csv}")
-    print(f"✅ Resumo agente: {agente_xlsx}")
-    print(f"✅ Stats JSON:    {stats_path}")
+    print(f"[OK] CSV detalhado: {csv_path}")
+    print(f"[OK] Excel resumo:  {xlsx_path}")
+    print(f"[OK] Resumo agente: {agente_csv}")
+    print(f"[OK] Resumo agente: {agente_xlsx}")
+    print(f"[OK] Stats JSON:    {stats_path}")
     if args.fluxo_diario and stats.get("fluxos_diarios"):
-        print(f"✅ Fluxos diários: {stats['fluxos_diarios']}")
+        print(f"[OK] Fluxos diarios: {stats['fluxos_diarios']}")
     return 0
 
 
