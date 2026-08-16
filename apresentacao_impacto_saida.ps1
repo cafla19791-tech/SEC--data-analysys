@@ -1,7 +1,8 @@
 # Consolida Excel de apresentacao a partir dos resumos ja gerados na saida.
 # Prefere impacto_fiscal_por_ano.csv + resumo_por_agente.csv do agregador.
+# ASCII_PS1_OK_20260816c
 #
-# Usa pasta sec_scripts (nao Scripts) — evita colisao com WinPython\Scripts.
+# Usa pasta sec_scripts (nao Scripts) - evita colisao com WinPython\Scripts.
 #
 # Cole no PowerShell (ja dentro da pasta winpython):
 #
@@ -27,7 +28,7 @@ $headers = @{
 }
 
 Write-Host "============================================================"
-Write-Host " Excel de apresentacao — impacto BNDES Indiretas"
+Write-Host " Excel de apresentacao - impacto BNDES Indiretas"
 Write-Host " Pasta: $Root"
 Write-Host " Ref: $Ref | Cache-bust: $bust"
 Write-Host "============================================================"
@@ -68,10 +69,10 @@ if (-not (Test-Path -LiteralPath $saida)) {
 $ano = Join-Path $saida "impacto_fiscal_por_ano.csv"
 $ag = Join-Path $saida "resumo_por_agente.csv"
 if (-not (Test-Path -LiteralPath $ano)) {
-    throw "Falta impacto_fiscal_por_ano.csv — rode agregar_impacto_saida.ps1 primeiro."
+    throw "Falta impacto_fiscal_por_ano.csv - rode agregar_impacto_saida.ps1 primeiro."
 }
 if (-not (Test-Path -LiteralPath $ag)) {
-    throw "Falta resumo_por_agente.csv — rode agregar_impacto_saida.ps1 primeiro."
+    throw "Falta resumo_por_agente.csv - rode agregar_impacto_saida.ps1 primeiro."
 }
 
 Write-Host ""
