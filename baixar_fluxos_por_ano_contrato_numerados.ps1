@@ -66,7 +66,9 @@ if ($txt -match "retomar") {
 }
 $gf = Join-Path $Root "sec_scripts\gerar_fluxos.py"
 $gfTxt = Get-Content -LiteralPath $gf -Raw
-if ($gfTxt -match [char]0x1F680) {
+# Nao usar [char]0x1F680: foguete esta fora do BMP e quebra cast em Windows PowerShell 5.1
+$rocket = [char]::ConvertFromUtf32(0x1F680)
+if ($gfTxt.IndexOf($rocket) -ge 0) {
     throw "gerar_fluxos.py ainda tem emoji foguete - download antigo. Rode o baixar de novo."
 }
 Write-Host "Versao gerar_fluxos.py: OK (sem emoji no console)"
