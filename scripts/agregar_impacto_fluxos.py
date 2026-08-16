@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Agrega impacto fiscal / subsídio a partir de fluxos_*.csv grandes (streaming).
+Agrega impacto fiscal / subsídio a partir de CSVs grandes (streaming).
 
-Pensado para a massa ContAgil WinPython após ``contagil_fluxos.py``:
-  ~70 milhões de parcelas em vários CSV — não cabe em memória.
+Fontes aceitas (nesta ordem de prioridade):
+
+  1. ``saida/fluxos_por_ano_contrato/YYYY.csv``  ← pipeline NUMERADOS (preferido)
+  2. ``fluxos_*.csv`` na pasta informada         ← pipeline ContAgil antigo
+
+Pensado para a massa ContAgil WinPython (~70M+ parcelas) — não cabe em memória.
 
 Lê só as colunas necessárias em chunks, acumula por ano e por agente, e grava:
 
@@ -16,10 +20,10 @@ Modo padrão: ``coluna`` (usa ``impacto_fiscal`` já gravado na geração).
 
 Uso (WinPython ContAgil)::
 
-  python scripts\\agregar_impacto_fluxos.py --pasta \"%cd%\\saida\"
+  python sec_scripts\\agregar_impacto_fluxos.py --pasta \"%cd%\\saida\"
 
   # ou com caminho absoluto:
-  python scripts\\agregar_impacto_fluxos.py ^
+  python sec_scripts\\agregar_impacto_fluxos.py ^
     --pasta \"C:\\Arquivos de Programas RFB\\ContAgilAppBeta64\\python_jep\\winpython\\saida\"
 """
 
@@ -40,7 +44,7 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent
 ROOT = _SCRIPTS_DIR.parent
 
 # Marcador para o usuário/scripts de download validarem a versão
-MARKER = "agregar-impacto-streaming-20260725b-importlib"
+MARKER = "agregar-impacto-streaming-20260816a-ano-contrato"
 
 
 def _load_sibling(mod_name: str):
@@ -55,7 +59,7 @@ def _load_sibling(mod_name: str):
         print("No PowerShell:")
         b = (
             "https://raw.githubusercontent.com/cafla19791-tech/"
-            "SEC--data-analysys/cursor/agregar-impacto-streaming-f342"
+            "SEC--data-analysys/cursor/agregar-ano-contrato-f342"
         )
         print(f'  $b="{b}"')
         print(
@@ -109,11 +113,46 @@ COLUNAS_UTEIS = (
 )
 
 
+def _csvs_por_ano_contrato(pasta: Path) -> list[Path]:
+    """Lista ``YYYY.csv`` (4 dígitos) em pasta; ignora RESUMO.csv e outros."""
+    pasta = Path(pasta)
+    if not pasta.is_dir():
+        return []
+    out: list[Path] = []
+    for p in pasta.glob("*.csv"):
+        stem = p.stem
+        if stem.upper() == "RESUMO":
+            continue
+        if stem.isdigit() and len(stem) == 4:
+            out.append(p)
+    return sorted(out, key=lambda p: p.name)
+
+
 def listar_csvs_fluxos(pasta: Path) -> list[Path]:
-    """Lista ``fluxos_*.csv`` na pasta (ignora diários)."""
+    """Lista CSVs de fluxos para agregar.
+
+    Preferência:
+      1. ``pasta/fluxos_por_ano_contrato/YYYY.csv`` (pipeline NUMERADOS)
+      2. ``YYYY.csv`` se ``pasta`` já for a pasta por ano
+      3. ``pasta/fluxos_*.csv`` (pipeline antigo; ignora *diario*)
+
+    Se existir a pasta por ano de contrato, **não** mistura com ``fluxos_*.csv``
+    (evita dupla contagem).
+    """
     pasta = Path(pasta)
     if not pasta.exists():
         raise FileNotFoundError(f"Pasta não encontrada: {pasta}")
+
+    sub = pasta / "fluxos_por_ano_contrato"
+    por_ano = _csvs_por_ano_contrato(sub)
+    if por_ano:
+        return por_ano
+
+    if pasta.name.lower() == "fluxos_por_ano_contrato":
+        por_ano = _csvs_por_ano_contrato(pasta)
+        if por_ano:
+            return por_ano
+
     csvs = sorted(
         p
         for p in pasta.glob("fluxos_*.csv")
@@ -121,8 +160,10 @@ def listar_csvs_fluxos(pasta: Path) -> list[Path]:
     )
     if not csvs:
         raise FileNotFoundError(
-            f"Nenhum fluxos_*.csv em {pasta}. "
-            "Gere com scripts/contagil_fluxos.py primeiro."
+            f"Nenhum CSV de fluxos em {pasta}. "
+            "Esperado: fluxos_por_ano_contrato\\YYYY.csv "
+            "(rode fluxos_por_ano_contrato_numerados.bat) "
+            "ou fluxos_*.csv (pipeline antigo)."
         )
     return csvs
 
@@ -395,8 +436,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=None,
         help=(
-            "Pasta com fluxos_*.csv (default: ContAgil saida/ se existir, "
-            "senão output/)."
+            "Pasta saida/ (ou fluxos_por_ano_contrato/). "
+            "Default: ContAgil saida/ se existir, senão output/."
         ),
     )
     p.add_argument(
@@ -468,7 +509,10 @@ def main(argv: list[str] | None = None) -> int:
     for a in arquivos:
         try:
             mb = a.stat().st_size / (1024 * 1024)
-            print(f"  - {a.name} ({mb:,.1f} MB)")
+            rel = a.name
+            if a.parent.name.lower() == "fluxos_por_ano_contrato":
+                rel = f"{a.parent.name}/{a.name}"
+            print(f"  - {rel} ({mb:,.1f} MB)")
         except OSError:
             print(f"  - {a.name}")
     print(f"Modo  : {args.modo}")
