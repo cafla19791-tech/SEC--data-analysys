@@ -50,4 +50,7 @@ data/bndes_naoautomaticas/
 output/naoautomaticas_discriminativo/*.xlsx
 data/bndes_diretas/
 output/pdf_operacoes/*.pdf
+!output/pdf_operacoes/OPERACOES_DIRETAS.pdf
+!output/pdf_operacoes/OPERACOES_INDIRETAS.pdf
+!output/pdf_operacoes/README.md
 !output/pdf_operacoes/README.md
