@@ -49,3 +49,10 @@ output/indiretas_automaticas_ipca/*.xlsx
 amostra_fluxos.xlsx
 data/bndes/*.xlsx
 data/bndes_automaticas/
+
+!output/top100_diretas/TOP100_DIRETAS_2019_2022_IPCA_JUL2026.xlsx
+output/top100_diretas/*.xlsx
+!output/top100_diretas/TOP100_DIRETAS_2003_2018_IPCA_JUL2026.xlsx
+!output/top100_diretas/TOP100_DIRETAS_2019_2022_IPCA_JUL2026.xlsx
+!output/top100_diretas/README.md
+data/bndes_naoautomaticas/
