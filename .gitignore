@@ -36,6 +36,9 @@ output/*_stats.json
 !output/RELATORIO_EXECUTIVO.md
 !output/desembolsos_1995_2001_ipca.md
 !output/desembolsos_1995_2001_ipca.xlsx
+output/indiretas_automaticas_ipca/*.xlsx
+!output/indiretas_automaticas_ipca/.gitkeep
+!output/indiretas_automaticas_ipca/README.md
 !output/grafico_interativo.html
 
 # Artefato clássico na raiz (cópia do resumo anual)
