@@ -71,7 +71,7 @@ if ($LASTEXITCODE -ne 0) { throw "pip install falhou" }
 
 $pasta = Join-Path $Root "saida\fluxos_por_ano_contrato"
 if (-not (Test-Path -LiteralPath $pasta)) {
-    throw "Pasta nao encontrada: $pasta — rode fluxos_por_ano_contrato_numerados.bat primeiro."
+    throw "Pasta nao encontrada: $pasta - rode fluxos_por_ano_contrato_numerados.bat primeiro."
 }
 
 $argsPy = @($outPy, "--pasta", $pasta)
