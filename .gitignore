@@ -45,3 +45,4 @@ output/*_stats.json
 .DS_Store
 amostra_fluxos.xlsx
 data/bndes/*.xlsx
+data/bndes_automaticas/
