@@ -1,4 +1,4 @@
-"""Testes do agregador streaming para massas grandes de fluxos_*.csv."""
+"""Testes do agregador streaming para massas grandes de fluxos CSVs."""
 
 from __future__ import annotations
 
@@ -17,11 +17,13 @@ from scripts.impacto_fiscal_por_ano import agregar_impacto_por_ano
 
 
 def _escrever_csv(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(rows).to_csv(path, index=False)
 
 
 def test_marker_presente():
     assert "streaming" in MARKER
+    assert "ano-contrato" in MARKER
 
 
 def test_listar_csvs_ignora_diario(tmp_path: Path):
@@ -48,6 +50,67 @@ def test_listar_csvs_ignora_diario(tmp_path: Path):
     csvs = listar_csvs_fluxos(tmp_path)
     assert len(csvs) == 1
     assert csvs[0].name == "fluxos_A.csv"
+
+
+def test_listar_prefere_por_ano_contrato(tmp_path: Path):
+    """Se existir fluxos_por_ano_contrato/, ignora fluxos_*.csv (sem dupla contagem)."""
+    _escrever_csv(
+        tmp_path / "fluxos_legado.csv",
+        [
+            {
+                "data_fluxo": "2010-01-15",
+                "subsidio": 999.0,
+                "impacto_fiscal": 999.0,
+            }
+        ],
+    )
+    sub = tmp_path / "fluxos_por_ano_contrato"
+    _escrever_csv(
+        sub / "2002.csv",
+        [
+            {
+                "data_fluxo": "2002-06-15",
+                "subsidio": 10.0,
+                "impacto_fiscal": 20.0,
+                "agente": "BANCO A",
+                "contrato": "1-2002",
+            }
+        ],
+    )
+    _escrever_csv(
+        sub / "2010.csv",
+        [
+            {
+                "data_fluxo": "2010-06-15",
+                "subsidio": 30.0,
+                "impacto_fiscal": 40.0,
+                "agente": "BANCO B",
+                "contrato": "2-2010",
+            }
+        ],
+    )
+    _escrever_csv(sub / "RESUMO.csv", [{"ano": 2002, "ok": 1}])
+
+    csvs = listar_csvs_fluxos(tmp_path)
+    assert [p.name for p in csvs] == ["2002.csv", "2010.csv"]
+    assert all(p.parent.name == "fluxos_por_ano_contrato" for p in csvs)
+
+
+def test_listar_pasta_direta_por_ano(tmp_path: Path):
+    pasta = tmp_path / "fluxos_por_ano_contrato"
+    _escrever_csv(
+        pasta / "2020.csv",
+        [
+            {
+                "data_fluxo": "2020-01-15",
+                "subsidio": 1.0,
+                "impacto_fiscal": 2.0,
+            }
+        ],
+    )
+    csvs = listar_csvs_fluxos(pasta)
+    assert len(csvs) == 1
+    assert csvs[0].name == "2020.csv"
 
 
 def test_agregar_streaming_modo_coluna_multiplos_arquivos(tmp_path: Path):
@@ -118,6 +181,49 @@ def test_agregar_streaming_modo_coluna_multiplos_arquivos(tmp_path: Path):
     assert por_ag.loc["BANCO A", "Impacto Fiscal 2026 (R$)"] == 1350.0
     assert por_ag.loc["BANCO A", "Qtd Contratos"] == 2
     assert por_ag.loc["BANCO B", "Impacto Fiscal 2026 (R$)"] == 400.0
+
+
+def test_agregar_por_ano_contrato_coluna(tmp_path: Path):
+    sub = tmp_path / "fluxos_por_ano_contrato"
+    _escrever_csv(
+        sub / "2002.csv",
+        [
+            {
+                "contrato": "1-2002",
+                "agente": "BANCO A",
+                "data_fluxo": "2002-06-15",
+                "subsidio": 10.0,
+                "impacto_fiscal": 100.0,
+            },
+            {
+                "contrato": "2-2002",
+                "agente": "BANCO A",
+                "data_fluxo": "2003-01-15",
+                "subsidio": 5.0,
+                "impacto_fiscal": 40.0,
+            },
+        ],
+    )
+    _escrever_csv(
+        sub / "2003.csv",
+        [
+            {
+                "contrato": "1-2003",
+                "agente": "BANCO B",
+                "data_fluxo": "2003-06-15",
+                "subsidio": 20.0,
+                "impacto_fiscal": 80.0,
+            },
+        ],
+    )
+    result = agregar_streaming(listar_csvs_fluxos(tmp_path), modo="coluna", chunksize=1)
+    assert result["parcelas"] == 3
+    por_ano = result["por_ano"].set_index("Ano")
+    assert por_ano.loc[2002, "Impacto Fiscal 2026 (R$)"] == 100.0
+    assert por_ano.loc[2003, "Impacto Fiscal 2026 (R$)"] == 120.0
+    por_ag = result["por_agente"].set_index("Instituição Financeira")
+    assert por_ag.loc["BANCO A", "Qtd Contratos"] == 2
+    assert por_ag.loc["BANCO B", "Impacto Fiscal 2026 (R$)"] == 80.0
 
 
 def test_salvar_resultados(tmp_path: Path):
