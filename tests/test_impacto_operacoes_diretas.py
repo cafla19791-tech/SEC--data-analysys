@@ -81,6 +81,36 @@ def test_mapear_so_contratado():
     assert out.loc[0, "agente"] == AGENTE_BNDES_DIRETA
 
 
+def test_agregar_por_ano_contrato(tmp_path: Path):
+    """Impacto agrupado pelo ano do contrato, nao pelo ano do fluxo."""
+    excel = tmp_path / "OPERACOES DIRETAS.xlsx"
+    # 1 contrato em 2009 com 3 parcelas (2009-2011 se amortizacao=3)
+    pd.DataFrame(
+        {
+            "Data da Contratação": ["15/03/2009"],
+            "Valor Contratado Reais": [100000.0],
+            "Juros": [6.0],
+            "Prezo - carencia (meses)": [0],
+            "Prazo - amortizaca (meses)": [3],
+            "Forma de Apoio": ["DIRETA"],
+            "Custo financeiro": ["TAXA FIXA"],
+            "Instituição Financeira Credenciada": ["-"],
+        }
+    ).to_excel(excel, index=False)
+
+    pasta_fluxos = tmp_path / "fluxos_diretas"
+    pasta_impacto = tmp_path / "impacto_diretas"
+    gerar_fluxos_diretas(excel, pasta_fluxos, fatores=_serie(), header=0)
+    info = agregar_diretas(pasta_fluxos, pasta_impacto)
+    por_ano = info["result"]["por_ano"]
+    assert "Ano do Contrato" in por_ano.columns
+    assert "Ano" not in por_ano.columns
+    assert info["result"]["agrupar_por"] == "contrato"
+    # Todo o impacto das 3 parcelas conta no ano 2009 (contratacao)
+    assert list(por_ano["Ano do Contrato"].astype(int)) == [2009]
+    assert int(por_ano["Quantidade de Parcelas"].sum()) == 3
+
+
 def test_pipeline_fluxos_agregar_apresentacao(tmp_path: Path):
     excel = tmp_path / "OPERACOES DIRETAS.xlsx"
     _excel_diretas(excel)
@@ -95,12 +125,14 @@ def test_pipeline_fluxos_agregar_apresentacao(tmp_path: Path):
     assert csv_path.exists()
     df = pd.read_csv(csv_path)
     assert "impacto_fiscal" in df.columns
+    assert "ano_contrato" in df.columns
     assert len(df) == 5  # 3+2
 
     info = agregar_diretas(pasta_fluxos, pasta_impacto)
     assert (pasta_impacto / "impacto_fiscal_por_ano.csv").exists()
     assert (pasta_impacto / "resumo_por_agente.csv").exists()
     assert info["result"]["parcelas"] == 5
+    assert "Ano do Contrato" in info["result"]["por_ano"].columns
 
     out = apresentar_diretas(pasta_impacto, pasta_saida)
     assert out.exists()
@@ -108,3 +140,5 @@ def test_pipeline_fluxos_agregar_apresentacao(tmp_path: Path):
     wb = load_workbook(out)
     assert "Impacto Fiscal" in str(wb["Capa"]["A1"].value)
     assert "Diretas" in str(wb["Capa"]["A1"].value)
+    assert "Por_Ano_Contrato" in wb.sheetnames
+    assert wb["Por_Ano_Contrato"].cell(1, 1).value == "Ano do Contrato"

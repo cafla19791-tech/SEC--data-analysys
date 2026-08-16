@@ -25,13 +25,20 @@ if not exist sec_scripts\impacto_operacoes_diretas.py (
   exit /b 1
 )
 
-findstr /C:"impacto-operacoes-diretas-20260816a" sec_scripts\impacto_operacoes_diretas.py >nul
+findstr /C:"impacto-operacoes-diretas-20260816b" sec_scripts\impacto_operacoes_diretas.py >nul
 if errorlevel 1 (
   echo [ERRO] MARKER ausente - download antigo/cache
   exit /b 1
 )
+findstr /C:"20260816d-ano-contrato" sec_scripts\agregar_impacto_fluxos.py >nul
+if errorlevel 1 (
+  echo [ERRO] agregar_impacto_fluxos.py desatualizado - download antigo/cache
+  exit /b 1
+)
 
-echo OK. Rodando pipeline...
+echo OK. Impacto sera agrupado por ANO DO CONTRATO.
+echo Dica: se fluxos_diretas\fluxos_*.csv ja existe, rode com --so-agregar
+echo.
 python.exe -m pip install "pandas>=2.0" "openpyxl>=3.1" "numpy>=1.24" "requests>=2.28"
 python.exe sec_scripts\impacto_operacoes_diretas.py %*
 endlocal

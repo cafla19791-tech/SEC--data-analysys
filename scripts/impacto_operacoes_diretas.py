@@ -7,8 +7,8 @@ Pipeline (mesma metodologia das indiretas — parcelas + impacto_fiscal):
 
   1. Localiza OPERACOES DIRETAS*.xlsx
   2. Gera fluxos (CSV streaming) em saida/fluxos_diretas/
-  3. Agrega impacto por ano / agente em saida/impacto_diretas/
-  4. Monta APRESENTACAO_IMPACTO_BNDES_DIRETAS.xlsx
+  3. Agrega impacto por ANO DO CONTRATO / agente em saida/impacto_diretas/
+  4. Monta APRESENTACAO_IMPACTO_BNDES_DIRETAS.xlsx (aba Por_Ano_Contrato)
 
 Uso (ContAgil)::
 
@@ -28,7 +28,7 @@ from pathlib import Path
 _SCRIPTS_DIR = Path(__file__).resolve().parent
 ROOT = _SCRIPTS_DIR.parent
 
-MARKER = "impacto-operacoes-diretas-20260816a"
+MARKER = "impacto-operacoes-diretas-20260816b"
 
 
 def _load_sibling(mod_name: str):
@@ -173,7 +173,10 @@ def agregar_diretas(pasta_fluxos: Path, pasta_impacto: Path) -> dict:
     pasta_impacto.mkdir(parents=True, exist_ok=True)
     arquivos = _ag.listar_csvs_fluxos(pasta_fluxos)
     print(f"[INFO] Agregando {len(arquivos)} CSV(s) de {pasta_fluxos}")
-    result = _ag.agregar_streaming(arquivos, modo="coluna", chunksize=500_000)
+    print("[INFO] Agrupamento por ANO DO CONTRATO (data_contratacao)")
+    result = _ag.agregar_streaming(
+        arquivos, modo="coluna", chunksize=500_000, agrupar_por="contrato"
+    )
     paths = _ag.salvar_resultados(result, pasta_impacto)
     # workbook com nome DIRETAS
     wb_dir = pasta_impacto / "resumo_impacto_bndes_diretas.xlsx"

@@ -37,7 +37,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
-MARKER = "apresentacao-impacto-bndes-20260816a"
+MARKER = "apresentacao-impacto-bndes-20260816b-ano-contrato"
 
 # Paleta sóbria (compatível com demais workbooks do repo)
 AZUL = "1F4E79"
@@ -68,13 +68,25 @@ FMT_INT = "#,##0"
 FMT_PCT = "0.0%"
 
 COL_AGENTE_ALIASES = ("Instituição Financeira", "Instituicao Financeira", "Agente", "agente")
+COL_ANO = "Ano"
+COL_ANO_CONTRATO = "Ano do Contrato"
 COL_IMPACTO = "Impacto Fiscal 2026 (R$)"
 COL_SUBSIDIO_ANO = "Soma Subsídio Nominal (R$)"
 COL_SUBSIDIO_AG = "Total Subsídio (R$)"
 COL_PARCELAS = "Quantidade de Parcelas"
 COL_QTD_PARCELAS_AG = "Qtd Parcelas"
 COL_CONTRATOS = "Qtd Contratos"
-COL_ANO = "Ano"
+
+
+def _col_ano(df: pd.DataFrame) -> str:
+    if COL_ANO_CONTRATO in df.columns:
+        return COL_ANO_CONTRATO
+    if COL_ANO in df.columns:
+        return COL_ANO
+    raise ValueError(
+        f"impacto_fiscal_por_ano sem coluna Ano / Ano do Contrato. "
+        f"Colunas: {list(df.columns)}"
+    )
 
 
 def _ler_tabela(pasta: Path, stem: str) -> pd.DataFrame:
@@ -101,21 +113,23 @@ def _col_agente(df: pd.DataFrame) -> str:
 
 
 def _norm_por_ano(df: pd.DataFrame) -> pd.DataFrame:
-    need = {COL_ANO, COL_SUBSIDIO_ANO, COL_IMPACTO}
+    col_ano = _col_ano(df)
+    need = {col_ano, COL_SUBSIDIO_ANO, COL_IMPACTO}
     missing = need - set(df.columns)
     if missing:
         raise ValueError(f"impacto_fiscal_por_ano sem colunas: {sorted(missing)}")
     out = df.copy()
-    out[COL_ANO] = pd.to_numeric(out[COL_ANO], errors="coerce").astype("Int64")
+    out[col_ano] = pd.to_numeric(out[col_ano], errors="coerce").astype("Int64")
     out[COL_SUBSIDIO_ANO] = pd.to_numeric(out[COL_SUBSIDIO_ANO], errors="coerce").fillna(0.0)
     out[COL_IMPACTO] = pd.to_numeric(out[COL_IMPACTO], errors="coerce").fillna(0.0)
     if COL_PARCELAS in out.columns:
         out[COL_PARCELAS] = pd.to_numeric(out[COL_PARCELAS], errors="coerce").fillna(0).astype(int)
-    out = out.dropna(subset=[COL_ANO]).sort_values(COL_ANO).reset_index(drop=True)
+    out = out.dropna(subset=[col_ano]).sort_values(col_ano).reset_index(drop=True)
     tot_imp = float(out[COL_IMPACTO].sum()) or 1.0
     out["Participação Impacto"] = out[COL_IMPACTO] / tot_imp
     out["Impacto (R$ bi)"] = out[COL_IMPACTO] / 1e9
     out["Subsídio (R$ bi)"] = out[COL_SUBSIDIO_ANO] / 1e9
+    out.attrs["col_ano"] = col_ano
     return out
 
 
@@ -404,8 +418,11 @@ def construir_apresentacao(
     _aba_sumario(wb, por_ano, por_agente)
 
     ws_ano = wb.create_sheet("Por_Ano")
+    col_ano = por_ano.attrs.get("col_ano", _col_ano(por_ano))
+    if col_ano == COL_ANO_CONTRATO:
+        ws_ano.title = "Por_Ano_Contrato"
     cols_ano = [
-        COL_ANO,
+        col_ano,
         COL_SUBSIDIO_ANO,
         "Subsídio (R$ bi)",
         COL_IMPACTO,
@@ -419,7 +436,7 @@ def construir_apresentacao(
         por_ano[cols_ano],
         money_cols={COL_SUBSIDIO_ANO, COL_IMPACTO},
         pct_cols={"Participação Impacto"},
-        int_cols={COL_ANO, COL_PARCELAS},
+        int_cols={col_ano, COL_PARCELAS},
         bi_cols={"Subsídio (R$ bi)", "Impacto (R$ bi)"},
     )
 

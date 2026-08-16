@@ -40,7 +40,7 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent
 ROOT = _SCRIPTS_DIR.parent
 
 # Marcador para o usuário/scripts de download validarem a versão
-MARKER = "agregar-impacto-streaming-20260725b-importlib"
+MARKER = "agregar-impacto-streaming-20260816d-ano-contrato"
 
 
 def _load_sibling(mod_name: str):
@@ -99,6 +99,9 @@ carregar_serie_selic = _imp.carregar_serie_selic
 CHUNK_DEFAULT = 500_000
 COLUNAS_UTEIS = (
     "data_fluxo",
+    "data_contratacao",
+    "ano_contrato",
+    "ano_fluxo",
     "subsidio",
     "impacto_fiscal",
     "impacto",
@@ -107,6 +110,9 @@ COLUNAS_UTEIS = (
     "mes",
     "contrato",
 )
+AGRUPAR_POR = ("fluxo", "contrato")
+COL_ANO_FLUXO = "Ano"
+COL_ANO_CONTRATO = "Ano do Contrato"
 
 
 def listar_csvs_fluxos(pasta: Path) -> list[Path]:
@@ -165,6 +171,24 @@ def _impacto_chunk(
     return _impacto_recalcular(subsidio, meses, taxa_selic_anual)
 
 
+def _anos_agrupamento(chunk: pd.DataFrame, agrupar_por: str) -> pd.Series:
+    """Extrai o ano de agrupamento (fluxo ou contrato) do chunk."""
+    if agrupar_por == "contrato":
+        if "ano_contrato" in chunk.columns:
+            anos = pd.to_numeric(chunk["ano_contrato"], errors="coerce")
+        elif "data_contratacao" in chunk.columns:
+            anos = pd.to_datetime(chunk["data_contratacao"], errors="coerce").dt.year
+        else:
+            raise ValueError(
+                "agrupar_por=contrato exige coluna ano_contrato ou data_contratacao no CSV."
+            )
+        return anos
+    # fluxo (padrão)
+    if "ano_fluxo" in chunk.columns:
+        return pd.to_numeric(chunk["ano_fluxo"], errors="coerce")
+    return pd.to_datetime(chunk["data_fluxo"], errors="coerce").dt.year
+
+
 def agregar_streaming(
     arquivos: list[Path],
     *,
@@ -172,14 +196,23 @@ def agregar_streaming(
     chunksize: int = CHUNK_DEFAULT,
     taxa_selic_anual: float = TAXA_SELIC_ANUAL,
     selic_serie=None,
+    agrupar_por: str = "fluxo",
 ) -> dict:
     """Agrega por ano e por agente sem carregar todos os CSV na memória.
+
+    ``agrupar_por``:
+      - ``fluxo`` (padrão): ano de ``data_fluxo`` / ``ano_fluxo``
+      - ``contrato``: ano de ``ano_contrato`` / ``data_contratacao``
 
     Retorna dict com DataFrames ``por_ano``, ``por_agente``, ``totais`` e
     metadados (parcelas, arquivos, segundos).
     """
     if modo not in MODOS:
         raise ValueError(f"Modo desconhecido: {modo}")
+    if agrupar_por not in AGRUPAR_POR:
+        raise ValueError(f"agrupar_por deve ser um de {AGRUPAR_POR}")
+
+    col_ano = COL_ANO_CONTRATO if agrupar_por == "contrato" else COL_ANO_FLUXO
 
     # ano -> [subsidio, impacto, qtd]
     acc_ano: dict[int, list[float]] = defaultdict(lambda: [0.0, 0.0, 0.0])
@@ -198,6 +231,13 @@ def agregar_streaming(
                 f"{path.name}: precisa de data_fluxo e subsidio. "
                 f"Colunas: {list(header.columns)}"
             )
+        if agrupar_por == "contrato" and (
+            "ano_contrato" not in header.columns
+            and "data_contratacao" not in header.columns
+        ):
+            raise ValueError(
+                f"{path.name}: agrupar_por=contrato exige ano_contrato ou data_contratacao."
+            )
         if modo == "coluna" and _coluna_impacto(header.columns) is None:
             raise ValueError(
                 f"{path.name}: modo coluna exige impacto_fiscal/impacto."
@@ -214,9 +254,8 @@ def agregar_streaming(
                 taxa_selic_anual=taxa_selic_anual,
                 selic_serie=selic_serie,
             )
-            data = pd.to_datetime(chunk["data_fluxo"], errors="coerce")
             subsidio = pd.to_numeric(chunk["subsidio"], errors="coerce").fillna(0.0)
-            anos = data.dt.year
+            anos = _anos_agrupamento(chunk, agrupar_por)
 
             # Por ano (groupby no chunk — rápido e leve)
             tmp = pd.DataFrame(
@@ -281,14 +320,14 @@ def agregar_streaming(
             )
             sys.stdout.flush()
 
-        print(f"  ✓ {path.name}: {lidas_arq:,} parcelas")
+        print(f"  OK {path.name}: {lidas_arq:,} parcelas")
         sys.stdout.flush()
 
     por_ano = (
         pd.DataFrame(
             [
                 {
-                    "Ano": ano,
+                    col_ano: ano,
                     "Soma Subsídio Nominal (R$)": round(v[0], 2),
                     "Impacto Fiscal 2026 (R$)": round(v[1], 2),
                     "Quantidade de Parcelas": int(v[2]),
@@ -299,7 +338,7 @@ def agregar_streaming(
         if acc_ano
         else pd.DataFrame(
             columns=[
-                "Ano",
+                col_ano,
                 "Soma Subsídio Nominal (R$)",
                 "Impacto Fiscal 2026 (R$)",
                 "Quantidade de Parcelas",
@@ -340,6 +379,12 @@ def agregar_streaming(
                 "Valor": DATA_REFERENCIA.strftime("%d/%m/%Y"),
             },
             {"Métrica": "Modo", "Valor": modo},
+            {
+                "Métrica": "Agrupamento por ano",
+                "Valor": "contrato (data_contratacao)"
+                if agrupar_por == "contrato"
+                else "fluxo (data_fluxo)",
+            },
         ]
     )
 
@@ -351,6 +396,8 @@ def agregar_streaming(
         "arquivos": [str(p) for p in arquivos],
         "segundos": round(time.time() - t0, 1),
         "modo": modo,
+        "agrupar_por": agrupar_por,
+        "col_ano": col_ano,
     }
 
 
@@ -377,7 +424,12 @@ def salvar_resultados(result: dict, pasta_saida: Path) -> dict[str, Path]:
 
     wb = pasta_saida / "resumo_impacto_bndes.xlsx"
     with pd.ExcelWriter(wb, engine="openpyxl") as writer:
-        result["por_ano"].to_excel(writer, sheet_name="Impacto_Por_Ano", index=False)
+        sheet_ano = (
+            "Impacto_Por_Ano_Contrato"
+            if result.get("agrupar_por") == "contrato"
+            else "Impacto_Por_Ano"
+        )
+        result["por_ano"].to_excel(writer, sheet_name=sheet_ano, index=False)
         if not result["por_agente"].empty:
             result["por_agente"].to_excel(writer, sheet_name="Por_Agente", index=False)
         result["totais"].to_excel(writer, sheet_name="Totais", index=False)
@@ -437,6 +489,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Pasta de saída dos resumos (default: --pasta).",
     )
+    p.add_argument(
+        "--agrupar-por",
+        choices=AGRUPAR_POR,
+        default="fluxo",
+        help=(
+            "fluxo = ano da parcela/data_fluxo (padrão); "
+            "contrato = ano da data_contratacao / ano_contrato."
+        ),
+    )
     return p.parse_args(argv)
 
 
@@ -472,6 +533,7 @@ def main(argv: list[str] | None = None) -> int:
         except OSError:
             print(f"  - {a.name}")
     print(f"Modo  : {args.modo}")
+    print(f"Ano   : {args.agrupar_por}")
     print()
 
     modo = args.modo
@@ -496,6 +558,7 @@ def main(argv: list[str] | None = None) -> int:
             chunksize=max(10_000, int(args.chunksize)),
             taxa_selic_anual=args.taxa_selic,
             selic_serie=selic_serie,
+            agrupar_por=args.agrupar_por,
         )
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
