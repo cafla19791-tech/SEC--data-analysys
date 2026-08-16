@@ -1,5 +1,6 @@
 # Converte saida\fluxos_por_ano_contrato\YYYY.csv em YYYY.xlsx fatiado
 # (varias abas de ate ~1M linhas - limite do Excel).
+# ASCII_PS1_OK_20260816b
 #
 # Usa pasta sec_scripts (nao Scripts).
 #
