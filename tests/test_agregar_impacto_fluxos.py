@@ -152,3 +152,74 @@ def test_modo_coluna_sem_impacto_falha(tmp_path: Path):
     )
     with pytest.raises(ValueError, match="impacto"):
         agregar_streaming(listar_csvs_fluxos(tmp_path), modo="coluna")
+
+
+def test_agregar_por_ano_contrato(tmp_path: Path):
+    """Parcelas em anos diferentes do fluxo somam no ano da contratacao."""
+    _escrever_csv(
+        tmp_path / "fluxos_c.csv",
+        [
+            {
+                "contrato": 1,
+                "Instituição Financeira": "BNDES",
+                "data_fluxo": "2010-04-15",
+                "ano_contrato": 2009,
+                "data_contratacao": "2009-03-15",
+                "subsidio": 100.0,
+                "impacto_fiscal": 1000.0,
+            },
+            {
+                "contrato": 1,
+                "Instituição Financeira": "BNDES",
+                "data_fluxo": "2011-04-15",
+                "ano_contrato": 2009,
+                "data_contratacao": "2009-03-15",
+                "subsidio": 50.0,
+                "impacto_fiscal": 400.0,
+            },
+            {
+                "contrato": 2,
+                "Instituição Financeira": "BNDES",
+                "data_fluxo": "2012-01-15",
+                "ano_contrato": 2011,
+                "data_contratacao": "2011-06-01",
+                "subsidio": 20.0,
+                "impacto_fiscal": 100.0,
+            },
+        ],
+    )
+    result = agregar_streaming(
+        listar_csvs_fluxos(tmp_path),
+        modo="coluna",
+        agrupar_por="contrato",
+    )
+    assert result["agrupar_por"] == "contrato"
+    por_ano = result["por_ano"].set_index("Ano do Contrato")
+    assert list(por_ano.index.astype(int)) == [2009, 2011]
+    assert por_ano.loc[2009, "Soma Subsídio Nominal (R$)"] == 150.0
+    assert por_ano.loc[2009, "Impacto Fiscal 2026 (R$)"] == 1400.0
+    assert int(por_ano.loc[2009, "Quantidade de Parcelas"]) == 2
+    assert por_ano.loc[2011, "Impacto Fiscal 2026 (R$)"] == 100.0
+
+    out = tmp_path / "out"
+    paths = salvar_resultados(result, out)
+    xl = pd.ExcelFile(paths["workbook"])
+    assert "Impacto_Por_Ano_Contrato" in xl.sheet_names
+    assert "Ano do Contrato" in pd.read_excel(paths["workbook"], sheet_name="Impacto_Por_Ano_Contrato").columns
+
+
+def test_agregar_contrato_sem_coluna_falha(tmp_path: Path):
+    _escrever_csv(
+        tmp_path / "fluxos_z.csv",
+        [
+            {
+                "data_fluxo": "2010-01-15",
+                "subsidio": 1.0,
+                "impacto_fiscal": 2.0,
+            }
+        ],
+    )
+    with pytest.raises(ValueError, match="ano_contrato|data_contratacao"):
+        agregar_streaming(
+            listar_csvs_fluxos(tmp_path), modo="coluna", agrupar_por="contrato"
+        )
