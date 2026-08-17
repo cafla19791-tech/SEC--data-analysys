@@ -69,6 +69,32 @@ Variação 2002–2010:
 
 A base fecha com o TCU: 2003 = −R$ 83 milhões; 2007 = +R$ 25,5 bi; 2010 = +R$ 40,8 bi (+24,6%).
 
+## O fator externo influencia muito a base — o que não explode é o saldo líquido
+
+Não se lê o salto de R$ 0,6 bi (2003) para R$ 155,4 bi (2007) como “influência pequena”. O quadro da p. 35 é uma **identidade contábil**, não um ranking de importância relativa:
+
+`Tesouro + títulos + setor externo + demais = variação da base`
+
+Cada fator entra pelo valor cheio. Em 2007 o setor externo **criou** R$ 155,4 bi de base — o maior choque expansionista da série, 6,1 vezes a variação líquida daquele ano (R$ 25,5 bi). Sem ele, e na mesma configuração dos outros fatores, a base teria *contraído* cerca de R$ 129,9 bi.
+
+O que é pequeno é outra coisa: o **saldo líquido** depois da compensação. No mesmo exercício o Tesouro retirou R$ 55,6 bi e os títulos/repos retiraram R$ 74,0 bi. A conta fecha em +R$ 25,5 bi. Influência bruta e variação líquida não são o mesmo objeto.
+
+| 2007 | R$ milhões | Papel |
+|---|---:|---|
+| Setor externo | +155.390 | cria base (compra de dólares) |
+| Tesouro | −55.600 | drena (Conta Única) |
+| Títulos públicos | −73.974 | esteriliza (repos / mercado aberto) |
+| Demais | −300 | residual |
+| **Variação da base** | **+25.516** | o que sobra no estoque de M0 |
+
+Três afirmações distintas, portanto:
+
+1. **Sobre a base (M0):** o fator externo influencia *muito*. É o motor. O net cresce pouco porque os outros fatores compensam no mesmo ano.
+2. **Sobre o M1:** a influência é *atenuada*, não nula. M1 sobe 33% em 2007, mas não na mesma ordem do choque de R$ 155,4 bi, porque o compulsório e o open market não deixam a reserva livre lastrear o múltiplo inteiro.
+3. **Sobre M3, repos e o custo da Selic:** a influência é *plena e persistente*. O real que saiu da base foi para as compromissadas (R$ 60,0 bi → R$ 165,8 bi) e permanece no M3. É aí que o salto de 643 para 155.390 continua a constranger a política monetária depois que a linha “variação da base” já fechou.
+
+Dizer “influencia, mas não tanto” mistura (1) com o net de (1). O correto é: influencia tanto que o Bacen teve de montar um estoque de repos e, depois, de compulsório, para a Selic não perder o controle da overnight.
+
 ## A relação reservas → base → agregados → Selic/repos
 
 A compra de reservas **cria** base. O depósito fracionário **pode** multiplicá-la em M1. A Mesa do mercado aberto **impede** que essa base livre derrube a overnight. O instrumento é a compromissada: o Bacen toma o real de volta, paga Selic, e devolve um título com recompra. A base se contrai (fator títulos); o M3 **não**. Na metodologia do Bacen, operações compromissadas entram no M3. Esterilizar a base é, em boa medida, **reclassificar** liquidez de reserva bancária para repo — ainda dinheiro, só que remunerado na meta.
