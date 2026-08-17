@@ -37,3 +37,12 @@ Run completo (fatores SELIC Bacen SGS 11 → ContAgil): 348.864 contratos ·
 72 agentes.
 
 Interface web: `streamlit run app.py`
+
+Montantes anuais da modalidade indireta (2002–2026), a partir dos microdados
+abertos do BNDES + série oficial de aprovações:
+
+```bash
+python3 scripts/montantes_contratos_indiretas.py
+```
+
+- `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
