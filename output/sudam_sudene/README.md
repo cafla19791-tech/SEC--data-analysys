@@ -1,11 +1,19 @@
-# Sudam/Sudene — Redução 75% IRPJ
+# Sudam / Sudene — incentivos IRPJ
+
+## Renúncia 75% (valores RFB)
 
 ```bat
 python scripts\discriminativo_sudam_sudene_75_ipca.py
 ```
 
-Saída: `DISCRIMINATIVO_SUDAM_SUDENE_75_IPCA_JUL2026.xlsx`
+`DISCRIMINATIVO_SUDAM_SUDENE_75_IPCA_JUL2026.xlsx` — empresas e valores 2015–2023.
 
-Abas: `Empresas`, `Por_Ano`, `Empresa_Ano`, `Capa`.
+## Aprovados Sudam (+ cruzamento RFB)
 
-**Cobertura:** microdados por CNPJ na fonte = **2015–2023** (anos 2003–2014 e 2024–2026 não constam com valor por empresa nesta base).
+```bat
+python scripts\consolidar_aprovados_sudam_sudene.py
+```
+
+`APROVADOS_SUDAM_CRUZAMENTO_RFB.xlsx` — laudos Sudam 2010–2023; quando o CNPJ existir na RFB, anexa renúncia corrente/IPCA.
+
+Sudene: sem lista pública equivalente de aprovados (nota na planilha).

@@ -55,3 +55,5 @@ output/sudam_sudene/*.xlsx
 !output/sudam_sudene/DISCRIMINATIVO_SUDAM_SUDENE_75_IPCA_JUL2026.xlsx
 !output/sudam_sudene/README.md
 !data/sudam_sudene/renuncia_sudam_sudene.xlsx
+data/sudam_sudene/aprovados/*.pdf
+!output/sudam_sudene/APROVADOS_SUDAM_CRUZAMENTO_RFB.xlsx
