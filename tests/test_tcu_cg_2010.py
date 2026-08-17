@@ -149,6 +149,7 @@ def test_build_gera_xlsx_e_md(tmp_path: Path):
         "Cotejamento_Selic_Base",
         "Reservas_Internacionais",
         "Agregados_M1_M4",
+        "Selic_IPCA_2003_2016",
     }
     assert esperadas <= set(wb.sheetnames)
     assert (tmp_path / "TCU_CG_2010_BASE_MONETARIA.md").exists()
@@ -157,6 +158,8 @@ def test_build_gera_xlsx_e_md(tmp_path: Path):
     assert (tmp_path / "grafico_selic_base_monetaria_2003_2010.png").exists()
     assert (tmp_path / "TCU_CG_2010_RESERVAS_M1M4.md").exists()
     assert (tmp_path / "grafico_reservas_agregados_2002_2010.png").exists()
+    assert (tmp_path / "TCU_CG_2010_SELIC_BP_2003_2016.md").exists()
+    assert (tmp_path / "grafico_selic_bp_1999_2016.png").exists()
 
     texto = p_md.read_text(encoding="utf-8")
     assert "236,72" in texto
@@ -256,6 +259,38 @@ def test_reservas_e_agregados_m1_m4():
     assert y07["titulos_publicos"] == -73_974
     assert y07["compromissadas"] == 165_813
     assert df_agregados()["m3"].is_monotonic_increasing
+
+
+def test_selic_bp_2003_2016():
+    from scripts.selic_bp_2003_2016_dados import (
+        balanca_comercial,
+        reservas_dezembro,
+        selic_ipca_anual,
+        transacoes_correntes,
+    )
+
+    bc = {r["ano"]: r["usd_mi"] for r in balanca_comercial()}
+    assert bc[2000] < 0
+    assert bc[2001] > 0
+    assert sum(bc[y] for y in range(2001, 2007)) > 150_000
+    assert bc[2006] > bc[2001]
+
+    tc = {r["ano"]: r["usd_mi"] for r in transacoes_correntes()}
+    assert tc[2003] > 0
+    assert tc[2006] > 0
+    assert tc[2008] < 0
+    assert tc[2014] < -100_000
+
+    rs = {r["ano"]: r["usd_mi"] for r in reservas_dezembro()}
+    assert rs[2000] == 33_011
+    assert rs[2007] == 180_334
+    assert rs[2010] == 288_575
+
+    si = {r["ano"]: r for r in selic_ipca_anual()}
+    assert abs(si[2016]["selic_acum_pct"] - 459.74) < 0.01
+    assert abs(si[2016]["ipca_acum_pct"] - 134.13) < 0.01
+    assert si[2016]["selic_acum_pct"] > si[2016]["ipca_acum_pct"]
+    assert si[2010]["ipca_pct"] == 5.91
 
 
 def test_dataframes_auxiliares():

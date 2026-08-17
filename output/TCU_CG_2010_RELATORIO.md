@@ -207,6 +207,12 @@ emissão não aparece como M1 descontrolado: a Selic e as compromissadas
 a reciclam para dentro do M3. A série M1–M4 e o comentário estão em
 `output/TCU_CG_2010_RESERVAS_M1M4.md`.
 
+A Selic deixa de ser instrumento de fechar o BP a partir do superávit
+de 2001–06 e das reservas da p. 43; permanece o instrumento da meta de
+inflação. Por isso não “acelera a queda” em 2003–16: o acumulado de
+~460% (SGS 4390) é juro composto de um nível ainda alto, não captação
+de dólares. Ver `output/TCU_CG_2010_SELIC_BP_2003_2016.md`.
+
 O relatório oficial confirma, no exercício de 2010:
 
 1. o Tesouro virou o principal *funding* do BNDES, com estoque de
@@ -233,6 +239,7 @@ uma conta de estoque/ano; o deste repositório é a soma das parcelas.
 | `output/TCU_CG_2010_BASE_MONETARIA.md` | Análise da p. 35 — fatores da base monetária 2003–2010 |
 | `output/TCU_CG_2010_SELIC_BASE.md` | Cotejamento Selic (p. 33) × fatores da base (p. 35) |
 | `output/TCU_CG_2010_RESERVAS_M1M4.md` | Reservas (p. 43) × M1–M4 × Selic/repos |
+| `output/TCU_CG_2010_SELIC_BP_2003_2016.md` | Por que a Selic não acelerou a queda após 2003 |
 | `scripts/tcu_cg_2010_dados.py` | Valores nominais extraídos do PDF |
 | `scripts/build_tcu_cg_2010.py` | Regenera a planilha e este markdown |
 

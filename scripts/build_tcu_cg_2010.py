@@ -37,6 +37,7 @@ from scripts import tcu_cg_2010_dados as D  # noqa: E402
 from scripts.analisar_base_monetaria_tcu import analisar  # noqa: E402
 from scripts.cotejar_selic_base_tcu import cotejar  # noqa: E402
 from scripts.analisar_reservas_agregados_tcu import analisar as analisar_reservas  # noqa: E402
+from scripts.analisar_selic_bp_2003_2016 import analisar as analisar_selic_bp  # noqa: E402
 
 MES_BASE_DEFAULT = datetime(2010, 12, 1)
 OUTPUT_XLSX = ROOT / "output" / "TCU_CG_2010.xlsx"
@@ -467,6 +468,12 @@ emissão não aparece como M1 descontrolado: a Selic e as compromissadas
 a reciclam para dentro do M3. A série M1–M4 e o comentário estão em
 `output/TCU_CG_2010_RESERVAS_M1M4.md`.
 
+A Selic deixa de ser instrumento de fechar o BP a partir do superávit
+de 2001–06 e das reservas da p. 43; permanece o instrumento da meta de
+inflação. Por isso não “acelera a queda” em 2003–16: o acumulado de
+~460% (SGS 4390) é juro composto de um nível ainda alto, não captação
+de dólares. Ver `output/TCU_CG_2010_SELIC_BP_2003_2016.md`.
+
 O relatório oficial confirma, no exercício de 2010:
 
 1. o Tesouro virou o principal *funding* do BNDES, com estoque de
@@ -493,6 +500,7 @@ uma conta de estoque/ano; o deste repositório é a soma das parcelas.
 | `output/TCU_CG_2010_BASE_MONETARIA.md` | Análise da p. 35 — fatores da base monetária 2003–2010 |
 | `output/TCU_CG_2010_SELIC_BASE.md` | Cotejamento Selic (p. 33) × fatores da base (p. 35) |
 | `output/TCU_CG_2010_RESERVAS_M1M4.md` | Reservas (p. 43) × M1–M4 × Selic/repos |
+| `output/TCU_CG_2010_SELIC_BP_2003_2016.md` | Por que a Selic não acelerou a queda após 2003 |
 | `scripts/tcu_cg_2010_dados.py` | Valores nominais extraídos do PDF |
 | `scripts/build_tcu_cg_2010.py` | Regenera a planilha e este markdown |
 
@@ -523,6 +531,7 @@ def build(
     base = analisar(ipca=ipca, data_ref=data_ref, pasta=xlsx.parent)
     cruz = cotejar(pasta=xlsx.parent)
     reservas = analisar_reservas(pasta=xlsx.parent)
+    selic_bp = analisar_selic_bp(pasta=xlsx.parent)
     extra = {
         "Base_Monetaria": base["serie"],
         "Base_Monetaria_Detalhe": base["detalhe"],
@@ -534,6 +543,8 @@ def build(
         "Reservas_Internacionais": reservas["reservas"],
         "Agregados_M1_M4": reservas["agregados"],
         "Reservas_vs_M1M4": reservas["quadro"],
+        "Balanca_Comercial": selic_bp["externo"],
+        "Selic_IPCA_2003_2016": selic_bp["selic_ipca"],
     }
     if base["ipca"] is not None:
         extra["Base_Monetaria_IPCA"] = base["ipca"]
@@ -563,6 +574,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[OK] {xlsx.parent / 'TCU_CG_2010_BASE_MONETARIA.md'}")
     print(f"[OK] {xlsx.parent / 'TCU_CG_2010_SELIC_BASE.md'}")
     print(f"[OK] {xlsx.parent / 'TCU_CG_2010_RESERVAS_M1M4.md'}")
+    print(f"[OK] {xlsx.parent / 'TCU_CG_2010_SELIC_BP_2003_2016.md'}")
     return 0
 
 
