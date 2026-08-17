@@ -138,6 +138,8 @@ streamlit run app.py
 | `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |
 | `resumo_fluxos_polars_final.xlsx` | Polars FINAL: Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais_Gerais |
 | `RELATORIO_EXECUTIVO.md` | Relatório markdown (totais + top agentes) |
+| `output/TCU_CG_2010.xlsx` | Tabelas do Relatório TCU Contas do Governo 2010 + IPCA jun/2026 |
+| `output/TCU_CG_2010_RELATORIO.md` | Recorte BNDES / crédito oficial / renúncia do mesmo relatório |
 | `grafico_interativo.html` | Impacto fiscal por ano (Plotly) |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
@@ -210,6 +212,16 @@ Para usar o STP ContAgil da RFB (capitalização oficial da tabela):
 ```bash
 python3 scripts/gerar_fluxos.py --download \
   --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
+```
+
+## TCU — Contas do Governo 2010
+
+Recorte do [Relatório e Parecer Prévio](https://sites.tcu.gov.br/recursos/contas-do-governo-2010/CG%202010%20Relat%C3%B3rio.pdf)
+(crédito oficial, BNDES, renúncia e PAC), com valores de 2010 atualizados
+pelo IPCA até 30/06/2026:
+
+```bash
+python3 scripts/build_tcu_cg_2010.py
 ```
 
 ## Testes
