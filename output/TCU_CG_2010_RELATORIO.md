@@ -193,6 +193,13 @@ aqui, a Selic efetiva na data de cada parcela.
 
 ## Como isso se conecta aos fluxos 2009–2010 do repositório
 
+O gráfico da p. 33 (Selic, jan/2006–mar/2011) e o quadro da p. 35 (fatores
+da base, 2003–2010) medem preço e quantidade da mesma liquidez. O
+cotejamento está em `output/TCU_CG_2010_SELIC_BASE.md`: em 2007 a Selic
+cai enquanto os títulos esterilizam o câmbio; em 2008 o compulsório injeta
+com a Selic ainda alta; em 2010 o compulsório aperta à frente da Selic e
+os títulos sobem como contrapartida, não como afrouxamento.
+
 O relatório oficial confirma, no exercício de 2010:
 
 1. o Tesouro virou o principal *funding* do BNDES, com estoque de
@@ -217,6 +224,7 @@ uma conta de estoque/ano; o deste repositório é a soma das parcelas.
 | `output/TCU_CG_2010.xlsx` | Tabelas extraídas + coluna IPCA até 30/06/2026 |
 | `output/TCU_CG_2010_RELATORIO.md` | Este relatório |
 | `output/TCU_CG_2010_BASE_MONETARIA.md` | Análise da p. 35 — fatores da base monetária 2003–2010 |
+| `output/TCU_CG_2010_SELIC_BASE.md` | Cotejamento Selic (p. 33) × fatores da base (p. 35) |
 | `scripts/tcu_cg_2010_dados.py` | Valores nominais extraídos do PDF |
 | `scripts/build_tcu_cg_2010.py` | Regenera a planilha e este markdown |
 
@@ -229,4 +237,5 @@ Fatores_DLSP, Superavit_Financeiro, Renuncia_Regional, Renuncia_Tributaria,
 Renuncia_Projetada, Carga_vs_Renuncia_PIB, Renuncia_Previdenciaria,
 Beneficios_Fin_Cred, PAC_Desoneracoes, PAC_Desoneracoes_Serie,
 PAC_Subsidios_Eixo, Resumo_IPCA, Base_Monetaria, Base_Monetaria_Detalhe,
-Base_Monetaria_Acum, Base_Monetaria_IPCA.
+Base_Monetaria_Acum, Base_Monetaria_IPCA, Selic_Copom, Selic_Anual,
+Cotejamento_Selic_Base, Selic_TCU_vs_oficial.

@@ -9,6 +9,8 @@ Unidades: R$ milhões, salvo indicação em `unidade`.
 
 from __future__ import annotations
 
+from datetime import date, timedelta
+
 FONTE_URL = (
     "https://sites.tcu.gov.br/recursos/contas-do-governo-2010/"
     "CG%202010%20Relat%C3%B3rio.pdf"
@@ -681,6 +683,157 @@ def fatores_base_monetaria_detalhe_2009_2010() -> list[dict]:
             "derivativos_ajustes": -1,
             "outras_contas_ajustes": 3_830,
             "var_base": 40_780,
+        },
+    ]
+
+
+def selic_copom_decisoes() -> list[dict]:
+    """Mudanças da meta Selic (Copom / Bacen SGS 432), dez/2002 a mar/2011.
+
+    `reuniao` é a data da reunião do Copom. `vigencia` é o primeiro dia da
+    nova meta na série diária SGS 432 (em geral o dia útil seguinte).
+    Inclui a taxa herdada de 18/12/2002 (25,00%), vigente em 1º/1/2003.
+
+    O gráfico da p. 33 do TCU cobre jan/2006–mar/2011; a série abaixo
+    cobre também 2003–2005, para cotejar com o quadro da p. 35.
+    """
+    return [
+        {"reuniao": date(2002, 12, 18), "vigencia": date(2002, 12, 19), "selic": 25.00, "delta_pp": 3.00},
+        {"reuniao": date(2003, 1, 22), "vigencia": date(2003, 1, 23), "selic": 25.50, "delta_pp": 0.50},
+        {"reuniao": date(2003, 2, 19), "vigencia": date(2003, 2, 20), "selic": 26.50, "delta_pp": 1.00},
+        {"reuniao": date(2003, 6, 18), "vigencia": date(2003, 6, 19), "selic": 26.00, "delta_pp": -0.50},
+        {"reuniao": date(2003, 7, 23), "vigencia": date(2003, 7, 24), "selic": 24.50, "delta_pp": -1.50},
+        {"reuniao": date(2003, 8, 20), "vigencia": date(2003, 8, 21), "selic": 22.00, "delta_pp": -2.50},
+        {"reuniao": date(2003, 9, 17), "vigencia": date(2003, 9, 18), "selic": 20.00, "delta_pp": -2.00},
+        {"reuniao": date(2003, 10, 22), "vigencia": date(2003, 10, 23), "selic": 19.00, "delta_pp": -1.00},
+        {"reuniao": date(2003, 11, 19), "vigencia": date(2003, 11, 20), "selic": 17.50, "delta_pp": -1.50},
+        {"reuniao": date(2003, 12, 17), "vigencia": date(2003, 12, 18), "selic": 16.50, "delta_pp": -1.00},
+        {"reuniao": date(2004, 4, 14), "vigencia": date(2004, 4, 15), "selic": 16.00, "delta_pp": -0.50},
+        {"reuniao": date(2004, 9, 15), "vigencia": date(2004, 9, 16), "selic": 16.25, "delta_pp": 0.25},
+        {"reuniao": date(2004, 10, 20), "vigencia": date(2004, 10, 21), "selic": 16.75, "delta_pp": 0.50},
+        {"reuniao": date(2004, 11, 17), "vigencia": date(2004, 11, 18), "selic": 17.25, "delta_pp": 0.50},
+        {"reuniao": date(2004, 12, 15), "vigencia": date(2004, 12, 16), "selic": 17.75, "delta_pp": 0.50},
+        {"reuniao": date(2005, 1, 19), "vigencia": date(2005, 1, 20), "selic": 18.25, "delta_pp": 0.50},
+        {"reuniao": date(2005, 2, 16), "vigencia": date(2005, 2, 17), "selic": 18.75, "delta_pp": 0.50},
+        {"reuniao": date(2005, 3, 16), "vigencia": date(2005, 3, 17), "selic": 19.25, "delta_pp": 0.50},
+        {"reuniao": date(2005, 4, 20), "vigencia": date(2005, 4, 21), "selic": 19.50, "delta_pp": 0.25},
+        {"reuniao": date(2005, 5, 18), "vigencia": date(2005, 5, 19), "selic": 19.75, "delta_pp": 0.25},
+        {"reuniao": date(2005, 9, 14), "vigencia": date(2005, 9, 15), "selic": 19.50, "delta_pp": -0.25},
+        {"reuniao": date(2005, 10, 19), "vigencia": date(2005, 10, 20), "selic": 19.00, "delta_pp": -0.50},
+        {"reuniao": date(2005, 11, 23), "vigencia": date(2005, 11, 24), "selic": 18.50, "delta_pp": -0.50},
+        {"reuniao": date(2005, 12, 14), "vigencia": date(2005, 12, 15), "selic": 18.00, "delta_pp": -0.50},
+        {"reuniao": date(2006, 1, 18), "vigencia": date(2006, 1, 19), "selic": 17.25, "delta_pp": -0.75},
+        {"reuniao": date(2006, 3, 8), "vigencia": date(2006, 3, 9), "selic": 16.50, "delta_pp": -0.75},
+        {"reuniao": date(2006, 4, 19), "vigencia": date(2006, 4, 20), "selic": 15.75, "delta_pp": -0.75},
+        {"reuniao": date(2006, 5, 31), "vigencia": date(2006, 6, 1), "selic": 15.25, "delta_pp": -0.50},
+        {"reuniao": date(2006, 7, 19), "vigencia": date(2006, 7, 20), "selic": 14.75, "delta_pp": -0.50},
+        {"reuniao": date(2006, 8, 30), "vigencia": date(2006, 8, 31), "selic": 14.25, "delta_pp": -0.50},
+        {"reuniao": date(2006, 10, 18), "vigencia": date(2006, 10, 19), "selic": 13.75, "delta_pp": -0.50},
+        {"reuniao": date(2006, 11, 29), "vigencia": date(2006, 11, 30), "selic": 13.25, "delta_pp": -0.50},
+        {"reuniao": date(2007, 1, 24), "vigencia": date(2007, 1, 25), "selic": 13.00, "delta_pp": -0.25},
+        {"reuniao": date(2007, 3, 7), "vigencia": date(2007, 3, 8), "selic": 12.75, "delta_pp": -0.25},
+        {"reuniao": date(2007, 4, 18), "vigencia": date(2007, 4, 19), "selic": 12.50, "delta_pp": -0.25},
+        {"reuniao": date(2007, 6, 6), "vigencia": date(2007, 6, 7), "selic": 12.00, "delta_pp": -0.50},
+        {"reuniao": date(2007, 7, 18), "vigencia": date(2007, 7, 19), "selic": 11.50, "delta_pp": -0.50},
+        {"reuniao": date(2007, 9, 5), "vigencia": date(2007, 9, 6), "selic": 11.25, "delta_pp": -0.25},
+        {"reuniao": date(2008, 4, 16), "vigencia": date(2008, 4, 17), "selic": 11.75, "delta_pp": 0.50},
+        {"reuniao": date(2008, 6, 4), "vigencia": date(2008, 6, 5), "selic": 12.25, "delta_pp": 0.50},
+        {"reuniao": date(2008, 7, 23), "vigencia": date(2008, 7, 24), "selic": 13.00, "delta_pp": 0.75},
+        {"reuniao": date(2008, 9, 10), "vigencia": date(2008, 9, 11), "selic": 13.75, "delta_pp": 0.75},
+        {"reuniao": date(2009, 1, 21), "vigencia": date(2009, 1, 22), "selic": 12.75, "delta_pp": -1.00},
+        {"reuniao": date(2009, 3, 11), "vigencia": date(2009, 3, 12), "selic": 11.25, "delta_pp": -1.50},
+        {"reuniao": date(2009, 4, 29), "vigencia": date(2009, 4, 30), "selic": 10.25, "delta_pp": -1.00},
+        {"reuniao": date(2009, 6, 10), "vigencia": date(2009, 6, 11), "selic": 9.25, "delta_pp": -1.00},
+        {"reuniao": date(2009, 7, 22), "vigencia": date(2009, 7, 23), "selic": 8.75, "delta_pp": -0.50},
+        {"reuniao": date(2010, 4, 28), "vigencia": date(2010, 4, 29), "selic": 9.50, "delta_pp": 0.75},
+        {"reuniao": date(2010, 6, 9), "vigencia": date(2010, 6, 10), "selic": 10.25, "delta_pp": 0.75},
+        {"reuniao": date(2010, 7, 21), "vigencia": date(2010, 7, 22), "selic": 10.75, "delta_pp": 0.50},
+        {"reuniao": date(2011, 1, 19), "vigencia": date(2011, 1, 20), "selic": 11.25, "delta_pp": 0.50},
+        {"reuniao": date(2011, 3, 2), "vigencia": date(2011, 3, 3), "selic": 11.75, "delta_pp": 0.50},
+    ]
+
+
+def selic_na_data(dia: date, decisoes: list[dict] | None = None) -> float:
+    """Meta Selic vigente em `dia` (SGS 432)."""
+    serie = decisoes if decisoes is not None else selic_copom_decisoes()
+    meta = None
+    for dec in serie:
+        if dec["vigencia"] <= dia:
+            meta = float(dec["selic"])
+        else:
+            break
+    if meta is None:
+        raise ValueError(f"Sem meta Selic para {dia.isoformat()}")
+    return meta
+
+
+def selic_anual(ano_ini: int = 2003, ano_fim: int = 2010) -> list[dict]:
+    """Selic no 1º e no último dia do ano, média ponderada por dias e extremos."""
+    serie = selic_copom_decisoes()
+    rows = []
+    for ano in range(ano_ini, ano_fim + 1):
+        d0 = date(ano, 1, 1)
+        d1 = date(ano, 12, 31)
+        ini = selic_na_data(d0, serie)
+        fim = selic_na_data(d1, serie)
+        total = 0.0
+        n = 0
+        mx = ini
+        mn = ini
+        dia = d0
+        while dia <= d1:
+            v = selic_na_data(dia, serie)
+            total += v
+            n += 1
+            if v > mx:
+                mx = v
+            if v < mn:
+                mn = v
+            dia += timedelta(days=1)
+        delta = round(fim - ini, 2)
+        if delta < -0.01:
+            sentido = "queda"
+        elif delta > 0.01:
+            sentido = "alta"
+        else:
+            sentido = "estável"
+        rows.append(
+            {
+                "ano": ano,
+                "selic_ini": ini,
+                "selic_fim": fim,
+                "selic_media": round(total / n, 2),
+                "selic_max": mx,
+                "selic_min": mn,
+                "delta_pp": delta,
+                "sentido": sentido,
+            }
+        )
+    return rows
+
+
+def tcu_vs_oficial_selic_p33() -> list[dict]:
+    """Datas que o TCU lê no gráfico da p. 33 versus o calendário oficial do Copom."""
+    return [
+        {
+            "evento": "Piso de 8,75% a.a.",
+            "leitura_tcu_p33": "vigente até a reunião de 22/7/2009",
+            "oficial_copom": "corte para 8,75% na reunião de 22/7/2009, vigente em 23/7/2009; piso até 28/4/2010",
+        },
+        {
+            "evento": "Selic em 10,25% a.a.",
+            "leitura_tcu_p33": "aumentou para 10,25% apenas em 1º/9/2010",
+            "oficial_copom": "10,25% vigente desde 10/6/2010 (reunião de 9/6); em 1º/9/2010 a meta já era 10,75%",
+        },
+        {
+            "evento": "Alta de 0,50 pp para 11,25%",
+            "leitura_tcu_p33": "reunião de 19/1/2011",
+            "oficial_copom": "reunião de 19/1/2011, vigente em 20/1/2011",
+        },
+        {
+            "evento": "Janela do gráfico da p. 33",
+            "leitura_tcu_p33": "janeiro de 2006 a março de 2011",
+            "oficial_copom": "o quadro da p. 35 começa em 2003; o cotejamento usa a série oficial 2003–2010 e marca a janela do gráfico",
         },
     ]
 

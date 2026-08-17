@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -18,6 +18,7 @@ from scripts.build_tcu_cg_2010 import (
     fator_dez2010_ref,
 )
 from scripts.analisar_base_monetaria_tcu import df_detalhe_2009_2010, df_fatores
+from scripts.cotejar_selic_base_tcu import df_cotejamento
 from scripts.tcu_cg_2010_dados import (
     FONTE_URL,
     autorizacoes_legais,
@@ -30,6 +31,8 @@ from scripts.tcu_cg_2010_dados import (
     renuncia_previdenciaria,
     renuncia_regional,
     renuncia_tributaria,
+    selic_anual,
+    selic_na_data,
 )
 
 
@@ -138,10 +141,15 @@ def test_build_gera_xlsx_e_md(tmp_path: Path):
         "Beneficios_Fin_Cred",
         "Base_Monetaria",
         "Base_Monetaria_Acum",
+        "Selic_Copom",
+        "Selic_Anual",
+        "Cotejamento_Selic_Base",
     }
     assert esperadas <= set(wb.sheetnames)
     assert (tmp_path / "TCU_CG_2010_BASE_MONETARIA.md").exists()
     assert (tmp_path / "grafico_base_monetaria_2003_2010.png").exists()
+    assert (tmp_path / "TCU_CG_2010_SELIC_BASE.md").exists()
+    assert (tmp_path / "grafico_selic_base_monetaria_2003_2010.png").exists()
 
     texto = p_md.read_text(encoding="utf-8")
     assert "236,72" in texto
@@ -176,6 +184,40 @@ def test_fatores_base_monetaria_identidade():
         + d2010["outras_contas_ajustes"]
     )
     assert abs(demais - (-233_082)) < 1e-6
+
+
+def test_selic_copom_e_cotejamento():
+    assert selic_na_data(date(2003, 1, 1)) == 25.00
+    assert selic_na_data(date(2003, 2, 20)) == 26.50
+    assert selic_na_data(date(2009, 7, 23)) == 8.75
+    assert selic_na_data(date(2010, 4, 28)) == 8.75
+    assert selic_na_data(date(2010, 6, 10)) == 10.25
+    assert selic_na_data(date(2010, 12, 31)) == 10.75
+    assert selic_na_data(date(2011, 1, 20)) == 11.25
+
+    anual = {r["ano"]: r for r in selic_anual()}
+    assert anual[2003]["selic_fim"] == 16.50
+    assert anual[2003]["delta_pp"] == -8.50
+    assert anual[2003]["selic_max"] == 26.50
+    assert anual[2005]["selic_max"] == 19.75
+    assert anual[2009]["selic_min"] == 8.75
+    assert anual[2009]["delta_pp"] == -5.00
+    assert anual[2010]["selic_ini"] == 8.75
+    assert anual[2010]["selic_fim"] == 10.75
+    assert anual[2010]["delta_pp"] == 2.00
+    assert anual[2010]["sentido"] == "alta"
+    assert abs(anual[2010]["selic_media"] - 9.90) < 0.05
+
+    cruz = df_cotejamento()
+    y2010 = cruz.loc[cruz["ano"] == 2010].iloc[0]
+    assert y2010["titulos_publicos"] == 249_513
+    assert y2010["demais_operacoes"] == -233_082
+    assert y2010["var_base"] == 40_780
+    assert "compulsório" in y2010["instrumento_dominante"].lower()
+    y2007 = cruz.loc[cruz["ano"] == 2007].iloc[0]
+    assert y2007["titulos_publicos"] == -73_974
+    assert y2007["setor_externo"] == 155_390
+    assert y2007["sentido_selic"] == "queda"
 
 
 def test_dataframes_auxiliares():
