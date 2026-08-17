@@ -17,11 +17,13 @@ from scripts.build_tcu_cg_2010 import (
     df_resumo_ipca,
     fator_dez2010_ref,
 )
+from scripts.analisar_base_monetaria_tcu import df_detalhe_2009_2010, df_fatores
 from scripts.tcu_cg_2010_dados import (
     FONTE_URL,
     autorizacoes_legais,
     beneficios_fin_cred,
     creditos_dlsp,
+    fatores_base_monetaria,
     indicadores,
     pac_desoneracoes,
     pac_subsidios_eixo,
@@ -32,7 +34,7 @@ from scripts.tcu_cg_2010_dados import (
 
 
 def _ipca_constante(taxa: float = 0.5) -> pd.DataFrame:
-    mes = pd.date_range("2009-01-01", "2026-06-01", freq="MS")
+    mes = pd.date_range("2003-01-01", "2026-06-01", freq="MS")
     fator = (1.0 + taxa / 100.0) ** pd.Series(range(1, len(mes) + 1))
     return pd.DataFrame({"mes": mes, "valor": taxa, "fator": fator.to_numpy()})
 
@@ -134,8 +136,12 @@ def test_build_gera_xlsx_e_md(tmp_path: Path):
         "PAC_Subsidios_Eixo",
         "Resumo_IPCA",
         "Beneficios_Fin_Cred",
+        "Base_Monetaria",
+        "Base_Monetaria_Acum",
     }
     assert esperadas <= set(wb.sheetnames)
+    assert (tmp_path / "TCU_CG_2010_BASE_MONETARIA.md").exists()
+    assert (tmp_path / "grafico_base_monetaria_2003_2010.png").exists()
 
     texto = p_md.read_text(encoding="utf-8")
     assert "236,72" in texto
@@ -143,6 +149,33 @@ def test_build_gera_xlsx_e_md(tmp_path: Path):
     assert "tcu.gov.br" in texto
     assert FONTE_URL in texto
     assert "Lei 11.948" in texto
+
+
+def test_fatores_base_monetaria_identidade():
+    rows = fatores_base_monetaria()
+    assert [r["ano"] for r in rows] == list(range(2003, 2011))
+    assert rows[0]["ano"] == 2003
+    y2010 = next(r for r in rows if r["ano"] == 2010)
+    assert y2010["titulos_publicos"] == 249_513
+    assert y2010["demais_operacoes"] == -233_082
+    assert y2010["var_base"] == 40_780
+
+    df = df_fatores()
+    assert df["identidade_ok"].all()
+    assert abs(df["residuo"]).max() <= 1.0
+    # Tesouro é contracionista em todos os anos
+    assert (df["tesouro_nacional"] < 0).all()
+    # 2008 é o único ano de contração do setor externo
+    assert list(df.loc[df["setor_externo"] < 0, "ano"]) == [2008]
+
+    det = df_detalhe_2009_2010()
+    d2010 = det.loc[det["ano"] == 2010].iloc[0]
+    demais = (
+        d2010["depositos_inst_financ"]
+        + d2010["derivativos_ajustes"]
+        + d2010["outras_contas_ajustes"]
+    )
+    assert abs(demais - (-233_082)) < 1e-6
 
 
 def test_dataframes_auxiliares():

@@ -216,6 +216,7 @@ uma conta de estoque/ano; o deste repositório é a soma das parcelas.
 |---|---|
 | `output/TCU_CG_2010.xlsx` | Tabelas extraídas + coluna IPCA até 30/06/2026 |
 | `output/TCU_CG_2010_RELATORIO.md` | Este relatório |
+| `output/TCU_CG_2010_BASE_MONETARIA.md` | Análise da p. 35 — fatores da base monetária 2003–2010 |
 | `scripts/tcu_cg_2010_dados.py` | Valores nominais extraídos do PDF |
 | `scripts/build_tcu_cg_2010.py` | Regenera a planilha e este markdown |
 
@@ -227,4 +228,5 @@ Abas da planilha: Fonte, Indicadores, Creditos_DLSP, Autorizacoes_Legais, DPF,
 Fatores_DLSP, Superavit_Financeiro, Renuncia_Regional, Renuncia_Tributaria,
 Renuncia_Projetada, Carga_vs_Renuncia_PIB, Renuncia_Previdenciaria,
 Beneficios_Fin_Cred, PAC_Desoneracoes, PAC_Desoneracoes_Serie,
-PAC_Subsidios_Eixo, Resumo_IPCA.
+PAC_Subsidios_Eixo, Resumo_IPCA, Base_Monetaria, Base_Monetaria_Detalhe,
+Base_Monetaria_Acum, Base_Monetaria_IPCA.

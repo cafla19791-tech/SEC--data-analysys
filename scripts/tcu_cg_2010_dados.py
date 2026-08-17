@@ -637,3 +637,64 @@ def fatores_dlsp() -> list[dict]:
         {"item": "Efeito crescimento do PIB", "y2008": None, "pib2008": -5.56, "y2009": None, "pib2009": -1.85, "y2010": None, "pib2010": -5.52},
         {"item": "PIB 12 meses (valores correntes)", "y2008": 3_031_864, "pib2008": None, "y2009": 3_185_125, "pib2009": None, "y2010": 3_657_366, "pib2010": None},
     ]
+
+
+def fatores_base_monetaria() -> list[dict]:
+    """Quadro p. 35 — Fatores Condicionantes da Base Monetária – 2002 a 2010.
+
+    O título do TCU cita 2002–2010 e o texto fala em “últimos sete exercícios”,
+    mas a tabela impressa começa em 2003. Valores em R$ milhões.
+    Convenção Bacen/TCU: (+) expansão da base / (−) retração.
+    Identidade: tesouro + titulos + setor_externo + demais = var_base.
+    """
+    return [
+        {"ano": 2003, "tesouro_nacional": -1_064, "titulos_publicos": 11_181, "setor_externo": 643, "demais_operacoes": -10_843, "var_base": -83},
+        {"ano": 2004, "tesouro_nacional": -42_140, "titulos_publicos": 52_111, "setor_externo": 12_599, "demais_operacoes": -8_468, "var_base": 14_102},
+        {"ano": 2005, "tesouro_nacional": -43_008, "titulos_publicos": 2_808, "setor_externo": 52_395, "demais_operacoes": 319, "var_base": 12_514},
+        {"ano": 2006, "tesouro_nacional": -59_511, "titulos_publicos": -687, "setor_externo": 74_369, "demais_operacoes": 5_683, "var_base": 19_854},
+        {"ano": 2007, "tesouro_nacional": -55_600, "titulos_publicos": -73_974, "setor_externo": 155_390, "demais_operacoes": -300, "var_base": 25_516},
+        {"ano": 2008, "tesouro_nacional": -74_312, "titulos_publicos": 34_059, "setor_externo": -12_124, "demais_operacoes": 53_311, "var_base": 933},
+        {"ano": 2009, "tesouro_nacional": -52_312, "titulos_publicos": 11_281, "setor_externo": 62_937, "demais_operacoes": -3_383, "var_base": 18_523},
+        {"ano": 2010, "tesouro_nacional": -51_204, "titulos_publicos": 249_513, "setor_externo": 75_553, "demais_operacoes": -233_082, "var_base": 40_780},
+    ]
+
+
+def fatores_base_monetaria_detalhe_2009_2010() -> list[dict]:
+    """Quadro p. 34 — detalhe 2009–2010 (R$ milhões)."""
+    return [
+        {
+            "ano": 2009,
+            "tesouro_nacional": -52_312,
+            "titulos_publicos": 11_281,
+            "setor_externo": 62_937,
+            "depositos_inst_financ": -3_425,
+            "derivativos_ajustes": -3_199,
+            "outras_contas_ajustes": 3_242,
+            "var_base": 18_523,
+        },
+        {
+            "ano": 2010,
+            "tesouro_nacional": -51_204,
+            "titulos_publicos": 249_513,
+            "setor_externo": 75_553,
+            "depositos_inst_financ": -236_911,
+            "derivativos_ajustes": -1,
+            "outras_contas_ajustes": 3_830,
+            "var_base": 40_780,
+        },
+    ]
+
+
+def operacoes_compromissadas_prazos() -> list[dict]:
+    """Quadro p. 36 — prazos de vencimento das compromissadas (R$ milhões)."""
+    return [
+        {"periodo": "dez/06", "curtissimo": 5_800, "ate_3_meses": None, "acima_3_meses": 54_231, "total": 60_030},
+        {"periodo": "jun/07", "curtissimo": 10_198, "ate_3_meses": 48_767, "acima_3_meses": 77_795, "total": 136_760},
+        {"periodo": "dez/07", "curtissimo": -1_460, "ate_3_meses": 82_781, "acima_3_meses": 84_493, "total": 165_813},
+        {"periodo": "jun/08", "curtissimo": 20_348, "ate_3_meses": 138_195, "acima_3_meses": 74_586, "total": 233_129},
+        {"periodo": "dez/08", "curtissimo": 75_834, "ate_3_meses": 180_666, "acima_3_meses": 43_990, "total": 300_491},
+        {"periodo": "jun/09", "curtissimo": 56_029, "ate_3_meses": 272_136, "acima_3_meses": 57_458, "total": 385_624},
+        {"periodo": "dez/09", "curtissimo": 31_846, "ate_3_meses": 316_634, "acima_3_meses": 79_394, "total": 427_874},
+        {"periodo": "jun/10", "curtissimo": 25_853, "ate_3_meses": 231_049, "acima_3_meses": 93_827, "total": 350_729},
+        {"periodo": "dez/10", "curtissimo": None, "ate_3_meses": 116_509, "acima_3_meses": 142_739, "total": 259_248},
+    ]

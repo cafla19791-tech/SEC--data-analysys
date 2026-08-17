@@ -224,6 +224,9 @@ pelo IPCA até 30/06/2026:
 python3 scripts/build_tcu_cg_2010.py
 ```
 
+A análise da p. 35 (fatores condicionantes da base monetária, 2003–2010)
+fica em `output/TCU_CG_2010_BASE_MONETARIA.md`.
+
 ## Testes
 
 ```bash

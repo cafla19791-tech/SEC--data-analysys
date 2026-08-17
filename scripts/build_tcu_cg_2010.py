@@ -34,6 +34,7 @@ from scripts.calcular_diretas_ipca_selic import (  # noqa: E402
     fator_ipca_entre,
 )
 from scripts import tcu_cg_2010_dados as D  # noqa: E402
+from scripts.analisar_base_monetaria_tcu import analisar  # noqa: E402
 
 MES_BASE_DEFAULT = datetime(2010, 12, 1)
 OUTPUT_XLSX = ROOT / "output" / "TCU_CG_2010.xlsx"
@@ -183,6 +184,7 @@ def escrever_excel(
     destino: Path,
     fator: float,
     data_ref: datetime,
+    extra_sheets: dict | None = None,
 ) -> Path:
     destino.parent.mkdir(parents=True, exist_ok=True)
     fonte = pd.DataFrame(
@@ -223,6 +225,8 @@ def escrever_excel(
         "PAC_Subsidios_Eixo": df_pac_eixo(fator),
         "Resumo_IPCA": df_resumo_ipca(fator, data_ref),
     }
+    if extra_sheets:
+        abas.update(extra_sheets)
     with pd.ExcelWriter(destino, engine="openpyxl") as writer:
         for nome, frame in abas.items():
             frame.to_excel(writer, sheet_name=nome[:31], index=False)
@@ -470,6 +474,7 @@ uma conta de estoque/ano; o deste repositório é a soma das parcelas.
 |---|---|
 | `output/TCU_CG_2010.xlsx` | Tabelas extraídas + coluna IPCA até {ref} |
 | `output/TCU_CG_2010_RELATORIO.md` | Este relatório |
+| `output/TCU_CG_2010_BASE_MONETARIA.md` | Análise da p. 35 — fatores da base monetária 2003–2010 |
 | `scripts/tcu_cg_2010_dados.py` | Valores nominais extraídos do PDF |
 | `scripts/build_tcu_cg_2010.py` | Regenera a planilha e este markdown |
 
@@ -481,7 +486,8 @@ Abas da planilha: Fonte, Indicadores, Creditos_DLSP, Autorizacoes_Legais, DPF,
 Fatores_DLSP, Superavit_Financeiro, Renuncia_Regional, Renuncia_Tributaria,
 Renuncia_Projetada, Carga_vs_Renuncia_PIB, Renuncia_Previdenciaria,
 Beneficios_Fin_Cred, PAC_Desoneracoes, PAC_Desoneracoes_Serie,
-PAC_Subsidios_Eixo, Resumo_IPCA.
+PAC_Subsidios_Eixo, Resumo_IPCA, Base_Monetaria, Base_Monetaria_Detalhe,
+Base_Monetaria_Acum, Base_Monetaria_IPCA.
 """
     destino.write_text(md, encoding="utf-8")
     return destino
@@ -494,7 +500,15 @@ def build(
     md: Path = OUTPUT_MD,
 ) -> tuple[Path, Path, float]:
     fator = fator_dez2010_ref(ipca, data_ref=data_ref)
-    p_xlsx = escrever_excel(xlsx, fator, data_ref)
+    base = analisar(ipca=ipca, data_ref=data_ref, pasta=xlsx.parent)
+    extra = {
+        "Base_Monetaria": base["serie"],
+        "Base_Monetaria_Detalhe": base["detalhe"],
+        "Base_Monetaria_Acum": base["acumulado"],
+    }
+    if base["ipca"] is not None:
+        extra["Base_Monetaria_IPCA"] = base["ipca"]
+    p_xlsx = escrever_excel(xlsx, fator, data_ref, extra_sheets=extra)
     p_md = escrever_markdown(md, fator, data_ref)
     return p_xlsx, p_md, fator
 
@@ -517,6 +531,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[OK] fator IPCA dez/2010 → {data_ref.date()} = {fator:.6f}")
     print(f"[OK] {xlsx}")
     print(f"[OK] {md}")
+    print(f"[OK] {xlsx.parent / 'TCU_CG_2010_BASE_MONETARIA.md'}")
     return 0
 
 
