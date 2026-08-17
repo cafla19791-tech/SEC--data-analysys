@@ -18,9 +18,11 @@ from scripts.build_tcu_cg_2010 import (
     fator_dez2010_ref,
 )
 from scripts.analisar_base_monetaria_tcu import df_detalhe_2009_2010, df_fatores
+from scripts.analisar_reservas_agregados_tcu import df_agregados, df_quadro, df_reservas
 from scripts.cotejar_selic_base_tcu import df_cotejamento
 from scripts.tcu_cg_2010_dados import (
     FONTE_URL,
+    agregados_monetarios_dezembro,
     autorizacoes_legais,
     beneficios_fin_cred,
     creditos_dlsp,
@@ -31,6 +33,7 @@ from scripts.tcu_cg_2010_dados import (
     renuncia_previdenciaria,
     renuncia_regional,
     renuncia_tributaria,
+    reservas_internacionais_liquidez,
     selic_anual,
     selic_na_data,
 )
@@ -144,12 +147,16 @@ def test_build_gera_xlsx_e_md(tmp_path: Path):
         "Selic_Copom",
         "Selic_Anual",
         "Cotejamento_Selic_Base",
+        "Reservas_Internacionais",
+        "Agregados_M1_M4",
     }
     assert esperadas <= set(wb.sheetnames)
     assert (tmp_path / "TCU_CG_2010_BASE_MONETARIA.md").exists()
     assert (tmp_path / "grafico_base_monetaria_2003_2010.png").exists()
     assert (tmp_path / "TCU_CG_2010_SELIC_BASE.md").exists()
     assert (tmp_path / "grafico_selic_base_monetaria_2003_2010.png").exists()
+    assert (tmp_path / "TCU_CG_2010_RESERVAS_M1M4.md").exists()
+    assert (tmp_path / "grafico_reservas_agregados_2002_2010.png").exists()
 
     texto = p_md.read_text(encoding="utf-8")
     assert "236,72" in texto
@@ -218,6 +225,37 @@ def test_selic_copom_e_cotejamento():
     assert y2007["titulos_publicos"] == -73_974
     assert y2007["setor_externo"] == 155_390
     assert y2007["sentido_selic"] == "queda"
+
+
+def test_reservas_e_agregados_m1_m4():
+    res = {r["ano"]: r for r in reservas_internacionais_liquidez()}
+    assert res[2002]["reservas_usd_mi"] == 37_823
+    assert res[2003]["reservas_usd_mi"] == 49_296
+    assert res[2007]["reservas_usd_mi"] == 180_334
+    assert res[2010]["reservas_usd_mi"] == 288_575
+    assert res[2007]["reservas_usd_mi"] / res[2003]["reservas_usd_mi"] > 3.0
+
+    agg = {r["ano"]: r for r in agregados_monetarios_dezembro()}
+    assert agg[2003]["base"] - agg[2002]["base"] == -83
+    assert agg[2010]["base"] - agg[2009]["base"] == 40_780
+    assert abs((agg[2007]["base"] - agg[2006]["base"]) - 25_516) <= 1
+    assert agg[2002]["m1"] < agg[2002]["m2"] < agg[2002]["m3"] < agg[2002]["m4"]
+    assert agg[2010]["m1"] == 287_739
+    assert agg[2010]["m4"] == 2_976_783
+    # M1 cai em 2008; M2 e M3 continuam a subir
+    assert agg[2008]["m1"] < agg[2007]["m1"]
+    assert agg[2008]["m2"] > agg[2007]["m2"]
+
+    df_r = df_reservas()
+    y10 = df_r.loc[df_r["ano"] == 2010].iloc[0]
+    assert abs(y10["reservas_r_mi"] - 288_575 * 1.6662) < 1.0
+
+    cruz = df_quadro()
+    y07 = cruz.loc[cruz["ano"] == 2007].iloc[0]
+    assert y07["setor_externo"] == 155_390
+    assert y07["titulos_publicos"] == -73_974
+    assert y07["compromissadas"] == 165_813
+    assert df_agregados()["m3"].is_monotonic_increasing
 
 
 def test_dataframes_auxiliares():

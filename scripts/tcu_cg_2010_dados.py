@@ -838,6 +838,55 @@ def tcu_vs_oficial_selic_p33() -> list[dict]:
     ]
 
 
+def reservas_internacionais_liquidez() -> list[dict]:
+    """Estoque em dezembro — reservas internacionais, conceito de liquidez.
+
+    Fonte do gráfico TCU p. 43 (Bacen, Indicadores Econômicos).
+    Série oficial: Bacen SGS 3546, US$ milhões. PTAX venda no último dia
+    útil do ano: SGS 1.
+    """
+    return [
+        {"ano": 2002, "reservas_usd_mi": 37_823, "ptax_fim": 3.5333},
+        {"ano": 2003, "reservas_usd_mi": 49_296, "ptax_fim": 2.8892},
+        {"ano": 2004, "reservas_usd_mi": 52_935, "ptax_fim": 2.6544},
+        {"ano": 2005, "reservas_usd_mi": 53_799, "ptax_fim": 2.3407},
+        {"ano": 2006, "reservas_usd_mi": 85_839, "ptax_fim": 2.1380},
+        {"ano": 2007, "reservas_usd_mi": 180_334, "ptax_fim": 1.7713},
+        {"ano": 2008, "reservas_usd_mi": 193_783, "ptax_fim": 2.3370},
+        {"ano": 2009, "reservas_usd_mi": 238_520, "ptax_fim": 1.7412},
+        {"ano": 2010, "reservas_usd_mi": 288_575, "ptax_fim": 1.6662},
+    ]
+
+
+def agregados_monetarios_dezembro() -> list[dict]:
+    """Saldos de fim de período, dezembro de 2002 a 2010 (R$ milhões).
+
+    M1–M4: Bacen SGS 27791, 27810, 27813 e 27815 (metodologia da Nota de
+    Estatísticas Monetárias de ago/2018, série retroagida a dez/2001).
+    Unidade original: R$ mil; valores convertidos para R$ milhões.
+
+    Definição vigente: M1 = PMPP + depósitos à vista; M2 = M1 + poupança
+    e títulos privados de instituições depositárias; M3 = M2 + quotas de
+    fundos depositários e operações compromissadas; M4 = M3 + títulos
+    públicos federais em poder do público.
+
+    Base monetária: SGS 1782 (fecha com as variações anuais da p. 35).
+    M1 restrito contemporâneo (PMPP + depósitos à vista, série 1785):
+    o M1 que o TCU/Bacen usavam em 2010, antes da revisão de 2018.
+    """
+    return [
+        {"ano": 2002, "base": 73_302, "m1_restrito": 69_901, "m1": 110_334, "m2": 400_342, "m3": 691_108, "m4": 800_036},
+        {"ano": 2003, "base": 73_219, "m1_restrito": 70_802, "m1": 112_766, "m2": 416_248, "m3": 841_738, "m4": 953_805},
+        {"ano": 2004, "base": 88_733, "m1_restrito": 87_344, "m1": 129_660, "m2": 495_043, "m3": 990_548, "m4": 1_104_058},
+        {"ano": 2005, "base": 101_247, "m1_restrito": 98_306, "m1": 146_745, "m2": 580_696, "m3": 1_166_453, "m4": 1_298_801},
+        {"ano": 2006, "base": 121_102, "m1_restrito": 118_304, "m1": 176_890, "m2": 657_427, "m3": 1_365_958, "m4": 1_506_072},
+        {"ano": 2007, "base": 146_617, "m1_restrito": 143_642, "m1": 235_075, "m2": 779_566, "m3": 1_600_006, "m4": 1_827_748},
+        {"ano": 2008, "base": 147_550, "m1_restrito": 145_742, "m1": 227_167, "m2": 1_086_785, "m3": 1_894_809, "m4": 2_165_027},
+        {"ano": 2009, "base": 166_073, "m1_restrito": 167_400, "m1": 254_714, "m2": 1_185_866, "m3": 2_196_530, "m4": 2_497_479},
+        {"ano": 2010, "base": 206_853, "m1_restrito": 197_388, "m1": 287_739, "m2": 1_387_912, "m3": 2_681_421, "m4": 2_976_783},
+    ]
+
+
 def operacoes_compromissadas_prazos() -> list[dict]:
     """Quadro p. 36 — prazos de vencimento das compromissadas (R$ milhões)."""
     return [
