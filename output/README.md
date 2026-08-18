@@ -16,6 +16,7 @@ Arquivos principais:
 - `resumo_fluxos_avancado.xlsx` — workbook ContAgil (Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais)
 - `resumo_fluxos_polars_final.xlsx` — Polars FINAL (SELIC/TJLP mensais + Totais_Gerais)
 - `RELATORIO_EXECUTIVO.md` / `grafico_interativo.html` / `grafico_top_subsidio.png`
+- `TCU_CG_2010.xlsx` / `TCU_CG_2010_RELATORIO.md` — Relatório TCU Contas do Governo 2010 (BNDES, crédito oficial, renúncia, PAC) + IPCA jun/2026
 - `amostra_fluxos_detalhados.xlsx` — primeiras parcelas com colunas ContAgil
 - `fluxos_amostra.xlsx` — amostra rápida (20 contratos de exemplo)
 
