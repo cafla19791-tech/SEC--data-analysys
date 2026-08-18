@@ -241,6 +241,7 @@ uma conta de estoque/ano; o deste repositório é a soma das parcelas.
 | `output/TCU_CG_2010_RESERVAS_M1M4.md` | Reservas (p. 43) × M1–M4 × Selic/repos |
 | `output/TCU_CG_2010_SELIC_BP_2003_2016.md` | Por que a Selic não acelerou a queda após 2003 |
 | `output/TCU_CG_2010_DBGG_CONTA_UNICA.md` | Simulação Conta Única × fatores da DBGG 2003–2015 |
+| `output/TCU_CG_2010_MACROMETRICA.md` | Bloco macrométrico (atividade–receita–dívida) |
 | `scripts/tcu_cg_2010_dados.py` | Valores nominais extraídos do PDF |
 | `scripts/build_tcu_cg_2010.py` | Regenera a planilha e este markdown |
 

@@ -340,3 +340,34 @@ def test_simulacao_dbgg_conta_unica():
     y03 = sim.loc[sim["ano"] == 2003].iloc[0]
     assert y03["dbgg_oficial"] is None or pd.isna(y03["dbgg_oficial"])
     assert y03["juros_evitados"] == 0.0
+
+
+def test_bloco_macrometrico():
+    from scripts.macrometrica_conta_unica import (
+        CARGA_FEDERAL_PIB,
+        ELASTICIDADE_RECEITA,
+        MU_BNDES,
+        MU_TRIBUTO,
+        df_dbgg_macrometrica,
+        df_macrometrica,
+    )
+    from scripts.simular_dbgg_conta_unica import df_fluxos, df_simulacao
+
+    mm = df_macrometrica()
+    y15 = mm.loc[mm["ano"] == 2015].iloc[0]
+    assert y15["delta_pib"] < 0
+    assert y15["receita_ciclo"] < 0
+    assert y15["renuncia_liquida"] < y15["renuncia_estatica"]
+    assert y15["fluxo_macrometrico"] < y15["fluxo_estatico"]
+    assert abs(y15["vazamento"] - (y15["fluxo_estatico"] - y15["fluxo_macrometrico"])) < 1e-6
+    esperado_dy = -MU_TRIBUTO * y15["renuncia_estatica"] - MU_BNDES * y15["bndes"]
+    assert abs(y15["delta_pib"] - esperado_dy) < 1e-6
+    esperado_ciclo = ELASTICIDADE_RECEITA * CARGA_FEDERAL_PIB * esperado_dy
+    assert abs(y15["receita_ciclo"] - esperado_ciclo) < 1e-6
+
+    est = df_simulacao(df_fluxos())
+    mm_d = df_dbgg_macrometrica(mm)
+    e15 = est.loc[est["ano"] == 2015].iloc[0]
+    d15 = mm_d.loc[mm_d["ano"] == 2015].iloc[0]
+    assert d15["dbgg_mm_selic"] > e15["dbgg_cf_selic"]
+    assert d15["dbgg_mm_selic"] < d15["dbgg_oficial"]
