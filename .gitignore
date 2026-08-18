@@ -41,7 +41,10 @@ output/*_stats.json
 !output/TCU_CG_2010_SELIC_BASE.md
 !output/TCU_CG_2010_RESERVAS_M1M4.md
 !output/TCU_CG_2010_SELIC_BP_2003_2016.md
+!output/TCU_CG_2010_DBGG_CONTA_UNICA.md
 !output/grafico_selic_bp_1999_2016.png
+!output/grafico_dbgg_fluxos_conta_unica_2003_2015.png
+!output/grafico_dbgg_contrafactual_2006_2015.png
 !output/TCU_CG_2010.xlsx
 !output/grafico_base_monetaria_2003_2010.png
 !output/grafico_selic_base_monetaria_2003_2010.png

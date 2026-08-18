@@ -298,3 +298,45 @@ def test_dataframes_auxiliares():
     assert abs(df_beneficios(fator)["y2010_ipca_jun2026"].iloc[-1] - 18_877.65 * 2) < 1e-6
     assert abs(df_pac_deson(fator)["projecao_2010_ipca_jun2026"].iloc[-1] - 46_636.0) < 1e-6
     assert abs(df_pac_eixo(fator)["desembolsos"].iloc[-1] - 4_444.24) < 1e-6
+
+
+def test_simulacao_dbgg_conta_unica():
+    from scripts.sim_dbgg_conta_unica_dados import (
+        DBGG_DEZ_R_MI,
+        INDIRETAS_R_MI,
+        PARTICIPACOES_R_MI,
+        RENUNCIA_2015_EFETIVA,
+        TESOURO_CAPTACAO_R_MI,
+        renuncia_reconstruida,
+    )
+    from scripts.simular_dbgg_conta_unica import df_fluxos, df_simulacao
+
+    assert abs(INDIRETAS_R_MI[2010] - 81_538.0) < 1e-6
+    assert abs(sum(INDIRETAS_R_MI[a] for a in range(2003, 2016)) - 658_375.0) < 1.0
+    assert PARTICIPACOES_R_MI[2003] is None
+    assert abs(PARTICIPACOES_R_MI[2010] - 25_429.091) < 1e-3
+    assert TESOURO_CAPTACAO_R_MI[2009] == 105_000.0
+    assert abs(TESOURO_CAPTACAO_R_MI[2010] - 107_100.0) < 1e-6
+    assert abs(DBGG_DEZ_R_MI[2009] - 1_973_423.68) < 0.1
+    assert abs(DBGG_DEZ_R_MI[2010] - 2_011_521.66) < 0.1
+
+    r15 = renuncia_reconstruida(2015)
+    assert abs(r15["desenvolvimento_regional"] - RENUNCIA_2015_EFETIVA["desenvolvimento_regional"]) < 1e-6
+    assert abs(r15["inovacao"] - RENUNCIA_2015_EFETIVA["inovacao_lei_bem"]) < 1e-6
+    assert abs(r15["imunes_isentas"] - RENUNCIA_2015_EFETIVA["imunes_isentas"]) < 1e-6
+    assert r15["regional_ampla"] == r15["desenvolvimento_regional"] + r15["zfm_alc"]
+    assert renuncia_reconstruida(2004)["inovacao"] == 0.0
+    assert renuncia_reconstruida(2006)["inovacao"] > 0.0
+
+    fluxos = df_fluxos()
+    sim = df_simulacao(fluxos)
+    y10 = fluxos.loc[fluxos["ano"] == 2010].iloc[0]
+    assert abs(y10["fluxo_total"] - (y10["indiretas"] + y10["participacoes_uso"] + y10["renuncia"])) < 1e-6
+    y15 = sim.loc[sim["ano"] == 2015].iloc[0]
+    assert y15["dbgg_cf_estoque"] < y15["dbgg_oficial"]
+    assert y15["dbgg_cf_selic"] < y15["dbgg_cf_estoque"]
+    assert abs(y15["acum_fluxo"] - fluxos["fluxo_total"].sum()) < 1e-6
+    assert y15["emissao_evitada"] == -y15["fluxo"]
+    y03 = sim.loc[sim["ano"] == 2003].iloc[0]
+    assert y03["dbgg_oficial"] is None or pd.isna(y03["dbgg_oficial"])
+    assert y03["juros_evitados"] == 0.0

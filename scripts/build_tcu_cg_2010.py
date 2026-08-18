@@ -38,6 +38,7 @@ from scripts.analisar_base_monetaria_tcu import analisar  # noqa: E402
 from scripts.cotejar_selic_base_tcu import cotejar  # noqa: E402
 from scripts.analisar_reservas_agregados_tcu import analisar as analisar_reservas  # noqa: E402
 from scripts.analisar_selic_bp_2003_2016 import analisar as analisar_selic_bp  # noqa: E402
+from scripts.simular_dbgg_conta_unica import analisar as analisar_dbgg_cu  # noqa: E402
 
 MES_BASE_DEFAULT = datetime(2010, 12, 1)
 OUTPUT_XLSX = ROOT / "output" / "TCU_CG_2010.xlsx"
@@ -501,6 +502,7 @@ uma conta de estoque/ano; o deste repositório é a soma das parcelas.
 | `output/TCU_CG_2010_SELIC_BASE.md` | Cotejamento Selic (p. 33) × fatores da base (p. 35) |
 | `output/TCU_CG_2010_RESERVAS_M1M4.md` | Reservas (p. 43) × M1–M4 × Selic/repos |
 | `output/TCU_CG_2010_SELIC_BP_2003_2016.md` | Por que a Selic não acelerou a queda após 2003 |
+| `output/TCU_CG_2010_DBGG_CONTA_UNICA.md` | Simulação Conta Única × fatores da DBGG 2003–2015 |
 | `scripts/tcu_cg_2010_dados.py` | Valores nominais extraídos do PDF |
 | `scripts/build_tcu_cg_2010.py` | Regenera a planilha e este markdown |
 
@@ -532,6 +534,7 @@ def build(
     cruz = cotejar(pasta=xlsx.parent)
     reservas = analisar_reservas(pasta=xlsx.parent)
     selic_bp = analisar_selic_bp(pasta=xlsx.parent)
+    dbgg_cu = analisar_dbgg_cu(pasta=xlsx.parent)
     extra = {
         "Base_Monetaria": base["serie"],
         "Base_Monetaria_Detalhe": base["detalhe"],
@@ -545,6 +548,8 @@ def build(
         "Reservas_vs_M1M4": reservas["quadro"],
         "Balanca_Comercial": selic_bp["externo"],
         "Selic_IPCA_2003_2016": selic_bp["selic_ipca"],
+        "DBGG_Fluxos_Conta_Unica": dbgg_cu["fluxos"],
+        "DBGG_Simulacao_Conta_Unica": dbgg_cu["simulacao"],
     }
     if base["ipca"] is not None:
         extra["Base_Monetaria_IPCA"] = base["ipca"]
@@ -575,6 +580,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[OK] {xlsx.parent / 'TCU_CG_2010_SELIC_BASE.md'}")
     print(f"[OK] {xlsx.parent / 'TCU_CG_2010_RESERVAS_M1M4.md'}")
     print(f"[OK] {xlsx.parent / 'TCU_CG_2010_SELIC_BP_2003_2016.md'}")
+    print(f"[OK] {xlsx.parent / 'TCU_CG_2010_DBGG_CONTA_UNICA.md'}")
     return 0
 
 
