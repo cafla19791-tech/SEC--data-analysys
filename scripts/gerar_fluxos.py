@@ -640,9 +640,13 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
             elif key.startswith("valor_historico"):
                 # BNDES INDIRETAS ContAgil: Valor histórico / Valor Histórico R$ (*)
                 target = "valor_desembolsado"
-            elif "prazo" in key and "carencia" in key:
+            elif ("prazo" in key or "prezo" in key or key.startswith("carencia")) and (
+                "carencia" in key
+            ):
                 target = "prazo_carencia"
-            elif "prazo" in key and "amortizacao" in key:
+            elif ("prazo" in key or "prezo" in key) and (
+                "amortizacao" in key or "amortizaca" in key
+            ):
                 target = "prazo_amortizacao"
             elif "instituicao" in key and "financeira" in key:
                 target = "agente"
@@ -1000,6 +1004,8 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
         if isinstance(num_src, pd.DataFrame):
             num_src = num_src.iloc[:, 0]
         out["numero_contrato"] = num_src.astype(str).to_numpy()
+    else:
+        out["numero_contrato"] = _numerar_contratos_por_ano(out["data_contratacao"])
 
     before = len(out)
     out = out.dropna(
@@ -1013,6 +1019,17 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
     print(f"Contratos válidos: {len(out):,}")
     print(f"Agentes distintos: {out['agente'].nunique():,}")
     return out
+
+
+def _numerar_contratos_por_ano(datas: pd.Series) -> pd.Series:
+    """1-AAAA, 2-AAAA... reiniciando a cada ano civil da contratação."""
+    s = pd.Series(pd.to_datetime(datas, errors="coerce"), index=getattr(datas, "index", None))
+    anos = s.dt.year.astype("Int64")
+    if anos.isna().any():
+        seq = pd.Series(range(1, len(s) + 1), index=s.index)
+        return seq.astype(str) + "-0000"
+    seq = s.groupby(anos, sort=False).cumcount() + 1
+    return seq.astype(str) + "-" + anos.astype(str)
 
 
 def _coluna_impacto(df: pd.DataFrame) -> str:

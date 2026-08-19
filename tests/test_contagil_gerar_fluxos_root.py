@@ -1,17 +1,23 @@
 """Testes do script ContAgil na raiz (gerar_fluxos.py)."""
 
+import sys
 from datetime import datetime
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from gerar_fluxos import (
-    calcular_impacto_fiscal_real,
-    gerar_fluxos,
-    load_selic,
-    parse_args,
-)
+# Importa o módulo gerar_fluxos da raiz do repositório (script ContAgil raiz)
+import importlib.util
+_root_gf_path = Path(__file__).resolve().parents[1] / "gerar_fluxos.py"
+_spec = importlib.util.spec_from_file_location("gerar_fluxos_root", _root_gf_path)
+_mod = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_mod)
+
+calcular_impacto_fiscal_real = _mod.calcular_impacto_fiscal_real
+gerar_fluxos = _mod.gerar_fluxos
+load_selic = _mod.load_selic
+parse_args = _mod.parse_args
 
 
 def _selic_sintetica() -> pd.DataFrame:
@@ -97,7 +103,7 @@ def test_load_selic_placeholder_sem_arquivo():
 
 def test_gerar_fluxos_colunas_contagil_portugues(tmp_path: Path):
     """Excel ContAgil com headers PT (R$, parênteses, hífens)."""
-    from gerar_fluxos import main as root_main
+    root_main = _mod.main
 
     dados = tmp_path / "dados"
     saida = tmp_path / "saida"
