@@ -141,6 +141,17 @@ python3 scripts/evolucao_consignado_cdc_cartao.py
 SGS 20579 (consignado), 20583 (CDC / aquisição de bens), 20590 (cartão).
 Split oficial desde mar/2007.
 
+# 5 maiores IFs — carteira e proxy de recursos livres (2002–2026)
+
+```bash
+python3 scripts/evolucao_top5_credito_livres.py
+python3 scripts/evolucao_top5_credito_livres.py --sem-download
+```
+
+IF.data (não o SGS): carteira de crédito por conglomerado desde 2002;
+proxy de recursos livres por modalidade PF/PJ desde 2014. Saída:
+`output/evolucao_top5_credito_livres_2002_2026.md`.
+
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
 `data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen

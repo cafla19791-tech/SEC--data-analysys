@@ -46,6 +46,9 @@ output/*_stats.json
 !output/evolucao_consignado_cdc_cartao_2002_2016.md
 !output/consignado_cdc_cartao_anual_2002_2016.csv
 !output/consignado_cdc_cartao_fases_2002_2016.csv
+!output/evolucao_top5_credito_livres_2002_2026.md
+!output/top5_credito_livres_anual_2002_2026.csv
+data/ifdata/
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
 !output/indiretas_automaticas_ipca/README.md
