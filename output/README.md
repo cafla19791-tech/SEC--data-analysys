@@ -44,7 +44,9 @@ Balança comercial e reservas (Bacen SGS, 1995–2025):
 python3 scripts/evolucao_balanca_reservas.py
 ```
 
-- `evolucao_balanca_reservas_1995_2025.md` — relatório com fases e série anual
+- `evolucao_balanca_reservas_1995_2025.md` — relatório com tabelas em grade contínua (HTML)
 - `balanca_reservas_anual_1995_2025.csv` / `balanca_reservas_fases_1995_2025.csv`
+- `balanca_reservas_tabelas_1995_2025.xlsx` — bordas contínuas (thin) em todas as células
+- `tabela_anual_1995_2025.png` / `tabela_fases_1995_2025.png`
 - `grafico_saldo_comercial_1995_2025.png`, `grafico_reservas_1995_2025.png`,
   `grafico_saldo_e_reservas_1995_2025.png`, `grafico_exportacoes_importacoes_1995_2025.png`

@@ -22,6 +22,25 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 import requests
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
+
+ESTILO_TABELA = (
+    "border-collapse:collapse;border-spacing:0;"
+    "border:1.5px solid #1a1a1a;width:100%;"
+)
+ESTILO_CELULA = (
+    "border:1px solid #1a1a1a;padding:6px 8px;"
+    "font-family:Calibri,Arial,sans-serif;font-size:13px;"
+)
+ESTILO_TH = ESTILO_CELULA + "background:#1f4e79;color:#fff;font-weight:700;"
+BORDA_CONTINUA = Border(
+    left=Side(style="thin", color="1A1A1A"),
+    right=Side(style="thin", color="1A1A1A"),
+    top=Side(style="thin", color="1A1A1A"),
+    bottom=Side(style="thin", color="1A1A1A"),
+)
 
 BCB_SGS = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{cod}/dados"
 
@@ -282,43 +301,205 @@ def gerar_graficos(anual: pd.DataFrame, output_dir: Path) -> list[Path]:
     return caminhos
 
 
-def _tabela_anual_md(anual: pd.DataFrame) -> str:
-    linhas = [
-        "| Ano | Exportações | Importações | Saldo comercial | Reservas (dez.) | Δ reservas |",
-        "|----:|------------:|------------:|----------------:|----------------:|-----------:|",
+def cabecalhos_anual() -> list[str]:
+    return [
+        "Ano",
+        "Exportações",
+        "Importações",
+        "Saldo comercial",
+        "Reservas (dez.)",
+        "Δ reservas",
     ]
+
+
+def cabecalhos_fases() -> list[str]:
+    return [
+        "Período",
+        "Contexto",
+        "Saldo médio",
+        "Saldo acumulado",
+        "Reservas início",
+        "Reservas fim",
+        "Δ reservas",
+    ]
+
+
+def linhas_tabela_anual(anual: pd.DataFrame) -> list[list[str]]:
+    linhas = []
     for row in anual.itertuples(index=False):
         linhas.append(
-            "| {ano} | {x} | {m} | {s} | {r} | {d} |".format(
-                ano=int(row.ano),
-                x=_fmt_bi(row.exportacoes),
-                m=_fmt_bi(row.importacoes),
-                s=_fmt_bi_signed(row.saldo_comercial),
-                r=_fmt_bi(row.reservas),
-                d=_fmt_bi_signed(row.var_reservas),
-            )
+            [
+                str(int(row.ano)),
+                _fmt_bi(row.exportacoes),
+                _fmt_bi(row.importacoes),
+                _fmt_bi_signed(row.saldo_comercial),
+                _fmt_bi(row.reservas),
+                _fmt_bi_signed(row.var_reservas),
+            ]
         )
-    return "\n".join(linhas)
+    return linhas
 
 
-def _tabela_fases_md(fases: list[dict]) -> str:
-    linhas = [
-        "| Período | Contexto | Saldo médio | Saldo acumulado | Reservas início | Reservas fim | Δ reservas |",
-        "|---------|----------|------------:|----------------:|----------------:|-------------:|-----------:|",
-    ]
+def linhas_tabela_fases(fases: list[dict]) -> list[list[str]]:
+    linhas = []
     for f in fases:
         linhas.append(
-            "| {p} | {r} | {sm} | {sa} | {ri} | {rf} | {vr} |".format(
-                p=f["periodo"],
-                r=f["rotulo"],
-                sm=_fmt_bi_signed(f["saldo_medio"]),
-                sa=_fmt_bi_signed(f["saldo_acumulado"]),
-                ri=_fmt_bi(f["reservas_inicio"]),
-                rf=_fmt_bi(f["reservas_fim"]),
-                vr=_fmt_bi_signed(f["var_reservas"]),
-            )
+            [
+                f["periodo"],
+                f["rotulo"],
+                _fmt_bi_signed(f["saldo_medio"]),
+                _fmt_bi_signed(f["saldo_acumulado"]),
+                _fmt_bi(f["reservas_inicio"]),
+                _fmt_bi(f["reservas_fim"]),
+                _fmt_bi_signed(f["var_reservas"]),
+            ]
         )
-    return "\n".join(linhas)
+    return linhas
+
+
+def tabela_html(
+    cabecalhos: list[str],
+    linhas: list[list[str]],
+    aligns: list[str] | None = None,
+) -> str:
+    """Tabela HTML com grade contínua (border-collapse + 1px solid em todas as células)."""
+    aligns = aligns or (["center"] + ["right"] * (len(cabecalhos) - 1))
+    if len(aligns) != len(cabecalhos):
+        aligns = ["center"] * len(cabecalhos)
+    ths = "".join(
+        f'<th style="{ESTILO_TH}text-align:{aligns[i]};">{h}</th>'
+        for i, h in enumerate(cabecalhos)
+    )
+    corpo = []
+    for r, linha in enumerate(linhas):
+        fundo = "#ffffff" if r % 2 == 0 else "#eef3f8"
+        tds = "".join(
+            f'<td style="{ESTILO_CELULA}background:{fundo};text-align:{aligns[i]};">{val}</td>'
+            for i, val in enumerate(linha)
+        )
+        corpo.append(f"<tr>{tds}</tr>")
+    return (
+        f'<table style="{ESTILO_TABELA}">'
+        f"<thead><tr>{ths}</tr></thead>"
+        f"<tbody>{''.join(corpo)}</tbody>"
+        "</table>"
+    )
+
+
+def _tabela_anual_html(anual: pd.DataFrame) -> str:
+    return tabela_html(cabecalhos_anual(), linhas_tabela_anual(anual))
+
+
+def _tabela_fases_html(fases: list[dict]) -> str:
+    aligns = ["center", "left"] + ["right"] * 5
+    return tabela_html(cabecalhos_fases(), linhas_tabela_fases(fases), aligns)
+
+
+def desenhar_tabela_png(
+    cabecalhos: list[str],
+    linhas: list[list[str]],
+    path: Path,
+    titulo: str,
+    larguras: list[float] | None = None,
+) -> Path:
+    """PNG com grade contínua (todas as arestas das células em traço sólido)."""
+    n_lin = len(linhas) + 1
+    n_col = len(cabecalhos)
+    fig_w = max(11.0, 1.7 * n_col)
+    fig_h = 0.36 * n_lin + 0.85
+    fig, ax = plt.subplots(figsize=(fig_w, fig_h))
+    ax.set_axis_off()
+    ax.set_title(titulo, fontsize=12, pad=10, loc="left")
+    tab = ax.table(
+        cellText=linhas,
+        colLabels=cabecalhos,
+        loc="center",
+        cellLoc="center",
+        colWidths=larguras,
+    )
+    tab.auto_set_font_size(False)
+    tab.set_fontsize(8)
+    tab.scale(1, 1.25)
+    for (r, _c), cell in tab.get_celld().items():
+        cell.set_edgecolor("#1a1a1a")
+        cell.set_linewidth(0.9)
+        cell.visible_edges = "BTRL"
+        if r == 0:
+            cell.set_facecolor("#1f4e79")
+            cell.get_text().set_color("white")
+            cell.get_text().set_fontweight("bold")
+        elif r % 2 == 0:
+            cell.set_facecolor("#eef3f8")
+        else:
+            cell.set_facecolor("white")
+    fig.tight_layout()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=150, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+    return path
+
+
+def _escrever_aba_excel(ws, cabecalhos: list[str], linhas: list[list[str]]) -> None:
+    preench_cab = PatternFill("solid", fgColor="1F4E79")
+    preench_alt = PatternFill("solid", fgColor="EEF3F8")
+    fonte_cab = Font(name="Calibri", bold=True, color="FFFFFF", size=11)
+    fonte_cel = Font(name="Calibri", size=11)
+    for col, cab in enumerate(cabecalhos, start=1):
+        cell = ws.cell(1, col, cab)
+        cell.border = BORDA_CONTINUA
+        cell.fill = preench_cab
+        cell.font = fonte_cab
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    for i, linha in enumerate(linhas, start=2):
+        for col, val in enumerate(linha, start=1):
+            cell = ws.cell(i, col, val)
+            cell.border = BORDA_CONTINUA
+            cell.font = fonte_cel
+            cell.alignment = Alignment(
+                horizontal="left" if col == 2 and ws.title == "Fases" else "center",
+                vertical="center",
+            )
+            if i % 2 == 0:
+                cell.fill = preench_alt
+    for col in range(1, len(cabecalhos) + 1):
+        letras = [str(ws.cell(r, col).value or "") for r in range(1, len(linhas) + 2)]
+        ws.column_dimensions[get_column_letter(col)].width = min(max(len(max(letras, key=len)) + 3, 12), 42)
+    ws.row_dimensions[1].height = 20
+    ws.freeze_panes = "A2"
+    ws.sheet_view.showGridlines = True
+
+
+def exportar_excel_grade(anual: pd.DataFrame, output_dir: Path) -> Path:
+    """Planilha com borda contínua (thin) em todas as células."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "balanca_reservas_tabelas_1995_2025.xlsx"
+    wb = Workbook()
+    ws1 = wb.active
+    ws1.title = "Serie_anual"
+    _escrever_aba_excel(ws1, cabecalhos_anual(), linhas_tabela_anual(anual))
+    ws2 = wb.create_sheet("Fases")
+    _escrever_aba_excel(ws2, cabecalhos_fases(), linhas_tabela_fases(fases_historicas(anual)))
+    wb.save(path)
+    return path
+
+
+def gerar_tabelas_png(anual: pd.DataFrame, output_dir: Path) -> list[Path]:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    p1 = desenhar_tabela_png(
+        cabecalhos_anual(),
+        linhas_tabela_anual(anual),
+        output_dir / "tabela_anual_1995_2025.png",
+        "Balança comercial e reservas — série anual (US$ bilhões)",
+        larguras=[0.10, 0.16, 0.16, 0.20, 0.20, 0.18],
+    )
+    p2 = desenhar_tabela_png(
+        cabecalhos_fases(),
+        linhas_tabela_fases(fases_historicas(anual)),
+        output_dir / "tabela_fases_1995_2025.png",
+        "Fases históricas — saldo médio e reservas (US$ bilhões)",
+        larguras=[0.10, 0.28, 0.12, 0.14, 0.12, 0.12, 0.12],
+    )
+    return [p1, p2]
 
 
 def _destaques(anual: pd.DataFrame) -> dict[str, float | int]:
@@ -369,6 +550,7 @@ balanço de pagamentos (BPM6): séries 22707 (saldo), 22708 (exportações) e
 Reservas internacionais: série 3546 (conceito de liquidez internacional),
 estoque de dezembro, em US$ milhões. Valores nas tabelas em **US$ bilhões**.
 **Consulta:** {gerado}.
+Tabelas com **grade contínua** (borda sólida em todas as células).
 
 Os números do Banco Central **não coincidem** com a balança comercial da
 Secex/MDIC. O BP registra transferência de propriedade entre residentes e
@@ -403,7 +585,7 @@ na mesma proporção ano a ano.
 
 ## Fases
 
-{_tabela_fases_md(fases)}
+{_tabela_fases_html(fases)}
 
 ### 1995–1998 — âncora cambial e vulnerabilidade externa
 
@@ -468,12 +650,14 @@ brasileira — o platô de 2012–2025 substituiu o acúmulo acelerado de
 
 ## Série anual (US$ bilhões)
 
-{_tabela_anual_md(anual)}
+{_tabela_anual_html(anual)}
 
 ## Arquivos gerados
 
 - `balanca_reservas_anual_1995_2025.csv` — série anual
 - `balanca_reservas_fases_1995_2025.csv` — recortes históricos
+- `balanca_reservas_tabelas_1995_2025.xlsx` — mesmas tabelas com borda contínua em todas as células
+- `tabela_anual_1995_2025.png` / `tabela_fases_1995_2025.png` — grade contínua
 - `grafico_saldo_comercial_1995_2025.png`
 - `grafico_reservas_1995_2025.png`
 - `grafico_saldo_e_reservas_1995_2025.png`
@@ -500,7 +684,8 @@ def exportar_tabelas(anual: pd.DataFrame, output_dir: Path) -> list[Path]:
     for col in ["saldo_medio", "saldo_acumulado", "reservas_inicio", "reservas_fim", "var_reservas"]:
         fases[col] = fases[col] / 1000.0
     fases.to_csv(csv_fases, index=False, float_format="%.3f")
-    return [csv_anual, csv_fases]
+    xlsx = exportar_excel_grade(anual, output_dir)
+    return [csv_anual, csv_fases, xlsx]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -518,6 +703,7 @@ def main(argv: list[str] | None = None) -> int:
     caminhos.append(relatorio)
     if not args.sem_graficos:
         caminhos.extend(gerar_graficos(anual, args.output_dir))
+        caminhos.extend(gerar_tabelas_png(anual, args.output_dir))
     print(f"Anos: {int(anual['ano'].min())}–{int(anual['ano'].max())} ({len(anual)} linhas)")
     print(
         "Reservas dez/{ini}: US$ {r0:.1f} bi → dez/{fim}: US$ {r1:.1f} bi".format(

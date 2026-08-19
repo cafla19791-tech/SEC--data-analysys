@@ -6,14 +6,21 @@ from pathlib import Path
 
 import pandas as pd
 
+from openpyxl import load_workbook
+
 from scripts.evolucao_balanca_reservas import (
     ANO_FIM,
     ANO_INICIO,
+    BORDA_CONTINUA,
     agregar_anual,
+    desenhar_tabela_png,
+    exportar_excel_grade,
     exportar_tabelas,
     fases_historicas,
     gerar_graficos,
     gerar_relatorio,
+    gerar_tabelas_png,
+    tabela_html,
 )
 
 
@@ -115,16 +122,48 @@ def test_fases_e_relatorio(tmp_path: Path):
     assert "1995–2025" in texto
     assert "22707" in texto
     assert "3546" in texto
-    assert "| 1995 |" in texto
-    assert "| 2025 |" in texto
+    assert "<table" in texto
+    assert "border-collapse:collapse" in texto
+    assert "border:1px solid #1a1a1a" in texto
+    assert ">1995<" in texto
+    assert ">2025<" in texto
     assert "US$ " in texto
     assert "," in texto  # separador decimal brasileiro
 
-    csvs = exportar_tabelas(anual, tmp_path)
-    assert all(p.exists() for p in csvs)
-    lido = pd.read_csv(csvs[0])
+    saidas = exportar_tabelas(anual, tmp_path)
+    assert all(p.exists() for p in saidas)
+    lido = pd.read_csv(saidas[0])
     # CSV em US$ bilhões (÷ 1000)
     assert abs(lido.loc[lido["ano"] == 1995, "saldo_comercial"].iloc[0] - (-0.012)) < 1e-9
+    assert saidas[2].suffix == ".xlsx"
+
+
+def test_tabela_html_grade_continua():
+    html = tabela_html(["A", "B"], [["1", "2"], ["3", "4"]])
+    assert html.count("border:1px solid #1a1a1a") >= 6  # 2 th + 4 td
+    assert "border-collapse:collapse" in html
+    assert html.count("<tr>") == 3
+
+
+def test_excel_borda_continua(tmp_path: Path):
+    anual = agregar_anual(_series_sinteticas())
+    path = exportar_excel_grade(anual, tmp_path)
+    wb = load_workbook(path)
+    ws = wb["Serie_anual"]
+    assert ws["A1"].border.left.style == BORDA_CONTINUA.left.style
+    assert ws["B2"].border.top.style == "thin"
+    assert ws["B2"].border.bottom.style == "thin"
+    assert ws["B2"].border.left.style == "thin"
+    assert ws["B2"].border.right.style == "thin"
+
+
+def test_tabelas_png(tmp_path: Path):
+    anual = agregar_anual(_series_sinteticas())
+    paths = gerar_tabelas_png(anual, tmp_path)
+    assert len(paths) == 2
+    assert all(p.exists() and p.stat().st_size > 0 for p in paths)
+    extra = desenhar_tabela_png(["X"], [["1"]], tmp_path / "uma.png", "T")
+    assert extra.exists()
 
 
 def test_graficos(tmp_path: Path):
