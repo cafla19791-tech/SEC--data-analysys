@@ -110,6 +110,17 @@ python resumo_fluxos_polars.py \
   --tjlp "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx"
 ```
 
+# Balança comercial e reservas (1995–2025)
+
+```bash
+python3 scripts/evolucao_balanca_reservas.py
+# só cache local (data/sgs_*.csv):
+python3 scripts/evolucao_balanca_reservas.py --sem-download
+```
+
+SGS 22707/22708/22709 (BP, BPM6) e 3546 (reservas, liquidez). Saída:
+`output/evolucao_balanca_reservas_1995_2025.md` e gráficos PNG.
+
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
 `data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen

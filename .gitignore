@@ -16,6 +16,7 @@ data/*.xlsx
 !data/tjlp_mensal.xlsx
 !data/selic_mensal.xlsx
 !data/selic_taxas_contagil.xlsx
+!data/sgs_*.csv
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
 output/*.csv
@@ -36,6 +37,9 @@ output/*_stats.json
 !output/RELATORIO_EXECUTIVO.md
 !output/desembolsos_1995_2001_ipca.md
 !output/desembolsos_1995_2001_ipca.xlsx
+!output/evolucao_balanca_reservas_1995_2025.md
+!output/balanca_reservas_anual_1995_2025.csv
+!output/balanca_reservas_fases_1995_2025.csv
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
 !output/indiretas_automaticas_ipca/README.md

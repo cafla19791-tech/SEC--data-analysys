@@ -37,3 +37,14 @@ Run completo (fatores SELIC Bacen SGS 11 → ContAgil): 348.864 contratos ·
 72 agentes.
 
 Interface web: `streamlit run app.py`
+
+Balança comercial e reservas (Bacen SGS, 1995–2025):
+
+```bash
+python3 scripts/evolucao_balanca_reservas.py
+```
+
+- `evolucao_balanca_reservas_1995_2025.md` — relatório com fases e série anual
+- `balanca_reservas_anual_1995_2025.csv` / `balanca_reservas_fases_1995_2025.csv`
+- `grafico_saldo_comercial_1995_2025.png`, `grafico_reservas_1995_2025.png`,
+  `grafico_saldo_e_reservas_1995_2025.png`, `grafico_exportacoes_importacoes_1995_2025.png`
