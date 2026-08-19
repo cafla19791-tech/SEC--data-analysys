@@ -46,23 +46,6 @@ import pandas as pd
 from dateutil.relativedelta import relativedelta
 
 
-def _configure_stdio() -> None:
-    """WinPython/ContAgil usa cp1252: evita UnicodeEncodeError em prints."""
-    for stream in (sys.stdout, sys.stderr):
-        reconf = getattr(stream, "reconfigure", None)
-        if reconf is None:
-            continue
-        try:
-            reconf(encoding="utf-8", errors="replace")
-        except Exception:
-            try:
-                reconf(errors="replace")
-            except Exception:
-                pass
-
-
-_configure_stdio()
-
 # ===================== CONFIGURAÇÕES =====================
 TAXA_SELIC_ANUAL = 0.145  # 14,5% a.a.
 TJLP_TLP_BASE = 0.06  # ContAgil: TJLP/TLP = 6% + juros do contrato
@@ -640,9 +623,9 @@ def _mapear_colunas_contratos(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
             elif key.startswith("valor_historico"):
                 # BNDES INDIRETAS ContAgil: Valor histórico / Valor Histórico R$ (*)
                 target = "valor_desembolsado"
-            elif "prazo" in key and "carencia" in key:
+            elif "prazo" in key and ("carencia" in key or "carenc" in key or "prezo" in key):
                 target = "prazo_carencia"
-            elif "prazo" in key and "amortizacao" in key:
+            elif "prazo" in key and ("amortizacao" in key or "amortizaca" in key or "amortiz" in key):
                 target = "prazo_amortizacao"
             elif "instituicao" in key and "financeira" in key:
                 target = "agente"
@@ -724,6 +707,27 @@ def parse_datas(series: pd.Series) -> pd.Series:
             s[~iso_mask], dayfirst=True, errors="coerce"
         ).values
     return out
+
+
+def _numerar_contratos_por_ano(
+    datas: pd.Series | np.ndarray | list,
+    *,
+    anos: pd.Series | None = None,
+) -> pd.Series:
+    """Gera série 1-AAAA, 2-AAAA, ... reiniciando a cada ano."""
+    if not isinstance(datas, pd.Series):
+        datas = pd.Series(datas)
+    if len(datas) == 0:
+        return pd.Series(dtype=str, index=datas.index)
+    if anos is None:
+        anos = parse_datas(datas).dt.year
+    anos_i = pd.Series(anos, index=datas.index).astype("Int64")
+    if anos_i.isna().any():
+        raise ValueError(
+            f"Há {int(anos_i.isna().sum())} linha(s) sem ano para numerar o contrato."
+        )
+    seq = pd.Series(range(len(datas)), index=datas.index).groupby(anos_i, sort=False).cumcount() + 1
+    return seq.astype(str) + "-" + anos_i.astype(str)
 
 
 def meses_ate_impacto(data_fluxo: datetime, data_impacto: datetime = DATA_IMPACTO) -> int:
@@ -990,7 +994,7 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
             "custo_financeiro": custo.values,
         }
     )
-    # Preserva numeração N-AAAA (planilha BNDES_INDIRETAS_NUMERADOS)
+    # Preserva numeração N-AAAA (planilha BNDES_INDIRETAS_NUMERADOS) ou atribui se houver data
     num_src = None
     if "numero_contrato" in df.columns:
         num_src = df["numero_contrato"]
@@ -1000,6 +1004,8 @@ def _prepare_contracts(df: pd.DataFrame) -> pd.DataFrame:
         if isinstance(num_src, pd.DataFrame):
             num_src = num_src.iloc[:, 0]
         out["numero_contrato"] = num_src.astype(str).to_numpy()
+    elif "data_contratacao" in out.columns and not out["data_contratacao"].isna().all():
+        out["numero_contrato"] = _numerar_contratos_por_ano(out["data_contratacao"]).to_numpy()
 
     before = len(out)
     out = out.dropna(
@@ -2070,7 +2076,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument(
         "--arquivo-selic",
-        type=Path,
         default=None,
         help=(
             "Excel STP ContAgil/Bacen (col A=data, col D=fator acumulado). "
@@ -2095,6 +2100,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--fluxo-diario",
         action="store_true",
         help="Gera tabela detalhada dia a dia (output/fluxos_diarios_detalhados.xlsx).",
+    )
+    p.add_argument(
+        "--output-dir",
+        "--pasta-saida",
+        default=None,
+        help="Pasta de saída para os arquivos gerados.",
+    )
+    p.add_argument(
+        "--massa-dados",
+        default=None,
+        help="Caminho para pasta ou arquivo com massa de dados de contratos.",
     )
     p.add_argument(
         "--saida-diario",
@@ -2136,17 +2152,54 @@ def carregar_selic_serie(args: argparse.Namespace) -> SelicSerie | None:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    output_dir = Path(args.output_dir) if args.output_dir else OUTPUT_DIR
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     selic_serie = carregar_selic_serie(args)
 
+    if args.massa_dados:
+        # Se passado --massa-dados, processa arquivos da pasta ou o arquivo apontado
+        p_massa = Path(args.massa_dados)
+        if p_massa.is_dir():
+            arquivos = [p for p in p_massa.glob("*.xlsx") if not p.name.startswith("~$")]
+            if not arquivos:
+                arquivos = list(p_massa.glob("*.csv"))
+        else:
+            arquivos = [p_massa]
+
+        for arq in arquivos:
+            nome = arq.name.upper()
+            if nome.startswith("STP") or "SELIC" in nome:
+                continue
+            df = load_from_excel(arq) if arq.suffix.lower() == ".xlsx" else load_from_csv(arq)
+            if args.max_contratos is not None:
+                df = df.head(args.max_contratos).copy()
+                df["contrato"] = df.index
+            out_name = f"fluxos_{arq.stem}.xlsx"
+            out_path = output_dir / out_name
+            saida_diario = (
+                output_dir / f"fluxos_diarios_{arq.stem}.xlsx"
+                if args.fluxo_diario
+                else None
+            )
+            # Gerar fluxos simplificado por arquivo
+            df_fluxos = gerar_fluxos(
+                df,
+                selic_serie,
+                fluxo_diario=args.fluxo_diario,
+                max_contratos=args.max_contratos,
+                saida_diario=saida_diario,
+            )
+            df_fluxos.to_excel(out_path, index=False)
+        return 0
+
     if args.excel:
         print(f"Lendo Excel: {args.excel}")
-        df = load_from_excel(args.excel)
+        df = load_from_excel(Path(args.excel))
     elif args.input:
         print(f"Lendo CSV: {args.input}")
-        df = load_from_csv(args.input)
+        df = load_from_csv(Path(args.input))
     else:
         excel_auto = resolver_excel_operacoes()
         if excel_auto is not None and not args.download:
@@ -2164,10 +2217,10 @@ def main(argv: list[str] | None = None) -> int:
         df["contrato"] = df.index
         print(f"Limitado a {len(df):,} contratos (--max-contratos)")
 
-    csv_path = OUTPUT_DIR / f"{args.stem}.csv"
-    xlsx_path = OUTPUT_DIR / f"{args.stem}.xlsx"
-    stats_path = OUTPUT_DIR / f"{args.stem}_stats.json"
-    saida_diario = args.saida_diario or (OUTPUT_DIR / "fluxos_diarios_detalhados.xlsx")
+    csv_path = output_dir / f"{args.stem}.csv"
+    xlsx_path = output_dir / f"{args.stem}.xlsx"
+    stats_path = output_dir / f"{args.stem}_stats.json"
+    saida_diario = args.saida_diario or (output_dir / "fluxos_diarios_detalhados.xlsx")
 
     stats = processar_em_lotes(
         df,
@@ -2178,7 +2231,7 @@ def main(argv: list[str] | None = None) -> int:
         saida_diario=saida_diario if args.fluxo_diario else None,
     )
     resumo_agente = resumo_from_agent_agg(stats.get("por_agente", {}))
-    agente_csv, agente_xlsx = salvar_resumo_por_agente(resumo_agente)
+    agente_csv, agente_xlsx = salvar_resumo_por_agente(resumo_agente, pasta=output_dir)
 
     printable = {
         k: v for k, v in stats.items() if k not in {"monthly", "por_agente"}
