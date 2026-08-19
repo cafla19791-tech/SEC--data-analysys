@@ -132,6 +132,15 @@ SGS 20542 (livres), 20593 (direcionados), 20539 (total). Split oficial
 desde mar/2007; crédito total desde 2002. Saída:
 `output/evolucao_recursos_livres_direcionados_2002_2026.md`.
 
+# Consignado, CDC e cartão (2002–2016)
+
+```bash
+python3 scripts/evolucao_consignado_cdc_cartao.py
+```
+
+SGS 20579 (consignado), 20583 (CDC / aquisição de bens), 20590 (cartão).
+Split oficial desde mar/2007.
+
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
 `data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen
