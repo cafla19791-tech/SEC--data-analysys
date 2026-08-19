@@ -50,3 +50,13 @@ python3 scripts/evolucao_balanca_reservas.py
 - `tabela_anual_1995_2025.png` / `tabela_fases_1995_2025.png`
 - `grafico_saldo_comercial_1995_2025.png`, `grafico_reservas_1995_2025.png`,
   `grafico_saldo_e_reservas_1995_2025.png`, `grafico_exportacoes_importacoes_1995_2025.png`
+
+Recursos livres e direcionados no SFN (2002–2026):
+
+```bash
+python3 scripts/evolucao_recursos_livres_direcionados.py
+```
+
+- `evolucao_recursos_livres_direcionados_2002_2026.md`
+- `recursos_livres_direcionados_anual_2002_2026.csv` / `_fases_` / `_tabelas_*.xlsx`
+- `tabela_recursos_anual_2002_2026.png` / `tabela_recursos_fases_2002_2026.png`

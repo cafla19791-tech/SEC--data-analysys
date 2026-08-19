@@ -40,6 +40,9 @@ output/*_stats.json
 !output/evolucao_balanca_reservas_1995_2025.md
 !output/balanca_reservas_anual_1995_2025.csv
 !output/balanca_reservas_fases_1995_2025.csv
+!output/evolucao_recursos_livres_direcionados_2002_2026.md
+!output/recursos_livres_direcionados_anual_2002_2026.csv
+!output/recursos_livres_direcionados_fases_2002_2026.csv
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
 !output/indiretas_automaticas_ipca/README.md
