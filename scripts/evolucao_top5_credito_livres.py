@@ -24,11 +24,16 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import sys
 import time
 import unicodedata
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -42,7 +47,6 @@ from scripts.evolucao_balanca_reservas import (
 )
 
 IFDATA = "https://olinda.bcb.gov.br/olinda/servico/IFDATA/versao/v1/odata"
-ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "ifdata"
 OUTPUT_DIR = ROOT / "output"
 
