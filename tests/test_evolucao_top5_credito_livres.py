@@ -16,7 +16,7 @@ from scripts.evolucao_top5_credito_livres import (
 )
 
 
-def test_canonico_une_fusoes_e_ignora_bndes() -> None:
+def test_canonico_une_fusoes_e_ignora_ruido() -> None:
     assert nome_canonico("Banco do Brasil S.A.") == "Banco do Brasil"
     assert nome_canonico("Itaú Unibanco S.A.") == "Itaú Unibanco"
     assert nome_canonico("Unibanco - União de Bancos Brasileiros S.A.") == "Itaú Unibanco"
@@ -27,15 +27,21 @@ def test_canonico_une_fusoes_e_ignora_bndes() -> None:
     assert nome_canonico("BNDES") is None
     assert nome_canonico("Banco Nacional de Desenvolvimento Econômico e Social") is None
     assert nome_canonico("Nubank") is None
+    assert nome_canonico("Banco Nossa Caixa S.A.") is None
+    assert nome_canonico("Caixa Geral") is None
+    assert nome_canonico("Sicoob Itaúna") is None
+    assert nome_canonico("ITAU - PRUDENCIAL") == "Itaú Unibanco"
+    assert nome_canonico("CAIXA ECONÔMICA FEDERAL - PRUDENCIAL") == "Caixa"
+    assert nome_canonico("BNDES - PRUDENCIAL") is None
 
 
-def test_agregar_big5_soma_fusoes_e_nao_duplica_if() -> None:
+def test_agregar_big5_soma_fusoes_e_usa_cef_nao_caixa_geral() -> None:
     cad = pd.DataFrame(
         [
-            {"CodInst": "C001", "NomeInstituicao": "Itaú"},
-            {"CodInst": "C002", "NomeInstituicao": "Unibanco"},
-            {"CodInst": "C003", "NomeInstituicao": "Caixa Econômica Federal"},
-            {"CodInst": "00360305", "NomeInstituicao": "Caixa Econômica Federal"},
+            {"CodInst": "C001", "NomeInstituicao": "ITAU"},
+            {"CodInst": "C002", "NomeInstituicao": "UNIBANCO"},
+            {"CodInst": "00360305", "NomeInstituicao": "CAIXA ECONOMICA FEDERAL"},
+            {"CodInst": "C0051815", "NomeInstituicao": "CAIXA GERAL"},
             {"CodInst": "C004", "NomeInstituicao": "BNDES"},
         ]
     )
@@ -43,36 +49,35 @@ def test_agregar_big5_soma_fusoes_e_nao_duplica_if() -> None:
         [
             {"CodInst": "C001", "Saldo": 100.0},
             {"CodInst": "C002", "Saldo": 80.0},
-            {"CodInst": "C003", "Saldo": 120.0},
-            {"CodInst": "00360305", "Saldo": 90.0},
+            {"CodInst": "00360305", "Saldo": 361.0},
+            {"CodInst": "C0051815", "Saldo": 0.3},
             {"CodInst": "C004", "Saldo": 999.0},
         ]
     )
     cons = agregar_big5(cred, cad)
     assert cons.loc[cons["banco"] == "Itaú Unibanco", "carteira"].iloc[0] == 180.0
-    assert cons.loc[cons["banco"] == "Caixa", "carteira"].iloc[0] == 120.0
+    assert cons.loc[cons["banco"] == "Caixa", "carteira"].iloc[0] == 361.0
     assert "BNDES" not in set(cons["banco"])
 
 
 def test_proxy_livres_nao_duplica_conglomerado_e_exclui_direcionados() -> None:
     cad = pd.DataFrame(
         [
-            {"CodInst": "X", "NomeInstituicao": "Itaú Unibanco S.A."},
-            {"CodInst": "Y", "NomeInstituicao": "Itaú Unibanco S.A."},
+            {"CodInst": "C001", "NomeInstituicao": "ITAU UNIBANCO"},
+            {"CodInst": "Y", "NomeInstituicao": "ITAU UNIBANCO"},
         ]
     )
     modal = pd.DataFrame(
         [
-            {"CodInst": "X", "Grupo": "Cartão de Crédito", "Saldo": 10.0},
-            {"CodInst": "Y", "Grupo": "Cartão de Crédito", "Saldo": 12.0},
-            {"CodInst": "X", "Grupo": "Empréstimo com Consignação em Folha", "Saldo": 20.0},
-            {"CodInst": "X", "Grupo": "Habitação", "Saldo": 999.0},
-            {"CodInst": "X", "Grupo": "Capital de Giro", "Saldo": 30.0},
-            {"CodInst": "X", "Grupo": "Rural e agroindustrial", "Saldo": 888.0},
+            {"CodInst": "C001", "Grupo": "Cartão de Crédito", "Saldo": 12.0},
+            {"CodInst": "Y", "Grupo": "Cartão de Crédito", "Saldo": 10.0},
+            {"CodInst": "C001", "Grupo": "Empréstimo com Consignação em Folha", "Saldo": 20.0},
+            {"CodInst": "C001", "Grupo": "Habitação", "Saldo": 999.0},
+            {"CodInst": "C001", "Grupo": "Capital de Giro", "Saldo": 30.0},
+            {"CodInst": "C001", "Grupo": "Rural e agroindustrial", "Saldo": 888.0},
         ]
     )
     livres = proxy_livres(modal, cad, PF_LIVRES | PJ_LIVRES)
-    # cartão usa o maior saldo do grupo (12), não a soma 10+12
     assert livres.loc[livres["banco"] == "Itaú Unibanco", "livres"].iloc[0] == 62.0
 
 

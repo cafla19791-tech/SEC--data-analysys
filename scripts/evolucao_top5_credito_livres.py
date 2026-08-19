@@ -81,21 +81,57 @@ def _norm(txt: str) -> str:
     return txt.upper()
 
 
-def nome_canonico(nome: str) -> str | None:
-    n = _norm(nome)
-    if "BNDES" in n or "DESENVOLVIMENTO ECONOMICO" in n:
+def _e_ruido(n: str) -> bool:
+    marcas = (
+        "COOPERATIVA",
+        "CECM",
+        "CREDICOOP",
+        "ITAUNA",
+        "NOSSA CAIXA",
+        "CAIXA GERAL",
+        "CAIXA ESTADUAL",
+        "CAIXA FORTE",
+        "APCEF",
+        "FOMENTO",
+        "BNDES",
+        "DESENVOLVIMENTO ECONOMICO",
+    )
+    return any(m in n for m in marcas)
+
+
+def classificacao(nome: str) -> tuple[str, str] | None:
+    """(banco canônico, entidade pré-fusão) ou None se não for uma das 5 IFs."""
+    n = _norm(nome).strip()
+    if n.endswith(" - PRUDENCIAL"):
+        n = n[: -len(" - PRUDENCIAL")].strip()
+    if _e_ruido(n):
         return None
-    if "CAIXA" in n:
-        return "Caixa"
-    if n == "BB" or n.startswith("BB ") or "BANCO DO BRASIL" in n:
-        return "Banco do Brasil"
-    if "ITAU" in n or "UNIBANCO" in n:
-        return "Itaú Unibanco"
-    if "BRADESCO" in n:
-        return "Bradesco"
-    if "SANTANDER" in n or "ABN AMRO" in n or "BANESPA" in n:
-        return "Santander"
+    if n == "BB" or n.startswith("BB ") or n.startswith("BANCO DO BRASIL"):
+        return ("Banco do Brasil", "BB")
+    if n == "UNIBANCO" or n.startswith("UNIBANCO -") or n.startswith("UNIBANCO "):
+        return ("Itaú Unibanco", "UNIBANCO")
+    if n in {"ITAU", "ITAU UNIBANCO"} or n.startswith("ITAU UNIBANCO") or n.startswith("BANCO ITAU"):
+        return ("Itaú Unibanco", "ITAU")
+    if n == "BRADESCO" or n.startswith("BANCO BRADESCO") or n.startswith("BRADESCO"):
+        return ("Bradesco", "BRADESCO")
+    if n in {"CAIXA", "CAIXA ECONOMICA FEDERAL"} or n.startswith("CAIXA ECONOMICA FEDERAL"):
+        return ("Caixa", "CAIXA")
+    if n == "ABN AMRO" or n.startswith("ABN AMRO") or n.startswith("BANCO ABN"):
+        return ("Santander", "ABN")
+    if (
+        n in {"SANTANDER", "SANTANDER BANESPA"}
+        or n.startswith("BANCO SANTANDER")
+        or n.startswith("SANTANDER")
+    ):
+        return ("Santander", "SANTANDER")
+    if n.startswith("BANESPA") or "BANCO DO ESTADO DE SAO PAULO" in n:
+        return ("Santander", "BANESPA")
     return None
+
+
+def nome_canonico(nome: str) -> str | None:
+    c = classificacao(nome)
+    return None if c is None else c[0]
 
 
 def _fmt_bi(valor: float | None, casas: int = 1) -> str:
@@ -184,33 +220,37 @@ def baixar_valores(
     return df
 
 
-def _saldo_canonico(m: pd.DataFrame, chaves: list[str]) -> pd.DataFrame:
-    """Soma conglomerados distintos (fusões) e evita duplicar IF vs conglomerado.
+def _saldo_por_entidade(m: pd.DataFrame) -> pd.DataFrame:
+    """Máximo por entidade pré-fusão; soma entidades materiais do mesmo banco.
 
-    CodInst iniciado em C = conglomerado. Se existir conglomerado do banco,
-    usamos a soma desses conglomerados (Itaú + Unibanco antes da fusão).
-    Sem conglomerado, usamos o maior saldo individual da marca.
+    Evita o residual de 'Caixa Geral' no lugar da CEF e as cooperativas
+    'Itaúna'. Mantém a soma Itaú+Unibanco e ABN+Santander antes das fusões.
+    Entidade com menos de 5% da maior do banco é satélite e entra fora.
     """
     if m.empty:
-        return pd.DataFrame(columns=[*chaves, "Saldo"])
+        return pd.DataFrame(columns=["banco", "Saldo"])
     m = m.copy()
-    m["cong"] = m["CodInst"].astype(str).str.upper().str.startswith("C")
-    cong = m[m["cong"]].groupby(chaves, as_index=False)["Saldo"].sum()
-    indiv = m[~m["cong"]].groupby(chaves, as_index=False)["Saldo"].max()
-    bancos_cong = set(cong[chaves[0]]) if not cong.empty else set()
-    if indiv.empty:
-        return cong
-    indiv = indiv[~indiv[chaves[0]].isin(bancos_cong)]
-    return pd.concat([cong, indiv], ignore_index=True)
+    parsed = m["NomeInstituicao"].map(classificacao)
+    m["banco"] = parsed.map(lambda x: None if x is None else x[0])
+    m["entidade"] = parsed.map(lambda x: None if x is None else x[1])
+    m = m.dropna(subset=["banco", "entidade", "Saldo"])
+    if m.empty:
+        return pd.DataFrame(columns=["banco", "Saldo"])
+    chaves = ["banco", "entidade"]
+    if "Grupo" in m.columns and m["Grupo"].notna().any():
+        chaves = ["banco", "entidade", "Grupo"]
+    por = m.groupby(chaves, as_index=False)["Saldo"].max()
+    teto = por.groupby([c for c in chaves if c != "entidade"])["Saldo"].transform("max")
+    por = por[por["Saldo"] >= 0.05 * teto]
+    g = por.groupby([c for c in chaves if c != "entidade"], as_index=False)["Saldo"].sum()
+    return g
 
 
 def agregar_big5(credito: pd.DataFrame, cadastro: pd.DataFrame) -> pd.DataFrame:
     if credito.empty or cadastro.empty:
         return pd.DataFrame(columns=["banco", "carteira"])
     m = credito.merge(cadastro, on="CodInst", how="left")
-    m["banco"] = m["NomeInstituicao"].map(nome_canonico)
-    m = m.dropna(subset=["banco", "Saldo"])
-    g = _saldo_canonico(m, ["banco"])
+    g = _saldo_por_entidade(m)
     return g.rename(columns={"Saldo": "carteira"})
 
 
@@ -218,14 +258,15 @@ def proxy_livres(modal: pd.DataFrame, cadastro: pd.DataFrame, grupos: set[str]) 
     if modal.empty or cadastro.empty:
         return pd.DataFrame(columns=["banco", "livres"])
     m = modal.merge(cadastro, on="CodInst", how="left")
-    m["banco"] = m["NomeInstituicao"].map(nome_canonico)
-    m = m.dropna(subset=["banco", "Saldo"])
-    m = m[m["Grupo"].isin(grupos)]
+    m = m[m["Grupo"].isin(grupos)] if "Grupo" in m.columns else m
     if m.empty:
         return pd.DataFrame(columns=["banco", "livres"])
-    por_grupo = _saldo_canonico(m, ["banco", "Grupo"])
-    g = por_grupo.groupby("banco", as_index=False)["Saldo"].sum()
-    return g.rename(columns={"Saldo": "livres"})
+    por = _saldo_por_entidade(m)
+    if por.empty:
+        return pd.DataFrame(columns=["banco", "livres"])
+    if "Grupo" in por.columns:
+        por = por.groupby("banco", as_index=False)["Saldo"].sum()
+    return por.rename(columns={"Saldo": "livres"})
 
 
 def montar_painel(cache_dir: Path, baixar: bool) -> pd.DataFrame:
@@ -233,7 +274,7 @@ def montar_painel(cache_dir: Path, baixar: bool) -> pd.DataFrame:
         raise FileNotFoundError(cache_dir)
     linhas = []
     for anomes, tipo, ano, coluna in datas_base():
-        print(f"IF.data {anomes} tipo={tipo} ({coluna})...")
+        print(f"IF.data {anomes} tipo={tipo} ({coluna})...", flush=True)
         cad = baixar_cadastro(anomes, cache_dir)
         cred = baixar_valores(
             anomes, tipo, "1", f"NomeColuna eq '{coluna}'", "resumo_credito", cache_dir
@@ -395,6 +436,12 @@ Proxy de recursos livres (desde 2014): {liv_txt}.
 ## Proxy de recursos livres (R$ bilhões, desde 2014)
 
 {html_liv}
+
+De 2012 a 2020 a CEF entra pela instituição 00360305 (o
+conglomerado financeiro da Caixa só volta a publicar a carteira
+cheia em 2021). Em 2025–2026 o IF.data passa ao conglomerado
+prudencial (`Nome - PRUDENCIAL`). O proxy de 2024 (tipo 2) e o de
+2025–2026 (tipo 1) **não são estritamente comparáveis**.
 
 Proxy PF: cartão, consignado, pessoal sem consignação, veículos e outros.
 Proxy PJ: capital de giro (inclui rotativo até a mudança de layout),
