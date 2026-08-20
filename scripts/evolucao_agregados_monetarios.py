@@ -67,6 +67,8 @@ SERIES_ANTIGA = {
     1840: "m3",
     1843: "m4",
 }
+# Séries descontinuadas em jul/2018 — não pedir após essa data.
+FIM_SERIE_ANTIGA = "31/07/2018"
 
 ANO_INICIO = 1995
 ANO_FIM = 2026
@@ -96,9 +98,11 @@ def _carregar_bloco(
     cache_dir: Path | None,
     baixar: bool,
     sufixo: str,
+    fim: str | None = None,
 ) -> dict[str, pd.DataFrame]:
     out: dict[str, pd.DataFrame] = {}
-    fim = datetime.now().strftime("%d/%m/%Y")
+    if fim is None:
+        fim = datetime.now().strftime("%d/%m/%Y")
     for cod, nome in series_map.items():
         cache = None if cache_dir is None else cache_dir / f"sgs_{cod}_{nome}_{sufixo}.csv"
         if cache is not None and cache.exists():
@@ -117,7 +121,9 @@ def _carregar_bloco(
 
 def carregar_series(cache_dir: Path | None = None, baixar: bool = True) -> dict[str, dict[str, pd.DataFrame]]:
     return {
-        "antiga": _carregar_bloco(SERIES_ANTIGA, cache_dir, baixar, "antiga"),
+        "antiga": _carregar_bloco(
+            SERIES_ANTIGA, cache_dir, baixar, "antiga", fim=FIM_SERIE_ANTIGA
+        ),
         "nova": _carregar_bloco(SERIES_NOVA, cache_dir, baixar, "nova"),
     }
 

@@ -79,6 +79,10 @@ def baixar_sgs(
             "dataFinal": bloco_fim.strftime("%d/%m/%Y"),
         }
         resp = requests.get(url, params=params, timeout=120)
+        # Séries descontinuadas ou sem histórico no intervalo devolvem 404.
+        if resp.status_code == 404:
+            cursor = bloco_fim + pd.DateOffset(days=1)
+            continue
         resp.raise_for_status()
         dados = resp.json()
         if dados:
