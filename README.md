@@ -152,6 +152,18 @@ IF.data (não o SGS): carteira de crédito por conglomerado desde 2002;
 proxy de recursos livres por modalidade PF/PJ desde 2014. Saída:
 `output/evolucao_top5_credito_livres_2002_2026.md`.
 
+# Agregados monetários M1–M4 (1995–2026)
+
+```bash
+python3 scripts/evolucao_agregados_monetarios.py
+python3 scripts/evolucao_agregados_monetarios.py --sem-download
+```
+
+Saldo de fim de período (dezembro; 2026* = último mês). Metodologia
+atual SGS 27791/27810/27813/27815 desde 2001; 1995–2000 usa as séries
+descontinuadas 1827/1837/1840/1843. Saída:
+`output/evolucao_agregados_monetarios_1995_2026.md`.
+
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
 `data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen
