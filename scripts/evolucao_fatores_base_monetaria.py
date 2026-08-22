@@ -160,7 +160,10 @@ def agregar_anual(series: dict[str, pd.DataFrame]) -> pd.DataFrame:
     out["soma_fatores"] = out[list(FATORES)].sum(axis=1, min_count=1)
     out["residuo_estoque"] = out["base"] - out["soma_fatores"]
     for nome in ("base",) + FATORES:
-        out[f"d_{nome}"] = out[nome].diff()
+        prev = out[nome].shift(1)
+        out[f"d_{nome}"] = out[nome] - prev
+        primeira = out[nome].notna() & prev.isna() & (out["ano"] > ANO_INICIO)
+        out.loc[primeira, f"d_{nome}"] = out.loc[primeira, nome]
     out["d_soma"] = out[[f"d_{n}" for n in FATORES]].sum(axis=1, min_count=1)
     out["residuo_var"] = out["d_base"] - out["d_soma"]
     return out

@@ -54,6 +54,9 @@ def test_agregar_usa_dezembro_e_varia_no_ultimo_mes() -> None:
     row_1996 = anual.loc[anual["ano"] == 1996].iloc[0]
     assert abs(row_1996["d_base"] - (row_1996["base"] - row_1995["base"])) < 1e-9
     assert abs(row_1996["residuo_var"] - (row_1996["d_base"] - row_1996["d_soma"])) < 1e-9
+    row_2020 = anual.loc[anual["ano"] == 2020].iloc[0]
+    assert pd.notna(row_2020["d_linhas_temp"])
+    assert abs(row_2020["d_linhas_temp"] - row_2020["linhas_temp"]) < 1e-9
     assert set(FATORES)
 
 
