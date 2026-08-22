@@ -2,10 +2,10 @@
 
 Fonte: Banco Central do Brasil, SGS.
 
-A DBGG oficial começa em dez/2001 (SGS 4537 / 4502). De 1995 a 2000
-mostramos os **drivers** disponíveis: NFSP e primário do Governo
-Federal + Bacen, Selic e câmbio. A partir de 2001 entram estoque da
-DBGG, DLSP e os ajustes patrimoniais/cambiais das tabelas especiais.
+A DBGG em % do PIB começa em dez/2001 (SGS 4537). O saldo em R$
+(SGS 4502) existe desde jan/1998. De 1995 a 1997 mostramos só os
+**drivers**: NFSP e primário do Governo Federal + Bacen, Selic e
+câmbio. Ajustes patrimoniais/cambiais entram em 2001.
 
 Séries (dezembro; no ano corrente, último mês):
 
@@ -134,15 +134,18 @@ def _ultimo_ano(df: pd.DataFrame, ano: int, escala: float = 1.0) -> float | None
 
 
 def mes_referencia(series: dict[str, pd.DataFrame], ano: int) -> str | None:
-    for nome in ("dbgg_rs", "dbgg_pib", "nfsp_gfbc"):
+    meses = []
+    for nome in ("dbgg_rs", "dbgg_pib", "nfsp_gfbc", "selic", "usd"):
         df = series.get(nome)
         if df is None or df.empty:
             continue
         bloco = df[pd.to_datetime(df["mes"]).dt.year == ano]
         if bloco.empty:
             continue
-        return pd.to_datetime(bloco["mes"].max()).strftime("%b/%Y")
-    return None
+        meses.append(pd.to_datetime(bloco["mes"].max()))
+    if not meses:
+        return None
+    return max(meses).strftime("%b/%Y")
 
 
 def agregar_anual(series: dict[str, pd.DataFrame]) -> pd.DataFrame:
@@ -402,7 +405,12 @@ def gerar_relatorio(anual: pd.DataFrame, output_dir: Path, mes_ultimo: str | Non
     d = _destaques(anual)
     fases = fases_historicas(anual)
     gerado = datetime.now().strftime("%Y-%m-%d")
-    nota = f" *{d['ano_fim']} = estoque de {mes_ultimo}." if mes_ultimo else ""
+    nota = (
+        f" *{d['ano_fim']}: último ponto disponível ({mes_ultimo});"
+        " dívida/NFSP em geral atrasam Selic/câmbio."
+        if mes_ultimo
+        else ""
+    )
     html_est = tabela_html(cabecalhos_estoque(), linhas_estoque(anual, mes_ultimo))
     html_fat = tabela_html(cabecalhos_fatores(), linhas_fatores(anual, mes_ultimo))
     html_fases = tabela_html(
@@ -417,9 +425,11 @@ def gerar_relatorio(anual: pd.DataFrame, output_dir: Path, mes_ultimo: str | Non
 A **DBGG** (dívida bruta do governo geral) soma os débitos da União,
 estados e municípios junto ao setor privado, ao setor público
 financeiro e ao resto do mundo, **incluindo as compromissadas do
-Bacen**. Não inclui estatais. Metodologia oficial a partir de
-dez/2001 (SGS 4537 e 4502). A revisão de 2008 (SGS 13762) altera o
-tratamento das compromissadas; a série longa 4537 continua publicada.
+Bacen**. Não inclui estatais. % do PIB (SGS 4537) desde dez/2001;
+saldo em R$ (4502) desde 1998. A revisão de 2008 (SGS 13762) altera
+o tratamento das compromissadas; a série longa 4537 continua
+publicada. Selic e US$ no ano corrente usam o último dia útil
+disponível (podem ser mais recentes que o estoque da dívida).
 
 Fatores oficiais da dinâmica (tabelas especiais / SGS):
 

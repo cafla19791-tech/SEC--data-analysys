@@ -4,9 +4,10 @@ Fonte: Banco Central do Brasil, SGS, saldo em final de período
 (milhares de R$). Tabelas em **R$ bilhões**.
 
 A variação anual de cada fator é a diferença do estoque de dezembro
-(no ano corrente, último mês publicado). Por construção do Bacen,
-a soma das variações explica a variação da base (resíduo = diferença
-de arredondamento / séries que começam depois de 1995).
+(no ano corrente, último mês publicado). Os estoques SGS são contas
+de operações, não uma partição da base: a soma não reproduz o nível
+nem, necessariamente, a variação da base (há quebras e contas fora
+desta lista). O resíduo = Δbase − Σ Δfatores.
 
   1788   Base monetária restrita
   1810   Tesouro Nacional — conta única
@@ -391,8 +392,9 @@ def gerar_relatorio(anual: pd.DataFrame, output_dir: Path, mes_ultimo: str | Non
 
 Os fatores oficiais medem as operações do Banco Central que expandem
 ou contraem a base (papel-moeda em circulação + reservas bancárias).
-Estoque positivo de um fator = fonte de expansão acumulada; a
-**variação anual** é o que de fato altera a base no ano.
+Estoque positivo de um fator = posição acumulada expansionista; a
+**variação anual** mostra o sentido da operação naquele ano. Os
+estoques **não** somam a base (resíduo de nível cresce com o tempo).
 
 - **Tesouro (1810):** conta única. Saque do Tesouro expande a base;
   recolhimento contrai.
