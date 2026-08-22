@@ -164,6 +164,26 @@ atual SGS 27791/27810/27813/27815 desde 2001; 1995–2000 usa as séries
 descontinuadas 1827/1837/1840/1843. Saída:
 `output/evolucao_agregados_monetarios_1995_2026.md`.
 
+# Fatores da base monetária (1995–hoje)
+
+```bash
+python3 scripts/evolucao_fatores_base_monetaria.py
+python3 scripts/evolucao_fatores_base_monetaria.py --sem-download
+```
+
+SGS 1788 (base) e fatores 1810/1809/1811/1815/1818/12484/12487/28724.
+Saída: `output/evolucao_fatores_base_monetaria_1995_2026.md`.
+
+# Fatores da DBGG (1995–hoje)
+
+```bash
+python3 scripts/evolucao_fatores_dbgg.py
+python3 scripts/evolucao_fatores_dbgg.py --sem-download
+```
+
+DBGG 4502/4537 desde 2001; primário/juros/NFSP, ajustes 10820–10824,
+Selic e câmbio. Saída: `output/evolucao_fatores_dbgg_1995_2026.md`.
+
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
 `data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen

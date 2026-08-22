@@ -51,6 +51,12 @@ output/*_stats.json
 !output/evolucao_agregados_monetarios_1995_2026.md
 !output/agregados_monetarios_anual_1995_2026.csv
 !output/agregados_monetarios_fases_1995_2026.csv
+!output/evolucao_fatores_base_monetaria_1995_2026.md
+!output/fatores_base_monetaria_anual_1995_2026.csv
+!output/fatores_base_monetaria_fases_1995_2026.csv
+!output/evolucao_fatores_dbgg_1995_2026.md
+!output/fatores_dbgg_anual_1995_2026.csv
+!output/fatores_dbgg_fases_1995_2026.csv
 data/ifdata/
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
