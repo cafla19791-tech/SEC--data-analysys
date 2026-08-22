@@ -57,6 +57,7 @@ output/*_stats.json
 !output/evolucao_fatores_dbgg_1995_2026.md
 !output/fatores_dbgg_anual_1995_2026.csv
 !output/fatores_dbgg_fases_1995_2026.csv
+!output/*.pdf
 data/ifdata/
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep

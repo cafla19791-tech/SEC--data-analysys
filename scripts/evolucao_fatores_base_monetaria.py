@@ -46,6 +46,7 @@ from scripts.evolucao_balanca_reservas import (
     _fmt_numero,
     baixar_sgs,
     desenhar_tabela_png,
+    exportar_pdf_relatorio,
     tabela_html,
 )
 
@@ -438,6 +439,7 @@ R$ {_fmt_bi(d['externo_fim'])} bi.
 - `fatores_base_monetaria_tabelas_1995_2026.xlsx`
 - `tabela_fatores_base_estoque_1995_2026.png` / `tabela_fatores_base_variacao_1995_2026.png`
 - `grafico_fatores_base_estoque_1995_2026.png` / `grafico_fatores_base_variacao_1995_2026.png`
+- `evolucao_fatores_base_monetaria_1995_2026.pdf`
 """
     output_dir.mkdir(parents=True, exist_ok=True)
     path = output_dir / "evolucao_fatores_base_monetaria_1995_2026.md"
@@ -488,6 +490,35 @@ def gerar_tabelas_png(anual: pd.DataFrame, output_dir: Path, mes_ultimo: str | N
     return [p1, p2, p3]
 
 
+def gerar_pdf(anual: pd.DataFrame, output_dir: Path, mes_ultimo: str | None) -> Path:
+    return exportar_pdf_relatorio(
+        output_dir / "evolucao_fatores_base_monetaria_1995_2026.pdf",
+        "Fatores condicionantes da base monetária (1995–2026)",
+        [
+            f"SGS 1788 (base), 1810 Tesouro, 1809 títulos, 1811 externo, 1815 depósitos de IF, "
+            f"1818 outras, 12484 redesconto, 12487 derivativos, 28724 linhas temporárias. "
+            f"Valores em R$ bilhões. *último estoque: {mes_ultimo or 'n/d'}.",
+            "Estoque positivo = posição expansionista. Os estoques não particionam a base; "
+            "resíduo = Δbase − Σ Δfatores. Primeira publicação de uma série conta como variação a partir de zero.",
+            "Sinal + = expansão da base. Fonte: Banco Central do Brasil.",
+        ],
+        tabelas=[
+            (
+                "Fases — variação acumulada (R$ bilhões)",
+                cabecalhos_fases(),
+                linhas_fases(fases_historicas(anual)),
+                [0.10, 0.26, 0.10, 0.10, 0.11, 0.11, 0.11, 0.11],
+            ),
+            ("Variação anual dos fatores (R$ bilhões)", cabecalhos_var(), linhas_var(anual, mes_ultimo), None),
+            ("Estoque em fim de período (R$ bilhões)", cabecalhos_estoque(), linhas_estoque(anual, mes_ultimo), None),
+        ],
+        imagens=[
+            output_dir / "grafico_fatores_base_estoque_1995_2026.png",
+            output_dir / "grafico_fatores_base_variacao_1995_2026.png",
+        ],
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cache-dir", type=Path, default=DATA_DIR)
@@ -505,6 +536,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.sem_graficos:
         caminhos.extend(gerar_graficos(anual, args.output_dir))
         caminhos.extend(gerar_tabelas_png(anual, args.output_dir, mes_ultimo))
+        caminhos.append(gerar_pdf(anual, args.output_dir, mes_ultimo))
     print(f"Anos: {int(anual['ano'].min())}–{int(anual['ano'].max())} ({len(anual)} linhas)")
     if mes_ultimo:
         print(f"Último estoque: {mes_ultimo}")

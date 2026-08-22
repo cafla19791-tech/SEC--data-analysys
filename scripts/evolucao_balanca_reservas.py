@@ -22,9 +22,11 @@ from datetime import datetime
 from html import unescape
 from pathlib import Path
 
+import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import pandas as pd
 import requests
+from matplotlib.backends.backend_pdf import PdfPages
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
@@ -583,6 +585,104 @@ def desenhar_tabela_png(
     path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(path, dpi=150, bbox_inches="tight", facecolor="white")
     plt.close(fig)
+    return path
+
+
+A4_PAISAGEM = (11.69, 8.27)
+
+
+def contar_paginas_pdf(path: Path) -> int:
+    """Conta objetos /Type /Page (exclui /Pages)."""
+    bruto = Path(path).read_bytes()
+    return len(re.findall(rb"/Type\s*/Page(?!s)\b", bruto))
+
+
+def _figura_capa_pdf(titulo: str, notas: list[str]):
+    fig = plt.figure(figsize=A4_PAISAGEM, facecolor="white")
+    fig.text(0.07, 0.84, titulo, fontsize=18, fontweight="bold", color="#1f4e79", va="top")
+    y = 0.72
+    for nota in notas:
+        fig.text(0.07, y, nota, fontsize=10, color="#222", va="top", wrap=True)
+        y -= 0.055 + 0.012 * nota.count("\n")
+    fig.text(0.07, 0.08, "Fonte: Banco Central do Brasil — SGS. Tabelas com grade contínua.", fontsize=8, color="#555")
+    return fig
+
+
+def _figura_tabela_pdf(
+    cabecalhos: list[str],
+    linhas: list[list[str]],
+    titulo: str,
+    larguras: list[float] | None = None,
+):
+    fig = plt.figure(figsize=A4_PAISAGEM, facecolor="white")
+    ax = fig.add_axes([0.03, 0.04, 0.94, 0.86])
+    ax.set_axis_off()
+    fig.suptitle(titulo, fontsize=12, x=0.04, ha="left", y=0.96, color="#1f4e79")
+    n_col = max(len(cabecalhos), 1)
+    fonte = 8 if n_col <= 8 else 6.5
+    tab = ax.table(
+        cellText=linhas,
+        colLabels=cabecalhos,
+        loc="center",
+        cellLoc="center",
+        colWidths=larguras,
+    )
+    tab.auto_set_font_size(False)
+    tab.set_fontsize(fonte)
+    tab.scale(1, 1.18)
+    for (r, _c), cell in tab.get_celld().items():
+        cell.set_edgecolor("#1a1a1a")
+        cell.set_linewidth(0.7)
+        cell.visible_edges = "BTRL"
+        if r == 0:
+            cell.set_facecolor("#1f4e79")
+            cell.get_text().set_color("white")
+            cell.get_text().set_fontweight("bold")
+        elif r % 2 == 0:
+            cell.set_facecolor("#eef3f8")
+        else:
+            cell.set_facecolor("white")
+    return fig
+
+
+def _figura_imagem_pdf(imagem: Path, titulo: str | None = None):
+    fig = plt.figure(figsize=A4_PAISAGEM, facecolor="white")
+    if titulo:
+        fig.suptitle(titulo, fontsize=11, x=0.04, ha="left", y=0.97, color="#1f4e79")
+        ax = fig.add_axes([0.04, 0.05, 0.92, 0.86])
+    else:
+        ax = fig.add_axes([0.03, 0.03, 0.94, 0.94])
+    ax.imshow(mpimg.imread(imagem))
+    ax.set_axis_off()
+    return fig
+
+
+def exportar_pdf_relatorio(
+    path: Path,
+    titulo: str,
+    notas: list[str],
+    tabelas: list[tuple[str, list[str], list[list[str]], list[float] | None]] | None = None,
+    imagens: list[Path] | None = None,
+) -> Path:
+    """PDF em A4 paisagem: capa, tabelas com grade contínua e gráficos."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with PdfPages(path) as pdf:
+        fig = _figura_capa_pdf(titulo, notas)
+        pdf.savefig(fig)
+        plt.close(fig)
+        for item in tabelas or []:
+            tit, cabs, lins, larg = item
+            fig = _figura_tabela_pdf(cabs, lins, tit, larg)
+            pdf.savefig(fig)
+            plt.close(fig)
+        for imagem in imagens or []:
+            img = Path(imagem)
+            if not img.exists():
+                continue
+            fig = _figura_imagem_pdf(img, img.stem.replace("_", " "))
+            pdf.savefig(fig)
+            plt.close(fig)
     return path
 
 

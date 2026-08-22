@@ -51,6 +51,7 @@ from scripts.evolucao_balanca_reservas import (
     _fmt_numero,
     baixar_sgs,
     desenhar_tabela_png,
+    exportar_pdf_relatorio,
     tabela_html,
 )
 
@@ -484,6 +485,7 @@ Selic em % a.a.; US$ em R$/US$.
 - `grafico_dbgg_dlsp_pib_1995_2026.png`
 - `grafico_dbgg_primario_juros_1995_2026.png`
 - `grafico_dbgg_selic_cambio_1995_2026.png`
+- `evolucao_fatores_dbgg_1995_2026.pdf`
 """
     output_dir.mkdir(parents=True, exist_ok=True)
     path = output_dir / "evolucao_fatores_dbgg_1995_2026.md"
@@ -533,6 +535,40 @@ def gerar_tabelas_png(anual: pd.DataFrame, output_dir: Path, mes_ultimo: str | N
     return [p1, p2, p3]
 
 
+def gerar_pdf(anual: pd.DataFrame, output_dir: Path, mes_ultimo: str | None) -> Path:
+    return exportar_pdf_relatorio(
+        output_dir / "evolucao_fatores_dbgg_1995_2026.pdf",
+        "Fatores que influenciam a DBGG (1995–2026)",
+        [
+            f"DBGG % PIB (4537) desde dez/2001; saldo em R$ (4502) desde 1998. "
+            f"Primário/juros/NFSP em % do PIB (sinal Bacen: positivo = déficit). "
+            f"Ajustes em R$ bilhões. *último ponto: {mes_ultimo or 'n/d'}.",
+            "Selic e US$ no ano corrente podem ser mais recentes que o estoque da dívida. "
+            "Efeito PIB = −d(t−1) × g/(1+g). Fonte: Banco Central do Brasil.",
+        ],
+        tabelas=[
+            (
+                "Fases — DBGG e drivers",
+                cabecalhos_fases(),
+                linhas_fases(fases_historicas(anual)),
+                [0.10, 0.24, 0.11, 0.10, 0.12, 0.11, 0.11, 0.11],
+            ),
+            (
+                "Fatores anuais (primário/juros/NFSP/efeito PIB em % PIB; ajustes em R$ bi)",
+                cabecalhos_fatores(),
+                linhas_fatores(anual, mes_ultimo),
+                None,
+            ),
+            ("Estoque da DBGG e da DLSP", cabecalhos_estoque(), linhas_estoque(anual, mes_ultimo), None),
+        ],
+        imagens=[
+            output_dir / "grafico_dbgg_dlsp_pib_1995_2026.png",
+            output_dir / "grafico_dbgg_primario_juros_1995_2026.png",
+            output_dir / "grafico_dbgg_selic_cambio_1995_2026.png",
+        ],
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cache-dir", type=Path, default=DATA_DIR)
@@ -550,6 +586,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.sem_graficos:
         caminhos.extend(gerar_graficos(anual, args.output_dir))
         caminhos.extend(gerar_tabelas_png(anual, args.output_dir, mes_ultimo))
+        caminhos.append(gerar_pdf(anual, args.output_dir, mes_ultimo))
     print(f"Anos: {int(anual['ano'].min())}–{int(anual['ano'].max())} ({len(anual)} linhas)")
     if mes_ultimo:
         print(f"Último ponto: {mes_ultimo}")

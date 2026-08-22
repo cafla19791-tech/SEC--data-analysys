@@ -184,6 +184,14 @@ python3 scripts/evolucao_fatores_dbgg.py --sem-download
 DBGG 4502/4537 desde 2001; primário/juros/NFSP, ajustes 10820–10824,
 Selic e câmbio. Saída: `output/evolucao_fatores_dbgg_1995_2026.md`.
 
+# Imprimir todas as evoluções em PDF (A4 paisagem)
+
+```bash
+python3 scripts/imprimir_evolucoes_pdf.py
+```
+
+Gera um PDF por relatório e o compilado `output/evolucoes_sgs_completo.pdf`.
+
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
 `data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen
