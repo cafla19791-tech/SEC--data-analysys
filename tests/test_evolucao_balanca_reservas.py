@@ -12,6 +12,7 @@ from scripts.evolucao_balanca_reservas import (
     ANO_FIM,
     ANO_INICIO,
     BORDA_CONTINUA,
+    _sgs_para_mensal,
     agregar_anual,
     desenhar_tabela_png,
     exportar_excel_grade,
@@ -20,6 +21,7 @@ from scripts.evolucao_balanca_reservas import (
     gerar_graficos,
     gerar_relatorio,
     gerar_tabelas_png,
+    parse_sgs_soap_xml,
     tabela_html,
 )
 
@@ -171,3 +173,20 @@ def test_graficos(tmp_path: Path):
     paths = gerar_graficos(anual, tmp_path)
     assert len(paths) == 4
     assert all(p.exists() and p.stat().st_size > 0 for p in paths)
+
+
+def test_parse_sgs_soap_xml_e_fim_de_mes():
+    xml = (
+        "&lt;SERIE&gt;&lt;ITEM&gt;&lt;DATA&gt;1/2024&lt;/DATA&gt;"
+        "&lt;VALOR&gt;10,5&lt;/VALOR&gt;&lt;/ITEM&gt;"
+        "&lt;ITEM&gt;&lt;DATA&gt;15/01/2024&lt;/DATA&gt;"
+        "&lt;VALOR&gt;11&lt;/VALOR&gt;&lt;/ITEM&gt;"
+        "&lt;ITEM&gt;&lt;DATA&gt;02/2024&lt;/DATA&gt;"
+        "&lt;VALOR&gt;12&lt;/VALOR&gt;&lt;/ITEM&gt;&lt;/SERIE&gt;"
+    )
+    bruto = parse_sgs_soap_xml(xml)
+    assert len(bruto) == 3
+    mensal = _sgs_para_mensal(bruto)
+    assert list(mensal["mes"].dt.month) == [1, 2]
+    assert mensal.loc[0, "valor"] == 11.0
+    assert mensal.loc[1, "valor"] == 12.0

@@ -16,7 +16,10 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import re
+import time
 from datetime import datetime
+from html import unescape
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -43,6 +46,123 @@ BORDA_CONTINUA = Border(
 )
 
 BCB_SGS = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{cod}/dados"
+BCB_SGS_SOAP = "https://www3.bcb.gov.br/wssgs/services/FachadaWSSGS"
+
+
+def _parse_sgs_data(texto: str) -> datetime | None:
+    texto = (texto or "").strip()
+    for fmt in ("%d/%m/%Y", "%m/%Y", "%d/%m/%y"):
+        try:
+            return datetime.strptime(texto, fmt)
+        except ValueError:
+            continue
+    partes = texto.split("/")
+    if len(partes) == 2:
+        try:
+            return datetime(int(partes[1]), int(partes[0]), 1)
+        except ValueError:
+            return None
+    return None
+
+
+def _sgs_para_mensal(df: pd.DataFrame) -> pd.DataFrame:
+    """Estoque de fim de mês (última observação do mês, diária ou mensal)."""
+    if df is None or df.empty:
+        return pd.DataFrame(columns=["mes", "valor"])
+    out = df.dropna(subset=["data", "valor"]).sort_values("data")
+    out["mes"] = out["data"].dt.to_period("M").dt.to_timestamp()
+    return (
+        out.drop_duplicates(subset=["mes"], keep="last")[["mes", "valor"]]
+        .reset_index(drop=True)
+    )
+
+
+def parse_sgs_soap_xml(texto: str) -> pd.DataFrame:
+    """Extrai DATA/VALOR do XML interno de getValoresSeriesXML."""
+    interno = unescape(texto or "")
+    itens = re.findall(
+        r"<ITEM>\s*<DATA>([^<]+)</DATA>\s*<VALOR>([^<]*)</VALOR>",
+        interno,
+        flags=re.I,
+    )
+    if not itens:
+        return pd.DataFrame(columns=["data", "valor"])
+    linhas = []
+    for data_txt, valor_txt in itens:
+        dt = _parse_sgs_data(data_txt)
+        if dt is None:
+            continue
+        try:
+            valor = float(valor_txt.replace(",", "."))
+        except ValueError:
+            continue
+        linhas.append({"data": pd.Timestamp(dt), "valor": valor})
+    if not linhas:
+        return pd.DataFrame(columns=["data", "valor"])
+    return pd.DataFrame(linhas).drop_duplicates(subset=["data"]).sort_values("data")
+
+
+def _baixar_sgs_soap_intervalo(cod: int, inicio: str, fim: str) -> pd.DataFrame:
+    """Uma chamada SOAP. Levanta HTTPError em 4xx/5xx ou Fault."""
+    corpo = f"""<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soapenv:Body>
+    <ns1:getValoresSeriesXML soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:ns1="https://www3.bcb.gov.br/wssgs/services/FachadaWSSGS">
+      <in0 xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" soapenc:arrayType="xsd:long[1]">
+        <item xsi:type="xsd:long">{int(cod)}</item>
+      </in0>
+      <in1 xsi:type="xsd:string">{inicio}</in1>
+      <in2 xsi:type="xsd:string">{fim}</in2>
+    </ns1:getValoresSeriesXML>
+  </soapenv:Body>
+</soapenv:Envelope>"""
+    resp = requests.post(
+        BCB_SGS_SOAP,
+        data=corpo.encode("utf-8"),
+        headers={"Content-Type": "text/xml; charset=utf-8", "SOAPAction": ""},
+        timeout=120,
+    )
+    resp.raise_for_status()
+    if re.search(r"<soap(?:env)?:Fault\b", resp.text or "", flags=re.I):
+        raise requests.HTTPError("SOAP fault", response=resp)
+    return parse_sgs_soap_xml(resp.text)
+
+
+def _baixar_sgs_soap(cod: int, inicio: str, fim: str) -> pd.DataFrame:
+    """Fallback quando a API JSON do SGS é bloqueada (WAF).
+
+    Intervalos longos (sobretudo séries diárias) devolvem HTTP 500; nesse
+    caso a série é baixada em blocos anuais.
+    """
+    try:
+        bruto = _baixar_sgs_soap_intervalo(cod, inicio, fim)
+        return _sgs_para_mensal(bruto)
+    except (requests.HTTPError, requests.Timeout, requests.ConnectionError):
+        pass
+    inicio_ts = pd.Timestamp(datetime.strptime(inicio, "%d/%m/%Y"))
+    fim_ts = pd.Timestamp(datetime.strptime(fim, "%d/%m/%Y"))
+    partes: list[pd.DataFrame] = []
+    cursor = inicio_ts
+    while cursor <= fim_ts:
+        bloco_fim = min(cursor + pd.DateOffset(years=1) - pd.DateOffset(days=1), fim_ts)
+        try:
+            parte = _baixar_sgs_soap_intervalo(
+                cod,
+                cursor.strftime("%d/%m/%Y"),
+                bloco_fim.strftime("%d/%m/%Y"),
+            )
+        except (requests.HTTPError, requests.Timeout, requests.ConnectionError):
+            parte = pd.DataFrame(columns=["data", "valor"])
+        if not parte.empty:
+            partes.append(parte)
+        cursor = bloco_fim + pd.DateOffset(days=1)
+        time.sleep(0.08)
+    if not partes:
+        return pd.DataFrame(columns=["mes", "valor"])
+    return _sgs_para_mensal(pd.concat(partes, ignore_index=True))
 
 SERIES = {
     22707: "saldo_comercial",
@@ -60,47 +180,70 @@ OUTPUT_DIR = ROOT / "output"
 DATA_DIR = ROOT / "data"
 
 
+def _json_sgs_payload(resp: requests.Response):
+    """Lista JSON da API, ou None se a resposta for WAF/erro."""
+    if resp.status_code == 404:
+        return []
+    texto = (resp.text or "").lstrip()
+    if not texto.startswith("[") and not texto.startswith("{"):
+        return None
+    try:
+        dados = resp.json()
+    except (requests.JSONDecodeError, ValueError):
+        return None
+    if isinstance(dados, dict):
+        return None
+    if isinstance(dados, list):
+        return dados
+    return None
+
+
 def baixar_sgs(
     cod: int,
     inicio: str = "01/01/1995",
     fim: str = "31/12/2025",
 ) -> pd.DataFrame:
-    """Baixa série SGS Bacen (json) em blocos de até 10 anos."""
+    """Baixa série SGS Bacen (json em blocos; SOAP se a API REST estiver bloqueada)."""
     url = BCB_SGS.format(cod=cod)
     inicio_ts = pd.Timestamp(datetime.strptime(inicio, "%d/%m/%Y"))
     fim_ts = pd.Timestamp(datetime.strptime(fim, "%d/%m/%Y"))
     partes: list[pd.DataFrame] = []
+    usar_soap = False
     cursor = inicio_ts
-    while cursor <= fim_ts:
+    while cursor <= fim_ts and not usar_soap:
         bloco_fim = min(cursor + pd.DateOffset(years=9, months=11), fim_ts)
         params = {
             "formato": "json",
             "dataInicial": cursor.strftime("%d/%m/%Y"),
             "dataFinal": bloco_fim.strftime("%d/%m/%Y"),
         }
-        resp = requests.get(url, params=params, timeout=120)
-        # Séries descontinuadas ou sem histórico no intervalo devolvem 404.
-        if resp.status_code == 404:
-            cursor = bloco_fim + pd.DateOffset(days=1)
-            continue
-        resp.raise_for_status()
-        dados = resp.json()
+        dados = None
+        for tentativa in range(2):
+            resp = requests.get(url, params=params, timeout=120)
+            dados = _json_sgs_payload(resp)
+            if dados is not None:
+                break
+            if resp.status_code in {429, 502, 503, 504}:
+                time.sleep(2 ** tentativa)
+                continue
+            usar_soap = True
+            break
+        if usar_soap:
+            break
         if dados:
             df = pd.DataFrame(dados)
             df["data"] = pd.to_datetime(df["data"], dayfirst=True, errors="coerce")
             df["valor"] = pd.to_numeric(df["valor"], errors="coerce")
             partes.append(df.dropna(subset=["data", "valor"]))
         cursor = bloco_fim + pd.DateOffset(days=1)
-    if not partes:
+    if usar_soap or not partes:
+        soap = _baixar_sgs_soap(cod, inicio, fim)
+        if not soap.empty:
+            return soap
+        if partes:
+            return _sgs_para_mensal(pd.concat(partes, ignore_index=True))
         raise RuntimeError(f"Série SGS {cod} vazia")
-    out = (
-        pd.concat(partes, ignore_index=True)
-        .drop_duplicates(subset=["data"])
-        .sort_values("data")
-        .reset_index(drop=True)
-    )
-    out["mes"] = out["data"].dt.to_period("M").dt.to_timestamp()
-    return out[["mes", "valor"]]
+    return _sgs_para_mensal(pd.concat(partes, ignore_index=True))
 
 
 def carregar_series(
