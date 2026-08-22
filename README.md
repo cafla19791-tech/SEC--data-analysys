@@ -110,6 +110,88 @@ python resumo_fluxos_polars.py \
   --tjlp "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx"
 ```
 
+# Balança comercial e reservas (1995–2025)
+
+```bash
+python3 scripts/evolucao_balanca_reservas.py
+# só cache local (data/sgs_*.csv):
+python3 scripts/evolucao_balanca_reservas.py --sem-download
+```
+
+SGS 22707/22708/22709 (BP, BPM6) e 3546 (reservas, liquidez). Saída:
+`output/evolucao_balanca_reservas_1995_2025.md` e gráficos PNG.
+
+# Recursos livres e direcionados no SFN (2002–2026)
+
+```bash
+python3 scripts/evolucao_recursos_livres_direcionados.py
+python3 scripts/evolucao_recursos_livres_direcionados.py --sem-download
+```
+
+SGS 20542 (livres), 20593 (direcionados), 20539 (total). Split oficial
+desde mar/2007; crédito total desde 2002. Saída:
+`output/evolucao_recursos_livres_direcionados_2002_2026.md`.
+
+# Consignado, CDC e cartão (2002–2016)
+
+```bash
+python3 scripts/evolucao_consignado_cdc_cartao.py
+```
+
+SGS 20579 (consignado), 20583 (CDC / aquisição de bens), 20590 (cartão).
+Split oficial desde mar/2007.
+
+# 5 maiores IFs — carteira e proxy de recursos livres (2002–2026)
+
+```bash
+python3 scripts/evolucao_top5_credito_livres.py
+python3 scripts/evolucao_top5_credito_livres.py --sem-download
+```
+
+IF.data (não o SGS): carteira de crédito por conglomerado desde 2002;
+proxy de recursos livres por modalidade PF/PJ desde 2014. Saída:
+`output/evolucao_top5_credito_livres_2002_2026.md`.
+
+# Agregados monetários M1–M4 (1995–2026)
+
+```bash
+python3 scripts/evolucao_agregados_monetarios.py
+python3 scripts/evolucao_agregados_monetarios.py --sem-download
+```
+
+Saldo de fim de período (dezembro; 2026* = último mês). Metodologia
+atual SGS 27791/27810/27813/27815 desde 2001; 1995–2000 usa as séries
+descontinuadas 1827/1837/1840/1843. Saída:
+`output/evolucao_agregados_monetarios_1995_2026.md`.
+
+# Fatores da base monetária (1995–hoje)
+
+```bash
+python3 scripts/evolucao_fatores_base_monetaria.py
+python3 scripts/evolucao_fatores_base_monetaria.py --sem-download
+```
+
+SGS 1788 (base) e fatores 1810/1809/1811/1815/1818/12484/12487/28724.
+Saída: `output/evolucao_fatores_base_monetaria_1995_2026.md`.
+
+# Fatores da DBGG (1995–hoje)
+
+```bash
+python3 scripts/evolucao_fatores_dbgg.py
+python3 scripts/evolucao_fatores_dbgg.py --sem-download
+```
+
+DBGG 4502/4537 desde 2001; primário/juros/NFSP, ajustes 10820–10824,
+Selic e câmbio. Saída: `output/evolucao_fatores_dbgg_1995_2026.md`.
+
+# Imprimir todas as evoluções em PDF (A4 paisagem)
+
+```bash
+python3 scripts/imprimir_evolucoes_pdf.py
+```
+
+Gera um PDF por relatório e o compilado `output/evolucoes_sgs_completo.pdf`.
+
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
 `CONTAGIL_SELIC`/`SELIC_STP`, caminho ContAgil Windows, `attachments/`,
 `data/STP*.xlsx`, `data/selic_fatores_bacen.xlsx`. Sem STP local, o Bacen
