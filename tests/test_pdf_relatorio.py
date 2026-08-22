@@ -18,7 +18,7 @@ def test_exportar_pdf_relatorio_cria_paginas(tmp_path: Path) -> None:
     path = exportar_pdf_relatorio(
         tmp_path / "relatorio.pdf",
         "Relatório de teste",
-        ["Nota de capa."],
+        ["Valores em R$ bilhões."],
         tabelas=[("Tabela", ["Ano", "Valor"], [["1995", "1,0"], ["1996", "2,0"]], None)],
         imagens=[png],
     )

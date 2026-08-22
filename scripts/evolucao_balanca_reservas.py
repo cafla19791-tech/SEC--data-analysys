@@ -591,6 +591,11 @@ def desenhar_tabela_png(
 A4_PAISAGEM = (11.69, 8.27)
 
 
+def _pdf_txt(texto) -> str:
+    """Escapa $ para o matplotlib não tratar R$ como mathtext."""
+    return str(texto).replace("$", r"\$")
+
+
 def contar_paginas_pdf(path: Path) -> int:
     """Conta objetos /Type /Page (exclui /Pages)."""
     bruto = Path(path).read_bytes()
@@ -599,12 +604,18 @@ def contar_paginas_pdf(path: Path) -> int:
 
 def _figura_capa_pdf(titulo: str, notas: list[str]):
     fig = plt.figure(figsize=A4_PAISAGEM, facecolor="white")
-    fig.text(0.07, 0.84, titulo, fontsize=18, fontweight="bold", color="#1f4e79", va="top")
+    fig.text(0.07, 0.84, _pdf_txt(titulo), fontsize=18, fontweight="bold", color="#1f4e79", va="top")
     y = 0.72
     for nota in notas:
-        fig.text(0.07, y, nota, fontsize=10, color="#222", va="top", wrap=True)
+        fig.text(0.07, y, _pdf_txt(nota), fontsize=10, color="#222", va="top", wrap=True)
         y -= 0.055 + 0.012 * nota.count("\n")
-    fig.text(0.07, 0.08, "Fonte: Banco Central do Brasil — SGS. Tabelas com grade contínua.", fontsize=8, color="#555")
+    fig.text(
+        0.07,
+        0.08,
+        "Fonte: Banco Central do Brasil — SGS. Tabelas com grade contínua.",
+        fontsize=8,
+        color="#555",
+    )
     return fig
 
 
@@ -617,12 +628,12 @@ def _figura_tabela_pdf(
     fig = plt.figure(figsize=A4_PAISAGEM, facecolor="white")
     ax = fig.add_axes([0.03, 0.04, 0.94, 0.86])
     ax.set_axis_off()
-    fig.suptitle(titulo, fontsize=12, x=0.04, ha="left", y=0.96, color="#1f4e79")
+    fig.suptitle(_pdf_txt(titulo), fontsize=12, x=0.04, ha="left", y=0.96, color="#1f4e79")
     n_col = max(len(cabecalhos), 1)
     fonte = 8 if n_col <= 8 else 6.5
     tab = ax.table(
-        cellText=linhas,
-        colLabels=cabecalhos,
+        cellText=[[_pdf_txt(c) for c in row] for row in linhas],
+        colLabels=[_pdf_txt(h) for h in cabecalhos],
         loc="center",
         cellLoc="center",
         colWidths=larguras,
@@ -648,7 +659,7 @@ def _figura_tabela_pdf(
 def _figura_imagem_pdf(imagem: Path, titulo: str | None = None):
     fig = plt.figure(figsize=A4_PAISAGEM, facecolor="white")
     if titulo:
-        fig.suptitle(titulo, fontsize=11, x=0.04, ha="left", y=0.97, color="#1f4e79")
+        fig.suptitle(_pdf_txt(titulo), fontsize=11, x=0.04, ha="left", y=0.97, color="#1f4e79")
         ax = fig.add_axes([0.04, 0.05, 0.92, 0.86])
     else:
         ax = fig.add_axes([0.03, 0.03, 0.94, 0.94])
