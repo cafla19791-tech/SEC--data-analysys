@@ -310,7 +310,7 @@ def carregar_olinda_mes(cache_dir: Path, ano_mes: str, baixar: bool = True) -> p
         f"{OLINDA}/TaxasJurosMensalPorMes?$format=json&$top=10000"
         f"&$filter=anoMes eq '{ano_mes}'"
     )
-    print(f"  Olinda {ano_mes}", flush=True)
+    print(f"  Olinda mensal {ano_mes}", flush=True)
     df = pd.DataFrame(_get_json(url).get("value", []))
     if not df.empty:
         df["cnpj8"] = df["cnpj8"].astype(str).str.zfill(8)
@@ -319,10 +319,61 @@ def carregar_olinda_mes(cache_dir: Path, ano_mes: str, baixar: bool = True) -> p
     return df
 
 
-def ultimo_mes_olinda(baixar: bool = True) -> str:
+def ultimo_mes_olinda() -> str:
     url = f"{OLINDA}/TaxasJurosMensalPorMes?$format=json&$top=1"
-    mes = _get_json(url)["value"][0]["anoMes"]
-    return str(mes)
+    return str(_get_json(url)["value"][0]["anoMes"])
+
+
+def ultimo_periodo_diario_olinda() -> tuple[str, str]:
+    url = f"{OLINDA}/ConsultaDatas?$format=json&$top=8000"
+    df = pd.DataFrame(_get_json(url).get("value", []))
+    d = df[df["tipoModalidade"] == "D"].sort_values("inicioPeriodo")
+    ult = d.iloc[-1]
+    return str(ult["inicioPeriodo"]), str(ult["fimPeriodo"])
+
+
+def carregar_olinda_diario(cache_dir: Path, inicio: str, baixar: bool = True) -> pd.DataFrame:
+    cache = cache_dir / f"olinda_diario_{inicio}.csv"
+    if cache.exists():
+        return pd.read_csv(cache, dtype={"cnpj8": str})
+    if not baixar:
+        raise FileNotFoundError(cache)
+    url = (
+        f"{OLINDA}/TaxasJurosDiariaPorInicioPeriodo?$format=json&$top=10000"
+        f"&$filter=InicioPeriodo eq '{inicio}'"
+    )
+    print(f"  Olinda diário {inicio}", flush=True)
+    df = pd.DataFrame(_get_json(url).get("value", []))
+    if not df.empty:
+        df["cnpj8"] = df["cnpj8"].astype(str).str.zfill(8)
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    df.to_csv(cache, index=False)
+    return df
+
+
+def carregar_olinda(cache_dir: Path, baixar: bool = True) -> tuple[pd.DataFrame, str]:
+    """Junta a tabela mensal (imobiliário) com a diária (demais modalidades)."""
+    mes = ultimo_mes_olinda()
+    ini, fim = ultimo_periodo_diario_olinda()
+    mensal = carregar_olinda_mes(cache_dir, mes, baixar=baixar)
+    diario = carregar_olinda_diario(cache_dir, ini, baixar=baixar)
+    partes = [p for p in (mensal, diario) if not p.empty]
+    out = pd.concat(partes, ignore_index=True)
+    rotulo = f"{ini} a {fim} e {mes} (imobiliário)"
+    return out, rotulo
+
+
+_ALIASES = (
+    ("ITAU", ("ITAU", "ITAÚ")),
+    ("ITAÚ", ("ITAU", "ITAÚ")),
+    ("BRADESCO", ("BRADESCO",)),
+    ("BB -", ("BCO DO BRASIL", "BANCO DO BRASIL")),
+    ("CAIXA", ("CAIXA ECONOMICA", "CAIXA ECONÔMICA")),
+    ("SANTANDER", ("SANTANDER",)),
+    ("NU PAGAMENTOS", ("NU FINANCEIRA", "NUBANK")),
+    ("BTG", ("BTG",)),
+    ("VOTORANTIM", ("VOTORANTIM", "BV")),
+)
 
 
 def cruzar_taxas(top5: pd.DataFrame, olinda: pd.DataFrame) -> pd.DataFrame:
@@ -339,12 +390,27 @@ def cruzar_taxas(top5: pd.DataFrame, olinda: pd.DataFrame) -> pd.DataFrame:
                 cnpjs = {str(rec.cnpj_lider).zfill(8)}
         else:
             cnpjs = {str(rec.cnpj_lider).zfill(8)}
+        nome_if = str(rec.instituicao).upper()
+        tokens = []
+        for chave, alts in _ALIASES:
+            if chave in nome_if:
+                tokens.extend(alts)
         if not mods:
             linhas.append({**rec._asdict(), "modalidade_olinda": "—", "if_olinda": "—", "taxa_aa": float("nan")})
             continue
         achou = False
         for mod in mods:
-            cand = olinda[(olinda["Modalidade"] == mod) & (olinda["cnpj8"].isin(cnpjs))]
+            base = olinda[olinda["Modalidade"] == mod]
+            if "Segmento" in base.columns:
+                alvo = "FÍSICA" if rec.segmento == "PF" else "JURÍDICA"
+                tem = base["Segmento"].notna()
+                base = base[~tem | base["Segmento"].astype(str).str.contains(alvo, case=False, na=False)]
+            cand = base[base["cnpj8"].isin(cnpjs)]
+            if cand.empty and tokens:
+                mask = False
+                for tok in tokens:
+                    mask = mask | base["InstituicaoFinanceira"].str.contains(tok, case=False, na=False)
+                cand = base[mask]
             if cand.empty:
                 continue
             # Se várias IFs do conglomerado reportam, usa a mediana das taxas.
@@ -498,8 +564,7 @@ def main(argv: list[str] | None = None) -> int:
         ignore_index=True,
     )
 
-    mes = ultimo_mes_olinda()
-    olinda = carregar_olinda_mes(args.cache_dir, mes, baixar=not args.sem_download)
+    olinda, mes = carregar_olinda(args.cache_dir, baixar=not args.sem_download)
     cruzado = cruzar_taxas(top, olinda)
     cruzado.drop(columns=["cnpjs"], errors="ignore").to_csv(
         args.output.parent / "taxas_credito_top5_bancos.csv", index=False
