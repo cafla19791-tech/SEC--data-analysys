@@ -1,0 +1,11 @@
+ordem,sentido,inicio,fim,selic_ini,selic_fim,delta,extensao,dias,n_reunioes,frase
+1,aumento,2003-01-01,2003-07-22,25.0,26.5,1.5,6 meses e 22 dias,203,6,"Entre 01/01/2003 e 22/07/2003 a Selic aumentou de 25,00% para 26,50% (extensão: 6 meses e 22 dias)."
+2,redução,2003-07-23,2004-09-14,26.5,16.0,-10.5,"1 ano, 1 mês e 23 dias",420,14,"Entre 23/07/2003 e 14/09/2004 a Selic foi reduzida de 26,50% para 16,00% (extensão: 1 ano, 1 mês e 23 dias)."
+3,aumento,2004-09-15,2005-09-13,16.0,19.75,3.75,11 meses e 30 dias,364,12,"Entre 15/09/2004 e 13/09/2005 a Selic aumentou de 16,00% para 19,75% (extensão: 11 meses e 30 dias)."
+4,redução,2005-09-14,2008-04-15,19.75,11.25,-8.5,"2 anos, 7 meses e 2 dias",945,22,"Entre 14/09/2005 e 15/04/2008 a Selic foi reduzida de 19,75% para 11,25% (extensão: 2 anos, 7 meses e 2 dias)."
+5,aumento,2008-04-16,2009-01-20,11.25,13.75,2.5,9 meses e 5 dias,280,6,"Entre 16/04/2008 e 20/01/2009 a Selic aumentou de 11,25% para 13,75% (extensão: 9 meses e 5 dias)."
+6,redução,2009-01-21,2010-04-27,13.75,8.75,-5.0,"1 ano, 3 meses e 7 dias",462,10,"Entre 21/01/2009 e 27/04/2010 a Selic foi reduzida de 13,75% para 8,75% (extensão: 1 ano, 3 meses e 7 dias)."
+7,aumento,2010-04-28,2011-08-30,8.75,12.5,3.75,"1 ano, 4 meses e 3 dias",490,11,"Entre 28/04/2010 e 30/08/2011 a Selic aumentou de 8,75% para 12,50% (extensão: 1 ano, 4 meses e 3 dias)."
+8,redução,2011-08-31,2013-04-16,12.5,7.25,-5.25,"1 ano, 7 meses e 17 dias",595,13,"Entre 31/08/2011 e 16/04/2013 a Selic foi reduzida de 12,50% para 7,25% (extensão: 1 ano, 7 meses e 17 dias)."
+9,aumento,2013-04-17,2016-10-18,7.25,14.25,7.0,"3 anos, 6 meses e 2 dias",1281,28,"Entre 17/04/2013 e 18/10/2016 a Selic aumentou de 7,25% para 14,25% (extensão: 3 anos, 6 meses e 2 dias)."
+10,redução,2016-10-19,2016-12-31,14.25,13.75,-0.5,2 meses e 13 dias,74,2,"Entre 19/10/2016 e 31/12/2016 a Selic foi reduzida de 14,25% para 13,75% (extensão: 2 meses e 13 dias)."

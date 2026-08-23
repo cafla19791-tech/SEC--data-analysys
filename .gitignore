@@ -49,6 +49,7 @@ output/indiretas_automaticas_ipca/*.xlsx
 !output/copom_atas_reunioes_2001_2026.csv
 !output/copom_atas_anual_2001_2026.csv
 !output/copom_atas_recuos_2003_2015.csv
+!output/copom_atas_lapsos_2003_2016.csv
 
 # Artefato clássico na raiz (cópia do resumo anual)
 /impacto_fiscal_por_ano.xlsx

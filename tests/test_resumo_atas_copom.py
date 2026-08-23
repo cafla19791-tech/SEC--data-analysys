@@ -11,7 +11,9 @@ from scripts.resumo_atas_copom import (
     extrair_voto,
     html_para_texto,
     identificador,
+    identificar_lapsos,
     identificar_recuos,
+    _extensao_pt,
     numero_reuniao,
     resumo_anual,
     tabela_html,
@@ -159,3 +161,41 @@ def test_identificar_recuos_corte_e_volta() -> None:
     assert recuos[0]["retorno"] == "retornou e superou"
     assert recuos[0]["n_cortes"] == 2
     assert recuos[0]["meses_ate_reverter"] > 4
+
+
+def test_extensao_pt_inclusiva() -> None:
+    assert _extensao_pt(pd.Timestamp("2003-01-01"), pd.Timestamp("2003-01-01")) == "1 dia"
+    assert "meses" in _extensao_pt(pd.Timestamp("2003-01-01"), pd.Timestamp("2003-07-22"))
+
+
+def test_identificar_lapsos_contiguos_ate_mudar_sentido() -> None:
+    reunioes = pd.DataFrame(
+        {
+            "reuniao": [10, 11, 12, 13, 14],
+            "data": pd.to_datetime(
+                ["2002-12-18", "2003-02-19", "2003-07-23", "2004-04-14", "2004-09-15"]
+            ),
+            "selic": [25.00, 26.50, 24.50, 16.00, 16.25],
+            "decisao": ["alta", "alta", "corte", "corte", "alta"],
+            "ano": [2002, 2003, 2003, 2004, 2004],
+        }
+    )
+    lapsos = identificar_lapsos(reunioes, "2003-01-01", "2004-12-31")
+    assert len(lapsos) == 3
+    assert lapsos[0]["sentido"] == "aumento"
+    assert lapsos[0]["inicio"] == pd.Timestamp("2003-01-01")
+    assert lapsos[0]["fim"] == pd.Timestamp("2003-07-22")
+    assert lapsos[0]["selic_ini"] == 25.00
+    assert lapsos[0]["selic_fim"] == 26.50
+    assert lapsos[1]["sentido"] == "redução"
+    assert lapsos[1]["inicio"] == pd.Timestamp("2003-07-23")
+    assert lapsos[1]["fim"] == pd.Timestamp("2004-09-14")
+    assert lapsos[1]["selic_ini"] == 26.50
+    assert lapsos[1]["selic_fim"] == 16.00
+    assert lapsos[2]["sentido"] == "aumento"
+    assert lapsos[2]["inicio"] == pd.Timestamp("2004-09-15")
+    assert lapsos[2]["fim"] == pd.Timestamp("2004-12-31")
+    assert lapsos[2]["selic_ini"] == 16.00
+    assert lapsos[2]["selic_fim"] == 16.25
+    assert lapsos[0]["fim"] + pd.Timedelta(days=1) == lapsos[1]["inicio"]
+    assert "foi reduzida de 26,50% para 16,00%" in lapsos[1]["frase"]

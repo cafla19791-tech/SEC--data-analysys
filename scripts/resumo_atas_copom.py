@@ -21,6 +21,8 @@ from datetime import datetime
 from html import unescape
 from pathlib import Path
 
+from dateutil.relativedelta import relativedelta
+
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -624,6 +626,119 @@ def linhas_recuos(recuos: list[dict]) -> list[list[str]]:
     return linhas
 
 
+def _extensao_pt(inicio: pd.Timestamp, fim: pd.Timestamp) -> str:
+    """Extensão inclusiva do intervalo, em anos, meses e dias."""
+    rd = relativedelta((pd.Timestamp(fim) + pd.Timedelta(days=1)).date(), pd.Timestamp(inicio).date())
+    partes: list[str] = []
+    if rd.years:
+        partes.append("1 ano" if rd.years == 1 else f"{rd.years} anos")
+    if rd.months:
+        partes.append("1 mês" if rd.months == 1 else f"{rd.months} meses")
+    if rd.days or not partes:
+        partes.append("1 dia" if rd.days == 1 else f"{rd.days} dias")
+    if len(partes) == 1:
+        return partes[0]
+    if len(partes) == 2:
+        return f"{partes[0]} e {partes[1]}"
+    return f"{partes[0]}, {partes[1]} e {partes[2]}"
+
+
+def identificar_lapsos(
+    reunioes: pd.DataFrame,
+    inicio: str | pd.Timestamp = "2003-01-01",
+    fim: str | pd.Timestamp = "2016-12-31",
+) -> list[dict]:
+    """Lapsos contínuos de 2003–2016 até a Selic mudar de sentido.
+
+    Manutenções ficam no sentido vigente. O próximo lapso começa no dia
+    seguinte ao fim do anterior.
+    """
+    ini = pd.Timestamp(inicio)
+    termino = pd.Timestamp(fim)
+    df = reunioes.sort_values("data").reset_index(drop=True)
+    df["data"] = pd.to_datetime(df["data"])
+    anteriores = df[df["data"] < ini]
+    if anteriores.empty or pd.isna(anteriores.iloc[-1]["selic"]):
+        raise ValueError("É preciso a Selic vigente em 1º/01/2003.")
+    selic_base = float(anteriores.iloc[-1]["selic"])
+    previo = anteriores[anteriores["decisao"].isin(["alta", "corte"])]
+    sentido = str(previo.iloc[-1]["decisao"]) if not previo.empty else None
+    janela = df[(df["data"] >= ini) & (df["data"] <= termino)].reset_index(drop=True)
+    if janela.empty:
+        return []
+    grupos: list[list[int]] = []
+    atual: list[int] = []
+    for i, rec in janela.iterrows():
+        if rec["decisao"] in ("alta", "corte"):
+            if sentido is None:
+                sentido = rec["decisao"]
+            elif rec["decisao"] != sentido:
+                if atual:
+                    grupos.append(atual)
+                atual = []
+                sentido = rec["decisao"]
+        atual.append(int(i))
+    if atual:
+        grupos.append(atual)
+    lapsos = []
+    selic_cursor = selic_base
+    for n, idxs in enumerate(grupos):
+        bloco = janela.loc[idxs]
+        moves = bloco[bloco["decisao"].isin(["alta", "corte"])]
+        sentido_g = str(moves.iloc[0]["decisao"]) if not moves.empty else "manutenção"
+        data_ini = ini if n == 0 else pd.Timestamp(lapsos[-1]["fim"]) + pd.Timedelta(days=1)
+        if n + 1 < len(grupos):
+            prox = janela.loc[grupos[n + 1][0], "data"]
+            data_fim = pd.Timestamp(prox) - pd.Timedelta(days=1)
+        else:
+            data_fim = termino
+        selic_fim = float(bloco.iloc[-1]["selic"])
+        verbo = {"corte": "foi reduzida", "alta": "aumentou", "manutenção": "manteve-se"}.get(sentido_g, "alterou")
+        nome = {"corte": "redução", "alta": "aumento", "manutenção": "manutenção"}[sentido_g]
+        frase = (
+            f"Entre {data_ini.strftime('%d/%m/%Y')} e {data_fim.strftime('%d/%m/%Y')} "
+            f"a Selic {verbo} de {_fmt(selic_cursor)}% para {_fmt(selic_fim)}% "
+            f"(extensão: {_extensao_pt(data_ini, data_fim)})."
+        )
+        lapsos.append(
+            {
+                "ordem": n + 1,
+                "sentido": nome,
+                "inicio": data_ini,
+                "fim": data_fim,
+                "selic_ini": selic_cursor,
+                "selic_fim": selic_fim,
+                "delta": selic_fim - selic_cursor,
+                "extensao": _extensao_pt(data_ini, data_fim),
+                "dias": int((data_fim - data_ini).days + 1),
+                "n_reunioes": int(len(bloco)),
+                "frase": frase,
+            }
+        )
+        selic_cursor = selic_fim
+    return lapsos
+
+
+def cabecalhos_lapsos() -> list[str]:
+    return ["Lapso", "Sentido", "Início", "Fim", "Extensão", "Selic início", "Selic fim", "Δ p.p."]
+
+
+def linhas_lapsos(lapsos: list[dict]) -> list[list[str]]:
+    return [
+        [
+            str(l["ordem"]),
+            l["sentido"],
+            l["inicio"].strftime("%d/%m/%Y"),
+            l["fim"].strftime("%d/%m/%Y"),
+            l["extensao"],
+            _fmt(l["selic_ini"]),
+            _fmt(l["selic_fim"]),
+            _fmt_signed(l["delta"]),
+        ]
+        for l in lapsos
+    ]
+
+
 def _narrativas_recuos() -> dict[int, str]:
     return {
         1: (
@@ -835,6 +950,7 @@ def exportar_tabelas(
     anual: pd.DataFrame,
     ciclos: list[dict],
     recuos: list[dict],
+    lapsos: list[dict],
     output_dir: Path,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -844,19 +960,23 @@ def exportar_tabelas(
     anual.to_csv(csv_a, index=False)
     csv_rec = output_dir / "copom_atas_recuos_2003_2015.csv"
     pd.DataFrame(recuos).to_csv(csv_rec, index=False)
+    csv_lap = output_dir / "copom_atas_lapsos_2003_2016.csv"
+    pd.DataFrame(lapsos).to_csv(csv_lap, index=False)
     xlsx = output_dir / "resumo_atas_copom_2001_2026.xlsx"
     wb = Workbook()
     ws1 = wb.active
     ws1.title = "Ciclos"
     _escrever_aba(ws1, cabecalhos_ciclos(), linhas_ciclos(ciclos))
-    ws2 = wb.create_sheet("Recuos_2003_2015")
-    _escrever_aba(ws2, cabecalhos_recuos(), linhas_recuos(recuos))
-    ws3 = wb.create_sheet("Anual")
-    _escrever_aba(ws3, cabecalhos_anual(), linhas_anual(anual))
-    ws4 = wb.create_sheet("Reunioes")
-    _escrever_aba(ws4, cabecalhos_reunioes(), linhas_reunioes(reunioes))
+    ws2 = wb.create_sheet("Lapsos_2003_2016")
+    _escrever_aba(ws2, cabecalhos_lapsos(), linhas_lapsos(lapsos))
+    ws3 = wb.create_sheet("Recuos_2003_2015")
+    _escrever_aba(ws3, cabecalhos_recuos(), linhas_recuos(recuos))
+    ws4 = wb.create_sheet("Anual")
+    _escrever_aba(ws4, cabecalhos_anual(), linhas_anual(anual))
+    ws5 = wb.create_sheet("Reunioes")
+    _escrever_aba(ws5, cabecalhos_reunioes(), linhas_reunioes(reunioes))
     wb.save(xlsx)
-    return [csv_r, csv_a, csv_rec, xlsx]
+    return [csv_r, csv_a, csv_rec, csv_lap, xlsx]
 
 
 def gerar_graficos(reunioes: pd.DataFrame, output_dir: Path) -> list[Path]:
@@ -909,6 +1029,7 @@ def gerar_relatorio(
     anual: pd.DataFrame,
     ciclos: list[dict],
     recuos: list[dict],
+    lapsos: list[dict],
     output_dir: Path,
 ) -> Path:
     narr = _narrativas()
@@ -917,6 +1038,8 @@ def gerar_relatorio(
     ultimo = reunioes.iloc[-1]
     html_ciclos = tabela_html(cabecalhos_ciclos(), linhas_ciclos(ciclos), ["center", "left"] + ["right"] * 8)
     html_recuos = tabela_html(cabecalhos_recuos(), linhas_recuos(recuos), ["left", "center"] + ["right"] * 7)
+    html_lapsos = tabela_html(cabecalhos_lapsos(), linhas_lapsos(lapsos), ["center", "left"] + ["right"] * 6)
+    frases_lapsos = "\n".join(f"- {l['frase']}" for l in lapsos)
     html_anual = tabela_html(cabecalhos_anual(), linhas_anual(anual))
     html_reun = tabela_html(cabecalhos_reunioes(), linhas_reunioes(reunioes))
     recuo_blocos = []
@@ -987,6 +1110,16 @@ justificam um recuo da Selic; poucos meses após o último corte, o Comitê
 é obrigado a reverter e, em três dos quatro episódios, a taxa volta perto
 ou acima do patamar de partida.
 
+## Lapsos de 2003 a 2016 (até mudar o sentido)
+
+Cada lapso vai do dia seguinte ao fim do anterior até a véspera da
+reunião que inverte a Selic. Manutenções ficam no sentido vigente.
+A janela é **01/01/2003 a 31/12/2016**.
+
+{html_lapsos}
+
+{frases_lapsos}
+
 ## Recuos e reversões (2003–2015)
 
 Quatro vezes o Copom cortou a Selic e, em 5 a 9 meses depois do último
@@ -1022,6 +1155,7 @@ de âncora.
 - `resumo_atas_copom_2001_2026.md` / `.xlsx` / `.pdf`
 - `copom_atas_reunioes_2001_2026.csv`
 - `copom_atas_recuos_2003_2015.csv`
+- `copom_atas_lapsos_2003_2016.csv`
 - `grafico_copom_selic_2001_2026.png`
 - `grafico_copom_recuos_2003_2015.png`
 """
@@ -1040,6 +1174,7 @@ def gerar_pdf(
     anual: pd.DataFrame,
     ciclos: list[dict],
     recuos: list[dict],
+    lapsos: list[dict],
     imagens: list[Path],
     output_dir: Path,
 ) -> Path:
@@ -1089,6 +1224,14 @@ def gerar_pdf(
         pdf.savefig(fig)
         plt.close(fig)
         fig = pagina_tabela("Ciclos de política nas atas", cabecalhos_ciclos(), linhas_ciclos(ciclos), [0.10, 0.28, 0.08, 0.09, 0.09, 0.07, 0.07, 0.07, 0.08, 0.07])
+        pdf.savefig(fig)
+        plt.close(fig)
+        fig = pagina_tabela(
+            "Lapsos 2003–2016 até a mudança de sentido",
+            cabecalhos_lapsos(),
+            linhas_lapsos(lapsos),
+            [0.07, 0.10, 0.12, 0.12, 0.19, 0.13, 0.13, 0.14],
+        )
         pdf.savefig(fig)
         plt.close(fig)
         fig = pagina_tabela(
@@ -1143,11 +1286,15 @@ def main(argv: list[str] | None = None) -> int:
     anual = resumo_anual(reunioes)
     ciclos = resumo_ciclos(reunioes)
     recuos = identificar_recuos(reunioes)
-    caminhos = exportar_tabelas(reunioes, anual, ciclos, recuos, args.output_dir)
-    caminhos.append(gerar_relatorio(reunioes, anual, ciclos, recuos, args.output_dir))
+    lapsos = identificar_lapsos(reunioes)
+    caminhos = exportar_tabelas(reunioes, anual, ciclos, recuos, lapsos, args.output_dir)
+    caminhos.append(gerar_relatorio(reunioes, anual, ciclos, recuos, lapsos, args.output_dir))
     imgs = gerar_graficos(reunioes, args.output_dir)
     caminhos.extend(imgs)
-    caminhos.append(gerar_pdf(reunioes, anual, ciclos, recuos, imgs, args.output_dir))
+    caminhos.append(gerar_pdf(reunioes, anual, ciclos, recuos, lapsos, imgs, args.output_dir))
+    print("Lapsos 2003–2016:")
+    for lapso in lapsos:
+        print(f"  {lapso['frase']}")
     print("Recuos 2003–2015:")
     for rec in recuos:
         print(
