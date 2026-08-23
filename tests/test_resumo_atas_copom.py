@@ -11,6 +11,7 @@ from scripts.resumo_atas_copom import (
     extrair_voto,
     html_para_texto,
     identificador,
+    identificar_recuos,
     numero_reuniao,
     resumo_anual,
     tabela_html,
@@ -127,3 +128,34 @@ def test_agregar_reunioes_e_resumo_anual() -> None:
     assert int(anual.iloc[0]["n"]) == 3
     assert int(anual.iloc[0]["altas"]) == 1
     assert int(anual.iloc[0]["manutencoes"]) == 1
+
+
+def test_identificar_recuos_corte_e_volta() -> None:
+    reunioes = pd.DataFrame(
+        {
+            "reuniao": [0, 1, 2, 3, 4, 5, 6],
+            "data": pd.to_datetime(
+                [
+                    "2003-12-01",
+                    "2004-01-01",
+                    "2004-03-01",
+                    "2004-05-01",
+                    "2004-10-01",
+                    "2004-12-01",
+                    "2005-03-01",
+                ]
+            ),
+            "selic_antes": [18.0, 18.0, 17.0, 16.0, 16.0, 16.5, 17.5],
+            "selic": [18.0, 17.0, 16.0, 16.0, 16.5, 17.5, 18.5],
+            "decisao": ["manutenção", "corte", "corte", "manutenção", "alta", "alta", "alta"],
+            "ano": [2003, 2004, 2004, 2004, 2004, 2004, 2005],
+        }
+    )
+    recuos = identificar_recuos(reunioes, ano_ini=2003, ano_fim=2015)
+    assert len(recuos) == 1
+    assert recuos[0]["patamar"] == 18.0
+    assert recuos[0]["piso"] == 16.0
+    assert recuos[0]["pico"] == 18.5
+    assert recuos[0]["retorno"] == "retornou e superou"
+    assert recuos[0]["n_cortes"] == 2
+    assert recuos[0]["meses_ate_reverter"] > 4

@@ -84,10 +84,10 @@ TEMAS = {
 
 CICLOS = [
     (2001, 2002, "Consolidação do regime e crise de 2002"),
-    (2003, 2005, "Ajuste e reconstrução de credibilidade"),
-    (2006, 2008, "Afrouxamento e choque internacional"),
-    (2009, 2010, "Resposta à crise e retomada"),
-    (2011, 2014, "Nova matriz e perda de âncora"),
+    (2003, 2005, "Primeiro recuo e reversão (16% → 19,75%)"),
+    (2006, 2008, "Cortes longos e reversão de 2008"),
+    (2009, 2010, "Crise: corte a 8,75% e início da volta"),
+    (2011, 2014, "Nova matriz: recuo a 7,25% e volta forçada"),
     (2015, 2016, "Recessão e aperto até 14,25%"),
     (2017, 2019, "Ciclo de cortes até a mínima histórica"),
     (2020, 2021, "Pandemia, piso de 2% e início do aperto"),
@@ -231,8 +231,9 @@ def classificar_decisao(delta: float | None) -> str:
 def trecho_decisao(texto: str, limite: int = 520) -> str:
     t = texto or ""
     marcas = [
+        r"Diante disso[^\n]{0,40}o Copom decidiu",
+        r"o Copom decidiu[^\n]{0,40}(reduzir|elevar|aumentar|manter|fixar)",
         r"Decis[aã]o de pol[ií]tica monet[aá]ria",
-        r"Implementa[cç][aã]o da pol[ií]tica monet[aá]ria",
         r"O Copom (?:decidiu|avalia)",
         r"O Comit[eê] (?:decidiu|avalia)",
     ]
@@ -498,6 +499,171 @@ def resumo_ciclos(reunioes: pd.DataFrame) -> list[dict]:
     return linhas
 
 
+def identificar_recuos(
+    reunioes: pd.DataFrame,
+    ano_ini: int = 2003,
+    ano_fim: int = 2015,
+) -> list[dict]:
+    """Cortes seguidos de alta que devolve (ou tenta devolver) o patamar anterior."""
+    df = reunioes.sort_values("data").reset_index(drop=True)
+    rotulos = [
+        "2003–05 — desinflação interrompida",
+        "2005–08 — cortes longos e alta de 2008",
+        "2009–11 — crise e quase-retorno a 13,75%",
+        "2011–15 — nova matriz e retorno acima do ponto de partida",
+    ]
+    runs: list[dict] = []
+    i = 0
+    while i < len(df):
+        if df.loc[i, "decisao"] != "corte":
+            i += 1
+            continue
+        ano = int(df.loc[i, "ano"])
+        if ano < ano_ini or ano > ano_fim:
+            i += 1
+            continue
+        start = i
+        if start > 0 and pd.notna(df.loc[start - 1, "selic"]):
+            patamar = float(df.loc[start - 1, "selic"])
+        else:
+            patamar = float(df.loc[start, "selic_antes"])
+        j = start
+        while j < len(df) and df.loc[j, "decisao"] != "alta":
+            j += 1
+        if j >= len(df):
+            break
+        easing = df.loc[start : j - 1]
+        cortes = easing[easing["decisao"] == "corte"]
+        last_cut = cortes.iloc[-1]
+        trough_idx = easing["selic"].idxmin()
+        k = j
+        while k < len(df) and df.loc[k, "decisao"] in ("alta", "manutenção"):
+            k += 1
+        hike = df.loc[j : k - 1]
+        altas = hike[hike["decisao"] == "alta"]
+        peak_idx = altas["selic"].idxmax()
+        trough = float(df.loc[trough_idx, "selic"])
+        peak = float(df.loc[peak_idx, "selic"])
+        corte_pp = patamar - trough
+        if corte_pp < 0.20:
+            i = k
+            continue
+        frac = (peak - trough) / corte_pp
+        if peak > patamar + 0.04:
+            retorno = "retornou e superou"
+        elif peak + 0.04 >= patamar:
+            retorno = "retornou"
+        elif frac >= 0.70:
+            retorno = "quase retornou"
+        else:
+            retorno = "reversão parcial"
+        meses = (pd.to_datetime(df.loc[j, "data"]) - pd.to_datetime(last_cut["data"])).days / 30.44
+        n = len(runs)
+        runs.append(
+            {
+                "episodio": n + 1,
+                "rotulo": rotulos[n] if n < len(rotulos) else f"Recuo {n + 1}",
+                "corte_ini": int(df.loc[start, "reuniao"]),
+                "corte_ini_data": pd.to_datetime(df.loc[start, "data"]),
+                "ultimo_corte": int(last_cut["reuniao"]),
+                "ultimo_corte_data": pd.to_datetime(last_cut["data"]),
+                "patamar": patamar,
+                "piso": trough,
+                "piso_reuniao": int(df.loc[trough_idx, "reuniao"]),
+                "piso_data": pd.to_datetime(df.loc[trough_idx, "data"]),
+                "corte_pp": corte_pp,
+                "alta_ini": int(df.loc[j, "reuniao"]),
+                "alta_ini_data": pd.to_datetime(df.loc[j, "data"]),
+                "pico": peak,
+                "pico_reuniao": int(df.loc[peak_idx, "reuniao"]),
+                "pico_data": pd.to_datetime(df.loc[peak_idx, "data"]),
+                "meses_ate_reverter": meses,
+                "retorno": retorno,
+                "n_cortes": int(len(cortes)),
+                "n_altas": int(len(altas)),
+                "fracao": frac,
+            }
+        )
+        i = k
+    return runs
+
+
+def cabecalhos_recuos() -> list[str]:
+    return [
+        "Episódio",
+        "Cortes (atas)",
+        "Patamar antes",
+        "Piso",
+        "Corte p.p.",
+        "1ª alta",
+        "Pico depois",
+        "Meses até reverter",
+        "Retorno",
+    ]
+
+
+def linhas_recuos(recuos: list[dict]) -> list[list[str]]:
+    linhas = []
+    for r in recuos:
+        cortes = f"{r['corte_ini']}ª–{r['ultimo_corte']}ª"
+        alta = f"{r['alta_ini']}ª ({r['alta_ini_data'].strftime('%d/%m/%Y')})"
+        pico = f"{_fmt(r['pico'])} ({r['pico_reuniao']}ª)"
+        linhas.append(
+            [
+                f"{r['episodio']} — {r['rotulo'].split(' — ', 1)[-1] if ' — ' in r['rotulo'] else r['rotulo']}",
+                cortes,
+                _fmt(r["patamar"]),
+                _fmt(r["piso"]),
+                _fmt(r["corte_pp"]),
+                alta,
+                pico,
+                _fmt(r["meses_ate_reverter"], 1),
+                r["retorno"],
+            ]
+        )
+    return linhas
+
+
+def _narrativas_recuos() -> dict[int, str]:
+    return {
+        1: (
+            "A 86ª (23/07/2003) fixa a Selic em 24,50% e abre o recuo desde "
+            "26,50%. Os cortes seguem até 16,00% na 95ª (14/04/2004); a 94ª "
+            "já havia sido dividida (6 a 3). Cinco meses depois a 100ª "
+            "(15/09/2004) eleva a meta a 16,25% por 5 votos a 3 — o piso não "
+            "seguiu. Oito altas levam a taxa a 19,75% (108ª, mai/2005). Não "
+            "volta aos 26,50%, mas desfaz o tramo final do recuo e sobe "
+            "3,75 p.p. acima do piso."
+        ),
+        2: (
+            "A 112ª (14/09/2005) corta de 19,75% para 19,50% e diz que "
+            "acompanhará o cenário antes de definir os próximos passos. O "
+            "ciclo se alonga até 11,25% (129ª, set/2007). Sete meses depois "
+            "a 134ª (16/04/2008) eleva a Selic a 11,75% e antecipa 'parte "
+            "relevante do movimento' para reduzir o ajuste total. O pico "
+            "fica em 13,75% (137ª, set/2008): Lehman corta a volta ao "
+            "patamar de 19,75%, mas a direção já havia se invertido."
+        ),
+        3: (
+            "A 140ª (21/01/2009) inicia o corte anticíclico desde 13,75%. "
+            "A 144ª (22/07/2009) para em 8,75% e avalia que o patamar é "
+            "'consistente com um cenário inflacionário benigno'. Nove meses "
+            "depois a 150ª (28/04/2010) começa a volta; em julho de 2011 a "
+            "160ª chega a 12,50% — quase o 13,75% de partida."
+        ),
+        4: (
+            "O recuo mais curto entre pico e corte: a 160ª (20/07/2011) "
+            "eleva a Selic a 12,50%; a 161ª, 42 dias depois, corta para "
+            "12,00% por 5 votos a 2 (a minoria queria manter 12,50%). As "
+            "atas da nova matriz seguem até 7,25% (170ª, 5 a 3). Seis "
+            "meses após o piso, a 174ª (17/04/2013) inicia a alta (6 a 2). "
+            "Desta vez a taxa não só retorna: em julho de 2015 a 192ª "
+            "fixa 14,25% — acima dos 12,50% abandonados em 2011 — e fala "
+            "em mantê-la 'por período suficientemente prolongado'."
+        ),
+    }
+
+
 def _narrativas() -> dict[str, str]:
     """Leitura qualitativa ancorada no padrão recorrente das atas oficiais."""
     return {
@@ -510,32 +676,35 @@ def _narrativas() -> dict[str, str]:
             "aperto adicional no fim do ano."
         ),
         "2003–2005": (
-            "As atas de 2003 enfatizam a reconstrução da credibilidade: superávit "
-            "primário, convergência das expectativas e Selic ainda muito alta. O "
-            "discurso passa da emergência para a desinflação gradual. Em 2004–2005 "
-            "o Comitê interrompe o afrouxamento e volta a subir juros quando a "
-            "atividade e o IPCA de serviços surpreendem — o padrão clássico do "
-            "regime de metas."
+            "As atas de 2003 enfatizam credibilidade e desinflação, e o Copom "
+            "corta a Selic de 26,50% para 16,00% (86ª–95ª). O recuo não se "
+            "sustenta: cinco meses após o último corte, a 100ª reunião (set/2004) "
+            "já eleva a taxa, por 5 votos a 3, e oito altas levam o juro a "
+            "19,75% em maio de 2005. A ata registra atividade e serviços mais "
+            "fortes do que o cenário que justificara os cortes de 0,25 p.p. de "
+            "março–abril de 2004 (a 94ª foi 6 a 3)."
         ),
         "2006–2008": (
-            "Com a inflação mais próxima da meta, as atas descrevem um ciclo de "
-            "cortes e, depois, estabilidade. O debate desloca-se para o hiato, o "
-            "crédito e o cenário externo benigno. Em 2008 o choque de commodities "
-            "e, no fim do ano, a crise de Lehman mudam o tom: de vigilância "
-            "inflacionária para risco de atividade e liquidez."
+            "O segundo recuo (112ª, set/2005) parte de 19,75% e chega a 11,25% "
+            "em setembro de 2007. Sete meses depois a 134ª (abr/2008) eleva a "
+            "Selic a 11,75% e diz que fará 'de imediato parte relevante do "
+            "movimento' para reduzir o ajuste total. O pico fica em 13,75% "
+            "(set/2008): a crise de Lehman interrompe a volta ao patamar de "
+            "19,75%, mas o sentido da política já havia se invertido."
         ),
         "2009–2010": (
-            "As atas de 2009 registram o afrouxamento anticíclico e a preocupação "
-            "com o crédito e a demanda mundial. Em 2010 o Comitê já discute a "
-            "retirada dos estímulos: a recuperação doméstica é rápida e a inflação "
-            "de serviços volta ao centro do diagnóstico."
+            "O terceiro recuo é a resposta à crise: 13,75% → 8,75% (140ª–144ª). "
+            "A 144ª afirma que 8,75% seria 'consistente com um cenário "
+            "inflacionário benigno'. Nove meses depois a 150ª (abr/2010) inicia "
+            "a volta; em julho de 2011 a Selic está em 12,50%, quase o "
+            "patamar de 13,75% de onde se partira."
         ),
         "2011–2014": (
-            "2011 começa com aperto. A partir de agosto as atas passam a dar mais "
-            "peso à desaceleração mundial e à 'nova matriz' — cortes mesmo com "
-            "inflação ainda pressionada. Em 2013–2014 o texto reconhece a perda de "
-            "âncora das expectativas e o Copom reverte, subindo a Selic; o fiscal "
-            "e os preços administrados entram com mais força no balanço de riscos."
+            "O quarto recuo é o mais nítido. A 160ª (20/07/2011) leva a Selic a "
+            "12,50%; 42 dias depois a 161ª corta para 12,00% (5 a 2). As atas "
+            "da 'nova matriz' seguem cortando até 7,25% (170ª, 5 a 3). Seis "
+            "meses após o piso, a 174ª (abr/2013) começa a volta (6 a 2). A "
+            "Selic não só retorna aos 12,50%: em 2015 supera e vai a 14,25%."
         ),
         "2015–2016": (
             "As atas descrevem recessão, realinhamento de preços administrados e "
@@ -661,23 +830,33 @@ def _escrever_aba(ws, cabecalhos, linhas) -> None:
         ws.column_dimensions[get_column_letter(col)].width = 16
 
 
-def exportar_tabelas(reunioes: pd.DataFrame, anual: pd.DataFrame, ciclos: list[dict], output_dir: Path) -> list[Path]:
+def exportar_tabelas(
+    reunioes: pd.DataFrame,
+    anual: pd.DataFrame,
+    ciclos: list[dict],
+    recuos: list[dict],
+    output_dir: Path,
+) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     csv_r = output_dir / "copom_atas_reunioes_2001_2026.csv"
     reunioes.drop(columns=["texto"], errors="ignore").to_csv(csv_r, index=False)
     csv_a = output_dir / "copom_atas_anual_2001_2026.csv"
     anual.to_csv(csv_a, index=False)
+    csv_rec = output_dir / "copom_atas_recuos_2003_2015.csv"
+    pd.DataFrame(recuos).to_csv(csv_rec, index=False)
     xlsx = output_dir / "resumo_atas_copom_2001_2026.xlsx"
     wb = Workbook()
     ws1 = wb.active
     ws1.title = "Ciclos"
     _escrever_aba(ws1, cabecalhos_ciclos(), linhas_ciclos(ciclos))
-    ws2 = wb.create_sheet("Anual")
-    _escrever_aba(ws2, cabecalhos_anual(), linhas_anual(anual))
-    ws3 = wb.create_sheet("Reunioes")
-    _escrever_aba(ws3, cabecalhos_reunioes(), linhas_reunioes(reunioes))
+    ws2 = wb.create_sheet("Recuos_2003_2015")
+    _escrever_aba(ws2, cabecalhos_recuos(), linhas_recuos(recuos))
+    ws3 = wb.create_sheet("Anual")
+    _escrever_aba(ws3, cabecalhos_anual(), linhas_anual(anual))
+    ws4 = wb.create_sheet("Reunioes")
+    _escrever_aba(ws4, cabecalhos_reunioes(), linhas_reunioes(reunioes))
     wb.save(xlsx)
-    return [csv_r, csv_a, xlsx]
+    return [csv_r, csv_a, csv_rec, xlsx]
 
 
 def gerar_graficos(reunioes: pd.DataFrame, output_dir: Path) -> list[Path]:
@@ -704,16 +883,52 @@ def gerar_graficos(reunioes: pd.DataFrame, output_dir: Path) -> list[Path]:
     p2 = output_dir / "grafico_copom_decisoes_ano.png"
     fig.savefig(p2, dpi=140)
     plt.close(fig)
-    return [p1, p2]
+
+    recuos = identificar_recuos(reunioes)
+    janela = reunioes[(reunioes["ano"] >= 2003) & (reunioes["ano"] <= 2015)]
+    fig, ax = plt.subplots(figsize=(12, 5.2))
+    ax.plot(janela["data"], janela["selic"], color="#1f4e79", linewidth=2.0)
+    cores = ["#c6dbef", "#fde0dd", "#d9f0d3", "#fee6ce"]
+    for i, rec in enumerate(recuos):
+        ax.axvspan(rec["corte_ini_data"], rec["ultimo_corte_data"], color=cores[i % 4], alpha=0.55)
+        ax.axvspan(rec["alta_ini_data"], rec["pico_data"], color="#f4cccc", alpha=0.35)
+        ax.scatter([rec["piso_data"]], [rec["piso"]], color="#1b7f4a", zorder=5)
+        ax.scatter([rec["pico_data"]], [rec["pico"]], color="#b54708", zorder=5)
+    ax.set_title("Recuos e reversões da Selic nas atas (2003–2015)")
+    ax.set_ylabel("% a.a.")
+    ax.grid(axis="y", linestyle=":", alpha=0.5)
+    fig.tight_layout()
+    p3 = output_dir / "grafico_copom_recuos_2003_2015.png"
+    fig.savefig(p3, dpi=140)
+    plt.close(fig)
+    return [p1, p2, p3]
 
 
-def gerar_relatorio(reunioes: pd.DataFrame, anual: pd.DataFrame, ciclos: list[dict], output_dir: Path) -> Path:
+def gerar_relatorio(
+    reunioes: pd.DataFrame,
+    anual: pd.DataFrame,
+    ciclos: list[dict],
+    recuos: list[dict],
+    output_dir: Path,
+) -> Path:
     narr = _narrativas()
+    narr_rec = _narrativas_recuos()
     primeiro = reunioes.iloc[0]
     ultimo = reunioes.iloc[-1]
     html_ciclos = tabela_html(cabecalhos_ciclos(), linhas_ciclos(ciclos), ["center", "left"] + ["right"] * 8)
+    html_recuos = tabela_html(cabecalhos_recuos(), linhas_recuos(recuos), ["left", "center"] + ["right"] * 7)
     html_anual = tabela_html(cabecalhos_anual(), linhas_anual(anual))
     html_reun = tabela_html(cabecalhos_reunioes(), linhas_reunioes(reunioes))
+    recuo_blocos = []
+    for rec in recuos:
+        recuo_blocos.append(
+            f"### Episódio {rec['episodio']} — {rec['rotulo']}\n\n"
+            f"Patamar {_fmt(rec['patamar'])}% → piso {_fmt(rec['piso'])}% "
+            f"({rec['n_cortes']} cortes). Primeira alta na {rec['alta_ini']}ª, "
+            f"{_fmt(rec['meses_ate_reverter'], 1)} meses após o último corte. "
+            f"Pico posterior {_fmt(rec['pico'])}% ({rec['retorno']}).\n\n"
+            f"{narr_rec.get(rec['episodio'], '')}\n"
+        )
     blocos = []
     for c in ciclos:
         texto = narr.get(c["periodo"], "")
@@ -767,6 +982,23 @@ O fio condutor é a **âncora das expectativas**. Quando elas se afastam da
 meta, o Copom aperta (2002, 2015, 2021–22, 2024–25). Quando o hiato está
 negativo e as expectativas convergem, corta (2009, 2017–19, 2020, 2023).
 
+Entre **2003 e 2015** esse fio aparece como **stop-and-go**: as atas
+justificam um recuo da Selic; poucos meses após o último corte, o Comitê
+é obrigado a reverter e, em três dos quatro episódios, a taxa volta perto
+ou acima do patamar de partida.
+
+## Recuos e reversões (2003–2015)
+
+Quatro vezes o Copom cortou a Selic e, em 5 a 9 meses depois do último
+corte, teve de iniciar a volta. O padrão está nas próprias atas: o texto
+do recuo fala em cenário benigno ou em desaceleração mundial; o texto da
+reversão fala em atividade mais forte, expectativas e, em 2011–15, perda
+de âncora.
+
+{html_recuos}
+
+{"".join(recuo_blocos)}
+
 ## Ciclos de política nas atas
 
 {html_ciclos}
@@ -789,7 +1021,9 @@ negativo e as expectativas convergem, corta (2009, 2017–19, 2020, 2023).
 
 - `resumo_atas_copom_2001_2026.md` / `.xlsx` / `.pdf`
 - `copom_atas_reunioes_2001_2026.csv`
+- `copom_atas_recuos_2003_2015.csv`
 - `grafico_copom_selic_2001_2026.png`
+- `grafico_copom_recuos_2003_2015.png`
 """
     output_dir.mkdir(parents=True, exist_ok=True)
     path = output_dir / "resumo_atas_copom_2001_2026.md"
@@ -801,7 +1035,14 @@ def _pdf_txt(texto) -> str:
     return str(texto).replace("$", r"\$")
 
 
-def gerar_pdf(reunioes: pd.DataFrame, anual: pd.DataFrame, ciclos: list[dict], imagens: list[Path], output_dir: Path) -> Path:
+def gerar_pdf(
+    reunioes: pd.DataFrame,
+    anual: pd.DataFrame,
+    ciclos: list[dict],
+    recuos: list[dict],
+    imagens: list[Path],
+    output_dir: Path,
+) -> Path:
     path = output_dir / "resumo_atas_copom_2001_2026.pdf"
     output_dir.mkdir(parents=True, exist_ok=True)
     a4 = (11.69, 8.27)
@@ -850,6 +1091,14 @@ def gerar_pdf(reunioes: pd.DataFrame, anual: pd.DataFrame, ciclos: list[dict], i
         fig = pagina_tabela("Ciclos de política nas atas", cabecalhos_ciclos(), linhas_ciclos(ciclos), [0.10, 0.28, 0.08, 0.09, 0.09, 0.07, 0.07, 0.07, 0.08, 0.07])
         pdf.savefig(fig)
         plt.close(fig)
+        fig = pagina_tabela(
+            "Recuos e reversões da Selic (2003–2015)",
+            cabecalhos_recuos(),
+            linhas_recuos(recuos),
+            [0.22, 0.10, 0.09, 0.07, 0.08, 0.14, 0.12, 0.10, 0.08],
+        )
+        pdf.savefig(fig)
+        plt.close(fig)
         fig = pagina_tabela("Ano a ano", cabecalhos_anual(), linhas_anual(anual))
         pdf.savefig(fig)
         plt.close(fig)
@@ -893,11 +1142,18 @@ def main(argv: list[str] | None = None) -> int:
     reunioes = agregar_reunioes(atas, selic)
     anual = resumo_anual(reunioes)
     ciclos = resumo_ciclos(reunioes)
-    caminhos = exportar_tabelas(reunioes, anual, ciclos, args.output_dir)
-    caminhos.append(gerar_relatorio(reunioes, anual, ciclos, args.output_dir))
+    recuos = identificar_recuos(reunioes)
+    caminhos = exportar_tabelas(reunioes, anual, ciclos, recuos, args.output_dir)
+    caminhos.append(gerar_relatorio(reunioes, anual, ciclos, recuos, args.output_dir))
     imgs = gerar_graficos(reunioes, args.output_dir)
     caminhos.extend(imgs)
-    caminhos.append(gerar_pdf(reunioes, anual, ciclos, imgs, args.output_dir))
+    caminhos.append(gerar_pdf(reunioes, anual, ciclos, recuos, imgs, args.output_dir))
+    print("Recuos 2003–2015:")
+    for rec in recuos:
+        print(
+            f"  {rec['episodio']}. {rec['rotulo']}: {_fmt(rec['patamar'])}% → "
+            f"{_fmt(rec['piso'])}% → {_fmt(rec['pico'])}% ({rec['retorno']})"
+        )
     print(anual.to_string(index=False))
     for p in caminhos:
         print(f"  {p}")
