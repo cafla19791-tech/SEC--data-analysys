@@ -234,6 +234,17 @@ python3 scripts/lapsos_bis_juros.py
 
 Saída: `output/lapsos_bis_juros_105_161.xlsx`.
 
+## Taxas de crédito (BCB, 2001–2026)
+
+Médias anuais das taxas oficiais por modalidade (SGS) e os 5 conglomerados
+de maior saldo em cada modalidade (IF.data), com a taxa publicada no Olinda:
+
+```bash
+python3 scripts/taxas_credito_bcb.py
+```
+
+Saída: `output/taxas_credito_bcb_2001_2026.xlsx`.
+
 ## Testes
 
 ```bash

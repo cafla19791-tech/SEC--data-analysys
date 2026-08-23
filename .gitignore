@@ -21,6 +21,7 @@ data/*.xlsx
 !data/sgs_432_selic_meta.csv
 !data/sgs_11_selic_pregao.csv
 data/bis/
+data/credito_bcb/
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
 output/*.csv
@@ -53,6 +54,8 @@ output/indiretas_automaticas_ipca/*.xlsx
 !output/copom_atas_recuos_2003_2015.csv
 !output/copom_atas_lapsos_2003_2016.csv
 !output/copom_selic_lapsos_pregao_1999_2026.csv
+!output/taxas_credito_medias_anuais_2001_2026.csv
+!output/taxas_credito_top5_bancos.csv
 
 # Artefato clássico na raiz (cópia do resumo anual)
 /impacto_fiscal_por_ano.xlsx
