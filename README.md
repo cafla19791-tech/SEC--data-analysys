@@ -216,7 +216,7 @@ python3 scripts/gerar_fluxos.py --download \
 
 Resumo explicativo das atas oficiais do Banco Central
 ([publicacoes/atascopom](https://www.bcb.gov.br/publicacoes/atascopom)),
-cruzadas com a meta Selic (SGS 4189):
+cruzadas com a meta Selic (SGS 432):
 
 ```bash
 python3 scripts/resumo_atas_copom.py

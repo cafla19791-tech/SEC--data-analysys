@@ -3,7 +3,7 @@
 Fonte: Banco Central do Brasil
   https://www.bcb.gov.br/publicacoes/atascopom
   API: /api/servico/sitebcb/atascopom/ultimas e /principal
-  Selic meta: SGS 4189
+  Selic meta: SGS 432
 
 Uso:
   python3 scripts/resumo_atas_copom.py
@@ -341,21 +341,21 @@ def _baixar_sgs_soap(cod: int, inicio: str, fim: str) -> pd.DataFrame:
 
 
 def carregar_selic(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
-    cache = cache_dir / "sgs_4189_selic_diaria.csv"
+    cache = cache_dir / "sgs_432_selic_meta.csv"
     if cache.exists():
         return pd.read_csv(cache, parse_dates=["data"])
     if not baixar:
         raise FileNotFoundError(cache)
-    print("Baixando SGS 4189 (meta Selic)...", flush=True)
+    print("Baixando SGS 432 (meta Selic do Copom)...", flush=True)
     try:
-        df = _baixar_sgs_soap(4189, "01/01/2001", datetime.now().strftime("%d/%m/%Y"))
+        df = _baixar_sgs_soap(432, "01/12/2000", datetime.now().strftime("%d/%m/%Y"))
     except Exception:
         df = pd.DataFrame(columns=["data", "selic"])
-        cursor = pd.Timestamp("2001-01-01")
+        cursor = pd.Timestamp("2000-12-01")
         fim = pd.Timestamp.now()
         while cursor <= fim:
             bloco = min(cursor + pd.DateOffset(years=1) - pd.DateOffset(days=1), fim)
-            parte = _baixar_sgs_soap(4189, cursor.strftime("%d/%m/%Y"), bloco.strftime("%d/%m/%Y"))
+            parte = _baixar_sgs_soap(432, cursor.strftime("%d/%m/%Y"), bloco.strftime("%d/%m/%Y"))
             if not parte.empty:
                 df = pd.concat([df, parte], ignore_index=True)
             cursor = bloco + pd.DateOffset(days=1)
@@ -371,10 +371,25 @@ def agregar_reunioes(atas: pd.DataFrame, selic: pd.DataFrame) -> pd.DataFrame:
     sel = selic.copy()
     sel["data"] = pd.to_datetime(sel["data"])
     sel = sel.sort_values("data")
-    out = pd.merge_asof(out.sort_values("data"), sel, on="data", direction="backward")
-    out["delta_selic"] = out["selic"].diff()
+    # A meta nova entra no SGS no dia seguinte ao segundo dia da reunião.
+    antes = pd.merge_asof(
+        out[["data"]].sort_values("data"),
+        sel.rename(columns={"selic": "selic_antes"}),
+        on="data",
+        direction="backward",
+    )
+    depois = pd.merge_asof(
+        out.assign(data_depois=out["data"] + pd.Timedelta(days=1))
+        .sort_values("data_depois")[["data", "data_depois"]],
+        sel.rename(columns={"selic": "selic", "data": "data_depois"}),
+        on="data_depois",
+        direction="backward",
+    )
+    out = out.sort_values("data").reset_index(drop=True)
+    out["selic_antes"] = antes["selic_antes"].to_numpy()
+    out["selic"] = depois["selic"].to_numpy()
+    out["delta_selic"] = out["selic"] - out["selic_antes"]
     out["decisao"] = out["delta_selic"].map(classificar_decisao)
-    out.loc[out.index[0], "decisao"] = "—"
     out["voto"] = out["texto"].map(extrair_voto)
     out["trecho"] = out["texto"].map(lambda t: trecho_decisao(t, 420))
     temas = out["texto"].map(contar_temas).apply(pd.Series)
@@ -499,10 +514,11 @@ def _narrativas() -> dict[str, str]:
         "2024–2026": (
             "2024 mistura cortes residuais e, depois, a retomada do aperto quando "
             "as expectativas de inflação de médio prazo se desancoram e o fiscal "
-            "volta ao centro do risco. 2025–2026 mantêm a Selic em patamar "
-            "restritivo (na casa de 13–15%). As atas recentes (formato A/B/C) "
-            "separam conjuntura, cenários e decisão, e reiteram que a política "
-            "seguirá contracionista até a convergência da inflação à meta."
+            "volta ao centro do risco. Em 2025 o Copom leva a Selic a 15,00% e a "
+            "mantém. Em 2026 inicia um ciclo de cortes cauteloso (15,00% → 14,00% "
+            "na 280ª reunião). As atas no formato A/B/C separam conjuntura, "
+            "cenários e decisão, e reiteram política contracionista até a "
+            "convergência da inflação à meta."
         ),
     }
 
@@ -666,8 +682,9 @@ def gerar_relatorio(reunioes: pd.DataFrame, anual: pd.DataFrame, ciclos: list[di
     md = f"""# Resumo explicativo das atas do Copom (2001–2026)
 
 **Fonte:** Banco Central do Brasil, [atas do Copom](https://www.bcb.gov.br/publicacoes/atascopom)
-(API `atascopom/ultimas` e `atascopom/principal`). Meta Selic: SGS 4189.
-**Consulta:** {gerado}. Tabelas com **grade contínua**.
+(API `atascopom/ultimas` e `atascopom/principal`). Meta Selic: SGS 432.
+**Consulta:** {gerado}. Meta Selic: SGS 432 (vigente no dia seguinte à reunião).
+Tabelas com **grade contínua**.
 
 O Copom (presidente e diretores do Banco Central) define a **meta da Selic**
 visando a inflação do IPCA na meta do CMN. A decisão sai no comunicado do
@@ -740,7 +757,7 @@ def gerar_pdf(reunioes: pd.DataFrame, anual: pd.DataFrame, ciclos: list[dict], i
         fig.text(0.07, 0.82, _pdf_txt("Atas do Copom — resumo explicativo (2001–2026)"), fontsize=18, fontweight="bold", color="#1f4e79")
         fig.text(0.07, 0.68, _pdf_txt("Fonte: Banco Central do Brasil — www.bcb.gov.br/publicacoes/atascopom"), fontsize=11)
         fig.text(0.07, 0.60, _pdf_txt(f"{len(reunioes)} atas, da {int(reunioes.iloc[0].reuniao)}ª à {int(reunioes.iloc[-1].reuniao)}ª reunião."), fontsize=11)
-        fig.text(0.07, 0.52, _pdf_txt("Selic meta (SGS 4189) cruzada com a data de cada reunião."), fontsize=11)
+        fig.text(0.07, 0.52, _pdf_txt("Selic meta (SGS 432) vigente no dia seguinte a cada reunião."), fontsize=11)
         fig.text(0.07, 0.10, "Tabelas com grade contínua. Valores em % a.a.", fontsize=8, color="#555")
         return fig
 

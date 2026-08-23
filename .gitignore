@@ -18,6 +18,7 @@ data/*.xlsx
 !data/selic_taxas_contagil.xlsx
 !data/copom_atas_catalogo.csv
 !data/sgs_4189_selic_diaria.csv
+!data/sgs_432_selic_meta.csv
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
 output/*.csv

@@ -83,14 +83,25 @@ def test_agregar_reunioes_e_resumo_anual() -> None:
     )
     selic = pd.DataFrame(
         {
-            "data": pd.to_datetime(["2001-01-17", "2001-02-14", "2001-03-21"]),
-            "selic": [15.25, 15.75, 15.75],
+            "data": pd.to_datetime(
+                [
+                    "2001-01-16",
+                    "2001-01-17",
+                    "2001-01-18",
+                    "2001-02-14",
+                    "2001-02-15",
+                    "2001-03-21",
+                    "2001-03-22",
+                ]
+            ),
+            "selic": [15.75, 15.75, 15.25, 15.25, 15.75, 15.75, 15.75],
         }
     )
     reunioes = agregar_reunioes(atas, selic)
-    assert reunioes.loc[0, "decisao"] == "—"
+    assert reunioes.loc[0, "decisao"] == "corte"
     assert reunioes.loc[1, "decisao"] == "alta"
     assert reunioes.loc[2, "decisao"] == "manutenção"
+    assert float(reunioes.loc[0, "selic"]) == 15.25
     assert reunioes.loc[0, "voto"] == "unânime"
     assert reunioes.loc[1, "voto"] == "7 a 1"
     anual = resumo_anual(reunioes)
