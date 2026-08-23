@@ -225,6 +225,15 @@ python3 scripts/resumo_atas_copom.py
 Saídas em `output/resumo_atas_copom_2001_2026.md` / `.xlsx` / `.pdf`.
 Atas 200–231 entram via PDF; as demais, via HTML da API do site.
 
+Taxa acumulada das taxas básicas do [BIS WS_CBPOL](https://data.bis.org/static/bulk/WS_CBPOL_csv_col.zip)
+em cada lapso Selic 105–161 (uma aba por lapso):
+
+```bash
+python3 scripts/lapsos_bis_juros.py
+```
+
+Saída: `output/lapsos_bis_juros_105_161.xlsx`.
+
 ## Testes
 
 ```bash

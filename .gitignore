@@ -20,6 +20,7 @@ data/*.xlsx
 !data/sgs_4189_selic_diaria.csv
 !data/sgs_432_selic_meta.csv
 !data/sgs_11_selic_pregao.csv
+data/bis/
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
 output/*.csv
