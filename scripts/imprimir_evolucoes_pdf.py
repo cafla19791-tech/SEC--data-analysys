@@ -19,14 +19,28 @@ if str(ROOT) not in sys.path:
 from scripts.evolucao_balanca_reservas import exportar_pdf_relatorio
 from scripts.evolucao_fatores_base_monetaria import (
     agregar_anual as ag_base,
+    cabecalhos_estoque as cab_base_est,
+    cabecalhos_fases as cab_base_fases,
+    cabecalhos_var as cab_base_var,
     carregar_series as car_base,
+    fases_historicas as fases_base,
     gerar_pdf as pdf_base,
+    linhas_estoque as lin_base_est,
+    linhas_fases as lin_base_fases,
+    linhas_var as lin_base_var,
     mes_referencia as mes_base,
 )
 from scripts.evolucao_fatores_dbgg import (
     agregar_anual as ag_dbgg,
+    cabecalhos_estoque as cab_dbgg_est,
+    cabecalhos_fatores as cab_dbgg_fat,
+    cabecalhos_fases as cab_dbgg_fases,
     carregar_series as car_dbgg,
+    fases_historicas as fases_dbgg,
     gerar_pdf as pdf_dbgg,
+    linhas_estoque as lin_dbgg_est,
+    linhas_fatores as lin_dbgg_fat,
+    linhas_fases as lin_dbgg_fases,
     mes_referencia as mes_dbgg,
 )
 
@@ -137,28 +151,66 @@ def _pdf_pacote(spec: dict, output_dir: Path) -> Path | None:
     )
 
 
-def _pdf_completo(partes: list[Path], output_dir: Path) -> Path:
-    """Capa + todas as páginas dos PDFs individuais, via as imagens/tabelas já montadas."""
+def _pdf_completo(cache_dir: Path, output_dir: Path) -> Path:
+    """Capa + tabelas vetoriais da base/DBGG + PNGs de todos os relatórios."""
+    sb = car_base(cache_dir=cache_dir, baixar=False)
+    ab = ag_base(sb)
+    mb = mes_base(sb, int(ab["ano"].max()))
+    sd = car_dbgg(cache_dir=cache_dir, baixar=False)
+    ad = ag_dbgg(sd)
+    md = mes_dbgg(sd, int(ad["ano"].max()))
     notas = [
         f"Compilação gerada em {datetime.now().strftime('%d/%m/%Y')}.",
         "Inclui: fatores da base monetária, fatores da DBGG, agregados M1–M4, "
         "balança e reservas, recursos livres/direcionados, consignado/CDC/cartão "
         "e crédito das 5 maiores IFs.",
         "Valores em R$ bilhões ou % do PIB, conforme a tabela. Grade contínua.",
+        f"Último ponto da base: {mb or 'n/d'}. Último ponto da DBGG/Selic: {md or 'n/d'}.",
+    ]
+    tabelas = [
+        (
+            "Base monetária — fases (R$ bilhões)",
+            cab_base_fases(),
+            lin_base_fases(fases_base(ab)),
+            [0.10, 0.26, 0.10, 0.10, 0.11, 0.11, 0.11, 0.11],
+        ),
+        (
+            "Base monetária — variação anual (R$ bilhões)",
+            cab_base_var(),
+            lin_base_var(ab, mb),
+            None,
+        ),
+        (
+            "Base monetária — estoque de fim de período (R$ bilhões)",
+            cab_base_est(),
+            lin_base_est(ab, mb),
+            None,
+        ),
+        (
+            "DBGG — fases",
+            cab_dbgg_fases(),
+            lin_dbgg_fases(fases_dbgg(ad)),
+            [0.10, 0.24, 0.11, 0.10, 0.12, 0.11, 0.11, 0.11],
+        ),
+        (
+            "DBGG — fatores anuais (primário/juros/NFSP/efeito PIB em % PIB; ajustes em R$ bi)",
+            cab_dbgg_fat(),
+            lin_dbgg_fat(ad, md),
+            None,
+        ),
+        (
+            "DBGG — estoque",
+            cab_dbgg_est(),
+            lin_dbgg_est(ad, md),
+            None,
+        ),
     ]
     imagens: list[Path] = []
     for spec in PACOTES_IMAGEM:
         imagens.extend(output_dir / n for n in spec["imagens"] if (output_dir / n).exists())
-    # Gráficos e tabelas PNG dos dois relatórios principais (além das páginas vetoriais individuais).
     for nome in (
-        "tabela_fatores_base_fases_1995_2026.png",
-        "tabela_fatores_base_variacao_1995_2026.png",
-        "tabela_fatores_base_estoque_1995_2026.png",
         "grafico_fatores_base_estoque_1995_2026.png",
         "grafico_fatores_base_variacao_1995_2026.png",
-        "tabela_fatores_dbgg_fases_1995_2026.png",
-        "tabela_fatores_dbgg_1995_2026.png",
-        "tabela_dbgg_estoque_1995_2026.png",
         "grafico_dbgg_dlsp_pib_1995_2026.png",
         "grafico_dbgg_primario_juros_1995_2026.png",
         "grafico_dbgg_selic_cambio_1995_2026.png",
@@ -170,7 +222,7 @@ def _pdf_completo(partes: list[Path], output_dir: Path) -> Path:
         output_dir / "evolucoes_sgs_completo.pdf",
         "Evoluções SGS — compilado (1995–hoje)",
         notas,
-        tabelas=None,
+        tabelas=tabelas,
         imagens=imagens,
     )
 
@@ -188,7 +240,7 @@ def main(argv: list[str] | None = None) -> int:
         gerado = _pdf_pacote(spec, args.output_dir)
         if gerado is not None:
             caminhos.append(gerado)
-    caminhos.append(_pdf_completo(caminhos, args.output_dir))
+    caminhos.append(_pdf_completo(args.cache_dir, args.output_dir))
     for p in caminhos:
         print(f"  {p} ({p.stat().st_size} bytes)")
     return 0
