@@ -397,29 +397,147 @@ def _baixar_sgs_soap(cod: int, inicio: str, fim: str) -> pd.DataFrame:
     return pd.DataFrame(linhas).drop_duplicates("data").sort_values("data")
 
 
+def baixar_sgs_periodo(cod: int, inicio: str | pd.Timestamp, fim: str | pd.Timestamp) -> pd.DataFrame:
+    """Baixa SGS em blocos anuais; se falhar, tenta trimestre e mês."""
+    cursor = pd.Timestamp(inicio)
+    termino = pd.Timestamp(fim)
+    partes: list[pd.DataFrame] = []
+
+    def _bloco(a: pd.Timestamp, b: pd.Timestamp) -> pd.DataFrame:
+        return _baixar_sgs_soap(cod, a.strftime("%d/%m/%Y"), b.strftime("%d/%m/%Y"))
+
+    while cursor <= termino:
+        anual = min(cursor + pd.DateOffset(years=1) - pd.DateOffset(days=1), termino)
+        try:
+            parte = _bloco(cursor, anual)
+        except Exception:
+            parte = pd.DataFrame(columns=["data", "selic"])
+            mes = cursor
+            while mes <= anual:
+                fim_mes = min(mes + pd.DateOffset(months=1) - pd.DateOffset(days=1), anual)
+                try:
+                    pedaco = _bloco(mes, fim_mes)
+                except Exception as exc:  # noqa: BLE001
+                    print(f"    falha SGS {cod} {mes.date()}: {exc}", flush=True)
+                    pedaco = pd.DataFrame(columns=["data", "selic"])
+                if not pedaco.empty:
+                    parte = pd.concat([parte, pedaco], ignore_index=True)
+                mes = fim_mes + pd.DateOffset(days=1)
+                time.sleep(0.05)
+        if not parte.empty:
+            partes.append(parte)
+            print(f"  SGS {cod} {cursor.date()}–{anual.date()}: {len(parte)} pts", flush=True)
+        cursor = anual + pd.DateOffset(days=1)
+        time.sleep(0.08)
+    if not partes:
+        return pd.DataFrame(columns=["data", "selic"])
+    return pd.concat(partes, ignore_index=True).drop_duplicates("data").sort_values("data")
+
+
 def carregar_selic(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
     cache = cache_dir / "sgs_432_selic_meta.csv"
+    inicio = pd.Timestamp("1999-03-05")
+    fim = pd.Timestamp.now()
+    if cache.exists():
+        df = pd.read_csv(cache, parse_dates=["data"])
+        if not df.empty and pd.to_datetime(df["data"]).min() <= inicio:
+            return df
+        if baixar and not df.empty:
+            falta_ini = inicio
+            falta_fim = pd.to_datetime(df["data"]).min() - pd.Timedelta(days=1)
+            if falta_ini <= falta_fim:
+                print("Completando SGS 432 desde 05/03/1999...", flush=True)
+                extra = baixar_sgs_periodo(432, falta_ini, falta_fim)
+                df = pd.concat([extra, df], ignore_index=True).drop_duplicates("data").sort_values("data")
+                df.to_csv(cache, index=False)
+            return df
+        if not baixar:
+            return df
+    if not baixar:
+        raise FileNotFoundError(cache)
+    print("Baixando SGS 432 (meta Selic do Copom) desde 05/03/1999...", flush=True)
+    df = baixar_sgs_periodo(432, inicio, fim)
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    df.to_csv(cache, index=False)
+    return df
+
+
+def carregar_pregao(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
+    """Dias com abertura do mercado (SGS 11, Selic diária — só dias úteis)."""
+    cache = cache_dir / "sgs_11_selic_pregao.csv"
+    inicio = pd.Timestamp("1995-01-02")
+    fim = pd.Timestamp.now()
     if cache.exists():
         return pd.read_csv(cache, parse_dates=["data"])
     if not baixar:
         raise FileNotFoundError(cache)
-    print("Baixando SGS 432 (meta Selic do Copom)...", flush=True)
-    try:
-        df = _baixar_sgs_soap(432, "01/12/2000", datetime.now().strftime("%d/%m/%Y"))
-    except Exception:
-        df = pd.DataFrame(columns=["data", "selic"])
-        cursor = pd.Timestamp("2000-12-01")
-        fim = pd.Timestamp.now()
-        while cursor <= fim:
-            bloco = min(cursor + pd.DateOffset(years=1) - pd.DateOffset(days=1), fim)
-            parte = _baixar_sgs_soap(432, cursor.strftime("%d/%m/%Y"), bloco.strftime("%d/%m/%Y"))
-            if not parte.empty:
-                df = pd.concat([df, parte], ignore_index=True)
-            cursor = bloco + pd.DateOffset(days=1)
-            time.sleep(0.08)
+    print("Baixando SGS 11 (calendário de pregão)...", flush=True)
+    df = baixar_sgs_periodo(11, inicio, fim)
+    df = df.rename(columns={"selic": "selic_diaria"})
     cache_dir.mkdir(parents=True, exist_ok=True)
     df.to_csv(cache, index=False)
     return df
+
+
+def identificar_lapsos_pregao(
+    meta: pd.DataFrame,
+    pregao: pd.DataFrame,
+    inicio: str | pd.Timestamp = "1995-01-01",
+    fim: str | pd.Timestamp | None = None,
+) -> list[dict]:
+    """Um lapso por patamar da meta do Copom; termos e contagem só em dias de pregão."""
+    ini = pd.Timestamp(inicio)
+    termino = pd.Timestamp(fim) if fim is not None else pd.Timestamp.now().normalize()
+    m = meta.copy()
+    m["data"] = pd.to_datetime(m["data"])
+    m = m[(m["data"] >= ini) & (m["data"] <= termino)].sort_values("data")
+    p = pd.to_datetime(pregao["data"])
+    p = p[(p >= ini) & (p <= termino)].sort_values().reset_index(drop=True)
+    if m.empty or p.empty:
+        return []
+    m = m.drop_duplicates("data").reset_index(drop=True)
+    m["mudou"] = m["selic"].diff().abs() > 1e-6
+    m.loc[0, "mudou"] = True
+    mudancas = m[m["mudou"]].copy()
+    datas = list(mudancas["data"])
+    taxas = list(mudancas["selic"])
+    datas.append(m["data"].max() + pd.Timedelta(days=1))
+    lapsos = []
+    for i, taxa in enumerate(taxas):
+        cal_ini = pd.Timestamp(datas[i])
+        cal_fim = pd.Timestamp(datas[i + 1]) - pd.Timedelta(days=1)
+        if cal_fim < cal_ini:
+            continue
+        dias = p[(p >= cal_ini) & (p <= cal_fim)]
+        if dias.empty:
+            continue
+        lapsos.append(
+            {
+                "ordem": len(lapsos) + 1,
+                "selic": float(taxa),
+                "inicio": pd.Timestamp(dias.iloc[0]),
+                "fim": pd.Timestamp(dias.iloc[-1]),
+                "n_pregao": int(len(dias)),
+            }
+        )
+    return lapsos
+
+
+def cabecalhos_lapsos_pregao() -> list[str]:
+    return ["Lapso", "Selic Copom (% a.a.)", "Termo inicial", "Termo final", "Dias com pregão"]
+
+
+def linhas_lapsos_pregao(lapsos: list[dict]) -> list[list[str]]:
+    return [
+        [
+            str(l["ordem"]),
+            _fmt(l["selic"]),
+            l["inicio"].strftime("%d/%m/%Y"),
+            l["fim"].strftime("%d/%m/%Y"),
+            f"{l['n_pregao']:,}".replace(",", "."),
+        ]
+        for l in lapsos
+    ]
 
 
 def agregar_reunioes(atas: pd.DataFrame, selic: pd.DataFrame) -> pd.DataFrame:
@@ -951,6 +1069,7 @@ def exportar_tabelas(
     ciclos: list[dict],
     recuos: list[dict],
     lapsos: list[dict],
+    lapsos_pregao: list[dict],
     output_dir: Path,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -962,11 +1081,15 @@ def exportar_tabelas(
     pd.DataFrame(recuos).to_csv(csv_rec, index=False)
     csv_lap = output_dir / "copom_atas_lapsos_2003_2016.csv"
     pd.DataFrame(lapsos).to_csv(csv_lap, index=False)
+    csv_preg = output_dir / "copom_selic_lapsos_pregao_1999_2026.csv"
+    pd.DataFrame(lapsos_pregao).to_csv(csv_preg, index=False)
     xlsx = output_dir / "resumo_atas_copom_2001_2026.xlsx"
     wb = Workbook()
     ws1 = wb.active
     ws1.title = "Ciclos"
     _escrever_aba(ws1, cabecalhos_ciclos(), linhas_ciclos(ciclos))
+    ws0 = wb.create_sheet("Lapsos_pregao")
+    _escrever_aba(ws0, cabecalhos_lapsos_pregao(), linhas_lapsos_pregao(lapsos_pregao))
     ws2 = wb.create_sheet("Lapsos_2003_2016")
     _escrever_aba(ws2, cabecalhos_lapsos(), linhas_lapsos(lapsos))
     ws3 = wb.create_sheet("Recuos_2003_2015")
@@ -976,7 +1099,7 @@ def exportar_tabelas(
     ws5 = wb.create_sheet("Reunioes")
     _escrever_aba(ws5, cabecalhos_reunioes(), linhas_reunioes(reunioes))
     wb.save(xlsx)
-    return [csv_r, csv_a, csv_rec, csv_lap, xlsx]
+    return [csv_r, csv_a, csv_rec, csv_lap, csv_preg, xlsx]
 
 
 def gerar_graficos(reunioes: pd.DataFrame, output_dir: Path) -> list[Path]:
@@ -1030,6 +1153,7 @@ def gerar_relatorio(
     ciclos: list[dict],
     recuos: list[dict],
     lapsos: list[dict],
+    lapsos_pregao: list[dict],
     output_dir: Path,
 ) -> Path:
     narr = _narrativas()
@@ -1040,6 +1164,14 @@ def gerar_relatorio(
     html_recuos = tabela_html(cabecalhos_recuos(), linhas_recuos(recuos), ["left", "center"] + ["right"] * 7)
     html_lapsos = tabela_html(cabecalhos_lapsos(), linhas_lapsos(lapsos), ["center", "left"] + ["right"] * 6)
     frases_lapsos = "\n".join(f"- {l['frase']}" for l in lapsos)
+    html_pregao = tabela_html(
+        cabecalhos_lapsos_pregao(),
+        linhas_lapsos_pregao(lapsos_pregao),
+        ["center", "right", "center", "center", "right"],
+    )
+    n_preg = sum(l["n_pregao"] for l in lapsos_pregao)
+    first_p = lapsos_pregao[0] if lapsos_pregao else None
+    last_p = lapsos_pregao[-1] if lapsos_pregao else None
     html_anual = tabela_html(cabecalhos_anual(), linhas_anual(anual))
     html_reun = tabela_html(cabecalhos_reunioes(), linhas_reunioes(reunioes))
     recuo_blocos = []
@@ -1101,6 +1233,20 @@ Três blocos se repetem ao longo de 25 anos, ainda que o formato mude
 3. **Decisão** — alta, corte ou manutenção; voto; e, cada vez mais, a
    *comunicação* sobre os próximos passos.
 
+## Meta do Copom por lapso (dias de pregão, 1995–2026)
+
+A série oficial da **meta Selic definida pelo Copom** (SGS 432) começa em
+**05/03/1999**, com 45,00% a.a. De 1995 até 04/03/1999 o Copom ainda não
+fixava a Selic (o Comitê nasce em 1996 e operava com TBC/TBAN). Cada
+linha abaixo é um patamar constante: **termo inicial** e **termo final**
+são o primeiro e o último dia com abertura do mercado financeiro
+(calendário da Selic diária, SGS 11). O último lapso fecha no último
+pregão disponível.
+
+{f"{len(lapsos_pregao)} lapsos e {n_preg:,} pregões, de {first_p['inicio'].strftime('%d/%m/%Y')} a {last_p['fim'].strftime('%d/%m/%Y')}.".replace(",", ".") if first_p and last_p else "Sem dados de pregão."}
+
+{html_pregao}
+
 O fio condutor é a **âncora das expectativas**. Quando elas se afastam da
 meta, o Copom aperta (2002, 2015, 2021–22, 2024–25). Quando o hiato está
 negativo e as expectativas convergem, corta (2009, 2017–19, 2020, 2023).
@@ -1156,6 +1302,7 @@ de âncora.
 - `copom_atas_reunioes_2001_2026.csv`
 - `copom_atas_recuos_2003_2015.csv`
 - `copom_atas_lapsos_2003_2016.csv`
+- `copom_selic_lapsos_pregao_1999_2026.csv`
 - `grafico_copom_selic_2001_2026.png`
 - `grafico_copom_recuos_2003_2015.png`
 """
@@ -1175,6 +1322,7 @@ def gerar_pdf(
     ciclos: list[dict],
     recuos: list[dict],
     lapsos: list[dict],
+    lapsos_pregao: list[dict],
     imagens: list[Path],
     output_dir: Path,
 ) -> Path:
@@ -1226,6 +1374,16 @@ def gerar_pdf(
         fig = pagina_tabela("Ciclos de política nas atas", cabecalhos_ciclos(), linhas_ciclos(ciclos), [0.10, 0.28, 0.08, 0.09, 0.09, 0.07, 0.07, 0.07, 0.08, 0.07])
         pdf.savefig(fig)
         plt.close(fig)
+        preg_lin = linhas_lapsos_pregao(lapsos_pregao)
+        for i in range(0, max(len(preg_lin), 1), 28):
+            fig = pagina_tabela(
+                f"Meta do Copom por lapso (pregão) {i + 1}–{min(i + 28, len(preg_lin))}",
+                cabecalhos_lapsos_pregao(),
+                preg_lin[i : i + 28],
+                [0.10, 0.22, 0.22, 0.22, 0.24],
+            )
+            pdf.savefig(fig)
+            plt.close(fig)
         fig = pagina_tabela(
             "Lapsos 2003–2016 até a mudança de sentido",
             cabecalhos_lapsos(),
@@ -1287,11 +1445,20 @@ def main(argv: list[str] | None = None) -> int:
     ciclos = resumo_ciclos(reunioes)
     recuos = identificar_recuos(reunioes)
     lapsos = identificar_lapsos(reunioes)
-    caminhos = exportar_tabelas(reunioes, anual, ciclos, recuos, lapsos, args.output_dir)
-    caminhos.append(gerar_relatorio(reunioes, anual, ciclos, recuos, lapsos, args.output_dir))
+    pregao = carregar_pregao(args.cache_dir, baixar=not args.sem_download)
+    lapsos_pregao = identificar_lapsos_pregao(selic, pregao)
+    caminhos = exportar_tabelas(reunioes, anual, ciclos, recuos, lapsos, lapsos_pregao, args.output_dir)
+    caminhos.append(gerar_relatorio(reunioes, anual, ciclos, recuos, lapsos, lapsos_pregao, args.output_dir))
     imgs = gerar_graficos(reunioes, args.output_dir)
     caminhos.extend(imgs)
-    caminhos.append(gerar_pdf(reunioes, anual, ciclos, recuos, lapsos, imgs, args.output_dir))
+    caminhos.append(gerar_pdf(reunioes, anual, ciclos, recuos, lapsos, lapsos_pregao, imgs, args.output_dir))
+    print(f"Lapsos com pregão: {len(lapsos_pregao)}")
+    if lapsos_pregao:
+        print(
+            f"  {lapsos_pregao[0]['inicio'].date()} {lapsos_pregao[0]['selic']}% → "
+            f"{lapsos_pregao[-1]['fim'].date()} {lapsos_pregao[-1]['selic']}% "
+            f"({sum(l['n_pregao'] for l in lapsos_pregao)} pregões)"
+        )
     print("Lapsos 2003–2016:")
     for lapso in lapsos:
         print(f"  {lapso['frase']}")

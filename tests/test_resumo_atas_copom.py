@@ -12,6 +12,7 @@ from scripts.resumo_atas_copom import (
     html_para_texto,
     identificador,
     identificar_lapsos,
+    identificar_lapsos_pregao,
     identificar_recuos,
     _extensao_pt,
     numero_reuniao,
@@ -199,3 +200,40 @@ def test_identificar_lapsos_contiguos_ate_mudar_sentido() -> None:
     assert lapsos[2]["selic_fim"] == 16.25
     assert lapsos[0]["fim"] + pd.Timedelta(days=1) == lapsos[1]["inicio"]
     assert "foi reduzida de 26,50% para 16,00%" in lapsos[1]["frase"]
+
+
+def test_identificar_lapsos_pregao_so_dias_uteis() -> None:
+    meta = pd.DataFrame(
+        {
+            "data": pd.date_range("1999-03-05", "1999-03-18", freq="D"),
+            "selic": [45.0] * 5 + [39.5] * 9,
+        }
+    )
+    pregao = pd.DataFrame(
+        {
+            "data": pd.to_datetime(
+                [
+                    "1999-03-05",
+                    "1999-03-08",
+                    "1999-03-09",
+                    "1999-03-10",
+                    "1999-03-11",
+                    "1999-03-12",
+                    "1999-03-15",
+                    "1999-03-16",
+                    "1999-03-17",
+                    "1999-03-18",
+                ]
+            )
+        }
+    )
+    lapsos = identificar_lapsos_pregao(meta, pregao, "1995-01-01", "1999-03-18")
+    assert len(lapsos) == 2
+    assert lapsos[0]["selic"] == 45.0
+    assert lapsos[0]["inicio"] == pd.Timestamp("1999-03-05")
+    assert lapsos[0]["fim"] == pd.Timestamp("1999-03-09")
+    assert lapsos[0]["n_pregao"] == 3
+    assert lapsos[1]["selic"] == 39.5
+    assert lapsos[1]["inicio"] == pd.Timestamp("1999-03-10")
+    assert lapsos[1]["fim"] == pd.Timestamp("1999-03-18")
+    assert lapsos[1]["n_pregao"] == 7
