@@ -282,6 +282,11 @@ def carregar_textos(
                     print(f"    falha PDF {ident}: {exc}", flush=True)
             time.sleep(0.08)
         linhas.append({**rec, "texto": texto or "", "n_caracteres": len(texto or "")})
+        if baixar and len(linhas) % 10 == 0:
+            cache_dir.mkdir(parents=True, exist_ok=True)
+            pd.DataFrame(linhas)[["ident", "reuniao", "data", "titulo", "n_caracteres", "texto"]].to_csv(
+                cache, index=False
+            )
     out = pd.DataFrame(linhas)
     cache_dir.mkdir(parents=True, exist_ok=True)
     out[["ident", "reuniao", "data", "titulo", "n_caracteres", "texto"]].to_csv(cache, index=False)
