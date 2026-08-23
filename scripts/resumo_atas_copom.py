@@ -151,16 +151,70 @@ def identificador(link: str) -> str:
     return (link or "").rstrip("/").split("/")[-1]
 
 
+def _contar_nomes_voto(bloco: str) -> int:
+    bloco = re.sub(r"\([^)]*\)", " ", bloco or "")
+    partes = re.split(r",|\se\s", bloco)
+    return sum(1 for p in partes if len(re.sub(r"[^A-Za-zÁÉÍÓÚÂÊÔÃÕáéíóúâêôãõçÇ]", "", p)) >= 6)
+
+
+_NUM_PT = {
+    "um": "1",
+    "uma": "1",
+    "dois": "2",
+    "duas": "2",
+    "três": "3",
+    "tres": "3",
+    "quatro": "4",
+    "cinco": "5",
+    "seis": "6",
+    "sete": "7",
+    "oito": "8",
+    "nove": "9",
+}
+
+
+def _num_voto(token: str) -> str:
+    t = (token or "").strip().lower()
+    return _NUM_PT.get(t, t if t.isdigit() else "")
+
+
 def extrair_voto(texto: str) -> str:
     t = texto or ""
-    if re.search(r"unanimidade", t, flags=re.I):
-        return "unânime"
     m = re.search(r"por\s+(\d+)\s+votos?\s+a\s+(\d+)", t, flags=re.I)
     if m:
         return f"{m.group(1)} a {m.group(2)}"
+    m = re.search(
+        r"por\s+(\d+|um|uma|dois|duas|tr[eê]s|quatro|cinco|seis|sete|oito|nove)\s+votos?\s+"
+        r"a\s+favor\s+e\s+(\d+|um|uma|dois|duas|tr[eê]s|quatro|cinco|seis|sete|oito|nove)\s+contra",
+        t,
+        flags=re.I,
+    )
+    if m:
+        a, b = _num_voto(m.group(1)), _num_voto(m.group(2))
+        if a and b:
+            return f"{a} a {b}"
     m = re.search(r"(\d+)\s+votos?\s+a\s+favor[^\n]{0,40}(\d+)\s+voto", t, flags=re.I)
     if m:
         return f"{m.group(1)} a {m.group(2)}"
+    listas = re.findall(
+        r"(?:Votaram por|membros votaram por)\s+[^:]{0,140}:\s*([A-ZÁÉÍÓÚÂÊÔÃÕ][^.]{12,500})",
+        t,
+        flags=re.I,
+    )
+    if len(listas) >= 2:
+        contagens = sorted((_contar_nomes_voto(x) for x in listas), reverse=True)
+        if contagens[1] > 0:
+            return f"{contagens[0]} a {contagens[1]}"
+    if re.search(
+        r"por unanimidade|decidiu,?\s+unanimemente|decis[aã]o foi (tomada )?por unanimidade",
+        t,
+        flags=re.I,
+    ):
+        return "unânime"
+    if listas:
+        return "unânime"
+    if re.search(r"unanimidade", t, flags=re.I):
+        return "unânime"
     return "—"
 
 

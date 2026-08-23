@@ -44,8 +44,26 @@ def test_classificar_decisao() -> None:
 
 def test_extrair_voto() -> None:
     assert extrair_voto("A decisão foi tomada por unanimidade.") == "unânime"
+    assert extrair_voto("O Comitê então decidiu, unanimemente, pela elevação.") == "unânime"
     assert extrair_voto("O Copom decidiu, por 5 votos a 4, elevar a taxa.") == "5 a 4"
+    assert extrair_voto("por sete votos a favor e dois contra, o Copom decidiu") == "7 a 2"
     assert extrair_voto("sem menção a voto") == "—"
+    split = (
+        "Votaram por uma redução de 0,50 ponto percentual os seguintes membros do Comitê: "
+        "Roberto de Oliveira Campos Neto (presidente), Ailton de Aquino Santos, "
+        "Carolina de Assis Barros, Gabriel Muricca Galípolo e Otávio Ribeiro Damaso. "
+        "Votaram por uma redução de 0,25 ponto percentual os seguintes membros: "
+        "Diogo Abry Guillen, Fernanda Magalhães Rumenos Guardado, "
+        "Maurício Costa de Moura e Renato Dias de Brito Gomes."
+    )
+    assert extrair_voto(split) == "5 a 4"
+    unica = (
+        "Votaram por essa decisão os seguintes membros do Comitê: "
+        "Gabriel Muricca Galípolo (presidente), Ailton de Aquino Santos, "
+        "Gilneu Francisco Astolfi Vivan, Izabela Moreira Correa, "
+        "Nilton José Schneider David, Paulo Picchetti e Rodrigo Alves Teixeira."
+    )
+    assert extrair_voto(unica) == "unânime"
 
 
 def test_trecho_decisao_prioriza_secao() -> None:
