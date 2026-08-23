@@ -71,32 +71,64 @@ def codigo_spread(codigo_taxa: int) -> int | None:
     return None
 
 
-def baixar_sgs_retry(cod: int, inicio: str, fim: str, tentativas: int = 5) -> pd.DataFrame:
+def _fatias_periodo(inicio: str, fim: str, anos: int = 4) -> list[tuple[str, str]]:
+    ini = pd.to_datetime(inicio, dayfirst=True)
+    fim_dt = pd.to_datetime(fim, dayfirst=True)
+    fatias = []
+    cur = ini
+    while cur <= fim_dt:
+        nxt = min(cur + pd.DateOffset(years=anos) - pd.DateOffset(days=1), fim_dt)
+        fatias.append((cur.strftime("%d/%m/%Y"), nxt.strftime("%d/%m/%Y")))
+        cur = nxt + pd.DateOffset(days=1)
+    return fatias
+
+
+def _baixar_uma_fatia(cod: int, inicio: str, fim: str) -> pd.DataFrame:
+    resp = requests.get(
+        SGS_REST.format(cod=cod),
+        params={"formato": "json", "dataInicial": inicio, "dataFinal": fim},
+        timeout=90,
+    )
+    resp.raise_for_status()
+    dados = resp.json()
+    if not dados:
+        return pd.DataFrame(columns=["data", "taxa"])
+    out = pd.DataFrame(dados)
+    out["data"] = pd.to_datetime(out["data"], dayfirst=True)
+    out["taxa"] = pd.to_numeric(out["valor"], errors="coerce")
+    return out[["data", "taxa"]].dropna()
+
+
+def baixar_sgs_retry(cod: int, inicio: str, fim: str, tentativas: int = 4) -> pd.DataFrame:
+    """Baixa a série; se a janela inteira falhar (406/timeout), parte em fatias de 4 anos."""
     ultimo: Exception | None = None
-    for i in range(tentativas):
-        try:
-            return baixar_sgs(cod, inicio, fim)
-        except Exception as exc:  # noqa: BLE001
-            ultimo = exc
-            time.sleep(1.5 * (i + 1))
+    try:
+        return baixar_sgs(cod, inicio, fim)
+    except Exception as exc:  # noqa: BLE001
+        ultimo = exc
+    try:
+        return _baixar_uma_fatia(cod, inicio, fim)
+    except Exception as exc:
+        ultimo = exc
+    partes = []
+    for i0, i1 in _fatias_periodo(inicio, fim, anos=4):
+        ok = False
+        for i in range(tentativas):
             try:
-                resp = requests.get(
-                    SGS_REST.format(cod=cod),
-                    params={"formato": "json", "dataInicial": inicio, "dataFinal": fim},
-                    timeout=90,
-                )
-                resp.raise_for_status()
-                dados = resp.json()
-                if not dados:
-                    return pd.DataFrame(columns=["data", "taxa"])
-                out = pd.DataFrame(dados)
-                out["data"] = pd.to_datetime(out["data"], dayfirst=True)
-                out["taxa"] = pd.to_numeric(out["valor"], errors="coerce")
-                return out[["data", "taxa"]].dropna()
-            except Exception as exc2:  # noqa: BLE001
-                ultimo = exc2
-                time.sleep(2.0 * (i + 1))
-    raise RuntimeError(f"Falha ao baixar SGS {cod}: {ultimo}")
+                df = _baixar_uma_fatia(cod, i0, i1)
+                partes.append(df)
+                ok = True
+                break
+            except Exception as exc:  # noqa: BLE001
+                ultimo = exc
+                time.sleep(1.5 * (i + 1))
+        if not ok:
+            raise RuntimeError(f"Falha ao baixar SGS {cod} ({i0}–{i1}): {ultimo}")
+        time.sleep(0.05)
+    if not partes:
+        return pd.DataFrame(columns=["data", "taxa"])
+    out = pd.concat(partes, ignore_index=True).drop_duplicates("data").sort_values("data")
+    return out
 
 
 def _para_mensal_aa(df: pd.DataFrame, unidade: str) -> pd.Series:

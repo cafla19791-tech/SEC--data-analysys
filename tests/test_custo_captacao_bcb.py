@@ -8,6 +8,7 @@ import pandas as pd
 from openpyxl import load_workbook
 
 from scripts.custo_captacao_bcb import (
+    _fatias_periodo,
     am_para_aa,
     codigo_spread,
     comparativo_anual,
@@ -17,6 +18,12 @@ from scripts.custo_captacao_bcb import (
     gerar_planilha,
     medias_anuais_mercado,
 )
+
+
+def test_fatias_periodo_cobrem_o_intervalo() -> None:
+    fatias = _fatias_periodo("01/01/2001", "01/12/2006", anos=4)
+    assert fatias[0] == ("01/01/2001", "31/12/2004")
+    assert fatias[-1][1] == "01/12/2006"
 
 
 def test_am_para_aa_capitaliza() -> None:
