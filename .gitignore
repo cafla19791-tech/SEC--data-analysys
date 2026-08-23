@@ -16,6 +16,8 @@ data/*.xlsx
 !data/tjlp_mensal.xlsx
 !data/selic_mensal.xlsx
 !data/selic_taxas_contagil.xlsx
+!data/copom_atas_catalogo.csv
+!data/sgs_4189_selic_diaria.csv
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
 output/*.csv
@@ -40,6 +42,11 @@ output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
 !output/indiretas_automaticas_ipca/README.md
 !output/grafico_interativo.html
+!output/*.pdf
+!output/*.png
+!output/*.md
+!output/copom_atas_reunioes_2001_2026.csv
+!output/copom_atas_anual_2001_2026.csv
 
 # Artefato clássico na raiz (cópia do resumo anual)
 /impacto_fiscal_por_ano.xlsx

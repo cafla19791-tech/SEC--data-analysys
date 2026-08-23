@@ -212,6 +212,19 @@ python3 scripts/gerar_fluxos.py --download \
   --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
 ```
 
+## Atas do Copom (2001–hoje)
+
+Resumo explicativo das atas oficiais do Banco Central
+([publicacoes/atascopom](https://www.bcb.gov.br/publicacoes/atascopom)),
+cruzadas com a meta Selic (SGS 4189):
+
+```bash
+python3 scripts/resumo_atas_copom.py
+```
+
+Saídas em `output/resumo_atas_copom_2001_2026.md` / `.xlsx` / `.pdf`.
+Atas 200–231 entram via PDF; as demais, via HTML da API do site.
+
 ## Testes
 
 ```bash
