@@ -56,6 +56,9 @@ output/indiretas_automaticas_ipca/*.xlsx
 !output/copom_selic_lapsos_pregao_1999_2026.csv
 !output/taxas_credito_medias_anuais_2001_2026.csv
 !output/taxas_credito_top5_bancos.csv
+!output/custo_captacao_mercado_2001_2026.csv
+!output/custo_captacao_referencial_2001_2026.csv
+!output/custo_captacao_taxa_spread_2001_2026.csv
 
 # Artefato clássico na raiz (cópia do resumo anual)
 /impacto_fiscal_por_ano.xlsx
