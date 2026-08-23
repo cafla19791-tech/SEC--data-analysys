@@ -16,6 +16,13 @@ data/*.xlsx
 !data/tjlp_mensal.xlsx
 !data/selic_mensal.xlsx
 !data/selic_taxas_contagil.xlsx
+!data/copom_atas_catalogo.csv
+!data/sgs_4189_selic_diaria.csv
+!data/sgs_432_selic_meta.csv
+!data/sgs_11_selic_pregao.csv
+data/bis/
+data/credito_bcb/
+data/compulsorio/
 
 # Saídas detalhadas (CSV pode passar de 1 GB)
 output/*.csv
@@ -24,6 +31,8 @@ output/*_stats.json
 !output/.gitkeep
 !output/README.md
 !output/*.xlsx
+!output/bis_paises/
+!output/bis_paises/*.xlsx
 !output/resumo_por_agente.csv
 !output/impacto_fiscal_por_ano.csv
 !output/resumo_contratos.csv
@@ -40,6 +49,21 @@ output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
 !output/indiretas_automaticas_ipca/README.md
 !output/grafico_interativo.html
+!output/*.pdf
+!output/*.png
+!output/*.md
+!output/copom_atas_reunioes_2001_2026.csv
+!output/copom_atas_anual_2001_2026.csv
+!output/copom_atas_recuos_2003_2015.csv
+!output/copom_atas_lapsos_2003_2016.csv
+!output/copom_selic_lapsos_pregao_1999_2026.csv
+!output/taxas_credito_medias_anuais_2001_2026.csv
+!output/taxas_credito_top5_bancos.csv
+!output/custo_captacao_mercado_2001_2026.csv
+!output/custo_captacao_referencial_2001_2026.csv
+!output/custo_captacao_taxa_spread_2001_2026.csv
+!output/aliquotas_compulsorio_anual_2002_2026.csv
+!output/aliquotas_compulsorio_alteracoes.csv
 
 # Artefato clássico na raiz (cópia do resumo anual)
 /impacto_fiscal_por_ano.xlsx

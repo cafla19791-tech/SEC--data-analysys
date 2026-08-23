@@ -1,0 +1,116 @@
+segmento,modalidade_ifdata,rank,instituicao,cod_inst,cnpj_lider,saldo,modalidade_olinda,if_olinda,taxa_aa
+PF,Cartão de Crédito,1,ITAU - PRUDENCIAL,C0080099,60872504,151108461131.36,Cartão de crédito - rotativo total - Prefixado,BANCO INVESTCRED UNIBANCO S.A. / FIN. ITAU CBD CFI / ITAÚ UNIBANCO HOLDING S.A. / LUIZACRED S.A. SCFI,518.8199999999999
+PF,Cartão de Crédito,1,ITAU - PRUDENCIAL,C0080099,60872504,151108461131.36,Cartão de crédito - parcelado - Prefixado,BANCO INVESTCRED UNIBANCO S.A. / FIN. ITAU CBD CFI / ITAÚ UNIBANCO HOLDING S.A. / LUIZACRED S.A. SCFI,256.205
+PF,Cartão de Crédito,2,NU PAGAMENTOS - PRUDENCIAL,C0084693,18236120,115962031368.01,Cartão de crédito - rotativo total - Prefixado,NU FINANCEIRA S.A. CFI,303.57
+PF,Cartão de Crédito,2,NU PAGAMENTOS - PRUDENCIAL,C0084693,18236120,115962031368.01,Cartão de crédito - parcelado - Prefixado,NU FINANCEIRA S.A. CFI,180.92
+PF,Cartão de Crédito,3,BRADESCO - PRUDENCIAL,C0080075,60746948,78685325374.34,Cartão de crédito - rotativo total - Prefixado,BANCO BRADESCARD / BANCO DIGIO / BCO BRADESCO S.A.,640.06
+PF,Cartão de Crédito,3,BRADESCO - PRUDENCIAL,C0080075,60746948,78685325374.34,Cartão de crédito - parcelado - Prefixado,BANCO BRADESCARD / BANCO DIGIO / BCO BRADESCO S.A.,155.68
+PF,Cartão de Crédito,4,BB - PRUDENCIAL,C0080329,00000000,72999896820.66,Cartão de crédito - rotativo total - Prefixado,BCO DO BRASIL S.A.,343.32
+PF,Cartão de Crédito,4,BB - PRUDENCIAL,C0080329,00000000,72999896820.66,Cartão de crédito - parcelado - Prefixado,BCO DO BRASIL S.A.,156.79
+PF,Cartão de Crédito,5,SANTANDER - PRUDENCIAL,C0080185,90400888,63420553367.41,Cartão de crédito - rotativo total - Prefixado,BCO SANTANDER (BRASIL) S.A.,472.47
+PF,Cartão de Crédito,5,SANTANDER - PRUDENCIAL,C0080185,90400888,63420553367.41,Cartão de crédito - parcelado - Prefixado,BCO SANTANDER (BRASIL) S.A.,205.92
+PF,Empréstimo com Consignação em Folha,1,BB - PRUDENCIAL,C0080329,00000000,151959705593.45,Crédito pessoal consignado INSS - Prefixado,BCO DO BRASIL S.A.,24.18
+PF,Empréstimo com Consignação em Folha,1,BB - PRUDENCIAL,C0080329,00000000,151959705593.45,Crédito pessoal consignado privado - Prefixado,BCO DO BRASIL S.A.,45.08
+PF,Empréstimo com Consignação em Folha,1,BB - PRUDENCIAL,C0080329,00000000,151959705593.45,Crédito pessoal consignado público - Prefixado,BCO DO BRASIL S.A.,25.18
+PF,Empréstimo com Consignação em Folha,2,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,113284250675.33,Crédito pessoal consignado INSS - Prefixado,CAIXA ECONOMICA FEDERAL,24.46
+PF,Empréstimo com Consignação em Folha,2,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,113284250675.33,Crédito pessoal consignado privado - Prefixado,CAIXA ECONOMICA FEDERAL,43.23
+PF,Empréstimo com Consignação em Folha,2,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,113284250675.33,Crédito pessoal consignado público - Prefixado,CAIXA ECONOMICA FEDERAL,23.1
+PF,Empréstimo com Consignação em Folha,3,BRADESCO - PRUDENCIAL,C0080075,60746948,107015998812.98,Crédito pessoal consignado INSS - Prefixado,BANCO DIGIO / BCO BRADESCO S.A.,24.805
+PF,Empréstimo com Consignação em Folha,3,BRADESCO - PRUDENCIAL,C0080075,60746948,107015998812.98,Crédito pessoal consignado privado - Prefixado,BANCO DIGIO / BCO BRADESCO S.A.,39.42
+PF,Empréstimo com Consignação em Folha,3,BRADESCO - PRUDENCIAL,C0080075,60746948,107015998812.98,Crédito pessoal consignado público - Prefixado,BANCO DIGIO / BCO BRADESCO S.A.,24.125
+PF,Empréstimo com Consignação em Folha,4,ITAU - PRUDENCIAL,C0080099,60872504,78596500177.11,Crédito pessoal consignado INSS - Prefixado,ITAÚ UNIBANCO S.A.,24.11
+PF,Empréstimo com Consignação em Folha,4,ITAU - PRUDENCIAL,C0080099,60872504,78596500177.11,Crédito pessoal consignado privado - Prefixado,ITAÚ UNIBANCO S.A.,49.61
+PF,Empréstimo com Consignação em Folha,4,ITAU - PRUDENCIAL,C0080099,60872504,78596500177.11,Crédito pessoal consignado público - Prefixado,ITAÚ UNIBANCO S.A.,23.19
+PF,Empréstimo com Consignação em Folha,5,SANTANDER - PRUDENCIAL,C0080185,90400888,57981039567.65,Crédito pessoal consignado INSS - Prefixado,BCO SANTANDER (BRASIL) S.A.,24.77
+PF,Empréstimo com Consignação em Folha,5,SANTANDER - PRUDENCIAL,C0080185,90400888,57981039567.65,Crédito pessoal consignado privado - Prefixado,BCO SANTANDER (BRASIL) S.A.,38.41
+PF,Empréstimo com Consignação em Folha,5,SANTANDER - PRUDENCIAL,C0080185,90400888,57981039567.65,Crédito pessoal consignado público - Prefixado,BCO SANTANDER (BRASIL) S.A.,24.33
+PF,Empréstimo sem Consignação em Folha,1,NU PAGAMENTOS - PRUDENCIAL,C0084693,18236120,61784311784.06,Crédito pessoal não consignado - Prefixado,NU FINANCEIRA S.A. CFI,107.28
+PF,Empréstimo sem Consignação em Folha,2,BB - PRUDENCIAL,C0080329,00000000,56793274118.56,Crédito pessoal não consignado - Prefixado,BCO DO BRASIL S.A.,60.64
+PF,Empréstimo sem Consignação em Folha,2,BB - PRUDENCIAL,C0080329,00000000,56793274118.56,Cheque especial - Prefixado,BCO DO BRASIL S.A.,158.7
+PF,Empréstimo sem Consignação em Folha,3,BRADESCO - PRUDENCIAL,C0080075,60746948,49244702798.04,Crédito pessoal não consignado - Prefixado,BANCO DIGIO / BCO BRADESCO FINANC. S.A. / BCO BRADESCO S.A.,38.25
+PF,Empréstimo sem Consignação em Folha,3,BRADESCO - PRUDENCIAL,C0080075,60746948,49244702798.04,Cheque especial - Prefixado,BCO BRADESCO S.A.,151.51
+PF,Empréstimo sem Consignação em Folha,4,ITAU - PRUDENCIAL,C0080099,60872504,31306779068.54,Crédito pessoal não consignado - Prefixado,ITAÚ UNIBANCO S.A.,61.29
+PF,Empréstimo sem Consignação em Folha,4,ITAU - PRUDENCIAL,C0080099,60872504,31306779068.54,Cheque especial - Prefixado,ITAÚ UNIBANCO S.A.,157.45
+PF,Empréstimo sem Consignação em Folha,5,SANTANDER - PRUDENCIAL,C0080185,90400888,14938291113.68,Crédito pessoal não consignado - Prefixado,BCO SANTANDER (BRASIL) S.A. / SANTANDER SCFI S.A.,41.95
+PF,Empréstimo sem Consignação em Folha,5,SANTANDER - PRUDENCIAL,C0080185,90400888,14938291113.68,Cheque especial - Prefixado,BCO SANTANDER (BRASIL) S.A.,159.52
+PF,Habitação,1,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,942099973932.85,Financiamento imobiliário com taxas de mercado - Pós-fixado referenciado em TR,CAIXA ECONOMICA FEDERAL,12.12
+PF,Habitação,2,ITAU - PRUDENCIAL,C0080099,60872504,146123302379.56,Financiamento imobiliário com taxas de mercado - Pós-fixado referenciado em TR,ITAÚ UNIBANCO S.A.,12.01
+PF,Habitação,3,BRADESCO - PRUDENCIAL,C0080075,60746948,108284361121.78,Financiamento imobiliário com taxas de mercado - Pós-fixado referenciado em TR,BCO BRADESCO S.A.,12.29
+PF,Habitação,4,SANTANDER - PRUDENCIAL,C0080185,90400888,68899156006.84,Financiamento imobiliário com taxas de mercado - Prefixado,BCO SANTANDER (BRASIL) S.A.,14.61
+PF,Habitação,4,SANTANDER - PRUDENCIAL,C0080185,90400888,68899156006.84,Financiamento imobiliário com taxas de mercado - Pós-fixado referenciado em TR,BCO SANTANDER (BRASIL) S.A.,12.29
+PF,Habitação,5,BB - PRUDENCIAL,C0080329,00000000,45910463604.17,Financiamento imobiliário com taxas de mercado - Pós-fixado referenciado em TR,BCO DO BRASIL S.A.,14.42
+PF,Outros Créditos,1,ITAU - PRUDENCIAL,C0080099,60872504,40715034063.12,sem publicação Olinda para o conglomerado,—,
+PF,Outros Créditos,2,SANTANDER - PRUDENCIAL,C0080185,90400888,28580666923.03,Aquisição de outros bens - Prefixado,SANTANDER SCFI S.A.,28.64
+PF,Outros Créditos,3,BB - PRUDENCIAL,C0080329,00000000,23402985710.94,Aquisição de outros bens - Prefixado,BCO DO BRASIL S.A.,47.75
+PF,Outros Créditos,3,BB - PRUDENCIAL,C0080329,00000000,23402985710.94,Desconto de cheques - Prefixado,BCO DO BRASIL S.A.,71.36
+PF,Outros Créditos,4,BCO RABOBANK INTL BRASIL S.A. - PRUDENCIAL,C0081555,01023570,22827379824.58,sem publicação Olinda para o conglomerado,—,
+PF,Outros Créditos,5,BRADESCO - PRUDENCIAL,C0080075,60746948,21959266692.7,Aquisição de outros bens - Prefixado,BCO BRADESCO FINANC. S.A. / BCO BRADESCO S.A.,32.17
+PF,Outros Créditos,5,BRADESCO - PRUDENCIAL,C0080075,60746948,21959266692.7,Desconto de cheques - Prefixado,BCO BRADESCO S.A.,42.56
+PF,Rural e Agroindustrial,1,BB - PRUDENCIAL,C0080329,00000000,366498926114.18,—,—,
+PF,Rural e Agroindustrial,2,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,48742586093.92,—,—,
+PF,Rural e Agroindustrial,3,BRADESCO - PRUDENCIAL,C0080075,60746948,36439223568.42,—,—,
+PF,Rural e Agroindustrial,4,BCO COOPERATIVO SICREDI - PRUDENCIAL,C0080745,01181521,32014696965.83,—,—,
+PF,Rural e Agroindustrial,5,BCO DA AMAZONIA S.A. - PRUDENCIAL,C0081249,04902979,21694398087.92,—,—,
+PF,Veículos,1,SANTANDER - PRUDENCIAL,C0080185,90400888,82382430367.21,Aquisição de veículos - Prefixado,BANCO HYUNDAI CAPITAL BRASIL / BCO RCI BRASIL S.A. / SANTANDER SCFI S.A.,17.25
+PF,Veículos,2,VOTORANTIM - PRUDENCIAL,C0080484,59588111,55898986813.29,Aquisição de veículos - Prefixado,BCO VOTORANTIM S.A.,31.32
+PF,Veículos,3,BRADESCO - PRUDENCIAL,C0080075,60746948,46252762928.89,Aquisição de veículos - Prefixado,BCO BRADESCO FINANC. S.A. / BCO BRADESCO S.A.,24.97
+PF,Veículos,4,BTG PACTUAL - PRUDENCIAL,C0080336,30306294,38615319601.72,Aquisição de veículos - Prefixado,BANCO PAN,41.29
+PF,Veículos,5,ITAU - PRUDENCIAL,C0080099,60872504,35911925765.29,Aquisição de veículos - Prefixado,ITAÚ UNIBANCO HOLDING S.A.,28.4
+PJ,Capital de Giro,1,BRADESCO - PRUDENCIAL,C0080075,60746948,115229277268.76,Capital de giro com prazo até 365 dias - Prefixado,BCO BRADESCO S.A.,32.53
+PJ,Capital de Giro,1,BRADESCO - PRUDENCIAL,C0080075,60746948,115229277268.76,Capital de giro com prazo superior a 365 dias - Prefixado,BCO BRADESCO S.A.,31.93
+PJ,Capital de Giro,2,ITAU - PRUDENCIAL,C0080099,60872504,110604370929.34,Capital de giro com prazo até 365 dias - Prefixado,ITAÚ UNIBANCO S.A.,25.2
+PJ,Capital de Giro,2,ITAU - PRUDENCIAL,C0080099,60872504,110604370929.34,Capital de giro com prazo superior a 365 dias - Prefixado,ITAÚ UNIBANCO S.A.,26.6
+PJ,Capital de Giro,3,BB - PRUDENCIAL,C0080329,00000000,86087364571.09,Capital de giro com prazo até 365 dias - Prefixado,BCO DO BRASIL S.A.,31.55
+PJ,Capital de Giro,3,BB - PRUDENCIAL,C0080329,00000000,86087364571.09,Capital de giro com prazo superior a 365 dias - Prefixado,BCO DO BRASIL S.A.,33.18
+PJ,Capital de Giro,4,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,84007417675.17,Capital de giro com prazo até 365 dias - Prefixado,CAIXA ECONOMICA FEDERAL,28.25
+PJ,Capital de Giro,4,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,84007417675.17,Capital de giro com prazo superior a 365 dias - Prefixado,CAIXA ECONOMICA FEDERAL,24.19
+PJ,Capital de Giro,5,PAGSEGURO - PRUDENCIAL,C0084813,08561701,42513517739.07,Capital de giro com prazo até 365 dias - Prefixado,BANCOSEGURO S.A.,22.1
+PJ,Cheque Especial e Conta Garantida,1,ITAU - PRUDENCIAL,C0080099,60872504,16938319764.92,Cheque especial - Prefixado,ITAÚ UNIBANCO S.A.,511.3
+PJ,Cheque Especial e Conta Garantida,1,ITAU - PRUDENCIAL,C0080099,60872504,16938319764.92,Conta garantida - Prefixado,ITAÚ UNIBANCO S.A.,59.12
+PJ,Cheque Especial e Conta Garantida,2,SANTANDER - PRUDENCIAL,C0080185,90400888,8261979649.86,Cheque especial - Prefixado,BCO SANTANDER (BRASIL) S.A.,507.23
+PJ,Cheque Especial e Conta Garantida,2,SANTANDER - PRUDENCIAL,C0080185,90400888,8261979649.86,Conta garantida - Prefixado,BCO SANTANDER (BRASIL) S.A.,39.46
+PJ,Cheque Especial e Conta Garantida,3,BRADESCO - PRUDENCIAL,C0080075,60746948,8012488177.46,Cheque especial - Prefixado,BCO BRADESCO S.A.,484.99
+PJ,Cheque Especial e Conta Garantida,3,BRADESCO - PRUDENCIAL,C0080075,60746948,8012488177.46,Conta garantida - Prefixado,BANCO JOHN DEERE S.A. / BCO BRADESCO S.A.,34.71
+PJ,Cheque Especial e Conta Garantida,4,BB - PRUDENCIAL,C0080329,00000000,4920012253.22,Cheque especial - Prefixado,BCO DO BRASIL S.A.,433.3
+PJ,Cheque Especial e Conta Garantida,4,BB - PRUDENCIAL,C0080329,00000000,4920012253.22,Conta garantida - Prefixado,BCO DO BRASIL S.A.,30.53
+PJ,Cheque Especial e Conta Garantida,5,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,3238636264.9,Cheque especial - Prefixado,CAIXA ECONOMICA FEDERAL,445.9
+PJ,Comércio Exterior,1,BB - PRUDENCIAL,C0080329,00000000,65684303757.59,Adiantamento sobre contratos de câmbio (ACC) - Pós-fixado referenciado em moeda estrangeira,BCO DO BRASIL S.A.,5.33
+PJ,Comércio Exterior,2,ITAU - PRUDENCIAL,C0080099,60872504,38048903732.69,Adiantamento sobre contratos de câmbio (ACC) - Pós-fixado referenciado em moeda estrangeira,ITAÚ UNIBANCO S.A.,5.05
+PJ,Comércio Exterior,3,BRADESCO - PRUDENCIAL,C0080075,60746948,28896000345.38,Adiantamento sobre contratos de câmbio (ACC) - Pós-fixado referenciado em moeda estrangeira,BCO BRADESCO S.A.,5.46
+PJ,Comércio Exterior,4,CITIBANK - PRUDENCIAL,C0080192,33479023,18448738420.43,Adiantamento sobre contratos de câmbio (ACC) - Pós-fixado referenciado em moeda estrangeira,BCO CITIBANK S.A.,4.41
+PJ,Comércio Exterior,5,SANTANDER - PRUDENCIAL,C0080185,90400888,15629114317.56,Adiantamento sobre contratos de câmbio (ACC) - Pós-fixado referenciado em moeda estrangeira,BCO SANTANDER (BRASIL) S.A.,6.39
+PJ,Financiamento de Infraestrutura/Desenvolvimento/Projeto e Outros Créditos,1,BNDES - PRUDENCIAL,C0081847,33657248,349976888449.54,—,—,
+PJ,Financiamento de Infraestrutura/Desenvolvimento/Projeto e Outros Créditos,2,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,111537175424.88,—,—,
+PJ,Financiamento de Infraestrutura/Desenvolvimento/Projeto e Outros Créditos,3,BB - PRUDENCIAL,C0080329,00000000,40571025496.18,—,—,
+PJ,Financiamento de Infraestrutura/Desenvolvimento/Projeto e Outros Créditos,4,BRADESCO - PRUDENCIAL,C0080075,60746948,34851200242.02,—,—,
+PJ,Financiamento de Infraestrutura/Desenvolvimento/Projeto e Outros Créditos,5,ITAU - PRUDENCIAL,C0080099,60872504,28750479251.97,—,—,
+PJ,Habitacional,1,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,26196905714.77,—,—,
+PJ,Habitacional,2,BRADESCO - PRUDENCIAL,C0080075,60746948,13208209047.27,—,—,
+PJ,Habitacional,3,ITAU - PRUDENCIAL,C0080099,60872504,10802317666.91,—,—,
+PJ,Habitacional,4,BB - PRUDENCIAL,C0080329,00000000,4739148431.89,—,—,
+PJ,Habitacional,5,BRB - PRUDENCIAL,C0080288,00000208,3648525719.77,—,—,
+PJ,Investimento,1,BB - PRUDENCIAL,C0080329,00000000,86060721908.08,—,—,
+PJ,Investimento,2,BRADESCO - PRUDENCIAL,C0080075,60746948,39641293731.99,—,—,
+PJ,Investimento,3,SANTANDER - PRUDENCIAL,C0080185,90400888,19156816070.86,—,—,
+PJ,Investimento,4,ITAU - PRUDENCIAL,C0080099,60872504,17788730191.35,—,—,
+PJ,Investimento,5,VOLKSWAGEN - PRUDENCIAL,C0080202,59109165,16945894665.23,—,—,
+PJ,Operações com Recebíveis,1,BRADESCO - PRUDENCIAL,C0080075,60746948,29363604677.51,Desconto de duplicatas - Prefixado,BANCO DIGIO / BCO BRADESCO S.A.,20.55
+PJ,Operações com Recebíveis,1,BRADESCO - PRUDENCIAL,C0080075,60746948,29363604677.51,Antecipação de faturas de cartão de crédito - Prefixado,BANCO BRADESCARD / BCO BRADESCO S.A.,17.46
+PJ,Operações com Recebíveis,2,ITAU - PRUDENCIAL,C0080099,60872504,29178288279.08,Desconto de duplicatas - Prefixado,ITAÚ UNIBANCO S.A.,23.2
+PJ,Operações com Recebíveis,2,ITAU - PRUDENCIAL,C0080099,60872504,29178288279.08,Antecipação de faturas de cartão de crédito - Prefixado,ITAÚ UNIBANCO S.A.,13.34
+PJ,Operações com Recebíveis,3,SANTANDER - PRUDENCIAL,C0080185,90400888,24304393511.17,Desconto de duplicatas - Prefixado,BCO SANTANDER (BRASIL) S.A.,19.79
+PJ,Operações com Recebíveis,3,SANTANDER - PRUDENCIAL,C0080185,90400888,24304393511.17,Antecipação de faturas de cartão de crédito - Prefixado,BCO SANTANDER (BRASIL) S.A.,15.23
+PJ,Operações com Recebíveis,4,BTG PACTUAL - PRUDENCIAL,C0080336,30306294,16844798988.62,Desconto de duplicatas - Prefixado,BANCO BTG PACTUAL S.A.,16.53
+PJ,Operações com Recebíveis,4,BTG PACTUAL - PRUDENCIAL,C0080336,30306294,16844798988.62,Antecipação de faturas de cartão de crédito - Prefixado,BANCO BTG PACTUAL S.A.,14.97
+PJ,Operações com Recebíveis,5,BB - PRUDENCIAL,C0080329,00000000,13045717645.45,Desconto de duplicatas - Prefixado,BCO DO BRASIL S.A.,20.09
+PJ,Operações com Recebíveis,5,BB - PRUDENCIAL,C0080329,00000000,13045717645.45,Antecipação de faturas de cartão de crédito - Prefixado,BCO DO BRASIL S.A.,16.62
+PJ,Outros Créditos,1,BB - PRUDENCIAL,C0080329,00000000,36086161863.94,Desconto de cheques - Prefixado,BCO DO BRASIL S.A.,42.88
+PJ,Outros Créditos,2,BRADESCO - PRUDENCIAL,C0080075,60746948,33888099310.18,Desconto de cheques - Prefixado,BCO BRADESCO S.A.,29.29
+PJ,Outros Créditos,3,ITAU - PRUDENCIAL,C0080099,60872504,27081815418.8,sem publicação Olinda para o conglomerado,—,
+PJ,Outros Créditos,4,SANTANDER - PRUDENCIAL,C0080185,90400888,22333832733.91,Desconto de cheques - Prefixado,BCO SANTANDER (BRASIL) S.A.,28.32
+PJ,Outros Créditos,5,CAIXA ECONÔMICA FEDERAL - PRUDENCIAL,C0080738,00360305,17150789590.2,Desconto de cheques - Prefixado,CAIXA ECONOMICA FEDERAL,51.28
+PJ,Rural e Agroindustrial,1,ITAU - PRUDENCIAL,C0080099,60872504,17643586542.73,—,—,
+PJ,Rural e Agroindustrial,2,BNDES - PRUDENCIAL,C0081847,33657248,12544059907.03,—,—,
+PJ,Rural e Agroindustrial,3,BB - PRUDENCIAL,C0080329,00000000,10826960919.24,—,—,
+PJ,Rural e Agroindustrial,4,SANTANDER - PRUDENCIAL,C0080185,90400888,10553964927.7,—,—,
+PJ,Rural e Agroindustrial,5,BD REGIONAL DO EXTREMO SUL - PRUDENCIAL,C0081311,92816560,6146152157.59,—,—,

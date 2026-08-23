@@ -212,6 +212,39 @@ python3 scripts/gerar_fluxos.py --download \
   --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
 ```
 
+## Atas do Copom (2001–hoje)
+
+Resumo explicativo das atas oficiais do Banco Central
+([publicacoes/atascopom](https://www.bcb.gov.br/publicacoes/atascopom)),
+cruzadas com a meta Selic (SGS 432):
+
+```bash
+python3 scripts/resumo_atas_copom.py
+```
+
+Saídas em `output/resumo_atas_copom_2001_2026.md` / `.xlsx` / `.pdf`.
+Atas 200–231 entram via PDF; as demais, via HTML da API do site.
+
+Taxa acumulada das taxas básicas do [BIS WS_CBPOL](https://data.bis.org/static/bulk/WS_CBPOL_csv_col.zip)
+em cada lapso Selic 105–161 (uma aba por lapso):
+
+```bash
+python3 scripts/lapsos_bis_juros.py
+```
+
+Saída: `output/lapsos_bis_juros_105_161.xlsx`.
+
+## Taxas de crédito (BCB, 2001–2026)
+
+Médias anuais das taxas oficiais por modalidade (SGS) e os 5 conglomerados
+de maior saldo em cada modalidade (IF.data), com a taxa publicada no Olinda:
+
+```bash
+python3 scripts/taxas_credito_bcb.py
+```
+
+Saída: `output/taxas_credito_bcb_2001_2026.xlsx`.
+
 ## Testes
 
 ```bash

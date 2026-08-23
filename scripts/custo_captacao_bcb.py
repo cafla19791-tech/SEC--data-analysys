@@ -1,0 +1,540 @@
+"""Custos de captação dos recursos de crédito (BCB, 2001–2026).
+
+Dois recortes oficiais:
+
+1. Indicadores de mercado (Selic, CDI, CDB/RDB, poupança, TBF), disponíveis
+   no SGS para o intervalo 2001–2026.
+2. Custo de captação referencial por modalidade das estatísticas de crédito:
+   taxa média das novas operações minus o spread médio publicado pelo BCB
+   (definição oficial da Nota para Imprensa). Série a partir de março de 2011.
+
+Uso:
+  python3 scripts/custo_captacao_bcb.py
+  python3 scripts/custo_captacao_bcb.py --sem-download
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+import time
+from datetime import datetime
+from html import unescape
+from pathlib import Path
+
+import pandas as pd
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.taxas_credito_bcb import (  # noqa: E402
+    ANO_FIM,
+    ANO_INI,
+    DATA_DIR,
+    OUTPUT_DIR,
+    SGS_REST,
+    _escrever_aba,
+    baixar_sgs,
+    carregar_series_sgs,
+    media_anual,
+    taxas_medias_anuais,
+)
+
+import requests  # noqa: E402
+
+BCB_SGS_SOAP = "https://www3.bcb.gov.br/wssgs/services/FachadaWSSGS"
+
+# Indicadores de mercado. ``unidade``: aa = já em % a.a.; am = % no mês → anualiza.
+SERIES_MERCADO = [
+    (4189, "Selic over", "aa", "Taxa Selic mensal anualizada (média das taxas diárias)"),
+    (4391, "CDI", "am", "CDI acumulado no mês, anualizado por capitalização"),
+    (28663, "CDB/RDB pós-fixado", "aa", "Taxa média mensal dos depósitos a prazo pós-fixados"),
+    (25, "Caderneta de poupança", "am", "Rentabilidade mensal da poupança (regra vigente)"),
+    (256, "TBF", "aa", "Taxa Básica Financeira (referência histórica de CDB prefixado / TR)"),
+]
+
+# Spreads que o webservice do SGS entrega (os demais 207xx+69 estão "temporarily unavailable").
+PARES_SPREAD = [
+    (20714, 20783, "Total do SFN", "Total", "Livre e direcionado"),
+    (20715, 20784, "Total PJ", "PJ", "Livre e direcionado"),
+    (20716, 20785, "Total PF", "PF", "Livre e direcionado"),
+    (20717, 20786, "Recursos livres — total", "Total", "Livres"),
+    (20718, 20787, "Livres PJ — total", "PJ", "Livres"),
+    (20740, 20809, "Livres PF — total", "PF", "Livres"),
+    (20756, 20825, "Recursos direcionados — total", "Total", "Direcionados"),
+    (20757, 20826, "Direcionados PJ — total", "PJ", "Direcionados"),
+    (20768, 20837, "Direcionados PF — total", "PF", "Direcionados"),
+]
+
+
+def am_para_aa(taxa_am: float) -> float:
+    """Converte percentual ao mês em percentual ao ano, com capitalização."""
+    return ((1.0 + float(taxa_am) / 100.0) ** 12 - 1.0) * 100.0
+
+
+def custo_referencial(taxa_aa: float, spread_pp: float) -> float:
+    """Custo de captação referencial do BCB: taxa média minus spread médio."""
+    return float(taxa_aa) - float(spread_pp)
+
+
+def codigo_spread(codigo_taxa: int) -> int | None:
+    """Nas estatísticas de crédito, o spread da modalidade 207xx é o código + 69."""
+    if 20714 <= int(codigo_taxa) <= 20782:
+        return int(codigo_taxa) + 69
+    return None
+
+
+def _fatias_periodo(inicio: str, fim: str, anos: int = 4) -> list[tuple[str, str]]:
+    ini = pd.to_datetime(inicio, dayfirst=True)
+    fim_dt = pd.to_datetime(fim, dayfirst=True)
+    fatias = []
+    cur = ini
+    while cur <= fim_dt:
+        nxt = min(cur + pd.DateOffset(years=anos) - pd.DateOffset(days=1), fim_dt)
+        fatias.append((cur.strftime("%d/%m/%Y"), nxt.strftime("%d/%m/%Y")))
+        cur = nxt + pd.DateOffset(days=1)
+    return fatias
+
+
+def _baixar_uma_fatia(cod: int, inicio: str, fim: str) -> pd.DataFrame:
+    resp = requests.get(
+        SGS_REST.format(cod=cod),
+        params={"formato": "json", "dataInicial": inicio, "dataFinal": fim},
+        timeout=90,
+    )
+    resp.raise_for_status()
+    dados = resp.json()
+    if not dados:
+        return pd.DataFrame(columns=["data", "taxa"])
+    out = pd.DataFrame(dados)
+    out["data"] = pd.to_datetime(out["data"], dayfirst=True)
+    out["taxa"] = pd.to_numeric(out["valor"], errors="coerce")
+    return out[["data", "taxa"]].dropna()
+
+
+def baixar_sgs_retry(cod: int, inicio: str, fim: str, tentativas: int = 4) -> pd.DataFrame:
+    """Baixa a série; se a janela inteira falhar (406/timeout), parte em fatias de 4 anos."""
+    ultimo: Exception | None = None
+    try:
+        return baixar_sgs(cod, inicio, fim)
+    except Exception as exc:  # noqa: BLE001
+        ultimo = exc
+    try:
+        return _baixar_uma_fatia(cod, inicio, fim)
+    except Exception as exc:
+        ultimo = exc
+    partes = []
+    for i0, i1 in _fatias_periodo(inicio, fim, anos=4):
+        ok = False
+        for i in range(tentativas):
+            try:
+                df = _baixar_uma_fatia(cod, i0, i1)
+                partes.append(df)
+                ok = True
+                break
+            except Exception as exc:  # noqa: BLE001
+                ultimo = exc
+                time.sleep(1.5 * (i + 1))
+        if not ok:
+            raise RuntimeError(f"Falha ao baixar SGS {cod} ({i0}–{i1}): {ultimo}")
+        time.sleep(0.05)
+    if not partes:
+        return pd.DataFrame(columns=["data", "taxa"])
+    out = pd.concat(partes, ignore_index=True).drop_duplicates("data").sort_values("data")
+    return out
+
+
+def _para_mensal_aa(df: pd.DataFrame, unidade: str) -> pd.Series:
+    s = df.set_index("data")["taxa"].sort_index()
+    if unidade == "am":
+        s = s.map(am_para_aa)
+    # Séries diárias (poupança): média das observações de cada mês.
+    if len(s) > 400:
+        s = s.groupby(s.index.to_period("M")).mean()
+        s.index = s.index.to_timestamp()
+    return s
+
+
+def carregar_mercado(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
+    cache = cache_dir / "sgs_captacao_mercado.csv"
+    if cache.exists():
+        return pd.read_csv(cache, parse_dates=["data"])
+    if not baixar:
+        raise FileNotFoundError(cache)
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    partes = []
+    for cod, nome, unidade, nota in SERIES_MERCADO:
+        print(f"  mercado SGS {cod} {nome}", flush=True)
+        df = baixar_sgs_retry(cod, "01/01/2001", "01/12/2026")
+        if df.empty:
+            print(f"    vazia {cod}", flush=True)
+            continue
+        df = df.copy()
+        df["codigo"] = cod
+        df["indicador"] = nome
+        df["unidade_origem"] = unidade
+        df["nota"] = nota
+        partes.append(df)
+        time.sleep(0.08)
+    if not partes:
+        raise RuntimeError("Nenhuma série de mercado de captação foi baixada.")
+    out = pd.concat(partes, ignore_index=True)
+    out.to_csv(cache, index=False)
+    return out
+
+
+def medias_anuais_mercado(mensal: pd.DataFrame) -> pd.DataFrame:
+    linhas = []
+    for (cod, nome, unidade, nota), g in mensal.groupby(
+        ["codigo", "indicador", "unidade_origem", "nota"], sort=False
+    ):
+        s = _para_mensal_aa(g[["data", "taxa"]], str(unidade))
+        # CDI/Selic acumulados no mês corrente ainda incompleto distorcem a anualização.
+        if int(cod) in {4390, 4391} and not s.empty:
+            hoje = pd.Timestamp.today().normalize()
+            if s.index.max().to_period("M") == hoje.to_period("M") and hoje.day < 28:
+                s = s.iloc[:-1]
+        anual = media_anual(s)
+        rec = {
+            "codigo": int(cod),
+            "indicador": nome,
+            "unidade": "% a.a.",
+            "inicio": s.index.min().strftime("%m/%Y"),
+            "fim": s.index.max().strftime("%m/%Y"),
+            "nota": nota,
+        }
+        for ano in range(ANO_INI, ANO_FIM + 1):
+            rec[str(ano)] = float(anual[ano]) if ano in anual.index else float("nan")
+        linhas.append(rec)
+    return pd.DataFrame(linhas)
+
+
+def _baixar_soap(cod: int, inicio: str, fim: str) -> pd.DataFrame:
+    corpo = f"""<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soapenv:Body>
+    <ns1:getValoresSeriesXML soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:ns1="https://www3.bcb.gov.br/wssgs/services/FachadaWSSGS">
+      <in0 xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" soapenc:arrayType="xsd:long[1]">
+        <item xsi:type="xsd:long">{int(cod)}</item>
+      </in0>
+      <in1 xsi:type="xsd:string">{inicio}</in1>
+      <in2 xsi:type="xsd:string">{fim}</in2>
+    </ns1:getValoresSeriesXML>
+  </soapenv:Body>
+</soapenv:Envelope>"""
+    resp = requests.post(
+        BCB_SGS_SOAP,
+        data=corpo.encode("utf-8"),
+        headers={"Content-Type": "text/xml; charset=utf-8", "SOAPAction": ""},
+        timeout=120,
+    )
+    resp.raise_for_status()
+    texto = unescape(resp.text)
+    if "temporarily unavailable" in texto or "SGSUsuarioNaoAutorizadoException" in texto:
+        return pd.DataFrame(columns=["data", "taxa"])
+    itens = re.findall(r"<ITEM>\s*<DATA>([^<]+)</DATA>\s*<VALOR>([^<]*)</VALOR>", texto, flags=re.I)
+    linhas = []
+    for data_txt, valor_txt in itens:
+        try:
+            dt = datetime.strptime(data_txt.strip(), "%d/%m/%Y")
+        except ValueError:
+            try:
+                dt = datetime.strptime(data_txt.strip(), "%m/%Y")
+            except ValueError:
+                continue
+        try:
+            valor = float(valor_txt.replace(",", "."))
+        except ValueError:
+            continue
+        linhas.append({"data": pd.Timestamp(dt), "taxa": valor})
+    if not linhas:
+        return pd.DataFrame(columns=["data", "taxa"])
+    return pd.DataFrame(linhas).drop_duplicates("data").sort_values("data")
+
+
+def carregar_spreads(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
+    cache = cache_dir / "sgs_spreads_modalidade.csv"
+    if cache.exists():
+        return pd.read_csv(cache, parse_dates=["data"])
+    if not baixar:
+        raise FileNotFoundError(cache)
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    partes = []
+    for cod, sc, nome, segmento, origem in PARES_SPREAD:
+        print(f"  spread SGS {sc} ← taxa {cod} {nome}", flush=True)
+        try:
+            df = _baixar_soap(sc, "01/03/2011", "01/12/2026")
+            if df.empty:
+                df = baixar_sgs_retry(sc, "01/03/2011", "01/12/2026")
+        except Exception as exc:  # noqa: BLE001
+            print(f"    falha {sc}: {exc}", flush=True)
+            continue
+        if df.empty:
+            print(f"    vazia {sc}", flush=True)
+            continue
+        df = df.copy()
+        df["codigo_spread"] = sc
+        df["codigo_taxa"] = int(cod)
+        df["modalidade"] = nome
+        df["segmento"] = segmento
+        df["origem"] = origem
+        df = df.rename(columns={"taxa": "spread"})
+        partes.append(df)
+        time.sleep(0.08)
+    if not partes:
+        raise RuntimeError("Nenhuma série de spread foi baixada.")
+    out = pd.concat(partes, ignore_index=True)
+    out.to_csv(cache, index=False)
+    return out
+
+
+def garantir_taxas_pares(taxas: pd.DataFrame, cache_dir: Path, baixar: bool) -> pd.DataFrame:
+    """Inclui a taxa 20757 (direcionados PJ), ausente do recorte anterior de modalidades."""
+    out = taxas.copy()
+    if "codigo" in out.columns and "codigo_taxa" not in out.columns:
+        out = out.rename(columns={"codigo": "codigo_taxa"})
+    faltam = [p for p in PARES_SPREAD if int(p[0]) not in set(out["codigo_taxa"].astype(int))]
+    if not faltam:
+        return out
+    if not baixar:
+        return out
+    extra = []
+    for cod, _sc, nome, segmento, origem in faltam:
+        print(f"  taxa extra SGS {cod} {nome}", flush=True)
+        try:
+            df = baixar_sgs_retry(cod, "01/03/2011", "01/12/2026")
+        except Exception as exc:  # noqa: BLE001
+            print(f"    falha {cod}: {exc}", flush=True)
+            continue
+        if df.empty:
+            continue
+        df = df.copy()
+        df["codigo_taxa"] = int(cod)
+        df["modalidade"] = nome
+        df["segmento"] = segmento
+        df["origem"] = origem
+        extra.append(df)
+    if extra:
+        out = pd.concat([out, *extra], ignore_index=True)
+    return out
+
+
+def custos_mensais(taxas: pd.DataFrame, spreads: pd.DataFrame) -> pd.DataFrame:
+    t = taxas.rename(columns={"codigo": "codigo_taxa"})
+    cols = ["data", "codigo_taxa", "spread"]
+    if "codigo_spread" in spreads.columns:
+        cols.append("codigo_spread")
+    s = spreads[cols].copy()
+    m = t.merge(s, on=["data", "codigo_taxa"], how="inner")
+    m["custo"] = m["taxa"] - m["spread"]
+    return m
+
+
+def custos_anuais(mensal: pd.DataFrame) -> pd.DataFrame:
+    linhas = []
+    chaves = ["codigo_taxa", "codigo_spread", "modalidade", "segmento", "origem"]
+    tem_spread_cod = "codigo_spread" in mensal.columns
+    if not tem_spread_cod:
+        chaves = ["codigo_taxa", "modalidade", "segmento", "origem"]
+    for chave, g in mensal.groupby(chaves, sort=False):
+        if not isinstance(chave, tuple):
+            chave = (chave,)
+        rec_keys = dict(zip(chaves, chave))
+        s = g.set_index("data")["custo"].sort_index()
+        anual = media_anual(s)
+        rec = {
+            "codigo_taxa": int(rec_keys["codigo_taxa"]),
+            "codigo_spread": int(rec_keys["codigo_spread"]) if tem_spread_cod else None,
+            "modalidade": rec_keys["modalidade"],
+            "segmento": rec_keys["segmento"],
+            "origem": rec_keys["origem"],
+            "inicio": s.index.min().strftime("%m/%Y"),
+            "fim": s.index.max().strftime("%m/%Y"),
+        }
+        for ano in range(ANO_INI, ANO_FIM + 1):
+            rec[str(ano)] = float(anual[ano]) if ano in anual.index else float("nan")
+        linhas.append(rec)
+    return pd.DataFrame(linhas)
+
+
+def comparativo_anual(taxas_a: pd.DataFrame, spreads_m: pd.DataFrame, custos_a: pd.DataFrame) -> pd.DataFrame:
+    """Empilha taxa, spread e custo nas mesmas modalidades/anos."""
+    sp = spreads_m.copy()
+    if "codigo" in sp.columns and "codigo_spread" in sp.columns:
+        sp = sp.drop(columns=["codigo"])
+    spread_a = taxas_medias_anuais(
+        sp.rename(columns={"spread": "taxa", "codigo_spread": "codigo"})[
+            ["data", "taxa", "codigo", "modalidade", "segmento", "origem"]
+        ]
+    )
+    anos = [str(a) for a in range(ANO_INI, ANO_FIM + 1)]
+    partes = []
+    for rotulo, df, col_cod in (
+        ("Taxa de crédito", taxas_a, "codigo"),
+        ("Spread", spread_a, "codigo"),
+        ("Custo de captação", custos_a, "codigo_taxa"),
+    ):
+        tmp = df.copy()
+        tmp["indicador"] = rotulo
+        tmp = tmp.rename(columns={col_cod: "codigo"})
+        partes.append(tmp[["codigo", "modalidade", "segmento", "origem", "indicador"] + anos])
+    return pd.concat(partes, ignore_index=True)
+
+
+def gerar_planilha(
+    mercado: pd.DataFrame,
+    referencial: pd.DataFrame,
+    comparativo: pd.DataFrame,
+    path: Path,
+) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    wb = Workbook()
+    ws0 = wb.active
+    ws0.title = "Notas"
+    ws0["A1"] = "Custo de captação dos recursos de crédito no Brasil — 2001–2026"
+    ws0["A1"].font = Font(name="Calibri", size=14, bold=True, color="1F4E79")
+    notas = [
+        "O Banco Central não publica, por parcela, o custo de captação de cada banco. "
+        "O que existe no SGS é (a) o custo de mercado dos instrumentos de funding e "
+        "(b) o custo de captação referencial das estatísticas de crédito, definido como "
+        "a taxa média das novas operações minus o spread médio da mesma modalidade.",
+        "Aba Mercado: média aritmética, em cada ano-calendário, das taxas oficiais de "
+        "Selic (SGS 4189, % a.a.), CDI (SGS 4391, acumulada no mês e anualizada), "
+        "CDB/RDB pós-fixado (SGS 28663, % a.a.), caderneta de poupança (SGS 25, "
+        "rentabilidade mensal anualizada) e TBF (SGS 256, % a.a.).",
+        "A série de CDB/RDB 28663 termina em janeiro de 2024 — o BCB não republicou "
+        "essa taxa média depois dessa data. A partir de 2024 o CDI (e a Selic) é o "
+        "referencial de mercado dos depósitos pós-fixados.",
+        "Aba Custo_referencial: para cada modalidade da Nota para Imprensa, "
+        "custo = taxa SGS 207xx − spread SGS (mesmo código + 69). A metodologia "
+        "atual começa em março de 2011. O custo dos recursos livres acompanha a "
+        "Selic/CDI; o dos recursos direcionados acompanha a poupança e os fundos públicos.",
+        "O webservice do SGS bloqueia os spreads das linhas mais desagregadas "
+        "(cheque especial, consignado, veículos, cartão, rural, imobiliário). "
+        "O custo referencial sai então para os totais oficiais: SFN, PF, PJ, "
+        "livres, livres PF/PJ, direcionados e direcionados PF/PJ. Nas linhas "
+        "livres o funding acompanha Selic/CDI; nas direcionadas, a poupança e "
+        "os fundos públicos. Cartões 22021–22024 não têm spread no SGS.",
+        "Fontes: https://www.bcb.gov.br/estatisticas/estatisticasmonetariascredito  |  "
+        "https://www3.bcb.gov.br/sgspub/",
+    ]
+    for i, txt in enumerate(notas, start=3):
+        ws0[f"A{i}"] = txt
+        ws0.merge_cells(start_row=i, start_column=1, end_row=i, end_column=10)
+        ws0[f"A{i}"].alignment = Alignment(wrap_text=True)
+        ws0.row_dimensions[i].height = 42
+    ws0.column_dimensions["A"].width = 28
+
+    anos = [str(a) for a in range(ANO_INI, ANO_FIM + 1)]
+    cabs_m = ["Código SGS", "Indicador", "Unidade", "Início", "Fim", "Nota"] + anos
+    linhas_m = []
+    for rec in mercado.to_dict("records"):
+        lin = [int(rec["codigo"]), rec["indicador"], rec["unidade"], rec["inicio"], rec["fim"], rec["nota"]]
+        for a in anos:
+            v = rec.get(a)
+            lin.append(None if v is None or pd.isna(v) else float(v))
+        linhas_m.append(lin)
+    _escrever_aba(
+        wb.create_sheet("Mercado"),
+        cabs_m,
+        linhas_m,
+        [12, 24, 10, 10, 10, 62] + [9] * len(anos),
+    )
+
+    cabs_r = [
+        "Código taxa",
+        "Código spread",
+        "Modalidade",
+        "Segmento",
+        "Origem",
+        "Início",
+        "Fim",
+    ] + anos
+    linhas_r = []
+    for rec in referencial.to_dict("records"):
+        lin = [
+            int(rec["codigo_taxa"]),
+            None if rec.get("codigo_spread") is None or pd.isna(rec.get("codigo_spread")) else int(rec["codigo_spread"]),
+            rec["modalidade"],
+            rec["segmento"],
+            rec["origem"],
+            rec["inicio"],
+            rec["fim"],
+        ]
+        for a in anos:
+            v = rec.get(a)
+            lin.append(None if v is None or pd.isna(v) else float(v))
+        linhas_r.append(lin)
+    _escrever_aba(
+        wb.create_sheet("Custo_referencial"),
+        cabs_r,
+        linhas_r,
+        [12, 14, 46, 10, 18, 10, 10] + [9] * len(anos),
+    )
+
+    cabs_c = ["Código", "Modalidade", "Segmento", "Origem", "Indicador"] + anos
+    linhas_c = []
+    for rec in comparativo.to_dict("records"):
+        lin = [int(rec["codigo"]), rec["modalidade"], rec["segmento"], rec["origem"], rec["indicador"]]
+        for a in anos:
+            v = rec.get(a)
+            lin.append(None if v is None or pd.isna(v) else float(v))
+        linhas_c.append(lin)
+    _escrever_aba(
+        wb.create_sheet("Taxa_spread_custo"),
+        cabs_c,
+        linhas_c,
+        [12, 46, 10, 18, 22] + [9] * len(anos),
+    )
+
+    # Destaque da linha de cabeçalho das notas
+    fill = PatternFill("solid", fgColor="D6EAF8")
+    ws0["A1"].fill = fill
+    wb.save(path)
+    return path
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--cache-dir", type=Path, default=DATA_DIR)
+    parser.add_argument("--output", type=Path, default=OUTPUT_DIR / "custo_captacao_bcb_2001_2026.xlsx")
+    parser.add_argument("--sem-download", action="store_true")
+    args = parser.parse_args(argv)
+
+    print("Indicadores de mercado de captação...", flush=True)
+    mercado_m = carregar_mercado(args.cache_dir, baixar=not args.sem_download)
+    mercado_a = medias_anuais_mercado(mercado_m)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    mercado_a.to_csv(args.output.parent / "custo_captacao_mercado_2001_2026.csv", index=False)
+
+    print("Taxas e spreads oficiais por modalidade...", flush=True)
+    taxas_m = carregar_series_sgs(args.cache_dir, baixar=not args.sem_download)
+    taxas_m = garantir_taxas_pares(taxas_m, args.cache_dir, baixar=not args.sem_download)
+    spreads_m = carregar_spreads(args.cache_dir, baixar=not args.sem_download)
+    mensal = custos_mensais(taxas_m, spreads_m)
+    if mensal.empty:
+        raise RuntimeError("Não foi possível cruzar taxa e spread.")
+    ref_a = custos_anuais(mensal)
+    ref_a.to_csv(args.output.parent / "custo_captacao_referencial_2001_2026.csv", index=False)
+
+    taxas_a = taxas_medias_anuais(taxas_m.rename(columns={"codigo_taxa": "codigo"}))
+    comp = comparativo_anual(taxas_a, spreads_m, ref_a)
+    comp.to_csv(args.output.parent / "custo_captacao_taxa_spread_2001_2026.csv", index=False)
+
+    path = gerar_planilha(mercado_a, ref_a, comp, args.output)
+    print(f"Planilha: {path}")
+    print(mercado_a[["indicador", "inicio", "fim", "2024", "2025", "2026"]].to_string(index=False))
+    cols = [c for c in ("modalidade", "inicio", "fim", "2011", "2024", "2025", "2026") if c in ref_a.columns]
+    print(ref_a[cols].to_string(index=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
