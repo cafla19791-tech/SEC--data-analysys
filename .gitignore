@@ -30,6 +30,8 @@ output/*_stats.json
 !output/.gitkeep
 !output/README.md
 !output/*.xlsx
+!output/bis_paises/
+!output/bis_paises/*.xlsx
 !output/resumo_por_agente.csv
 !output/impacto_fiscal_por_ano.csv
 !output/resumo_contratos.csv
