@@ -16,8 +16,11 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 import time
+from datetime import datetime
+from html import unescape
 from pathlib import Path
 
 import pandas as pd
@@ -33,7 +36,6 @@ from scripts.taxas_credito_bcb import (  # noqa: E402
     ANO_INI,
     DATA_DIR,
     OUTPUT_DIR,
-    SERIES,
     SGS_REST,
     _escrever_aba,
     baixar_sgs,
@@ -44,6 +46,8 @@ from scripts.taxas_credito_bcb import (  # noqa: E402
 
 import requests  # noqa: E402
 
+BCB_SGS_SOAP = "https://www3.bcb.gov.br/wssgs/services/FachadaWSSGS"
+
 # Indicadores de mercado. ``unidade``: aa = já em % a.a.; am = % no mês → anualiza.
 SERIES_MERCADO = [
     (4189, "Selic over", "aa", "Taxa Selic mensal anualizada (média das taxas diárias)"),
@@ -51,6 +55,19 @@ SERIES_MERCADO = [
     (28663, "CDB/RDB pós-fixado", "aa", "Taxa média mensal dos depósitos a prazo pós-fixados"),
     (25, "Caderneta de poupança", "am", "Rentabilidade mensal da poupança (regra vigente)"),
     (256, "TBF", "aa", "Taxa Básica Financeira (referência histórica de CDB prefixado / TR)"),
+]
+
+# Spreads que o webservice do SGS entrega (os demais 207xx+69 estão "temporarily unavailable").
+PARES_SPREAD = [
+    (20714, 20783, "Total do SFN", "Total", "Livre e direcionado"),
+    (20715, 20784, "Total PJ", "PJ", "Livre e direcionado"),
+    (20716, 20785, "Total PF", "PF", "Livre e direcionado"),
+    (20717, 20786, "Recursos livres — total", "Total", "Livres"),
+    (20718, 20787, "Livres PJ — total", "PJ", "Livres"),
+    (20740, 20809, "Livres PF — total", "PF", "Livres"),
+    (20756, 20825, "Recursos direcionados — total", "Total", "Direcionados"),
+    (20757, 20826, "Direcionados PJ — total", "PJ", "Direcionados"),
+    (20768, 20837, "Direcionados PF — total", "PF", "Direcionados"),
 ]
 
 
@@ -196,6 +213,52 @@ def medias_anuais_mercado(mensal: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(linhas)
 
 
+def _baixar_soap(cod: int, inicio: str, fim: str) -> pd.DataFrame:
+    corpo = f"""<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soapenv:Body>
+    <ns1:getValoresSeriesXML soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:ns1="https://www3.bcb.gov.br/wssgs/services/FachadaWSSGS">
+      <in0 xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" soapenc:arrayType="xsd:long[1]">
+        <item xsi:type="xsd:long">{int(cod)}</item>
+      </in0>
+      <in1 xsi:type="xsd:string">{inicio}</in1>
+      <in2 xsi:type="xsd:string">{fim}</in2>
+    </ns1:getValoresSeriesXML>
+  </soapenv:Body>
+</soapenv:Envelope>"""
+    resp = requests.post(
+        BCB_SGS_SOAP,
+        data=corpo.encode("utf-8"),
+        headers={"Content-Type": "text/xml; charset=utf-8", "SOAPAction": ""},
+        timeout=120,
+    )
+    resp.raise_for_status()
+    texto = unescape(resp.text)
+    if "temporarily unavailable" in texto or "SGSUsuarioNaoAutorizadoException" in texto:
+        return pd.DataFrame(columns=["data", "taxa"])
+    itens = re.findall(r"<ITEM>\s*<DATA>([^<]+)</DATA>\s*<VALOR>([^<]*)</VALOR>", texto, flags=re.I)
+    linhas = []
+    for data_txt, valor_txt in itens:
+        try:
+            dt = datetime.strptime(data_txt.strip(), "%d/%m/%Y")
+        except ValueError:
+            try:
+                dt = datetime.strptime(data_txt.strip(), "%m/%Y")
+            except ValueError:
+                continue
+        try:
+            valor = float(valor_txt.replace(",", "."))
+        except ValueError:
+            continue
+        linhas.append({"data": pd.Timestamp(dt), "taxa": valor})
+    if not linhas:
+        return pd.DataFrame(columns=["data", "taxa"])
+    return pd.DataFrame(linhas).drop_duplicates("data").sort_values("data")
+
+
 def carregar_spreads(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
     cache = cache_dir / "sgs_spreads_modalidade.csv"
     if cache.exists():
@@ -204,15 +267,12 @@ def carregar_spreads(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
         raise FileNotFoundError(cache)
     cache_dir.mkdir(parents=True, exist_ok=True)
     partes = []
-    vistos: set[int] = set()
-    for cod, nome, segmento, origem in SERIES:
-        sc = codigo_spread(int(cod))
-        if sc is None or sc in vistos:
-            continue
-        vistos.add(sc)
+    for cod, sc, nome, segmento, origem in PARES_SPREAD:
         print(f"  spread SGS {sc} ← taxa {cod} {nome}", flush=True)
         try:
-            df = baixar_sgs_retry(sc, "01/03/2011", "01/12/2026")
+            df = _baixar_soap(sc, "01/03/2011", "01/12/2026")
+            if df.empty:
+                df = baixar_sgs_retry(sc, "01/03/2011", "01/12/2026")
         except Exception as exc:  # noqa: BLE001
             print(f"    falha {sc}: {exc}", flush=True)
             continue
@@ -232,6 +292,37 @@ def carregar_spreads(cache_dir: Path, baixar: bool = True) -> pd.DataFrame:
         raise RuntimeError("Nenhuma série de spread foi baixada.")
     out = pd.concat(partes, ignore_index=True)
     out.to_csv(cache, index=False)
+    return out
+
+
+def garantir_taxas_pares(taxas: pd.DataFrame, cache_dir: Path, baixar: bool) -> pd.DataFrame:
+    """Inclui a taxa 20757 (direcionados PJ), ausente do recorte anterior de modalidades."""
+    out = taxas.copy()
+    if "codigo" in out.columns and "codigo_taxa" not in out.columns:
+        out = out.rename(columns={"codigo": "codigo_taxa"})
+    faltam = [p for p in PARES_SPREAD if int(p[0]) not in set(out["codigo_taxa"].astype(int))]
+    if not faltam:
+        return out
+    if not baixar:
+        return out
+    extra = []
+    for cod, _sc, nome, segmento, origem in faltam:
+        print(f"  taxa extra SGS {cod} {nome}", flush=True)
+        try:
+            df = baixar_sgs_retry(cod, "01/03/2011", "01/12/2026")
+        except Exception as exc:  # noqa: BLE001
+            print(f"    falha {cod}: {exc}", flush=True)
+            continue
+        if df.empty:
+            continue
+        df = df.copy()
+        df["codigo_taxa"] = int(cod)
+        df["modalidade"] = nome
+        df["segmento"] = segmento
+        df["origem"] = origem
+        extra.append(df)
+    if extra:
+        out = pd.concat([out, *extra], ignore_index=True)
     return out
 
 
@@ -325,10 +416,12 @@ def gerar_planilha(
         "custo = taxa SGS 207xx − spread SGS (mesmo código + 69). A metodologia "
         "atual começa em março de 2011. O custo dos recursos livres acompanha a "
         "Selic/CDI; o dos recursos direcionados acompanha a poupança e os fundos públicos.",
-        "Não há série oficial de spread (logo, nem de custo referencial) para as "
-        "modalidades de cartão 22021–22024. O funding desses produtos entra no "
-        "agregado de recursos livres. 2026 usa os meses já publicados (crédito até "
-        "junho; Selic/CDI até o último mês completo).",
+        "O webservice do SGS bloqueia os spreads das linhas mais desagregadas "
+        "(cheque especial, consignado, veículos, cartão, rural, imobiliário). "
+        "O custo referencial sai então para os totais oficiais: SFN, PF, PJ, "
+        "livres, livres PF/PJ, direcionados e direcionados PF/PJ. Nas linhas "
+        "livres o funding acompanha Selic/CDI; nas direcionadas, a poupança e "
+        "os fundos públicos. Cartões 22021–22024 não têm spread no SGS.",
         "Fontes: https://www.bcb.gov.br/estatisticas/estatisticasmonetariascredito  |  "
         "https://www3.bcb.gov.br/sgspub/",
     ]
@@ -423,9 +516,7 @@ def main(argv: list[str] | None = None) -> int:
 
     print("Taxas e spreads oficiais por modalidade...", flush=True)
     taxas_m = carregar_series_sgs(args.cache_dir, baixar=not args.sem_download)
-    taxas_m = taxas_m.rename(columns={"codigo": "codigo_taxa"}) if "codigo_taxa" not in taxas_m.columns else taxas_m
-    if "codigo" in taxas_m.columns and "codigo_taxa" not in taxas_m.columns:
-        taxas_m = taxas_m.rename(columns={"codigo": "codigo_taxa"})
+    taxas_m = garantir_taxas_pares(taxas_m, args.cache_dir, baixar=not args.sem_download)
     spreads_m = carregar_spreads(args.cache_dir, baixar=not args.sem_download)
     mensal = custos_mensais(taxas_m, spreads_m)
     if mensal.empty:

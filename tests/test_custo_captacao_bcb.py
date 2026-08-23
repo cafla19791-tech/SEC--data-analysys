@@ -8,6 +8,7 @@ import pandas as pd
 from openpyxl import load_workbook
 
 from scripts.custo_captacao_bcb import (
+    PARES_SPREAD,
     _fatias_periodo,
     am_para_aa,
     codigo_spread,
@@ -36,6 +37,9 @@ def test_custo_referencial_e_codigo_spread() -> None:
     assert codigo_spread(20714) == 20783
     assert codigo_spread(20756) == 20825
     assert codigo_spread(22022) is None
+    for taxa, spread, *_ in PARES_SPREAD:
+        if 20714 <= taxa <= 20782:
+            assert spread == codigo_spread(taxa)
 
 
 def test_medias_anuais_mercado_anualiza_cdi() -> None:
