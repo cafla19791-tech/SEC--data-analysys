@@ -48,6 +48,7 @@ FONTES = [
         "titulo": "Estatísticas públicas de títulos de dívida",
         "pais": ("ISSUER_RES", "Issuer residence"),
         "chave": "residência do emissor",
+        "partir_agregados": True,
     },
     {
         "stem": "WS_TC",
@@ -588,10 +589,13 @@ def gerar_planilha(
     return path
 
 
-def processar(fonte: dict, cache_dir: Path, output_dir: Path, baixar: bool) -> Path:
+def _eh_agregado(codigo: str) -> bool:
+    return bool(codigo) and codigo[0].isdigit()
+
+
+def processar(fonte: dict, cache_dir: Path, output_dir: Path, baixar: bool) -> list[Path]:
     print(f"{fonte['stem']} — {fonte['titulo']}", flush=True)
     zip_path = baixar_zip(fonte, cache_dir, baixar=baixar)
-    dest = output_dir / f"bis_{fonte['stem']}_paises.xlsx"
     grupos: list[tuple[str, str, pd.DataFrame]] = []
 
     if fonte["formato"] == "flat":
@@ -611,9 +615,32 @@ def processar(fonte: dict, cache_dir: Path, output_dir: Path, baixar: bool) -> P
         for (codigo, pais), g in prep.groupby(["_codigo", "_pais"], sort=False):
             grupos.append((str(codigo), str(pais), g))
 
-    path = gerar_planilha(grupos, f"{fonte['titulo']} — BIS {fonte['stem']}", fonte["url"], fonte["chave"], dest)
-    print(f"  {len(grupos)} abas → {path}", flush=True)
-    return path
+    if fonte.get("partir_agregados"):
+        paises = [g for g in grupos if not _eh_agregado(g[0])]
+        agreg = [g for g in grupos if _eh_agregado(g[0])]
+        dests = []
+        if paises:
+            dest = output_dir / f"bis_{fonte['stem']}_paises.xlsx"
+            gerar_planilha(paises, f"{fonte['titulo']} — BIS {fonte['stem']} (países)", fonte["url"], fonte["chave"], dest)
+            print(f"  {len(paises)} países → {dest}", flush=True)
+            dests.append(dest)
+        if agreg:
+            dest = output_dir / f"bis_{fonte['stem']}_agregados.xlsx"
+            gerar_planilha(
+                agreg,
+                f"{fonte['titulo']} — BIS {fonte['stem']} (agregados)",
+                fonte["url"],
+                fonte["chave"] + " — códigos agregados do BIS (3P, 4T, 5R…)",
+                dest,
+            )
+            print(f"  {len(agreg)} agregados → {dest}", flush=True)
+            dests.append(dest)
+        return dests
+
+    dest = output_dir / f"bis_{fonte['stem']}_paises.xlsx"
+    gerar_planilha(grupos, f"{fonte['titulo']} — BIS {fonte['stem']}", fonte["url"], fonte["chave"], dest)
+    print(f"  {len(grupos)} abas → {dest}", flush=True)
+    return [dest]
 
 
 def gerar_indice(gerados: list[tuple[dict, Path]], path: Path) -> Path:
@@ -652,9 +679,10 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("Nenhum indicador selecionado.")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    gerados = []
+    gerados: list[tuple[dict, Path]] = []
     for fonte in alvos:
-        gerados.append((fonte, processar(fonte, args.cache_dir, args.output_dir, not args.sem_download)))
+        for dest in processar(fonte, args.cache_dir, args.output_dir, not args.sem_download):
+            gerados.append((fonte, dest))
 
     cat = args.output_dir / "bis_indice_urls.xlsx"
     gerar_indice(gerados, cat)

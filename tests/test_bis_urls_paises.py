@@ -9,6 +9,7 @@ import pandas as pd
 from openpyxl import load_workbook
 
 from scripts.bis_urls_paises import (
+    _eh_agregado,
     coluna_pais,
     e_periodo,
     fundir_cabecalho,
@@ -50,6 +51,13 @@ def test_partir_e_periodo() -> None:
     assert e_periodo("1999")
     assert not e_periodo("FREQ")
     assert nome_pais("BR", "Brazil") == "Brasil"
+
+
+def test_eh_agregado_bis() -> None:
+    assert _eh_agregado("3P")
+    assert _eh_agregado("5R")
+    assert not _eh_agregado("BR")
+    assert not _eh_agregado("US")
 
 
 def test_nome_aba_limite() -> None:
