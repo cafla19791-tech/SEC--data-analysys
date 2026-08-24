@@ -41,6 +41,10 @@ output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/README.md
 !output/grafico_interativo.html
 
+# Excel BIS (regeneráveis; alguns passam de dezenas de MB)
+output/bis/*.xlsx
+!output/bis/README.md
+
 # Artefato clássico na raiz (cópia do resumo anual)
 /impacto_fiscal_por_ano.xlsx
 
