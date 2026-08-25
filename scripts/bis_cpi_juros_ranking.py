@@ -12,6 +12,8 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import re
 import sys
 import zipfile
@@ -57,11 +59,35 @@ def baixar(url: str, dest: Path, baixar: bool) -> Path:
     return dest
 
 
+def _abrir_csv_zip(zip_path: Path):
+    zf = zipfile.ZipFile(zip_path)
+    nome = next(n for n in zf.namelist() if n.lower().endswith(".csv"))
+    raw = zf.open(nome)
+    return zf, raw
+
+
 def ler_csv_col(zip_path: Path, usecols=None) -> pd.DataFrame:
-    with zipfile.ZipFile(zip_path) as zf:
-        nome = next(n for n in zf.namelist() if n.lower().endswith(".csv"))
-        with zf.open(nome) as fh:
-            return pd.read_csv(fh, dtype=str, usecols=usecols, low_memory=False)
+    import csv
+    import io
+
+    zf, raw = _abrir_csv_zip(zip_path)
+    try:
+        fh = io.TextIOWrapper(raw, encoding="utf-8", newline="")
+        reader = csv.reader(fh)
+        header = next(reader)
+        if callable(usecols):
+            keep = [i for i, c in enumerate(header) if usecols(c)]
+        elif usecols is None:
+            keep = list(range(len(header)))
+        else:
+            wanted = set(usecols)
+            keep = [i for i, c in enumerate(header) if c in wanted]
+        cols = [header[i] for i in keep]
+        linhas = [[rec[i] if i < len(rec) else "" for i in keep] for rec in reader]
+        return pd.DataFrame(linhas, columns=cols)
+    finally:
+        raw.close()
+        zf.close()
 
 
 def _formatos(wb) -> dict:
@@ -456,8 +482,10 @@ def main(argv: list[str] | None = None) -> int:
 
     print("CPI — lendo", flush=True)
     cpi_bruto = ler_csv_col(zip_cpi)
+    print(f"  {cpi_bruto.shape[0]} séries × {cpi_bruto.shape[1]} colunas", flush=True)
     paises_cpi = extrair_cpi(cpi_bruto)
     dest_cpi = args.output_dir / "bis_WS_LONG_CPI_inflacao.xlsx"
+    print("  gravando planilha de inflação", flush=True)
     gerar_cpi(paises_cpi, dest_cpi)
     print(f"  {len(paises_cpi)} países → {dest_cpi}", flush=True)
 
