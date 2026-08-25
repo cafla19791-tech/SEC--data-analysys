@@ -190,26 +190,38 @@ def extrair_cpi(df: pd.DataFrame) -> dict[str, dict[str, pd.DataFrame]]:
     """{codigo: {'mensal': df, 'anual': df, 'nome': str}}."""
     periodos_m = [c for c in df.columns if MES_RE.match(str(c))]
     periodos_a = [c for c in df.columns if ANO_RE.match(str(c))]
+    id_cols = ["FREQ", "REF_AREA", "Reference area", "UNIT_MEASURE"]
+    nomes = {
+        str(c): nome_pais(str(c), str(n))
+        for c, n in df.drop_duplicates("REF_AREA")[["REF_AREA", "Reference area"]].itertuples(index=False)
+    }
+
+    def _bloco(periodos: list[str], freq: str) -> pd.DataFrame:
+        if not periodos:
+            return pd.DataFrame(columns=["REF_AREA", "periodo", "indice_2010", "var_12m"])
+        sub = df.loc[df["FREQ"] == freq, id_cols + periodos]
+        long = sub.melt(id_vars=id_cols, value_vars=periodos, var_name="periodo", value_name="valor")
+        long["valor"] = pd.to_numeric(long["valor"], errors="coerce")
+        long = long.dropna(subset=["valor"])
+        if long.empty:
+            return pd.DataFrame(columns=["REF_AREA", "periodo", "indice_2010", "var_12m"])
+        idx = long.loc[long["UNIT_MEASURE"] == "628", ["REF_AREA", "periodo", "valor"]].rename(
+            columns={"valor": "indice_2010"}
+        )
+        yoy = long.loc[long["UNIT_MEASURE"] == "771", ["REF_AREA", "periodo", "valor"]].rename(
+            columns={"valor": "var_12m"}
+        )
+        return pd.merge(idx, yoy, on=["REF_AREA", "periodo"], how="outer")
+
+    mensal = _bloco(periodos_m, "M")
+    anual = _bloco(periodos_a, "A")
     out: dict[str, dict] = {}
-    for codigo, g in df.groupby("REF_AREA", sort=False):
-        nome = nome_pais(str(codigo), str(g["Reference area"].iloc[0]))
-        blocos = {}
-        for freq, cols, chave in (("M", periodos_m, "mensal"), ("A", periodos_a, "anual")):
-            idx = g[(g["FREQ"] == freq) & (g["UNIT_MEASURE"] == "628")]
-            yoy = g[(g["FREQ"] == freq) & (g["UNIT_MEASURE"] == "771")]
-            if idx.empty and yoy.empty:
-                continue
-            periodos = cols
-            recs = []
-            for p in periodos:
-                v_idx = pd.to_numeric(idx.iloc[0][p], errors="coerce") if not idx.empty else np.nan
-                v_yoy = pd.to_numeric(yoy.iloc[0][p], errors="coerce") if not yoy.empty else np.nan
-                if pd.isna(v_idx) and pd.isna(v_yoy):
-                    continue
-                recs.append({"periodo": p, "indice_2010": v_idx, "var_12m": v_yoy})
-            blocos[chave] = pd.DataFrame(recs)
-        if blocos:
-            out[str(codigo)] = {"nome": nome, **blocos}
+    for codigo, nome in nomes.items():
+        m = mensal.loc[mensal["REF_AREA"] == codigo, ["periodo", "indice_2010", "var_12m"]].sort_values("periodo")
+        a = anual.loc[anual["REF_AREA"] == codigo, ["periodo", "indice_2010", "var_12m"]].sort_values("periodo")
+        if m.empty and a.empty:
+            continue
+        out[codigo] = {"nome": nome, "mensal": m.reset_index(drop=True), "anual": a.reset_index(drop=True)}
     return out
 
 
@@ -338,12 +350,13 @@ def gerar_juros(paises: dict[str, tuple[str, pd.Series]], path: Path) -> dict[st
         aba = nome_aba(codigo, nome, usados)
         ws = wb.add_worksheet(aba)
         _cabecalho(ws, cabs, fmt, [12, 18, 24, 24, 24])
-        for i, rec in enumerate(tab.itertuples(index=False), start=1):
-            ws.write_datetime(i, 0, rec.data.to_pydatetime(), fmt["data"])
-            ws.write_number(i, 1, float(rec.taxa_basica_aa), fmt["num"])
-            ws.write_number(i, 2, float(rec.taxa_eq_diaria), fmt["num4"])
-            ws.write_number(i, 3, float(rec.taxa_acum_mes), fmt["num"])
-            ws.write_number(i, 4, float(rec.taxa_acum_ano), fmt["num"])
+        dados = tab.itertuples(index=False, name=None)
+        for i, rec in enumerate(dados, start=1):
+            ws.write_datetime(i, 0, rec[0].to_pydatetime(), fmt["data"])
+            ws.write_number(i, 1, float(rec[1]), fmt["num"])
+            ws.write_number(i, 2, float(rec[2]), fmt["num4"])
+            ws.write_number(i, 3, float(rec[3]), fmt["num"])
+            ws.write_number(i, 4, float(rec[4]), fmt["num"])
         if not tab.empty:
             ws.autofilter(0, 0, len(tab), 4)
         indice.append(
