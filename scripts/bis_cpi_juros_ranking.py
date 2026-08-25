@@ -457,16 +457,15 @@ def gerar_ranking(base: pd.DataFrame, path: Path) -> Path:
         rec = base[base["ano"] == ano].copy()
         ws = wb.add_worksheet(str(ano))
         blocos = [
-            (0, "Juros nominais % a.a.", "juros_nominais"),
-            (4, "Inflação oficial %", "inflacao"),
-            (8, "Juros reais (Fisher) %", "juros_reais"),
+            (0, "Juros nominais acumulados", "juros_nominais", "Juros nominais %"),
+            (4, "Inflação oficial", "inflacao", "Inflação %"),
+            (8, "Juros reais (Fisher)", "juros_reais", "Juros reais %"),
         ]
         ws.merge_range(0, 0, 0, 10, f"Rankings {ano}", fmt["titulo"])
-        for col0, titulo, campo in blocos:
+        for col0, titulo, campo, cab_valor in blocos:
             sub = rec.dropna(subset=[campo]).sort_values(campo, ascending=False).reset_index(drop=True)
-            ws.write(2, col0, titulo, fmt["cab"])
             ws.merge_range(2, col0, 2, col0 + 2, titulo, fmt["cab"])
-            for j, cab in enumerate(["Posição", "País", titulo.split(" (")[0] + " %"]):
+            for j, cab in enumerate(["Posição", "País", cab_valor]):
                 ws.write(3, col0 + j, cab, fmt["cab"])
             for i, row in sub.iterrows():
                 ws.write_number(i + 4, col0, i + 1, fmt["int"])
