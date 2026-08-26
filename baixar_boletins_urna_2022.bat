@@ -69,10 +69,11 @@ if exist "%OUT%\urnas_2t_presidente.csv" (
   explorer /select,"%OUT%\urnas_2t_presidente.csv"
 ) else (
   echo FALHOU. Veja %LOG%
-  echo Se o TSE bloqueou o download ^(403^), baixe os ZIPs no navegador:
-  echo   https://dadosabertos.tse.jus.br/dataset/resultados-2022-boletim-de-urna
-  echo e copie para %RAW%
-  echo Depois rode de novo com: baixar_boletins_urna_2022.bat --somente-processar
+  echo O script agora tenta o Archive.org se o TSE bloquear.
+  echo Se ainda falhar, abra o HTML de links no Edge e salve os ZIPs em:
+  echo   %RAW%
+  echo Depois: baixar_boletins_urna_2022.bat --somente-processar
+  if exist "%OUT%\baixar_boletins_links.html" start "" "%OUT%\baixar_boletins_links.html"
 )
 
 echo.

@@ -77,6 +77,9 @@ MODELO_URL = (
     "https://cdn.tse.jus.br/estatistica/sead/odsele/modelo_urna/"
     "modelourna_numerointerno.zip"
 )
+# O CDN do TSE costuma devolver 403 para scripts. O Internet Archive
+# guardou os ZIPs oficiais (captura nov/2022); 2023id_ resolve a cópia.
+WAYBACK_ID_PREFIX = "https://web.archive.org/web/2023id_/"
 
 # Faixas oficiais TSE (STI/COTEL): número interno → modelo.
 # Mesmo conteúdo de modelourna_numerointerno.csv (publicado em 05/11/2022).
@@ -281,7 +284,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--timeout",
         type=int,
-        default=180,
+        default=300,
         help="Timeout HTTP por arquivo, em segundos.",
     )
     p.add_argument(
@@ -289,6 +292,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=int,
         default=4,
         help="Tentativas por download (backoff 4/8/16/32s).",
+    )
+    p.add_argument(
+        "--gerar-links",
+        action="store_true",
+        help="Só gera o HTML com links TSE + Archive.org e sai.",
     )
     return p.parse_args(argv)
 
@@ -310,6 +318,38 @@ def url_bweb(uf: str) -> str:
     return BWEB_2T_URL.format(uf=uf.upper())
 
 
+def urls_espelho(url: str) -> list[str]:
+    """TSE oficial primeiro; Internet Archive se o CDN bloquear."""
+    if url.startswith(WAYBACK_ID_PREFIX):
+        return [url]
+    return [url, f"{WAYBACK_ID_PREFIX}{url}"]
+
+
+def escrever_pagina_links(destino: Path) -> Path:
+    """HTML com os 28 ZIPs (TSE + Archive.org) para abrir no navegador."""
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    linhas = [
+        "<!DOCTYPE html><html lang='pt-BR'><head><meta charset='utf-8'>",
+        "<title>Boletins de Urna 2022 — download</title></head><body>",
+        "<h1>Boletins de Urna 2022 (2º turno)</h1>",
+        "<p>Se o script tomou 403, baixe no navegador e salve em "
+        "<code>dados\\tse2022\\raw</code>. Depois rode com "
+        "<code>--somente-processar</code>.</p><ol>",
+    ]
+    for uf in UFS:
+        oficial = url_bweb(uf)
+        archive = f"{WAYBACK_ID_PREFIX}{oficial}"
+        nome = f"bweb_2t_{uf}_311020221535.zip"
+        linhas.append(
+            f"<li><b>{uf}</b> — "
+            f"<a href='{oficial}'>{nome}</a> · "
+            f"<a href='{archive}'>espelho Archive.org</a></li>"
+        )
+    linhas.append("</ol></body></html>")
+    destino.write_text("\n".join(linhas), encoding="utf-8")
+    return destino
+
+
 def baixar_arquivo(
     url: str,
     destino: Path,
@@ -318,7 +358,7 @@ def baixar_arquivo(
     tentativas: int = 4,
     session: requests.Session | None = None,
 ) -> Path:
-    """Baixa um arquivo oficial do TSE com retries. Reusa o arquivo se já existir."""
+    """Baixa um arquivo oficial do TSE com retries e espelho Archive.org."""
     destino.parent.mkdir(parents=True, exist_ok=True)
     if destino.exists() and destino.stat().st_size > 0:
         return destino
@@ -326,32 +366,40 @@ def baixar_arquivo(
     http = session or requests.Session()
     last_err: Exception | None = None
     tmp = destino.with_suffix(destino.suffix + ".part")
-    for tentativa in range(tentativas):
-        try:
-            with http.get(url, headers=HEADERS, stream=True, timeout=timeout) as resp:
-                resp.raise_for_status()
-                with tmp.open("wb") as fh:
-                    for chunk in resp.iter_content(chunk_size=1024 * 256):
-                        if chunk:
-                            fh.write(chunk)
-            if tmp.stat().st_size == 0:
-                raise RuntimeError(f"Download vazio: {url}")
-            tmp.replace(destino)
-            return destino
-        except Exception as exc:
-            last_err = exc
-            if tmp.exists():
-                tmp.unlink(missing_ok=True)
-            if tentativa + 1 >= tentativas:
-                break
-            time.sleep(4 * (2**tentativa))
+    for candidato in urls_espelho(url):
+        for tentativa in range(tentativas):
+            try:
+                print(f"    GET {candidato}", flush=True)
+                with http.get(
+                    candidato, headers=HEADERS, stream=True, timeout=timeout
+                ) as resp:
+                    resp.raise_for_status()
+                    with tmp.open("wb") as fh:
+                        for chunk in resp.iter_content(chunk_size=1024 * 256):
+                            if chunk:
+                                fh.write(chunk)
+                if tmp.stat().st_size < 100:
+                    raise RuntimeError(f"Download vazio: {candidato}")
+                tmp.replace(destino)
+                return destino
+            except Exception as exc:
+                last_err = exc
+                if tmp.exists():
+                    tmp.unlink(missing_ok=True)
+                status = getattr(getattr(exc, "response", None), "status_code", None)
+                if status == 403:
+                    print(f"    bloqueado (403): {candidato}", flush=True)
+                    break
+                if tentativa + 1 >= tentativas:
+                    break
+                time.sleep(4 * (2**tentativa))
     extra = ""
     resp = getattr(last_err, "response", None)
     if resp is not None and getattr(resp, "status_code", None) == 403:
         extra = (
-            " O CDN do TSE bloqueou este IP (HTTP 403). Rode o script na sua "
-            "máquina ou baixe os ZIPs em dadosabertos.tse.jus.br e use "
-            "--somente-processar."
+            " TSE e/ou Archive bloquearam este IP (HTTP 403). "
+            "Abra o HTML de links no navegador, salve os ZIPs em "
+            "dados\\tse2022\\raw e use --somente-processar."
         )
     raise RuntimeError(f"Falha ao baixar {url}: {last_err}.{extra}") from last_err
 
@@ -699,16 +747,34 @@ def main(argv: list[str] | None = None) -> int:
     print(f"ZIPs : {raw_dir}", flush=True)
     print(f"Saida: {saida}", flush=True)
 
+    if args.gerar_links:
+        html = escrever_pagina_links(saida / "baixar_boletins_links.html")
+        print(f"Abra no navegador: {html}")
+        return 0
+
     if not args.somente_processar:
-        baixar_todos(
-            ufs,
-            raw_dir,
-            workers=args.workers,
-            timeout=args.timeout,
-            tentativas=args.tentativas,
-            baixar_modelo=args.modelo is None,
-            modelo_path=args.modelo if args.modelo and args.modelo.suffix == ".zip" else None,
-        )
+        try:
+            baixar_todos(
+                ufs,
+                raw_dir,
+                workers=args.workers,
+                timeout=args.timeout,
+                tentativas=args.tentativas,
+                baixar_modelo=args.modelo is None,
+                modelo_path=args.modelo
+                if args.modelo and args.modelo.suffix == ".zip"
+                else None,
+            )
+        except RuntimeError:
+            html = escrever_pagina_links(saida / "baixar_boletins_links.html")
+            print(
+                "\nTSE bloqueou o CDN. O script tentou o Archive.org.\n"
+                f"Se ainda falhou, abra no navegador:\n  {html}\n"
+                f"Salve os ZIPs em:\n  {raw_dir}\n"
+                "Depois: python baixar_boletins_urna_2022.py --somente-processar\n",
+                flush=True,
+            )
+            raise
 
     if args.somente_baixar:
         print(f"Downloads em {raw_dir}")

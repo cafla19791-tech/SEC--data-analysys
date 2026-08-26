@@ -24,6 +24,8 @@ from scripts.baixar_boletins_urna_2022 import (
     pastas_padrao,
     processar_zip_bweb,
     resolver_pastas,
+    urls_espelho,
+    escrever_pagina_links,
     resumo_por_modelo,
     rotulo_modelo,
     url_bweb,
@@ -43,6 +45,10 @@ def test_url_oficial_por_uf():
     url = url_bweb("rr")
     assert url.endswith("bweb_2t_RR_311020221535.zip")
     assert "eleicoes2022/buweb" in url
+    espelhos = urls_espelho(url)
+    assert espelhos[0] == url
+    assert espelhos[1].startswith("https://web.archive.org/web/2023id_/")
+    assert espelhos[1].endswith(url)
 
 
 def test_normalizar_ufs_rejeita_invalida():
@@ -141,6 +147,14 @@ def test_pastas_contagil_massa_e_saida(tmp_path: Path):
     assert saida2 == winpy / "saida" / "tse2022"
     assert _pasta_raw_de_massa(winpy / "dados") == winpy / "dados" / "tse2022" / "raw"
     assert _pasta_saida_contagil(winpy / "saida") == winpy / "saida" / "tse2022"
+
+
+def test_pagina_links_tem_28_ufs(tmp_path: Path):
+    html = escrever_pagina_links(tmp_path / "links.html")
+    texto = html.read_text(encoding="utf-8")
+    assert "bweb_2t_SP_311020221535.zip" in texto
+    assert "web.archive.org" in texto
+    assert texto.count("<li>") == 28
 
 
 def test_entrypoint_contagil_carrega_scripts(tmp_path: Path, monkeypatch):
