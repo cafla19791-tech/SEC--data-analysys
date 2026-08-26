@@ -1,0 +1,669 @@
+#!/usr/bin/env python3
+"""
+Baixa os Boletins de Urna (BU) do 2º turno de 2022 nas 28 UFs
+(27 estados + ZZ/exterior) e monta uma tabela nacional com
+número de série e modelo de cada urna + votos para Presidente.
+
+O TSE não publica um ZIP único de BU. Este script percorre as 28 UFs,
+baixa cada arquivo oficial e junta o resultado.
+
+Fontes oficiais (Dados Abertos do TSE):
+  - Boletim de Urna 2º turno (por UF):
+      https://dadosabertos.tse.jus.br/dataset/resultados-2022-boletim-de-urna
+      cdn: .../buweb/bweb_2t_{UF}_311020221535.zip
+  - Correspondência número interno × modelo:
+      https://dadosabertos.tse.jus.br/dataset/correspondencia-entre-numero-interno-e-modelo-da-urna-1
+      cdn: .../modelo_urna/modelourna_numerointerno.zip
+
+Uso:
+  python3 scripts/baixar_boletins_urna_2022.py
+  python3 scripts/baixar_boletins_urna_2022.py --ufs RR AC
+  python3 scripts/baixar_boletins_urna_2022.py --somente-processar
+  python3 scripts/baixar_boletins_urna_2022.py --saida output/tse2022
+"""
+
+from __future__ import annotations
+
+import argparse
+import io
+import sys
+import time
+import zipfile
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+
+import pandas as pd
+import requests
+
+UFS = (
+    "AC",
+    "AL",
+    "AM",
+    "AP",
+    "BA",
+    "CE",
+    "DF",
+    "ES",
+    "GO",
+    "MA",
+    "MG",
+    "MS",
+    "MT",
+    "PA",
+    "PB",
+    "PE",
+    "PI",
+    "PR",
+    "RJ",
+    "RN",
+    "RO",
+    "RR",
+    "RS",
+    "SC",
+    "SE",
+    "SP",
+    "TO",
+    "ZZ",
+)
+
+BWEB_2T_URL = (
+    "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/"
+    "buweb/bweb_2t_{uf}_311020221535.zip"
+)
+MODELO_URL = (
+    "https://cdn.tse.jus.br/estatistica/sead/odsele/modelo_urna/"
+    "modelourna_numerointerno.zip"
+)
+
+# Faixas oficiais TSE (STI/COTEL): número interno → modelo.
+# Mesmo conteúdo de modelourna_numerointerno.csv (publicado em 05/11/2022).
+FAIXAS_MODELO_OFICIAL = (
+    (2009, 999_500, 1_220_500),
+    (2010, 1_220_501, 1_345_500),
+    (2011, 1_368_501, 1_370_500),
+    (2011, 1_600_000, 1_650_000),
+    (2013, 1_650_001, 1_701_000),
+    (2015, 1_750_000, 1_950_000),
+    (2020, 2_000_000, 2_250_000),
+)
+
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/zip,application/octet-stream,*/*",
+    "Referer": "https://dadosabertos.tse.jus.br/",
+}
+
+BWEB_COLS = (
+    "NR_TURNO",
+    "SG_UF",
+    "CD_MUNICIPIO",
+    "NM_MUNICIPIO",
+    "NR_ZONA",
+    "NR_SECAO",
+    "NR_LOCAL_VOTACAO",
+    "CD_CARGO_PERGUNTA",
+    "DS_CARGO_PERGUNTA",
+    "CD_TIPO_VOTAVEL",
+    "DS_TIPO_VOTAVEL",
+    "NR_VOTAVEL",
+    "NM_VOTAVEL",
+    "QT_VOTOS",
+    "NR_URNA_EFETIVADA",
+    "QT_APTOS",
+    "QT_COMPARECIMENTO",
+    "QT_ABSTENCOES",
+    "DT_ABERTURA",
+    "DT_ENCERRAMENTO",
+    "DS_TIPO_URNA",
+)
+
+CHAVES_URNA = (
+    "SG_UF",
+    "CD_MUNICIPIO",
+    "NR_ZONA",
+    "NR_SECAO",
+    "NR_URNA_EFETIVADA",
+)
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _configure_stdio() -> None:
+    for stream in (sys.stdout, sys.stderr):
+        reconf = getattr(stream, "reconfigure", None)
+        if reconf is None:
+            continue
+        try:
+            reconf(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument(
+        "--ufs",
+        nargs="+",
+        default=list(UFS),
+        help="UFs a baixar (padrão: as 28, incluindo ZZ).",
+    )
+    p.add_argument(
+        "--raw-dir",
+        type=Path,
+        default=REPO_ROOT / "data" / "tse2022" / "raw",
+        help="Pasta dos ZIPs baixados.",
+    )
+    p.add_argument(
+        "--saida",
+        type=Path,
+        default=REPO_ROOT / "output" / "tse2022",
+        help="Pasta dos CSVs gerados.",
+    )
+    p.add_argument(
+        "--modelo",
+        type=Path,
+        default=None,
+        help="CSV/ZIP oficial de faixas de modelo (opcional).",
+    )
+    p.add_argument(
+        "--somente-baixar",
+        action="store_true",
+        help="Só baixa os ZIPs, não processa.",
+    )
+    p.add_argument(
+        "--somente-processar",
+        action="store_true",
+        help="Usa ZIPs já baixados em --raw-dir.",
+    )
+    p.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="Downloads em paralelo (padrão: 4).",
+    )
+    p.add_argument(
+        "--timeout",
+        type=int,
+        default=180,
+        help="Timeout HTTP por arquivo, em segundos.",
+    )
+    p.add_argument(
+        "--tentativas",
+        type=int,
+        default=4,
+        help="Tentativas por download (backoff 4/8/16/32s).",
+    )
+    return p.parse_args(argv)
+
+
+def normalizar_ufs(ufs: list[str]) -> list[str]:
+    out: list[str] = []
+    seen: set[str] = set()
+    for raw in ufs:
+        uf = raw.strip().upper()
+        if uf not in UFS:
+            raise ValueError(f"UF inválida: {raw!r}. Use uma de: {', '.join(UFS)}")
+        if uf not in seen:
+            out.append(uf)
+            seen.add(uf)
+    return out
+
+
+def url_bweb(uf: str) -> str:
+    return BWEB_2T_URL.format(uf=uf.upper())
+
+
+def baixar_arquivo(
+    url: str,
+    destino: Path,
+    *,
+    timeout: int = 180,
+    tentativas: int = 4,
+    session: requests.Session | None = None,
+) -> Path:
+    """Baixa um arquivo oficial do TSE com retries. Reusa o arquivo se já existir."""
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    if destino.exists() and destino.stat().st_size > 0:
+        return destino
+
+    http = session or requests.Session()
+    last_err: Exception | None = None
+    tmp = destino.with_suffix(destino.suffix + ".part")
+    for tentativa in range(tentativas):
+        try:
+            with http.get(url, headers=HEADERS, stream=True, timeout=timeout) as resp:
+                resp.raise_for_status()
+                with tmp.open("wb") as fh:
+                    for chunk in resp.iter_content(chunk_size=1024 * 256):
+                        if chunk:
+                            fh.write(chunk)
+            if tmp.stat().st_size == 0:
+                raise RuntimeError(f"Download vazio: {url}")
+            tmp.replace(destino)
+            return destino
+        except Exception as exc:
+            last_err = exc
+            if tmp.exists():
+                tmp.unlink(missing_ok=True)
+            if tentativa + 1 >= tentativas:
+                break
+            time.sleep(4 * (2**tentativa))
+    extra = ""
+    resp = getattr(last_err, "response", None)
+    if resp is not None and getattr(resp, "status_code", None) == 403:
+        extra = (
+            " O CDN do TSE bloqueou este IP (HTTP 403). Rode o script na sua "
+            "máquina ou baixe os ZIPs em dadosabertos.tse.jus.br e use "
+            "--somente-processar."
+        )
+    raise RuntimeError(f"Falha ao baixar {url}: {last_err}.{extra}") from last_err
+
+
+def ler_csv_tse(fonte: Path | io.BytesIO | io.StringIO) -> pd.DataFrame:
+    return pd.read_csv(fonte, sep=";", encoding="latin-1", dtype=str, low_memory=False)
+
+
+def csv_dentro_do_zip(zip_path: Path) -> bytes:
+    with zipfile.ZipFile(zip_path) as zf:
+        nomes = [n for n in zf.namelist() if n.lower().endswith(".csv")]
+        if not nomes:
+            raise FileNotFoundError(f"Nenhum CSV em {zip_path}")
+        # Prefere o arquivo de dados, não o leiame.
+        nomes.sort(key=lambda n: (0 if "leiame" in n.lower() else 1, n))
+        escolhido = nomes[-1]
+        return zf.read(escolhido)
+
+
+def carregar_faixas_modelo(path: Path | None = None) -> pd.DataFrame:
+    """Lê o CSV/ZIP oficial ou usa as faixas publicadas pelo TSE."""
+    if path is not None and path.exists():
+        if path.suffix.lower() == ".zip":
+            raw = csv_dentro_do_zip(path)
+            df = ler_csv_tse(io.BytesIO(raw))
+        else:
+            df = ler_csv_tse(path)
+        cols = {c.strip().upper(): c for c in df.columns}
+        modelo_col = next(
+            (cols[k] for k in ("DS_MODELO_URNA", "DS_MODELO", "MODELO") if k in cols),
+            None,
+        )
+        ini_col = next(
+            (
+                cols[k]
+                for k in (
+                    "NR_FAIXA_INICIAL",
+                    "NR_INICIAL",
+                    "NR_FABRICACAO_INICIAL",
+                    "NR_NUMERO_INTERNO_INICIAL",
+                )
+                if k in cols
+            ),
+            None,
+        )
+        fim_col = next(
+            (
+                cols[k]
+                for k in (
+                    "NR_FAIXA_FINAL",
+                    "NR_FINAL",
+                    "NR_FABRICACAO_FINAL",
+                    "NR_NUMERO_INTERNO_FINAL",
+                )
+                if k in cols
+            ),
+            None,
+        )
+        if modelo_col and ini_col and fim_col:
+            out = pd.DataFrame(
+                {
+                    "NR_MODELO": pd.to_numeric(df[modelo_col], errors="coerce"),
+                    "NR_FAIXA_INICIAL": pd.to_numeric(df[ini_col], errors="coerce"),
+                    "NR_FAIXA_FINAL": pd.to_numeric(df[fim_col], errors="coerce"),
+                }
+            ).dropna()
+            out["NR_MODELO"] = out["NR_MODELO"].astype(int)
+            out["NR_FAIXA_INICIAL"] = out["NR_FAIXA_INICIAL"].astype(int)
+            out["NR_FAIXA_FINAL"] = out["NR_FAIXA_FINAL"].astype(int)
+            return out.reset_index(drop=True)
+
+    return pd.DataFrame(
+        FAIXAS_MODELO_OFICIAL,
+        columns=["NR_MODELO", "NR_FAIXA_INICIAL", "NR_FAIXA_FINAL"],
+    )
+
+
+def rotulo_modelo(nr_modelo: int | float | None) -> str:
+    if nr_modelo is None or pd.isna(nr_modelo):
+        return "sem_faixa"
+    return f"UE{int(nr_modelo)}"
+
+
+def classificar_modelo(numeros: pd.Series, faixas: pd.DataFrame) -> pd.Series:
+    """Associa NR_URNA_EFETIVADA ao modelo pela faixa oficial do TSE."""
+    nums = pd.to_numeric(numeros, errors="coerce")
+    modelo = pd.Series(pd.NA, index=numeros.index, dtype="Int64")
+    for row in faixas.itertuples(index=False):
+        mask = nums.between(int(row.NR_FAIXA_INICIAL), int(row.NR_FAIXA_FINAL))
+        modelo.loc[mask] = int(row.NR_MODELO)
+    return modelo
+
+
+def filtrar_presidente_2t(df: pd.DataFrame) -> pd.DataFrame:
+    trabalho = df.copy()
+    trabalho.columns = [c.strip() for c in trabalho.columns]
+    if "NR_TURNO" in trabalho.columns:
+        turno = pd.to_numeric(trabalho["NR_TURNO"], errors="coerce")
+        trabalho = trabalho.loc[turno == 2]
+    if "CD_CARGO_PERGUNTA" in trabalho.columns:
+        cargo = pd.to_numeric(trabalho["CD_CARGO_PERGUNTA"], errors="coerce")
+        por_codigo = cargo == 1
+        if por_codigo.any():
+            trabalho = trabalho.loc[por_codigo]
+        elif "DS_CARGO_PERGUNTA" in trabalho.columns:
+            trabalho = trabalho.loc[
+                trabalho["DS_CARGO_PERGUNTA"].astype(str).str.contains(
+                    "Presidente", case=False, na=False
+                )
+            ]
+    elif "DS_CARGO_PERGUNTA" in trabalho.columns:
+        trabalho = trabalho.loc[
+            trabalho["DS_CARGO_PERGUNTA"].astype(str).str.contains(
+                "Presidente", case=False, na=False
+            )
+        ]
+    return trabalho
+
+
+def consolidar_urnas(df: pd.DataFrame, faixas: pd.DataFrame) -> pd.DataFrame:
+    """Uma linha por urna/seção, com série, modelo e votos de Presidente."""
+    base = filtrar_presidente_2t(df)
+    if base.empty:
+        return pd.DataFrame()
+
+    for col in (
+        "QT_VOTOS",
+        "QT_APTOS",
+        "QT_COMPARECIMENTO",
+        "QT_ABSTENCOES",
+        "NR_URNA_EFETIVADA",
+        "NR_VOTAVEL",
+        "CD_TIPO_VOTAVEL",
+    ):
+        if col in base.columns:
+            if col.startswith("QT_") or col == "NR_URNA_EFETIVADA":
+                base[col] = pd.to_numeric(base[col], errors="coerce")
+
+    tipo = base.get("DS_TIPO_VOTAVEL", pd.Series("", index=base.index)).astype(str)
+    nr_vot = pd.to_numeric(base.get("NR_VOTAVEL"), errors="coerce")
+    cd_tipo = pd.to_numeric(base.get("CD_TIPO_VOTAVEL"), errors="coerce")
+    nm = base.get("NM_VOTAVEL", pd.Series("", index=base.index)).astype(str).str.upper()
+
+    base["QT_VOTOS_LULA"] = 0
+    base["QT_VOTOS_BOLSONARO"] = 0
+    base["QT_VOTOS_BRANCO"] = 0
+    base["QT_VOTOS_NULO"] = 0
+
+    votos = pd.to_numeric(base["QT_VOTOS"], errors="coerce").fillna(0)
+    lula = (nr_vot == 13) | nm.str.contains("LULA", na=False)
+    bolso = (nr_vot == 22) | nm.str.contains("BOLSONARO", na=False)
+    branco = (
+        tipo.str.contains("BRANCO", case=False, na=False)
+        | (cd_tipo == 2)
+        | (nr_vot == 95)
+        | nm.str.contains("BRANCO", na=False)
+    )
+    nulo = (
+        tipo.str.contains("NULO", case=False, na=False)
+        | (cd_tipo == 3)
+        | (nr_vot == 96)
+        | nm.str.contains("NULO", na=False)
+    )
+    base.loc[lula, "QT_VOTOS_LULA"] = votos.loc[lula]
+    base.loc[bolso, "QT_VOTOS_BOLSONARO"] = votos.loc[bolso]
+    base.loc[branco, "QT_VOTOS_BRANCO"] = votos.loc[branco]
+    base.loc[nulo, "QT_VOTOS_NULO"] = votos.loc[nulo]
+
+    chaves = [c for c in CHAVES_URNA if c in base.columns]
+    extras = [
+        c
+        for c in (
+            "NM_MUNICIPIO",
+            "NR_LOCAL_VOTACAO",
+            "QT_APTOS",
+            "QT_COMPARECIMENTO",
+            "QT_ABSTENCOES",
+            "DT_ABERTURA",
+            "DT_ENCERRAMENTO",
+            "DS_TIPO_URNA",
+        )
+        if c in base.columns
+    ]
+    agrupado = (
+        base.groupby(chaves, dropna=False)
+        .agg(
+            {
+                **{c: "first" for c in extras},
+                "QT_VOTOS_LULA": "sum",
+                "QT_VOTOS_BOLSONARO": "sum",
+                "QT_VOTOS_BRANCO": "sum",
+                "QT_VOTOS_NULO": "sum",
+            }
+        )
+        .reset_index()
+    )
+
+    agrupado["NR_MODELO"] = classificar_modelo(agrupado["NR_URNA_EFETIVADA"], faixas)
+    agrupado["DS_MODELO_URNA"] = agrupado["NR_MODELO"].map(rotulo_modelo)
+    agrupado["QT_VOTOS_VALIDOS"] = (
+        agrupado["QT_VOTOS_LULA"] + agrupado["QT_VOTOS_BOLSONARO"]
+    )
+    ordem = [
+        "SG_UF",
+        "CD_MUNICIPIO",
+        "NM_MUNICIPIO",
+        "NR_ZONA",
+        "NR_SECAO",
+        "NR_LOCAL_VOTACAO",
+        "NR_URNA_EFETIVADA",
+        "NR_MODELO",
+        "DS_MODELO_URNA",
+        "QT_APTOS",
+        "QT_COMPARECIMENTO",
+        "QT_ABSTENCOES",
+        "QT_VOTOS_LULA",
+        "QT_VOTOS_BOLSONARO",
+        "QT_VOTOS_BRANCO",
+        "QT_VOTOS_NULO",
+        "QT_VOTOS_VALIDOS",
+        "DT_ABERTURA",
+        "DT_ENCERRAMENTO",
+        "DS_TIPO_URNA",
+    ]
+    return agrupado[[c for c in ordem if c in agrupado.columns]]
+
+
+def processar_zip_bweb(zip_path: Path, faixas: pd.DataFrame) -> pd.DataFrame:
+    raw = csv_dentro_do_zip(zip_path)
+    df = pd.read_csv(
+        io.BytesIO(raw),
+        sep=";",
+        encoding="latin-1",
+        dtype=str,
+        usecols=lambda c: c in BWEB_COLS,
+        low_memory=False,
+    )
+    return consolidar_urnas(df, faixas)
+
+
+def resumo_por_uf(df: pd.DataFrame) -> pd.DataFrame:
+    g = (
+        df.groupby("SG_UF", dropna=False)
+        .agg(
+            QT_URNAS=("NR_URNA_EFETIVADA", "nunique"),
+            QT_SECOES=("NR_SECAO", "size"),
+            QT_VOTOS_LULA=("QT_VOTOS_LULA", "sum"),
+            QT_VOTOS_BOLSONARO=("QT_VOTOS_BOLSONARO", "sum"),
+            QT_VOTOS_BRANCO=("QT_VOTOS_BRANCO", "sum"),
+            QT_VOTOS_NULO=("QT_VOTOS_NULO", "sum"),
+            QT_VOTOS_VALIDOS=("QT_VOTOS_VALIDOS", "sum"),
+        )
+        .reset_index()
+        .sort_values("SG_UF")
+    )
+    return g
+
+
+def resumo_por_modelo(df: pd.DataFrame) -> pd.DataFrame:
+    g = (
+        df.groupby(["NR_MODELO", "DS_MODELO_URNA"], dropna=False)
+        .agg(
+            QT_URNAS=("NR_URNA_EFETIVADA", "nunique"),
+            QT_VOTOS_LULA=("QT_VOTOS_LULA", "sum"),
+            QT_VOTOS_BOLSONARO=("QT_VOTOS_BOLSONARO", "sum"),
+            QT_VOTOS_VALIDOS=("QT_VOTOS_VALIDOS", "sum"),
+        )
+        .reset_index()
+        .sort_values("NR_MODELO")
+    )
+    g["PCT_LULA"] = (g["QT_VOTOS_LULA"] / g["QT_VOTOS_VALIDOS"] * 100).round(2)
+    g["PCT_BOLSONARO"] = (g["QT_VOTOS_BOLSONARO"] / g["QT_VOTOS_VALIDOS"] * 100).round(2)
+    return g
+
+
+def baixar_todos(
+    ufs: list[str],
+    raw_dir: Path,
+    *,
+    workers: int,
+    timeout: int,
+    tentativas: int,
+    baixar_modelo: bool = True,
+    modelo_path: Path | None = None,
+) -> dict[str, Path]:
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    session = requests.Session()
+    tarefas: list[tuple[str, str, Path]] = []
+    if baixar_modelo:
+        dest_modelo = modelo_path or (raw_dir / "modelourna_numerointerno.zip")
+        tarefas.append(("MODELO", MODELO_URL, dest_modelo))
+    for uf in ufs:
+        tarefas.append((uf, url_bweb(uf), raw_dir / f"bweb_2t_{uf}_311020221535.zip"))
+
+    ok: dict[str, Path] = {}
+    erros: list[str] = []
+
+    def _job(item: tuple[str, str, Path]) -> tuple[str, Path]:
+        chave, url, dest = item
+        print(f"  baixando {chave}: {url}", flush=True)
+        path = baixar_arquivo(
+            url, dest, timeout=timeout, tentativas=tentativas, session=session
+        )
+        print(f"  ok {chave} ({path.stat().st_size:,} bytes)", flush=True)
+        return chave, path
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        futs = {pool.submit(_job, t): t[0] for t in tarefas}
+        for fut in as_completed(futs):
+            chave = futs[fut]
+            try:
+                k, path = fut.result()
+                ok[k] = path
+            except Exception as exc:
+                if chave == "MODELO":
+                    print(
+                        "  aviso: não baixou o ZIP de modelos; "
+                        "usando as faixas oficiais embutidas no script.",
+                        flush=True,
+                    )
+                    print(f"         ({exc})", flush=True)
+                    continue
+                erros.append(f"{chave}: {exc}")
+                print(f"  ERRO {chave}: {exc}", flush=True)
+
+    if erros:
+        raise RuntimeError(
+            "Falha em um ou mais downloads do TSE:\n  " + "\n  ".join(erros)
+        )
+    return ok
+
+
+def main(argv: list[str] | None = None) -> int:
+    _configure_stdio()
+    args = parse_args(argv)
+    ufs = normalizar_ufs(args.ufs)
+    raw_dir = args.raw_dir
+    saida = args.saida
+    saida.mkdir(parents=True, exist_ok=True)
+
+    print(f"UFs ({len(ufs)}): {', '.join(ufs)}", flush=True)
+
+    if not args.somente_processar:
+        baixar_todos(
+            ufs,
+            raw_dir,
+            workers=args.workers,
+            timeout=args.timeout,
+            tentativas=args.tentativas,
+            baixar_modelo=args.modelo is None,
+            modelo_path=args.modelo if args.modelo and args.modelo.suffix == ".zip" else None,
+        )
+
+    if args.somente_baixar:
+        print(f"Downloads em {raw_dir}")
+        return 0
+
+    faixas = carregar_faixas_modelo(args.modelo)
+    print(
+        f"Faixas de modelo: {len(faixas)} "
+        f"({', '.join(sorted({rotulo_modelo(x) for x in faixas['NR_MODELO']}))})",
+        flush=True,
+    )
+
+    partes: list[pd.DataFrame] = []
+    faltando: list[str] = []
+    for uf in ufs:
+        zip_path = raw_dir / f"bweb_2t_{uf}_311020221535.zip"
+        if not zip_path.exists():
+            # aceita qualquer zip da UF já extraído/renomeado
+            candidatos = sorted(raw_dir.glob(f"bweb_2t_{uf}_*.zip"))
+            if not candidatos:
+                faltando.append(uf)
+                continue
+            zip_path = candidatos[0]
+        print(f"  processando {uf} ← {zip_path.name}", flush=True)
+        partes.append(processar_zip_bweb(zip_path, faixas))
+
+    if faltando:
+        raise FileNotFoundError(
+            "ZIP de BU ausente para: "
+            + ", ".join(faltando)
+            + f". Baixe com o script (sem --somente-processar) em {raw_dir}"
+        )
+
+    tabela = pd.concat(partes, ignore_index=True) if partes else pd.DataFrame()
+    if tabela.empty:
+        raise RuntimeError("Nenhuma urna processada. Confira os CSVs do TSE.")
+
+    detalhe = saida / "urnas_2t_presidente.csv"
+    por_uf = saida / "resumo_por_uf.csv"
+    por_modelo = saida / "resumo_por_modelo.csv"
+    tabela.to_csv(detalhe, index=False, encoding="utf-8")
+    resumo_por_uf(tabela).to_csv(por_uf, index=False, encoding="utf-8")
+    resumo_por_modelo(tabela).to_csv(por_modelo, index=False, encoding="utf-8")
+
+    print()
+    print(f"Urnas/seções: {len(tabela):,}".replace(",", "."))
+    print(f"Série preenchida: {tabela['NR_URNA_EFETIVADA'].notna().sum():,}".replace(",", "."))
+    print(f"Lula: {int(tabela['QT_VOTOS_LULA'].sum()):,}".replace(",", "."))
+    print(f"Bolsonaro: {int(tabela['QT_VOTOS_BOLSONARO'].sum()):,}".replace(",", "."))
+    print(f"Detalhe: {detalhe}")
+    print(f"Por UF: {por_uf}")
+    print(f"Por modelo: {por_modelo}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
