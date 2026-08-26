@@ -10,13 +10,20 @@ import pytest
 
 from scripts.baixar_boletins_urna_2022 import (
     UFS,
+    _pasta_raw_de_massa,
+    _pasta_saida_contagil,
+    _parece_winpython,
     carregar_faixas_modelo,
     classificar_modelo,
     consolidar_urnas,
+    descobrir_winpython,
     filtrar_presidente_2t,
     ler_csv_tse,
     normalizar_ufs,
+    parse_args,
+    pastas_padrao,
     processar_zip_bweb,
+    resolver_pastas,
     resumo_por_modelo,
     rotulo_modelo,
     url_bweb,
@@ -108,3 +115,35 @@ def test_processar_zip_oficial_e_resumos(tmp_path: Path):
     assert int(tabela["QT_VOTOS_LULA"].sum()) == 120
     assert int(tabela["QT_VOTOS_BOLSONARO"].sum()) == 220
     assert set(por_modelo["DS_MODELO_URNA"]) == {"UE2015", "UE2020"}
+
+
+def test_pastas_contagil_massa_e_saida(tmp_path: Path):
+    winpy = tmp_path / "ContAgilAppBeta64" / "python_jep" / "winpython"
+    winpy.mkdir(parents=True)
+    (winpy / "python.exe").write_bytes(b"")
+    assert _parece_winpython(winpy)
+    assert descobrir_winpython(winpy) == winpy.resolve()
+
+    raw, saida = pastas_padrao(winpy)
+    assert raw == winpy / "dados" / "tse2022" / "raw"
+    assert saida == winpy / "saida" / "tse2022"
+
+    args = parse_args(
+        [
+            "--massa-dados",
+            str(winpy / "dados"),
+            "--pasta-saida",
+            str(winpy / "saida"),
+        ]
+    )
+    raw2, saida2 = resolver_pastas(args)
+    assert raw2 == winpy / "dados" / "tse2022" / "raw"
+    assert saida2 == winpy / "saida" / "tse2022"
+    assert _pasta_raw_de_massa(winpy / "dados") == winpy / "dados" / "tse2022" / "raw"
+    assert _pasta_saida_contagil(winpy / "saida") == winpy / "saida" / "tse2022"
+
+
+def test_entrypoint_contagil_carrega_scripts(tmp_path: Path, monkeypatch):
+    import baixar_boletins_urna_2022 as entry
+
+    assert callable(entry._load_main())

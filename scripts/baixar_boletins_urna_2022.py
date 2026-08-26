@@ -15,11 +15,14 @@ Fontes oficiais (Dados Abertos do TSE):
       https://dadosabertos.tse.jus.br/dataset/correspondencia-entre-numero-interno-e-modelo-da-urna-1
       cdn: .../modelo_urna/modelourna_numerointerno.zip
 
-Uso:
+Uso (repo):
   python3 scripts/baixar_boletins_urna_2022.py
   python3 scripts/baixar_boletins_urna_2022.py --ufs RR AC
   python3 scripts/baixar_boletins_urna_2022.py --somente-processar
-  python3 scripts/baixar_boletins_urna_2022.py --saida output/tse2022
+
+Uso (ContAgil WinPython — duplo-clique):
+  baixar_boletins_urna_2022.bat
+  python baixar_boletins_urna_2022.py --massa-dados dados --pasta-saida saida
 """
 
 from __future__ import annotations
@@ -129,6 +132,9 @@ CHAVES_URNA = (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+CONTAGIL_WINPYTHON = Path(
+    r"C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
+)
 
 
 def _configure_stdio() -> None:
@@ -142,6 +148,80 @@ def _configure_stdio() -> None:
             pass
 
 
+def _parece_winpython(pasta: Path) -> bool:
+    try:
+        pasta = pasta.resolve()
+    except OSError:
+        return False
+    texto = str(pasta).upper().replace("/", "\\")
+    return (pasta / "python.exe").exists() and (
+        "WINPYTHON" in texto or "CONTAGIL" in texto
+    )
+
+
+def descobrir_winpython(*extras: Path) -> Path | None:
+    """Localiza a pasta WinPython do ContAgil (python.exe + winpython/contagil)."""
+    here = Path(__file__).resolve()
+    candidatos = [
+        *extras,
+        Path.cwd(),
+        here.parent,
+        here.parent.parent,
+        CONTAGIL_WINPYTHON,
+    ]
+    vistos: set[Path] = set()
+    for cand in candidatos:
+        if cand is None:
+            continue
+        for pasta in (Path(cand), Path(cand).parent):
+            try:
+                chave = pasta.resolve()
+            except OSError:
+                continue
+            if chave in vistos:
+                continue
+            vistos.add(chave)
+            if _parece_winpython(chave):
+                return chave
+    return None
+
+
+def pastas_padrao(winpy: Path | None = None) -> tuple[Path, Path]:
+    """ZIPs em dados/tse2022/raw e CSVs em saida/tse2022 no ContAgil."""
+    raiz = winpy if winpy is not None else descobrir_winpython()
+    if raiz is not None:
+        return raiz / "dados" / "tse2022" / "raw", raiz / "saida" / "tse2022"
+    return REPO_ROOT / "data" / "tse2022" / "raw", REPO_ROOT / "output" / "tse2022"
+
+
+def _pasta_raw_de_massa(massa: Path) -> Path:
+    nome = massa.name.lower()
+    if nome == "raw":
+        return massa
+    if nome == "tse2022":
+        return massa / "raw"
+    return massa / "tse2022" / "raw"
+
+
+def _pasta_saida_contagil(pasta: Path) -> Path:
+    return pasta if pasta.name.lower() == "tse2022" else pasta / "tse2022"
+
+
+def resolver_pastas(args: argparse.Namespace) -> tuple[Path, Path]:
+    raw_default, saida_default = pastas_padrao()
+    raw = args.raw_dir
+    saida = args.saida
+    if getattr(args, "massa_dados", None):
+        raw = _pasta_raw_de_massa(Path(args.massa_dados))
+    if getattr(args, "pasta_saida", None):
+        saida = _pasta_saida_contagil(Path(args.pasta_saida))
+    if raw is None:
+        raw = raw_default
+    if saida is None:
+        saida = saida_default
+    return Path(raw), Path(saida)
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
@@ -153,14 +233,28 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--raw-dir",
         type=Path,
-        default=REPO_ROOT / "data" / "tse2022" / "raw",
-        help="Pasta dos ZIPs baixados.",
+        default=None,
+        help="Pasta dos ZIPs baixados (default: ContAgil dados/tse2022/raw ou data/tse2022/raw).",
     )
     p.add_argument(
         "--saida",
         type=Path,
-        default=REPO_ROOT / "output" / "tse2022",
-        help="Pasta dos CSVs gerados.",
+        default=None,
+        help="Pasta dos CSVs gerados (default: ContAgil saida/tse2022 ou output/tse2022).",
+    )
+    p.add_argument(
+        "--massa-dados",
+        "--pasta-dados",
+        type=Path,
+        default=None,
+        dest="massa_dados",
+        help="ContAgil: pasta dados (ZIPs em dados/tse2022/raw).",
+    )
+    p.add_argument(
+        "--pasta-saida",
+        type=Path,
+        default=None,
+        help="ContAgil: pasta saida (CSVs em saida/tse2022).",
     )
     p.add_argument(
         "--modelo",
@@ -594,11 +688,16 @@ def main(argv: list[str] | None = None) -> int:
     _configure_stdio()
     args = parse_args(argv)
     ufs = normalizar_ufs(args.ufs)
-    raw_dir = args.raw_dir
-    saida = args.saida
+    raw_dir, saida = resolver_pastas(args)
+    raw_dir.mkdir(parents=True, exist_ok=True)
     saida.mkdir(parents=True, exist_ok=True)
 
+    winpy = descobrir_winpython()
+    if winpy is not None:
+        print(f"ContAgil WinPython: {winpy}", flush=True)
     print(f"UFs ({len(ufs)}): {', '.join(ufs)}", flush=True)
+    print(f"ZIPs : {raw_dir}", flush=True)
+    print(f"Saida: {saida}", flush=True)
 
     if not args.somente_processar:
         baixar_todos(
