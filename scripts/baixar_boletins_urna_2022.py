@@ -21,14 +21,18 @@ Uso (repo):
   python3 scripts/baixar_boletins_urna_2022.py --somente-processar
 
 Uso (ContAgil WinPython — duplo-clique):
-  baixar_boletins_urna_2022.bat
-  python baixar_boletins_urna_2022.py --massa-dados dados --pasta-saida saida
+  baixar_zips_urna_curl.bat
+  python baixar_boletins_urna_2022.py --usar-curl --workers 1
+  python baixar_boletins_urna_2022.py --somente-processar
 """
 
 from __future__ import annotations
 
 import argparse
 import io
+import os
+import shutil
+import subprocess
 import sys
 import time
 import zipfile
@@ -278,8 +282,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--workers",
         type=int,
-        default=4,
-        help="Downloads em paralelo (padrão: 4).",
+        default=1,
+        help="Downloads em paralelo (padrão: 1; no ContAgil evite >1).",
     )
     p.add_argument(
         "--timeout",
@@ -290,13 +294,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--tentativas",
         type=int,
-        default=4,
-        help="Tentativas por download (backoff 4/8/16/32s).",
+        default=2,
+        help="Tentativas do Python por URL (padrão: 2). SSL/403 vai direto ao curl.",
     )
     p.add_argument(
         "--gerar-links",
         action="store_true",
         help="Só gera o HTML com links TSE + Archive.org e sai.",
+    )
+    p.add_argument(
+        "--usar-curl",
+        action="store_true",
+        help="Baixa só com curl.exe (SChannel do Windows). Recomendado na RFB.",
     )
     return p.parse_args(argv)
 
@@ -332,9 +341,10 @@ def escrever_pagina_links(destino: Path) -> Path:
         "<!DOCTYPE html><html lang='pt-BR'><head><meta charset='utf-8'>",
         "<title>Boletins de Urna 2022 — download</title></head><body>",
         "<h1>Boletins de Urna 2022 (2º turno)</h1>",
-        "<p>Se o script tomou 403, baixe no navegador e salve em "
-        "<code>dados\\tse2022\\raw</code>. Depois rode com "
-        "<code>--somente-processar</code>.</p><ol>",
+        "<p>Na RFB o Python costuma falhar no TLS do Archive.org. "
+        "Prefira o <code>baixar_zips_urna_curl.bat</code> (usa curl.exe do Windows). "
+        "Ou baixe no navegador e salve em <code>dados\\tse2022\\raw</code>, "
+        "depois: <code>python baixar_boletins_urna_2022.py --somente-processar</code>.</p><ol>",
     ]
     for uf in UFS:
         oficial = url_bweb(uf)
@@ -350,15 +360,236 @@ def escrever_pagina_links(destino: Path) -> Path:
     return destino
 
 
+def e_erro_ssl(exc: BaseException) -> bool:
+    """WinPython/OpenSSL da RFB não fecha handshake com archive.org."""
+    if isinstance(exc, requests.exceptions.SSLError):
+        return True
+    causa = getattr(exc, "__cause__", None)
+    if causa is not None and "SSL" in type(causa).__name__:
+        return True
+    msg = str(exc).lower()
+    return any(
+        trecho in msg
+        for trecho in (
+            "sslv3",
+            "ssl:",
+            "ssl error",
+            "handshake failure",
+            "certificate verify",
+            "sslerror",
+        )
+    )
+
+
+def e_erro_irrecuperavel_python(exc: BaseException) -> bool:
+    """403, TLS quebrado ou timeout: retry do requests não resolve."""
+    status = getattr(getattr(exc, "response", None), "status_code", None)
+    if status == 403:
+        return True
+    if e_erro_ssl(exc):
+        return True
+    msg = str(exc).lower()
+    return "timed out" in msg or "timeout" in msg
+
+
+def resumir_erro_download(exc: BaseException) -> str:
+    status = getattr(getattr(exc, "response", None), "status_code", None)
+    if status:
+        return f"HTTP {status}"
+    if e_erro_ssl(exc):
+        return "falha TLS (Python/OpenSSL; use curl.exe)"
+    msg = str(exc)
+    if "timed out" in msg.lower() or "timeout" in msg.lower():
+        return "timeout"
+    primeira = msg.splitlines()[0].strip()
+    return primeira[:160]
+
+
+def preferir_curl(url: str, plataforma: str | None = None) -> bool:
+    """No Windows, Archive.org via curl.exe (SChannel) evita o bug de TLS."""
+    plat = plataforma if plataforma is not None else sys.platform
+    return plat == "win32" and "web.archive.org" in url
+
+
+def encontrar_curl() -> str | None:
+    if sys.platform == "win32":
+        system32 = (
+            Path(os.environ.get("SystemRoot", r"C:\Windows")) / "System32" / "curl.exe"
+        )
+        if system32.is_file():
+            return str(system32)
+    for nome in ("curl.exe", "curl"):
+        achado = shutil.which(nome)
+        if achado:
+            return achado
+    return None
+
+
+def montar_comando_curl(
+    url: str,
+    destino: Path,
+    *,
+    timeout: int,
+    insecure: bool = False,
+    curl: str = "curl",
+    plataforma: str | None = None,
+) -> list[str]:
+    plat = plataforma if plataforma is not None else sys.platform
+    cmd = [
+        curl,
+        "-L",
+        "--fail",
+        "--retry",
+        "2",
+        "--retry-delay",
+        "4",
+        "--connect-timeout",
+        "45",
+        "--max-time",
+        str(max(60, timeout)),
+        "-A",
+        HEADERS["User-Agent"],
+    ]
+    if plat == "win32":
+        cmd.append("--ssl-no-revoke")
+    if insecure:
+        cmd.append("-k")
+    cmd.extend(["-o", str(destino), "--", url])
+    return cmd
+
+
+def baixar_com_curl(
+    url: str,
+    destino: Path,
+    *,
+    timeout: int = 300,
+    curl: str | None = None,
+) -> Path:
+    """Baixa com curl.exe (SChannel no Windows). Evita o OpenSSL do WinPython."""
+    exe = curl or encontrar_curl()
+    if not exe:
+        raise RuntimeError(
+            "curl.exe nao encontrado. Na RFB use C:\\Windows\\System32\\curl.exe "
+            "ou rode baixar_zips_urna_curl.bat."
+        )
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    if destino.exists():
+        destino.unlink()
+    tentativas_cmd = [
+        montar_comando_curl(url, destino, timeout=timeout, curl=exe),
+    ]
+    if sys.platform == "win32":
+        tentativas_cmd.append(
+            montar_comando_curl(url, destino, timeout=timeout, curl=exe, insecure=True)
+        )
+    last_err: Exception | None = None
+    for i, cmd in enumerate(tentativas_cmd):
+        extra = " (-k)" if i and "-k" in cmd else ""
+        print(f"    CURL{extra} {url}", flush=True)
+        try:
+            proc = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=timeout + 60,
+            )
+        except subprocess.TimeoutExpired:
+            last_err = RuntimeError(f"curl timeout: {url}")
+            if destino.exists():
+                destino.unlink(missing_ok=True)
+            continue
+        if proc.returncode == 0 and destino.exists() and destino.stat().st_size >= 100:
+            return destino
+        if destino.exists():
+            destino.unlink(missing_ok=True)
+        detalhe = (proc.stderr or proc.stdout or "").strip().replace("\n", " ")
+        last_err = RuntimeError(
+            f"curl {proc.returncode}: {detalhe[-240:] or 'sem saida'}"
+        )
+    raise last_err or RuntimeError(f"curl falhou: {url}")
+
+
+def escrever_script_curl(destino: Path) -> Path:
+    """Gera um .bat que baixa os 28 ZIPs com curl.exe do Windows."""
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    linhas = [
+        "@echo off",
+        "REM Gerado pelo script — usa curl.exe do Windows (SChannel).",
+        "setlocal EnableExtensions",
+        'cd /d "%~dp0"',
+        'if not exist "%CD%\\dados" if exist "%CD%\\..\\..\\dados" cd /d "%CD%\\..\\.."',
+        'if not exist "%CD%\\dados" if exist "%CD%\\..\\dados" cd /d "%CD%\\.."',
+        'set "RAW=%CD%\\dados\\tse2022\\raw"',
+        'if not exist "%RAW%" mkdir "%RAW%"',
+        f'set "UA={HEADERS["User-Agent"]}"',
+        'set "TSE=https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"',
+        f'set "IA={WAYBACK_ID_PREFIX}https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"',
+        'set "CURL=%SystemRoot%\\System32\\curl.exe"',
+        'if not exist "%CURL%" set "CURL=curl.exe"',
+        "echo Destino: %RAW%",
+        "echo curl: %CURL%",
+        "echo.",
+    ]
+    for uf in UFS:
+        nome = f"bweb_2t_{uf}_311020221535.zip"
+        linhas.append(f'call :BAIXA "{uf}" "{nome}"')
+    linhas.extend(
+        [
+            "echo.",
+            "echo Processando ZIPs...",
+            "if exist baixar_boletins_urna_2022.py (",
+            '  python baixar_boletins_urna_2022.py --somente-processar --massa-dados "%CD%\\dados" --pasta-saida "%CD%\\saida"',
+            ") else (",
+            "  echo Rode: python baixar_boletins_urna_2022.py --somente-processar",
+            ")",
+            "goto :FIM",
+            "",
+            ":BAIXA",
+            'set "UF=%~1"',
+            'set "NOME=%~2"',
+            'set "DEST=%RAW%\\%NOME%"',
+            'if exist "%DEST%" (',
+            '  for %%A in ("%DEST%") do if %%~zA GTR 1000 (',
+            "    echo [ok] %UF% ja existe",
+            "    goto :EOF",
+            "  )",
+            ")",
+            "echo [TSE] %UF%",
+            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -A "%UA%" -o "%DEST%.part" "%TSE%/%NOME%"',
+            "if not errorlevel 1 (",
+            '  move /Y "%DEST%.part" "%DEST%" >nul',
+            "  echo [ok] %UF% via TSE",
+            "  goto :EOF",
+            ")",
+            "echo [IA] %UF%",
+            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -k -A "%UA%" -o "%DEST%.part" "%IA%/%NOME%"',
+            "if not errorlevel 1 (",
+            '  move /Y "%DEST%.part" "%DEST%" >nul',
+            "  echo [ok] %UF% via Archive.org",
+            "  goto :EOF",
+            ")",
+            "echo [ERRO] %UF%",
+            'if exist "%DEST%.part" del "%DEST%.part"',
+            "goto :EOF",
+            "",
+            ":FIM",
+            "endlocal",
+        ]
+    )
+    destino.write_text("\r\n".join(linhas) + "\r\n", encoding="utf-8")
+    return destino
+
+
 def baixar_arquivo(
     url: str,
     destino: Path,
     *,
     timeout: int = 180,
-    tentativas: int = 4,
+    tentativas: int = 2,
     session: requests.Session | None = None,
+    usar_curl: bool = False,
 ) -> Path:
-    """Baixa um arquivo oficial do TSE com retries e espelho Archive.org."""
+    """Baixa um arquivo oficial do TSE; se falhar, Archive.org; se TLS falhar, curl.exe."""
     destino.parent.mkdir(parents=True, exist_ok=True)
     if destino.exists() and destino.stat().st_size > 0:
         return destino
@@ -366,8 +597,30 @@ def baixar_arquivo(
     http = session or requests.Session()
     last_err: Exception | None = None
     tmp = destino.with_suffix(destino.suffix + ".part")
+
+    def _via_curl(candidato: str) -> bool:
+        nonlocal last_err
+        try:
+            baixar_com_curl(candidato, tmp, timeout=timeout)
+            if tmp.stat().st_size < 100:
+                raise RuntimeError(f"Download vazio: {candidato}")
+            tmp.replace(destino)
+            return True
+        except Exception as exc:
+            last_err = exc
+            if tmp.exists():
+                tmp.unlink(missing_ok=True)
+            print(f"    curl falhou: {resumir_erro_download(exc)}", flush=True)
+            return False
+
     for candidato in urls_espelho(url):
-        for tentativa in range(tentativas):
+        if usar_curl or preferir_curl(candidato):
+            if _via_curl(candidato):
+                return destino
+            if usar_curl:
+                continue
+
+        for tentativa in range(max(1, tentativas)):
             try:
                 print(f"    GET {candidato}", flush=True)
                 with http.get(
@@ -390,18 +643,22 @@ def baixar_arquivo(
                 if status == 403:
                     print(f"    bloqueado (403): {candidato}", flush=True)
                     break
-                if tentativa + 1 >= tentativas:
+                if e_erro_ssl(exc):
+                    print(
+                        "    TLS do Python falhou; tentando curl.exe do Windows...",
+                        flush=True,
+                    )
+                    break
+                if tentativa + 1 >= tentativas or e_erro_irrecuperavel_python(exc):
                     break
                 time.sleep(4 * (2**tentativa))
-    extra = ""
-    resp = getattr(last_err, "response", None)
-    if resp is not None and getattr(resp, "status_code", None) == 403:
-        extra = (
-            " TSE e/ou Archive bloquearam este IP (HTTP 403). "
-            "Abra o HTML de links no navegador, salve os ZIPs em "
-            "dados\\tse2022\\raw e use --somente-processar."
-        )
-    raise RuntimeError(f"Falha ao baixar {url}: {last_err}.{extra}") from last_err
+
+        if _via_curl(candidato):
+            return destino
+
+    raise RuntimeError(
+        f"Falha ao baixar {url}: {resumir_erro_download(last_err or RuntimeError('erro'))}"
+    ) from last_err
 
 
 def ler_csv_tse(fonte: Path | io.BytesIO | io.StringIO) -> pd.DataFrame:
@@ -684,6 +941,7 @@ def baixar_todos(
     tentativas: int,
     baixar_modelo: bool = True,
     modelo_path: Path | None = None,
+    usar_curl: bool = False,
 ) -> dict[str, Path]:
     raw_dir.mkdir(parents=True, exist_ok=True)
     session = requests.Session()
@@ -701,7 +959,12 @@ def baixar_todos(
         chave, url, dest = item
         print(f"  baixando {chave}: {url}", flush=True)
         path = baixar_arquivo(
-            url, dest, timeout=timeout, tentativas=tentativas, session=session
+            url,
+            dest,
+            timeout=timeout,
+            tentativas=tentativas,
+            session=session,
+            usar_curl=usar_curl,
         )
         print(f"  ok {chave} ({path.stat().st_size:,} bytes)", flush=True)
         return chave, path
@@ -720,14 +983,14 @@ def baixar_todos(
                         "usando as faixas oficiais embutidas no script.",
                         flush=True,
                     )
-                    print(f"         ({exc})", flush=True)
+                    print(f"         ({resumir_erro_download(exc)})", flush=True)
                     continue
-                erros.append(f"{chave}: {exc}")
-                print(f"  ERRO {chave}: {exc}", flush=True)
+                erros.append(f"{chave}: {resumir_erro_download(exc)}")
+                print(f"  ERRO {chave}: {resumir_erro_download(exc)}", flush=True)
 
     if erros:
         raise RuntimeError(
-            "Falha em um ou mais downloads do TSE:\n  " + "\n  ".join(erros)
+            "Falha em um ou mais downloads do TSE: " + ", ".join(erros)
         )
     return ok
 
@@ -764,17 +1027,26 @@ def main(argv: list[str] | None = None) -> int:
                 modelo_path=args.modelo
                 if args.modelo and args.modelo.suffix == ".zip"
                 else None,
+                usar_curl=args.usar_curl,
             )
-        except RuntimeError:
+        except RuntimeError as exc:
             html = escrever_pagina_links(saida / "baixar_boletins_links.html")
+            bat_curl = escrever_script_curl(saida / "baixar_zips_urna_curl.bat")
             print(
-                "\nTSE bloqueou o CDN. O script tentou o Archive.org.\n"
-                f"Se ainda falhou, abra no navegador:\n  {html}\n"
+                "\nNao deu para baixar os ZIPs pelo Python.\n"
+                "Na RFB o TSE devolve 403 e o OpenSSL do WinPython "
+                "quebra o TLS com archive.org (handshake failure).\n"
+                "Use o curl.exe do Windows (SChannel):\n"
+                "  baixar_zips_urna_curl.bat\n"
+                f"  (copia gerada em {bat_curl})\n"
+                "Ou: python baixar_boletins_urna_2022.py --usar-curl --workers 1\n"
+                f"Se o curl tambem falhar, abra no Edge:\n  {html}\n"
                 f"Salve os ZIPs em:\n  {raw_dir}\n"
-                "Depois: python baixar_boletins_urna_2022.py --somente-processar\n",
+                "Depois: python baixar_boletins_urna_2022.py --somente-processar\n"
+                f"Detalhe: {exc}\n",
                 flush=True,
             )
-            raise
+            return 2
 
     if args.somente_baixar:
         print(f"Downloads em {raw_dir}")

@@ -53,9 +53,9 @@ echo Instalando pandas/requests se preciso... >> "%LOG%"
 
 set "PYTHONPATH=%WINPY%;%PYTHONPATH%"
 if exist "%RUNNER%" (
-  "%PYTHON%" "%RUNNER%" --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" %* >> "%LOG%" 2>&1
+  "%PYTHON%" "%RUNNER%" --usar-curl --workers 1 --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" %* >> "%LOG%" 2>&1
 ) else (
-  "%PYTHON%" "%PKG%" --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" %* >> "%LOG%" 2>&1
+  "%PYTHON%" "%PKG%" --usar-curl --workers 1 --massa-dados "%DADOS%" --pasta-saida "%SAIDA%" %* >> "%LOG%" 2>&1
 )
 echo ---- fim ERRORLEVEL=%ERRORLEVEL% %DATE% %TIME% ---->> "%LOG%"
 
@@ -69,8 +69,9 @@ if exist "%OUT%\urnas_2t_presidente.csv" (
   explorer /select,"%OUT%\urnas_2t_presidente.csv"
 ) else (
   echo FALHOU. Veja %LOG%
-  echo O script agora tenta o Archive.org se o TSE bloquear.
-  echo Se ainda falhar, abra o HTML de links no Edge e salve os ZIPs em:
+  echo Na RFB o Python nao fecha TLS com archive.org.
+  echo Rode em vez disso: baixar_zips_urna_curl.bat
+  echo Ou abra o HTML de links no Edge e salve os ZIPs em:
   echo   %RAW%
   echo Depois: baixar_boletins_urna_2022.bat --somente-processar
   if exist "%OUT%\baixar_boletins_links.html" start "" "%OUT%\baixar_boletins_links.html"

@@ -8,27 +8,35 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+import requests
+
 from scripts.baixar_boletins_urna_2022 import (
     UFS,
     _pasta_raw_de_massa,
     _pasta_saida_contagil,
     _parece_winpython,
+    baixar_arquivo,
     carregar_faixas_modelo,
     classificar_modelo,
     consolidar_urnas,
     descobrir_winpython,
+    e_erro_ssl,
+    escrever_pagina_links,
+    escrever_script_curl,
     filtrar_presidente_2t,
     ler_csv_tse,
+    montar_comando_curl,
     normalizar_ufs,
     parse_args,
     pastas_padrao,
+    preferir_curl,
     processar_zip_bweb,
     resolver_pastas,
-    urls_espelho,
-    escrever_pagina_links,
     resumo_por_modelo,
+    resumir_erro_download,
     rotulo_modelo,
     url_bweb,
+    urls_espelho,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures" / "tse2022"
@@ -154,7 +162,93 @@ def test_pagina_links_tem_28_ufs(tmp_path: Path):
     texto = html.read_text(encoding="utf-8")
     assert "bweb_2t_SP_311020221535.zip" in texto
     assert "web.archive.org" in texto
+    assert "baixar_zips_urna_curl.bat" in texto
     assert texto.count("<li>") == 28
+
+
+def test_ssl_e_curl_windows():
+    assert e_erro_ssl(requests.exceptions.SSLError("sslv3 alert handshake failure"))
+    assert "TLS" in resumir_erro_download(
+        requests.exceptions.SSLError("SSLV3_ALERT_HANDSHAKE_FAILURE")
+    )
+    assert preferir_curl(
+        "https://web.archive.org/web/2023id_/https://cdn.tse.jus.br/x.zip",
+        plataforma="win32",
+    )
+    assert not preferir_curl("https://cdn.tse.jus.br/x.zip", plataforma="win32")
+    assert not preferir_curl(
+        "https://web.archive.org/web/2023id_/https://cdn.tse.jus.br/x.zip",
+        plataforma="linux",
+    )
+
+    dest = Path("ac.zip")
+    win = montar_comando_curl(
+        "https://example.test/a.zip", dest, timeout=120, curl="curl.exe", plataforma="win32"
+    )
+    assert "--ssl-no-revoke" in win
+    assert "-k" not in win
+    assert win[-1] == "https://example.test/a.zip"
+    insecure = montar_comando_curl(
+        "https://example.test/a.zip",
+        dest,
+        timeout=120,
+        curl="curl.exe",
+        plataforma="win32",
+        insecure=True,
+    )
+    assert "-k" in insecure
+    linux = montar_comando_curl(
+        "https://example.test/a.zip", dest, timeout=90, curl="curl", plataforma="linux"
+    )
+    assert "--ssl-no-revoke" not in linux
+
+
+def test_baixar_arquivo_usa_curl_apos_ssl(tmp_path: Path, monkeypatch):
+    dest = tmp_path / "bweb.zip"
+    chamadas_get: list[str] = []
+
+    class BoomSession:
+        def get(self, url, **_kwargs):
+            chamadas_get.append(url)
+            raise requests.exceptions.SSLError(
+                "SSLV3_ALERT_HANDSHAKE_FAILURE sslv3 alert handshake failure"
+            )
+
+    def fake_curl(url, destino, **_kwargs):
+        destino.write_bytes(b"PK" + b"\x00" * 200)
+        return destino
+
+    monkeypatch.setattr(
+        "scripts.baixar_boletins_urna_2022.baixar_com_curl", fake_curl
+    )
+    out = baixar_arquivo(
+        "https://cdn.tse.jus.br/estatistica/sead/x.zip",
+        dest,
+        timeout=10,
+        tentativas=4,
+        session=BoomSession(),
+    )
+    assert out == dest
+    assert dest.stat().st_size > 100
+    assert len(chamadas_get) == 1
+
+
+def test_script_curl_lista_28_ufs(tmp_path: Path):
+    bat = escrever_script_curl(tmp_path / "baixar_zips_urna_curl.bat")
+    texto = bat.read_text(encoding="utf-8")
+    assert "curl.exe" in texto
+    assert "--ssl-no-revoke" in texto
+    assert texto.count("bweb_2t_") >= 28
+    assert "bweb_2t_ZZ_311020221535.zip" in texto
+    assert "--somente-processar" in texto
+
+
+def test_padrao_workers_um_e_usar_curl():
+    args = parse_args([])
+    assert args.workers == 1
+    assert args.tentativas == 2
+    assert args.usar_curl is False
+    assert parse_args(["--usar-curl"]).usar_curl is True
 
 
 def test_entrypoint_contagil_carrega_scripts(tmp_path: Path, monkeypatch):
