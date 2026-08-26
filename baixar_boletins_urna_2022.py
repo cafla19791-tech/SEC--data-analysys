@@ -35,8 +35,12 @@ def _load_main():
         spec.loader.exec_module(mod)
         return mod.main
     raise FileNotFoundError(
-        "Nao achei baixar_boletins_urna_2022.py em sec_scripts\\ nem scripts\\. "
-        "Rode baixar_boletins_urna_2022.ps1 nesta pasta winpython."
+        "No ContAgil NAO use: python scripts\\baixar_boletins_urna_2022.py\n"
+        "(essa pasta e o Scripts do pip). Use:\n"
+        "  python baixar_boletins_urna_2022.py\n"
+        "ou duplo-clique em baixar_boletins_urna_2022.bat\n"
+        "Se o arquivo nao existir, rode baixar_boletins_urna_2022.ps1 "
+        "ou o bloco curl na pasta winpython."
     )
 
 

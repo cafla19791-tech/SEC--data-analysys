@@ -25,11 +25,24 @@ echo Saida : %OUT%
 echo.
 
 echo ---- inicio %DATE% %TIME% ---- > "%LOG%"
-if not exist "%RUNNER%" if not exist "%PKG%" (
-  echo [ERRO] Falta baixar_boletins_urna_2022.py >> "%LOG%"
-  echo [ERRO] Falta o script. Rode baixar_boletins_urna_2022.ps1 nesta pasta winpython.
-  goto :SHOW
+
+REM Nao use winpython\scripts\ — no Windows isso cai em Scripts\ (pip).
+set "BASE=https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/cursor/tse-boletins-urna-209b"
+if not exist "%WINPY%\sec_scripts" mkdir "%WINPY%\sec_scripts"
+if not exist "%WINPY%\sec_scripts\baixar_boletins_urna_2022.py" (
+  echo Baixando script do GitHub para sec_scripts\ ...
+  echo Baixando script do GitHub >> "%LOG%"
+  curl.exe -fsSL -o "%WINPY%\sec_scripts\baixar_boletins_urna_2022.py" "%BASE%/scripts/baixar_boletins_urna_2022.py"
+  if errorlevel 1 (
+    echo [ERRO] Nao consegui baixar o .py. Cole no cmd o bloco curl do README. >> "%LOG%"
+    echo [ERRO] Falta o script e o download do GitHub falhou.
+    goto :SHOW
+  )
 )
+if not exist "%RUNNER%" (
+  curl.exe -fsSL -o "%RUNNER%" "%BASE%/baixar_boletins_urna_2022.py" >nul 2>&1
+)
+set "PKG=%WINPY%\sec_scripts\baixar_boletins_urna_2022.py"
 if not exist "%DADOS%" mkdir "%DADOS%"
 if not exist "%SAIDA%" mkdir "%SAIDA%"
 if not exist "%RAW%" mkdir "%RAW%"
