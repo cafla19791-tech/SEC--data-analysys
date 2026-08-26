@@ -14,9 +14,10 @@ set "WINPY=%CD%"
 set "RAW=%WINPY%\dados\tse2022\raw"
 set "SAIDA=%WINPY%\saida\tse2022"
 set "LOG=%WINPY%\baixar_zips_urna_curl.log"
-set "UA=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+set "UA_TSE=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+set "UA_IA=ContAgil-TSE-BU/1.0"
 set "TSE=https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"
-set "IA=https://web.archive.org/web/2023id_/https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"
+set "IA=https://web.archive.org/web/20221108000702id_/https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"
 set "CURL=%SystemRoot%\System32\curl.exe"
 if not exist "%CURL%" set "CURL=curl.exe"
 if not exist "%RAW%" mkdir "%RAW%"
@@ -73,7 +74,7 @@ if exist "%DEST%" (
 )
 echo [TSE] %UF%
 echo [TSE] %UF% >> "%LOG%"
-"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -A "%UA%" -o "%DEST%.part" "%TSE%/%NOME%"
+"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -A "%UA_TSE%" -o "%DEST%.part" "%TSE%/%NOME%"
 if not errorlevel 1 (
   move /Y "%DEST%.part" "%DEST%" >nul
   echo [ok] %UF% via TSE
@@ -82,7 +83,7 @@ if not errorlevel 1 (
 )
 echo [IA] %UF%
 echo [IA] %UF% >> "%LOG%"
-"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -k -A "%UA%" -o "%DEST%.part" "%IA%/%NOME%"
+"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -k -A "%UA_IA%" -o "%DEST%.part" "%IA%/%NOME%"
 if not errorlevel 1 (
   move /Y "%DEST%.part" "%DEST%" >nul
   echo [ok] %UF% via Archive.org

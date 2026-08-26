@@ -82,8 +82,12 @@ MODELO_URL = (
     "modelourna_numerointerno.zip"
 )
 # O CDN do TSE costuma devolver 403 para scripts. O Internet Archive
-# guardou os ZIPs oficiais (captura nov/2022); 2023id_ resolve a cópia.
+# guardou os ZIPs oficiais (captura 2022-11-08). 2023id_ resolve a cópia
+# mais recente; o timestamp fixo evita o 302 que às vezes devolve 503.
+WAYBACK_TS_PREFIX = "https://web.archive.org/web/20221108000702id_/"
 WAYBACK_ID_PREFIX = "https://web.archive.org/web/2023id_/"
+# Chrome UA no Archive.org devolve 503; no TSE ajuda a passar o WAF.
+USER_AGENT_ARQUIVO = "ContAgil-TSE-BU/1.0"
 
 # Faixas oficiais TSE (STI/COTEL): número interno → modelo.
 # Mesmo conteúdo de modelourna_numerointerno.csv (publicado em 05/11/2022).
@@ -329,9 +333,27 @@ def url_bweb(uf: str) -> str:
 
 def urls_espelho(url: str) -> list[str]:
     """TSE oficial primeiro; Internet Archive se o CDN bloquear."""
-    if url.startswith(WAYBACK_ID_PREFIX):
+    if url.startswith("https://web.archive.org/"):
         return [url]
-    return [url, f"{WAYBACK_ID_PREFIX}{url}"]
+    return [
+        url,
+        f"{WAYBACK_TS_PREFIX}{url}",
+        f"{WAYBACK_ID_PREFIX}{url}",
+    ]
+
+
+def user_agent_para(url: str) -> str:
+    if "web.archive.org" in url:
+        return USER_AGENT_ARQUIVO
+    return HEADERS["User-Agent"]
+
+
+def cabecalhos_para(url: str) -> dict[str, str]:
+    headers = dict(HEADERS)
+    headers["User-Agent"] = user_agent_para(url)
+    if "web.archive.org" in url:
+        headers["Referer"] = "https://web.archive.org/"
+    return headers
 
 
 def escrever_pagina_links(destino: Path) -> Path:
@@ -448,7 +470,7 @@ def montar_comando_curl(
         "--max-time",
         str(max(60, timeout)),
         "-A",
-        HEADERS["User-Agent"],
+        user_agent_para(url),
     ]
     if plat == "win32":
         cmd.append("--ssl-no-revoke")
@@ -521,9 +543,10 @@ def escrever_script_curl(destino: Path) -> Path:
         'if not exist "%CD%\\dados" if exist "%CD%\\..\\dados" cd /d "%CD%\\.."',
         'set "RAW=%CD%\\dados\\tse2022\\raw"',
         'if not exist "%RAW%" mkdir "%RAW%"',
-        f'set "UA={HEADERS["User-Agent"]}"',
+        f'set "UA_TSE={HEADERS["User-Agent"]}"',
+        f'set "UA_IA={USER_AGENT_ARQUIVO}"',
         'set "TSE=https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"',
-        f'set "IA={WAYBACK_ID_PREFIX}https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"',
+        f'set "IA={WAYBACK_TS_PREFIX}https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb"',
         'set "CURL=%SystemRoot%\\System32\\curl.exe"',
         'if not exist "%CURL%" set "CURL=curl.exe"',
         "echo Destino: %RAW%",
@@ -555,14 +578,14 @@ def escrever_script_curl(destino: Path) -> Path:
             "  )",
             ")",
             "echo [TSE] %UF%",
-            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -A "%UA%" -o "%DEST%.part" "%TSE%/%NOME%"',
+            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -A "%UA_TSE%" -o "%DEST%.part" "%TSE%/%NOME%"',
             "if not errorlevel 1 (",
             '  move /Y "%DEST%.part" "%DEST%" >nul',
             "  echo [ok] %UF% via TSE",
             "  goto :EOF",
             ")",
             "echo [IA] %UF%",
-            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -k -A "%UA%" -o "%DEST%.part" "%IA%/%NOME%"',
+            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -k -A "%UA_IA%" -o "%DEST%.part" "%IA%/%NOME%"',
             "if not errorlevel 1 (",
             '  move /Y "%DEST%.part" "%DEST%" >nul',
             "  echo [ok] %UF% via Archive.org",
@@ -624,7 +647,10 @@ def baixar_arquivo(
             try:
                 print(f"    GET {candidato}", flush=True)
                 with http.get(
-                    candidato, headers=HEADERS, stream=True, timeout=timeout
+                    candidato,
+                    headers=cabecalhos_para(candidato),
+                    stream=True,
+                    timeout=timeout,
                 ) as resp:
                     resp.raise_for_status()
                     with tmp.open("wb") as fh:

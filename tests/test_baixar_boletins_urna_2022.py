@@ -37,6 +37,7 @@ from scripts.baixar_boletins_urna_2022 import (
     rotulo_modelo,
     url_bweb,
     urls_espelho,
+    user_agent_para,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures" / "tse2022"
@@ -55,8 +56,9 @@ def test_url_oficial_por_uf():
     assert "eleicoes2022/buweb" in url
     espelhos = urls_espelho(url)
     assert espelhos[0] == url
-    assert espelhos[1].startswith("https://web.archive.org/web/2023id_/")
-    assert espelhos[1].endswith(url)
+    assert any("/20221108000702id_/" in u for u in espelhos)
+    assert any("/2023id_/" in u for u in espelhos)
+    assert espelhos[-1].endswith(url)
 
 
 def test_normalizar_ufs_rejeita_invalida():
@@ -182,12 +184,15 @@ def test_ssl_e_curl_windows():
     )
 
     dest = Path("ac.zip")
+    assert user_agent_para("https://web.archive.org/web/x").startswith("ContAgil")
+    assert "Mozilla" in user_agent_para("https://cdn.tse.jus.br/x.zip")
     win = montar_comando_curl(
-        "https://example.test/a.zip", dest, timeout=120, curl="curl.exe", plataforma="win32"
+        "https://web.archive.org/web/x.zip", dest, timeout=120, curl="curl.exe", plataforma="win32"
     )
     assert "--ssl-no-revoke" in win
     assert "-k" not in win
-    assert win[-1] == "https://example.test/a.zip"
+    assert "ContAgil-TSE-BU/1.0" in win
+    assert win[-1] == "https://web.archive.org/web/x.zip"
     insecure = montar_comando_curl(
         "https://example.test/a.zip",
         dest,
@@ -238,6 +243,8 @@ def test_script_curl_lista_28_ufs(tmp_path: Path):
     texto = bat.read_text(encoding="utf-8")
     assert "curl.exe" in texto
     assert "--ssl-no-revoke" in texto
+    assert "ContAgil-TSE-BU/1.0" in texto
+    assert "20221108000702id_" in texto
     assert texto.count("bweb_2t_") >= 28
     assert "bweb_2t_ZZ_311020221535.zip" in texto
     assert "--somente-processar" in texto
