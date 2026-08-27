@@ -74,16 +74,16 @@ if exist "%DEST%" (
 )
 echo [TSE] %UF%
 echo [TSE] %UF% >> "%LOG%"
-"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -A "%UA_TSE%" -o "%DEST%.part" "%TSE%/%NOME%"
+"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke --tls-max 1.2 --http1.1 -A "%UA_TSE%" -o "%DEST%.part" "%TSE%/%NOME%"
 if not errorlevel 1 (
   move /Y "%DEST%.part" "%DEST%" >nul
   echo [ok] %UF% via TSE
   echo [ok] %UF% via TSE >> "%LOG%"
   goto :EOF
 )
-echo [IA] %UF%
-echo [IA] %UF% >> "%LOG%"
-"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -k -A "%UA_IA%" -o "%DEST%.part" "%IA%/%NOME%"
+echo [IA TLS1.2] %UF%
+echo [IA TLS1.2] %UF% >> "%LOG%"
+"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke --tls-max 1.2 --http1.1 -k -A "%UA_IA%" -o "%DEST%.part" "%IA%/%NOME%"
 if not errorlevel 1 (
   move /Y "%DEST%.part" "%DEST%" >nul
   echo [ok] %UF% via Archive.org

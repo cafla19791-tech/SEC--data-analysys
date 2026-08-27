@@ -68,6 +68,8 @@ copy /Y "%REPO%\baixar_boletins_urna_2022.py" "%WINPY%\" >nul
 copy /Y "%REPO%\baixar_boletins_urna_2022.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\baixar_boletins_urna_2022.ps1" "%WINPY%\" >nul
 copy /Y "%REPO%\baixar_zips_urna_curl.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_zips_urna.ps1" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_resultado_urna_github.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\requirements.txt" "%WINPY%\requirements_sec.txt" >nul
 
 echo OK. Arquivos copiados.
@@ -83,6 +85,8 @@ echo Relatorio:
 echo   resumo_fluxos_contagil.bat
 echo.
 echo Boletins de urna 2022 ^(28 UFs, serie + modelo^):
+echo   baixar_resultado_urna_github.bat
+echo   baixar_zips_urna.ps1
 echo   baixar_zips_urna_curl.bat
 echo   baixar_boletins_urna_2022.bat
 echo   Saida: %WINPY%\saida\tse2022\urnas_2t_presidente.csv

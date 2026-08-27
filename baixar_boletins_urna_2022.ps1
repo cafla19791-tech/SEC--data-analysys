@@ -32,6 +32,8 @@ $map = @(
     @{ Remote = "baixar_boletins_urna_2022.bat"; Local = "baixar_boletins_urna_2022.bat" },
     @{ Remote = "baixar_boletins_urna_2022.py"; Local = "baixar_boletins_urna_2022.py" },
     @{ Remote = "baixar_zips_urna_curl.bat"; Local = "baixar_zips_urna_curl.bat" },
+    @{ Remote = "baixar_zips_urna.ps1"; Local = "baixar_zips_urna.ps1" },
+    @{ Remote = "baixar_resultado_urna_github.bat"; Local = "baixar_resultado_urna_github.bat" },
     @{ Remote = "scripts/baixar_boletins_urna_2022.py"; Local = "sec_scripts/baixar_boletins_urna_2022.py" }
 )
 
@@ -62,7 +64,7 @@ if ($py -and (Test-Path -LiteralPath $py)) {
 }
 
 Write-Host ""
-Write-Host "OK. Na RFB, de duplo-clique em baixar_zips_urna_curl.bat"
+Write-Host "OK. Na RFB, de duplo-clique em baixar_resultado_urna_github.bat"
 Write-Host "  ZIPs  : $Root\dados\tse2022\raw"
 Write-Host "  Saida : $Root\saida\tse2022\urnas_2t_presidente.csv"
 Write-Host ""

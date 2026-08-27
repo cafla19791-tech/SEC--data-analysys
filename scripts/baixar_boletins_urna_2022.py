@@ -29,6 +29,7 @@ Uso (ContAgil WinPython — duplo-clique):
 from __future__ import annotations
 
 import argparse
+import gzip
 import io
 import os
 import shutil
@@ -88,6 +89,12 @@ WAYBACK_TS_PREFIX = "https://web.archive.org/web/20221108000702id_/"
 WAYBACK_ID_PREFIX = "https://web.archive.org/web/2023id_/"
 # Chrome UA no Archive.org devolve 503; no TSE ajuda a passar o WAF.
 USER_AGENT_ARQUIVO = "ContAgil-TSE-BU/1.0"
+# CSVs já consolidados (oficial BU → uma linha por urna). A RFB alcança o GitHub.
+RESULTADO_GITHUB_REF = "cursor/tse-boletins-urna-209b"
+RESULTADO_GITHUB_BASE = (
+    "https://raw.githubusercontent.com/cafla19791-tech/SEC--data-analysys/"
+    f"{RESULTADO_GITHUB_REF}/output/tse2022/"
+)
 
 # Faixas oficiais TSE (STI/COTEL): número interno → modelo.
 # Mesmo conteúdo de modelourna_numerointerno.csv (publicado em 05/11/2022).
@@ -309,7 +316,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--usar-curl",
         action="store_true",
-        help="Baixa só com curl.exe (SChannel do Windows). Recomendado na RFB.",
+        help="Baixa só com curl.exe (SChannel do Windows, TLS 1.2).",
+    )
+    p.add_argument(
+        "--somente-resultado-github",
+        action="store_true",
+        help="Baixa do GitHub o CSV nacional já consolidado (funciona na RFB).",
     )
     return p.parse_args(argv)
 
@@ -334,6 +346,8 @@ def url_bweb(uf: str) -> str:
 def urls_espelho(url: str) -> list[str]:
     """TSE oficial primeiro; Internet Archive se o CDN bloquear."""
     if url.startswith("https://web.archive.org/"):
+        return [url]
+    if "githubusercontent.com" in url or "github.com" in url:
         return [url]
     return [
         url,
@@ -363,10 +377,13 @@ def escrever_pagina_links(destino: Path) -> Path:
         "<!DOCTYPE html><html lang='pt-BR'><head><meta charset='utf-8'>",
         "<title>Boletins de Urna 2022 — download</title></head><body>",
         "<h1>Boletins de Urna 2022 (2º turno)</h1>",
-        "<p>Na RFB o Python costuma falhar no TLS do Archive.org. "
-        "Prefira o <code>baixar_zips_urna_curl.bat</code> (usa curl.exe do Windows). "
-        "Ou baixe no navegador e salve em <code>dados\\tse2022\\raw</code>, "
-        "depois: <code>python baixar_boletins_urna_2022.py --somente-processar</code>.</p><ol>",
+        "<p>Na RFB o TSE devolve 403 e o Archive.org quebra TLS 1.3 do Schannel "
+        "(<code>SEC_E_ILLEGAL_MESSAGE</code>). Caminhos:</p><ol>"
+        "<li><code>python baixar_boletins_urna_2022.py --somente-resultado-github</code> "
+        "(CSV nacional já consolidado, via GitHub)</li>"
+        "<li><code>baixar_zips_urna.ps1</code> (proxy Windows + TLS 1.2)</li>"
+        "<li>Baixe no Edge e salve em <code>dados\\tse2022\\raw</code>, "
+        "depois <code>--somente-processar</code>.</li></ol><p>Links por UF:</p><ol>",
     ]
     for uf in UFS:
         oficial = url_bweb(uf)
@@ -418,8 +435,8 @@ def resumir_erro_download(exc: BaseException) -> str:
     status = getattr(getattr(exc, "response", None), "status_code", None)
     if status:
         return f"HTTP {status}"
-    if e_erro_ssl(exc):
-        return "falha TLS (Python/OpenSSL; use curl.exe)"
+    if e_erro_ssl(exc) or "sec_e_illegal_message" in str(exc).lower() or "curl 35" in str(exc).lower():
+        return "falha TLS (Schannel/OpenSSL; tente TLS 1.2 ou o CSV no GitHub)"
     msg = str(exc)
     if "timed out" in msg.lower() or "timeout" in msg.lower():
         return "timeout"
@@ -447,6 +464,42 @@ def encontrar_curl() -> str | None:
     return None
 
 
+def detectar_proxy_windows() -> str | None:
+    """Proxy do ambiente ou das opções da Internet (RFB)."""
+    for chave in ("HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy"):
+        valor = os.environ.get(chave, "").strip()
+        if valor:
+            return valor
+    if sys.platform != "win32":
+        return None
+    try:
+        import winreg
+
+        with winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Software\Microsoft\Windows\CurrentVersion\Internet Settings",
+        ) as key:
+            enable, _ = winreg.QueryValueEx(key, "ProxyEnable")
+            if not enable:
+                return None
+            server, _ = winreg.QueryValueEx(key, "ProxyServer")
+    except OSError:
+        return None
+    server = str(server).strip()
+    if not server:
+        return None
+    if "=" in server:
+        pares = dict(
+            parte.split("=", 1) for parte in server.split(";") if "=" in parte
+        )
+        server = pares.get("https") or pares.get("http") or ""
+    if not server:
+        return None
+    if "://" not in server:
+        server = "http://" + server
+    return server
+
+
 def montar_comando_curl(
     url: str,
     destino: Path,
@@ -455,6 +508,8 @@ def montar_comando_curl(
     insecure: bool = False,
     curl: str = "curl",
     plataforma: str | None = None,
+    tls12: bool = True,
+    proxy: str | None = None,
 ) -> list[str]:
     plat = plataforma if plataforma is not None else sys.platform
     cmd = [
@@ -474,8 +529,13 @@ def montar_comando_curl(
     ]
     if plat == "win32":
         cmd.append("--ssl-no-revoke")
+    if tls12:
+        # Schannel + TLS 1.3 no archive.org → SEC_E_ILLEGAL_MESSAGE (0x80090326).
+        cmd.extend(["--tls-max", "1.2", "--http1.1"])
     if insecure:
         cmd.append("-k")
+    if proxy:
+        cmd.extend(["-x", proxy, "--proxy-ntlm", "--proxy-user", ":"])
     cmd.extend(["-o", str(destino), "--", url])
     return cmd
 
@@ -487,27 +547,29 @@ def baixar_com_curl(
     timeout: int = 300,
     curl: str | None = None,
 ) -> Path:
-    """Baixa com curl.exe (SChannel no Windows). Evita o OpenSSL do WinPython."""
+    """Baixa com curl.exe (SChannel + TLS 1.2 no Windows)."""
     exe = curl or encontrar_curl()
     if not exe:
         raise RuntimeError(
             "curl.exe nao encontrado. Na RFB use C:\\Windows\\System32\\curl.exe "
-            "ou rode baixar_zips_urna_curl.bat."
+            "ou rode baixar_zips_urna.ps1 / --somente-resultado-github."
         )
     destino.parent.mkdir(parents=True, exist_ok=True)
     if destino.exists():
         destino.unlink()
-    tentativas_cmd = [
-        montar_comando_curl(url, destino, timeout=timeout, curl=exe),
+    proxy = detectar_proxy_windows()
+    variantes: list[tuple[str, dict]] = [
+        ("TLS1.2", {"tls12": True, "insecure": False, "proxy": None}),
+        ("TLS1.2 -k", {"tls12": True, "insecure": True, "proxy": None}),
     ]
-    if sys.platform == "win32":
-        tentativas_cmd.append(
-            montar_comando_curl(url, destino, timeout=timeout, curl=exe, insecure=True)
+    if proxy:
+        variantes.append(
+            ("TLS1.2 proxy", {"tls12": True, "insecure": True, "proxy": proxy})
         )
     last_err: Exception | None = None
-    for i, cmd in enumerate(tentativas_cmd):
-        extra = " (-k)" if i and "-k" in cmd else ""
-        print(f"    CURL{extra} {url}", flush=True)
+    for rotulo, kwargs in variantes:
+        cmd = montar_comando_curl(url, destino, timeout=timeout, curl=exe, **kwargs)
+        print(f"    CURL ({rotulo}) {url}", flush=True)
         try:
             proc = subprocess.run(
                 cmd,
@@ -528,7 +590,80 @@ def baixar_com_curl(
         last_err = RuntimeError(
             f"curl {proc.returncode}: {detalhe[-240:] or 'sem saida'}"
         )
+        if proc.returncode == 22 and "403" in detalhe:
+            break
+    if sys.platform == "win32":
+        try:
+            return baixar_com_powershell(url, destino, timeout=timeout)
+        except Exception as exc:
+            last_err = exc
     raise last_err or RuntimeError(f"curl falhou: {url}")
+
+
+def baixar_com_powershell(
+    url: str,
+    destino: Path,
+    *,
+    timeout: int = 300,
+) -> Path:
+    """WinHTTP + proxy corporativo (NTLM) — costuma passar na RFB quando o curl não."""
+    if sys.platform != "win32":
+        raise RuntimeError("PowerShell só no Windows")
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    if destino.exists():
+        destino.unlink()
+    print(f"    PS1 {url}", flush=True)
+    script = (
+        "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; "
+        "$ProgressPreference = 'SilentlyContinue'; "
+        f"$dest = {str(destino)!r}; "
+        f"$url = {url!r}; "
+        "$wc = New-Object System.Net.WebClient; "
+        f"$wc.Headers.Add('User-Agent', {user_agent_para(url)!r}); "
+        "try { $p = [System.Net.WebRequest]::GetSystemWebProxy(); "
+        "$p.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials; "
+        "$wc.Proxy = $p } catch {}; "
+        "$wc.DownloadFile($url, $dest)"
+    )
+    proc = subprocess.run(
+        [
+            "powershell.exe",
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-Command",
+            script,
+        ],
+        capture_output=True,
+        text=True,
+        timeout=timeout + 60,
+    )
+    if proc.returncode != 0 or not destino.exists() or destino.stat().st_size < 100:
+        if destino.exists():
+            destino.unlink(missing_ok=True)
+        detalhe = (proc.stderr or proc.stdout or "").strip().replace("\n", " ")
+        raise RuntimeError(f"powershell: {detalhe[-240:] or proc.returncode}")
+    return destino
+
+
+def baixar_resultado_github(saida: Path, *, timeout: int = 180) -> dict[str, Path]:
+    """Baixa o CSV nacional já consolidado (GitHub raw — liberado na RFB)."""
+    saida.mkdir(parents=True, exist_ok=True)
+    arquivos = {
+        "urnas_2t_presidente.csv.gz": saida / "urnas_2t_presidente.csv.gz",
+        "resumo_por_uf.csv": saida / "resumo_por_uf.csv",
+        "resumo_por_modelo.csv": saida / "resumo_por_modelo.csv",
+    }
+    for nome, dest in arquivos.items():
+        url = RESULTADO_GITHUB_BASE + nome
+        print(f"  github {nome}", flush=True)
+        baixar_arquivo(url, dest, timeout=timeout, tentativas=1, usar_curl=True)
+    gz = arquivos["urnas_2t_presidente.csv.gz"]
+    csv = saida / "urnas_2t_presidente.csv"
+    with gzip.open(gz, "rb") as src, csv.open("wb") as dst:
+        dst.write(src.read())
+    print(f"  extraido {csv} ({csv.stat().st_size:,} bytes)", flush=True)
+    return {"detalhe": csv, "por_uf": arquivos["resumo_por_uf.csv"], "por_modelo": arquivos["resumo_por_modelo.csv"]}
 
 
 def escrever_script_curl(destino: Path) -> Path:
@@ -578,14 +713,14 @@ def escrever_script_curl(destino: Path) -> Path:
             "  )",
             ")",
             "echo [TSE] %UF%",
-            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -A "%UA_TSE%" -o "%DEST%.part" "%TSE%/%NOME%"',
+            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke --tls-max 1.2 --http1.1 -A "%UA_TSE%" -o "%DEST%.part" "%TSE%/%NOME%"',
             "if not errorlevel 1 (",
             '  move /Y "%DEST%.part" "%DEST%" >nul',
             "  echo [ok] %UF% via TSE",
             "  goto :EOF",
             ")",
             "echo [IA] %UF%",
-            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke -k -A "%UA_IA%" -o "%DEST%.part" "%IA%/%NOME%"',
+            '"%CURL%" -L --fail --retry 2 --connect-timeout 45 --max-time 600 --ssl-no-revoke --tls-max 1.2 --http1.1 -k -A "%UA_IA%" -o "%DEST%.part" "%IA%/%NOME%"',
             "if not errorlevel 1 (",
             '  move /Y "%DEST%.part" "%DEST%" >nul',
             "  echo [ok] %UF% via Archive.org",
@@ -1041,6 +1176,13 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Abra no navegador: {html}")
         return 0
 
+    if args.somente_resultado_github:
+        caminhos = baixar_resultado_github(saida, timeout=args.timeout)
+        print(f"Detalhe: {caminhos['detalhe']}")
+        print(f"Por UF: {caminhos['por_uf']}")
+        print(f"Por modelo: {caminhos['por_modelo']}")
+        return 0
+
     if not args.somente_processar:
         try:
             baixar_todos(
@@ -1059,16 +1201,15 @@ def main(argv: list[str] | None = None) -> int:
             html = escrever_pagina_links(saida / "baixar_boletins_links.html")
             bat_curl = escrever_script_curl(saida / "baixar_zips_urna_curl.bat")
             print(
-                "\nNao deu para baixar os ZIPs pelo Python.\n"
-                "Na RFB o TSE devolve 403 e o OpenSSL do WinPython "
-                "quebra o TLS com archive.org (handshake failure).\n"
-                "Use o curl.exe do Windows (SChannel):\n"
-                "  baixar_zips_urna_curl.bat\n"
-                f"  (copia gerada em {bat_curl})\n"
-                "Ou: python baixar_boletins_urna_2022.py --usar-curl --workers 1\n"
-                f"Se o curl tambem falhar, abra no Edge:\n  {html}\n"
-                f"Salve os ZIPs em:\n  {raw_dir}\n"
-                "Depois: python baixar_boletins_urna_2022.py --somente-processar\n"
+                "\nNao deu para baixar os ZIPs oficiais daqui.\n"
+                "Na RFB: TSE=403; Archive.org quebra TLS 1.3 do Schannel "
+                "(SEC_E_ILLEGAL_MESSAGE).\n"
+                "Caminho que ja funcionou na RFB (GitHub):\n"
+                "  python baixar_boletins_urna_2022.py --somente-resultado-github\n"
+                "  ou baixar_resultado_urna_github.bat\n"
+                "Outros: baixar_zips_urna.ps1 (proxy + TLS 1.2) ou Edge:\n"
+                f"  {html}\n"
+                f"Salve ZIPs em {raw_dir} e use --somente-processar\n"
                 f"Detalhe: {exc}\n",
                 flush=True,
             )

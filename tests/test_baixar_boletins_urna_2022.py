@@ -21,6 +21,7 @@ from scripts.baixar_boletins_urna_2022 import (
     consolidar_urnas,
     descobrir_winpython,
     e_erro_ssl,
+    detectar_proxy_windows,
     escrever_pagina_links,
     escrever_script_curl,
     filtrar_presidente_2t,
@@ -164,8 +165,8 @@ def test_pagina_links_tem_28_ufs(tmp_path: Path):
     texto = html.read_text(encoding="utf-8")
     assert "bweb_2t_SP_311020221535.zip" in texto
     assert "web.archive.org" in texto
-    assert "baixar_zips_urna_curl.bat" in texto
-    assert texto.count("<li>") == 28
+    assert "--somente-resultado-github" in texto
+    assert texto.count("<li><b>") == 28
 
 
 def test_ssl_e_curl_windows():
@@ -190,6 +191,8 @@ def test_ssl_e_curl_windows():
         "https://web.archive.org/web/x.zip", dest, timeout=120, curl="curl.exe", plataforma="win32"
     )
     assert "--ssl-no-revoke" in win
+    assert "--tls-max" in win
+    assert "1.2" in win
     assert "-k" not in win
     assert "ContAgil-TSE-BU/1.0" in win
     assert win[-1] == "https://web.archive.org/web/x.zip"
@@ -243,6 +246,7 @@ def test_script_curl_lista_28_ufs(tmp_path: Path):
     texto = bat.read_text(encoding="utf-8")
     assert "curl.exe" in texto
     assert "--ssl-no-revoke" in texto
+    assert "--tls-max" in texto
     assert "ContAgil-TSE-BU/1.0" in texto
     assert "20221108000702id_" in texto
     assert texto.count("bweb_2t_") >= 28
@@ -256,6 +260,14 @@ def test_padrao_workers_um_e_usar_curl():
     assert args.tentativas == 2
     assert args.usar_curl is False
     assert parse_args(["--usar-curl"]).usar_curl is True
+    assert parse_args(["--somente-resultado-github"]).somente_resultado_github is True
+
+
+def test_urls_github_sem_archive_e_proxy_env(monkeypatch):
+    url = "https://raw.githubusercontent.com/org/repo/main/x.csv.gz"
+    assert urls_espelho(url) == [url]
+    monkeypatch.setenv("HTTPS_PROXY", "http://proxy.rfb:8080")
+    assert detectar_proxy_windows() == "http://proxy.rfb:8080"
 
 
 def test_entrypoint_contagil_carrega_scripts(tmp_path: Path, monkeypatch):
