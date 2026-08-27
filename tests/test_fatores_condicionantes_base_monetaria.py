@@ -1,4 +1,4 @@
-"""Testes dos saldos anuais dos fatores condicionantes da base monetária."""
+"""Testes dos saldos/variações anuais dos fatores condicionantes."""
 
 from __future__ import annotations
 
@@ -8,12 +8,12 @@ import pandas as pd
 
 from scripts.fatores_condicionantes_base_monetaria import (
     SERIES,
-    baixar_serie,
+    agregados_anuais,
+    baixar_sgs,
     formatar_milhoes,
     gravar_saidas,
     markdown_tabela,
     montar_tabelas,
-    saldo_fim_de_ano,
 )
 
 
@@ -27,64 +27,87 @@ def _serie(codigo: int, datas: list[str], valores: list[float]) -> pd.DataFrame:
     )
 
 
-def test_saldo_fim_de_ano_usa_dezembro():
+def test_agregados_dezembro_e_soma_do_ano():
     df = _serie(
         1810,
-        ["1995-11-30", "1995-12-31", "1996-12-31", "1996-06-30"],
-        [10.0, 20.0, 40.0, 30.0],
+        ["1995-01-01", "1995-12-01", "1996-06-01", "1996-12-01"],
+        [10.0, 20.0, 5.0, 7.0],
     )
-    out = saldo_fim_de_ano(df, [1995, 1996])
+    out = agregados_anuais(df, [1995, 1996])
     assert list(out["ano"]) == [1995, 1996]
-    assert list(out["valor_rs_mil"]) == [20.0, 40.0]
-    assert set(out["fechamento"]) == {"fim_de_ano"}
+    assert list(out["valor_dezembro_rs_mil"]) == [20.0, 7.0]
+    assert list(out["variacao_ano_rs_mil"]) == [30.0, 12.0]
+    assert set(out["fechamento"]) == {"dezembro"}
 
 
-def test_saldo_ano_corrente_usa_ultimo_mes():
-    df = _serie(1788, ["2026-06-30", "2026-07-31"], [100.0, 110.0])
-    out = saldo_fim_de_ano(df, [2026])
-    assert len(out) == 1
-    assert out.iloc[0]["valor_rs_mil"] == 110.0
-    assert out.iloc[0]["fechamento"] == "ultimo_disponivel_07/2026"
+def test_agregados_ano_corrente_parcial():
+    df = _serie(1788, ["2026-05-01", "2026-06-01"], [100.0, 110.0])
+    out = agregados_anuais(df, [2026])
+    assert out.iloc[0]["valor_dezembro_rs_mil"] == 110.0
+    assert out.iloc[0]["variacao_ano_rs_mil"] == 210.0
+    assert out.iloc[0]["fechamento"] == "ultimo_06/2026"
+    assert out.iloc[0]["n_meses"] == 2
 
 
-def test_montar_tabelas_converte_para_milhoes():
-    catalogo = [SERIES[0], SERIES[-1]]  # conta única + base
+def test_montar_tabelas_converte_e_fecha_identidade():
+    catalogo = [
+        next(s for s in SERIES if s["codigo"] == 1810),
+        next(s for s in SERIES if s["codigo"] == 1809),
+        next(s for s in SERIES if s["codigo"] == 1788),
+    ]
     series = {
-        1810: _serie(1810, ["1995-12-31", "1996-12-31"], [1_000.0, 2_000.0]),
-        1788: _serie(1788, ["1995-12-31", "1996-12-31"], [5_000.0, 8_000.0]),
+        1810: _serie(1810, ["1995-12-01", "1996-06-01", "1996-12-01"], [1000.0, 400.0, 600.0]),
+        1809: _serie(1809, ["1995-12-01", "1996-06-01", "1996-12-01"], [2000.0, 100.0, 900.0]),
+        1788: _serie(1788, ["1995-12-01", "1996-06-01", "1996-12-01"], [10_000.0, 10_500.0, 12_000.0]),
     }
-    longo, largo = montar_tabelas(series, [1995, 1996], catalogo=catalogo)
-    assert set(longo["serie"]) == {
-        "Tesouro Nacional — Conta única",
-        "Base monetária restrita (resultado)",
-    }
-    assert largo.loc[largo["ano"] == 1995, "tesouro_conta_unica"].iloc[0] == 1.0
-    assert largo.loc[largo["ano"] == 1996, "base_monetaria_restrita"].iloc[0] == 8.0
-    assert list(largo["fechamento"]) == ["fim_de_ano", "fim_de_ano"]
+    longo, dez, var = montar_tabelas(series, [1995, 1996], catalogo=catalogo)
+    assert dez.loc[dez["ano"] == 1996, "tesouro_conta_unica"].iloc[0] == 0.6
+    assert var.loc[var["ano"] == 1996, "tesouro_conta_unica"].iloc[0] == 1.0
+    assert var.loc[var["ano"] == 1996, "titulos_publicos_total"].iloc[0] == 1.0
+    assert var.loc[var["ano"] == 1996, "soma_fatores"].iloc[0] == 2.0
+    assert var.loc[var["ano"] == 1996, "base_monetaria_restrita"].iloc[0] == 2.0
+    assert var.loc[var["ano"] == 1996, "variacao_base"].iloc[0] == 2.0
+    assert abs(var.loc[var["ano"] == 1996, "discrepancia"].iloc[0]) < 1e-9
 
 
-def test_baixar_serie_renomeia_mes(monkeypatch):
-    def fake_baixar(codigo, inicio="01/01/1995", fim=None):
-        return pd.DataFrame(
-            {"mes": pd.to_datetime(["1995-12-01"]), "valor": [123.0]}
-        )
+def test_baixar_sgs_ignora_404(monkeypatch):
+    class _Resp:
+        def __init__(self, status, payload=None):
+            self.status_code = status
+            self._payload = payload or []
+            self.content = b"[]" if status == 404 else b'[{"data":"01/12/2015"}]'
 
-    out = baixar_serie(1810, baixar=fake_baixar)
-    assert list(out.columns) == ["codigo", "data", "valor"]
-    assert out.iloc[0]["codigo"] == 1810
-    assert out.iloc[0]["valor"] == 123.0
+        def raise_for_status(self):
+            if self.status_code >= 400:
+                raise RuntimeError(f"http {self.status_code}")
+
+        def json(self):
+            return self._payload
+
+    calls = []
+
+    def fake_get(url, params=None, timeout=120):
+        calls.append(params["dataInicial"])
+        if params["dataInicial"].endswith("1995"):
+            return _Resp(404)
+        return _Resp(200, [{"data": "01/12/2015", "valor": "1500"}])
+
+    session = type("S", (), {"get": staticmethod(fake_get)})()
+    out = baixar_sgs(29004, inicio="01/01/1995", fim="31/12/2016", session=session)
+    assert not out.empty
+    assert out.iloc[0]["valor"] == 1500.0
+    assert any(c.endswith("1995") for c in calls)
 
 
 def test_gravar_saidas_e_markdown(tmp_path: Path):
-    catalogo = [SERIES[0]]
-    series = {1810: _serie(1810, ["1995-12-31"], [1_500_000.0])}
-    longo, largo = montar_tabelas(series, [1995], catalogo=catalogo)
-    caminhos = gravar_saidas(longo, largo, tmp_path, stem="teste_fatores")
-    assert caminhos["csv_largo"].exists()
+    catalogo = [next(s for s in SERIES if s["codigo"] == 1810)]
+    series = {1810: _serie(1810, ["1995-12-01"], [1_500_000.0])}
+    longo, dez, var = montar_tabelas(series, [1995], catalogo=catalogo)
+    caminhos = gravar_saidas(longo, dez, var, tmp_path, stem="teste_fatores")
     assert caminhos["xlsx"].exists()
-    md = caminhos["md"].read_text(encoding="utf-8")
-    assert "1.500,0" in md or formatar_milhoes(1500.0) in md
-    assert "1810" in markdown_tabela(largo, catalogo=catalogo)
+    md = caminhos["md_dezembro"].read_text(encoding="utf-8")
+    assert formatar_milhoes(1500.0) in md
     xl = pd.ExcelFile(caminhos["xlsx"])
-    assert "Anual_R$_milhoes" in xl.sheet_names
-    assert "Codigos_SGS" in xl.sheet_names
+    assert "Variacao_no_ano" in xl.sheet_names
+    assert "Valor_dezembro_SGS" in xl.sheet_names
+    assert "1810" in markdown_tabela(dez, "t", "n", catalogo=catalogo)

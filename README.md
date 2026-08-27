@@ -212,6 +212,16 @@ python3 scripts/gerar_fluxos.py --download \
   --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
 ```
 
+## Fatores condicionantes da base monetária (Bacen SGS)
+
+Saldos de dezembro e variação anual (1995–2026), em R$ milhões:
+
+```bash
+PYTHONPATH=. python3 scripts/fatores_condicionantes_base_monetaria.py
+```
+
+Saídas: `output/fatores_condicionantes_base_monetaria_anual.xlsx` e os markdown/CSV correspondentes.
+
 ## Testes
 
 ```bash

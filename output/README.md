@@ -37,3 +37,14 @@ Run completo (fatores SELIC Bacen SGS 11 → ContAgil): 348.864 contratos ·
 72 agentes.
 
 Interface web: `streamlit run app.py`
+
+## Fatores condicionantes da base monetária (Bacen SGS)
+
+```bash
+PYTHONPATH=. python3 scripts/fatores_condicionantes_base_monetaria.py
+```
+
+- `fatores_condicionantes_base_monetaria_dezembro.md` / `.csv` — valor de dezembro de cada fator (contribuição do mês) e saldo da base
+- `fatores_condicionantes_base_monetaria_variacao_anual.md` / `.csv` — soma das contribuições no ano (fecha com Δ da base)
+- `fatores_condicionantes_base_monetaria_anual.xlsx` — as duas tabelas + códigos SGS
+
