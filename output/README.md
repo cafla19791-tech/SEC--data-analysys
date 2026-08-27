@@ -44,7 +44,7 @@ Interface web: `streamlit run app.py`
 PYTHONPATH=. python3 scripts/fatores_condicionantes_base_monetaria.py
 ```
 
-- `fatores_condicionantes_base_monetaria_dezembro.md` / `.csv` — valor de dezembro de cada fator (contribuição do mês) e saldo da base
+- `fatores_condicionantes_base_monetaria_saldo_31_12.md` / `.csv` — saldo no último dia do ano (31/12; SGS saldo em final de período)
 - `fatores_condicionantes_base_monetaria_variacao_anual.md` / `.csv` — soma das contribuições no ano (fecha com Δ da base)
-- `fatores_condicionantes_base_monetaria_anual.xlsx` — as duas tabelas + códigos SGS
+- `fatores_condicionantes_base_monetaria_anual.xlsx` — aba **Saldo_ultimo_dia_ano** + variação + códigos SGS
 

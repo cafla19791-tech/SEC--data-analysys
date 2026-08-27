@@ -1,274 +1,274 @@
 codigo,ano,data,valor_dezembro_rs_mil,variacao_ano_rs_mil,n_meses,fechamento,serie,coluna,grupo,valor_dezembro_rs_milhoes,variacao_ano_rs_milhoes
-1788,1995,1995-12-01,21681591,,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,21681.591,
-1809,1995,1995-12-01,2456133,-14604987.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,2456.133,-14604.987
-1810,1995,1995-12-01,913253,-3979704.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,913.253,-3979.704
-1811,1995,1995-12-01,268337,14900094.0,12,dezembro,Operações com o setor externo,setor_externo,fator,268.337,14900.094
-1815,1995,1995-12-01,941339,4075931.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,941.339,4075.931
-1818,1995,1995-12-01,385638,2977769.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,385.638,2977.769
-1788,1996,1996-12-01,19795697,-1885894.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,19795.697,-1885.894
-1809,1996,1996-12-01,2309305,-29670499.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,2309.305,-29670.499
-1810,1996,1996-12-01,443623,5513388.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,443.623,5513.388
-1811,1996,1996-12-01,234088,9988202.0,12,dezembro,Operações com o setor externo,setor_externo,fator,234.088,9988.202
-1815,1996,1996-12-01,-1399092,-2146231.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1399.092,-2146.231
-1818,1996,1996-12-01,3491052,10027648.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,3491.052,10027.648
-1788,1997,1997-12-01,31828332,12032635.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,31828.332,12032.635
-1809,1997,1997-12-01,9731576,22158700.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,9731.576,22158.7
-1810,1997,1997-12-01,-1614296,-5074927.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-1614.296,-5074.927
-1811,1997,1997-12-01,-653416,-9049683.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-653.416,-9049.683
-1815,1997,1997-12-01,-572405,-8790445.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-572.405,-8790.445
-1818,1997,1997-12-01,-392392,1698923.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-392.392,1698.923
-1788,1998,1998-12-01,39184378,7356046.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,39184.378,7356.046
-1809,1998,1998-12-01,7008447,27854801.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,7008.447,27854.801
-1810,1998,1998-12-01,-691282,-15106533.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-691.282,-15106.533
-1811,1998,1998-12-01,-6553666,-21429065.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-6553.666,-21429.065
-1815,1998,1998-12-01,8602,20282878.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,8.602,20282.878
-1818,1998,1998-12-01,-17107,179863.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-17.107,179.863
-1788,1999,1999-12-01,48430157,9245779.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,48430.157,9245.779
-1809,1999,1999-12-01,13671946,34925161.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,13671.946,34925.161
-1810,1999,1999-12-01,221121,-15563288.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,221.121,-15563.288
-1811,1999,1999-12-01,-2758670,-14877571.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-2758.67,-14877.571
-1815,1999,1999-12-01,8346,2114291.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,8.346,2114.291
-1818,1999,1999-12-01,-34728,32201.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-34.728,32.201
-1788,2000,2000-12-01,47686213,-743944.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,47686.213,-743.944
-1809,2000,2000-12-01,9094619,21398839.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,9094.619,21398.839
-1810,2000,2000-12-01,-90184,-26539148.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-90.184,-26539.148
-1811,2000,2000-12-01,-1941905,4402641.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-1941.905,4402.641
-1815,2000,2000-12-01,-127452,1478559.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-127.452,1478.559
-1818,2000,2000-12-01,20253,-839262.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,20.253,-839.262
-12484,2000,2000-12-01,0,-614971.0,10,dezembro,Redesconto do Banco Central,redesconto,fator,0.0,-614.971
-1788,2001,2001-12-01,53255971,5569758.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,53255.971,5569.758
-1809,2001,2001-12-01,1536537,41318272.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,1536.537,41318.272
-1810,2001,2001-12-01,8397878,-11944926.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,8397.878,-11944.926
-1811,2001,2001-12-01,-2232312,-18572367.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-2232.312,-18572.367
-1815,2001,2001-12-01,-614102,-1806911.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-614.102,-1806.911
-1818,2001,2001-12-01,-66297,-3424281.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-66.297,-3424.281
-12484,2001,2001-12-01,0,0.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,0.0,0.0
-1788,2002,2002-12-01,73302272,20046301.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,73302.272,20046.301
-1809,2002,2002-12-01,15954153,90722091.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,15954.153,90722.091
-1810,2002,2002-12-01,196734,-20483697.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,196.734,-20483.697
-1811,2002,2002-12-01,-4981600,-26426605.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-4981.6,-26426.605
-1815,2002,2002-12-01,-276310,-33769655.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-276.31,-33769.655
-1818,2002,2002-12-01,143984,-1338211.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,143.984,-1338.211
-12484,2002,2002-12-01,-932,400375.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.932,400.375
-12487,2002,2002-12-01,1707304,10564640.0,7,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,1707.304,10564.64
-1788,2003,2003-12-01,73219136,-83136.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,73219.136,-83.136
-1809,2003,2003-12-01,3231403,11180802.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,3231.403,11180.802
-1810,2003,2003-12-01,11711648,-1064493.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,11711.648,-1064.493
-1811,2003,2003-12-01,13499,643224.0,12,dezembro,Operações com o setor externo,setor_externo,fator,13.499,643.224
-1815,2003,2003-12-01,-1665840,6729147.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1665.84,6729.147
-1818,2003,2003-12-01,22977,-1941998.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,22.977,-1941.998
-12484,2003,2003-12-01,-3965,2247.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-3.965,2.247
-12487,2003,2003-12-01,-2507953,-15632065.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-2507.953,-15632.065
-1788,2004,2004-12-01,88732677,15513541.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,88732.677,15513.541
-1809,2004,2004-12-01,12183568,57838483.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,12183.568,57838.483
-1810,2004,2004-12-01,-2788872,-48292470.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-2788.872,-48292.47
-1811,2004,2004-12-01,7186047,14556008.0,12,dezembro,Operações com o setor externo,setor_externo,fator,7186.047,14556.008
-1815,2004,2004-12-01,-1577674,-2400391.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1577.674,-2400.391
-1818,2004,2004-12-01,214898,-148935.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,214.898,-148.935
-12484,2004,2004-12-01,-1331,-7140.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-1.331,-7.14
-12487,2004,2004-12-01,-1581560,-6032014.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-1581.56,-6032.014
-1788,2005,2005-12-01,101247235,12514558.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,101247.235,12514.558
-1809,2005,2005-12-01,9945445,2808482.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,9945.445,2808.482
-1810,2005,2005-12-01,-1519602,-43007731.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-1519.602,-43007.731
-1811,2005,2005-12-01,9261061,52394883.0,12,dezembro,Operações com o setor externo,setor_externo,fator,9261.061,52394.883
-1815,2005,2005-12-01,-1927550,2373784.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1927.55,2373.784
-1818,2005,2005-12-01,144777,632906.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,144.777,632.906
-12484,2005,2005-12-01,-102,-3343.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.102,-3.343
-12487,2005,2005-12-01,-172064,-2684423.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-172.064,-2684.423
-1788,2006,2006-12-01,121102001,19854766.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,121102.001,19854.766
-1809,2006,2006-12-01,13309467,-686574.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,13309.467,-686.574
-1810,2006,2006-12-01,-2159061,-59510709.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-2159.061,-59510.709
-1811,2006,2006-12-01,5568509,74368942.0,12,dezembro,Operações com o setor externo,setor_externo,fator,5568.509,74368.942
-1815,2006,2006-12-01,-1645963,-764370.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1645.963,-764.37
-1818,2006,2006-12-01,195164,1012499.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,195.164,1012.499
-12484,2006,2006-12-01,-39,-1476.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.039,-1.476
-12487,2006,2006-12-01,498916,5436454.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,498.916,5436.454
-1788,2007,2007-12-01,146616867,25514866.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,146616.867,25514.866
-1809,2007,2007-12-01,19229181,-73974527.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,19229.181,-73974.527
-1810,2007,2007-12-01,-4826282,-55600882.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-4826.282,-55600.882
-1811,2007,2007-12-01,4210354,155390627.0,12,dezembro,Operações com o setor externo,setor_externo,fator,4210.354,155390.627
-1815,2007,2007-12-01,-3466240,-10600939.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-3466.24,-10600.939
-1818,2007,2007-12-01,137516,1491448.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,137.516,1491.448
-12484,2007,2007-12-01,-50,-3017.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.05,-3.017
-12487,2007,2007-12-01,484911,8812156.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,484.911,8812.156
-1788,2008,2008-12-01,147549705,932838.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,147549.705,932.838
-1809,2008,2008-12-01,-18947937,34058554.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,-18947.937,34058.554
-1810,2008,2008-12-01,-3477074,-74312396.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-3477.074,-74312.396
-1811,2008,2008-12-01,-7846766,-12124211.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-7846.766,-12124.211
-1815,2008,2008-12-01,44336711,57041220.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,44336.711,57041.22
-1818,2008,2008-12-01,182436,1071994.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,182.436,1071.994
-12484,2008,2008-12-01,-7,-1073.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.007,-1.073
-12487,2008,2008-12-01,983582,-4801250.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,983.582,-4801.25
-1788,2009,2009-12-01,166072835,18523130.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,166072.835,18523.13
-1809,2009,2009-12-01,19521306,11280602.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,19521.306,11280.602
-1810,2009,2009-12-01,-15185319,-52311507.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-15185.319,-52311.507
-1811,2009,2009-12-01,6337003,62936723.0,12,dezembro,Operações com o setor externo,setor_externo,fator,6337.003,62936.723
-1815,2009,2009-12-01,-2009398,-3425469.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-2009.398,-3425.469
-1818,2009,2009-12-01,541211,3242878.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,541.211,3242.878
-12484,2009,2009-12-01,-31,-1181.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.031,-1.181
-12487,2009,2009-12-01,0,-3198916.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,0.0,-3198.916
-1788,2010,2010-12-01,206853322,40780487.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,206853.322,40780.487
-1809,2010,2010-12-01,111543835,249513458.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,111543.835,249513.458
-1810,2010,2010-12-01,-22880052,-51203673.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-22880.052,-51203.673
-1811,2010,2010-12-01,4276126,75552632.0,12,dezembro,Operações com o setor externo,setor_externo,fator,4276.126,75552.632
-1815,2010,2010-12-01,-65142760,-236911071.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-65142.76,-236911.071
-1818,2010,2010-12-01,704969,3829680.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,704.969,3829.68
-12484,2010,2010-12-01,-134314,-539.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-134.314,-0.539
-12487,2010,2010-12-01,0,0.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,0.0,0.0
-1788,2011,2011-12-01,214235311,7381989.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,214235.311,7381.989
-1809,2011,2011-12-01,44910037,70196203.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,44910.037,70196.203
-1810,2011,2011-12-01,-17945760,-125632863.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-17945.76,-125632.863
-1811,2011,2011-12-01,303625,85156228.0,12,dezembro,Operações com o setor externo,setor_externo,fator,303.625,85156.228
-1815,2011,2011-12-01,4361607,-24388014.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,4361.607,-24388.014
-1818,2011,2011-12-01,-33262,2756678.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-33.262,2756.678
-12484,2011,2011-12-01,-1,-560.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.001,-0.56
-12487,2011,2011-12-01,-31850,-705683.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-31.85,-705.683
-1788,2012,2012-12-01,233371452,19136141.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,233371.452,19136.141
-1809,2012,2012-12-01,64648943,5653172.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,64648.943,5653.172
-1810,2012,2012-12-01,-39380522,-121648972.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-39380.522,-121648.972
-1811,2012,2012-12-01,-10975444,25896973.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-10975.444,25896.973
-1815,2012,2012-12-01,3161327,118682701.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,3161.327,118682.701
-1818,2012,2012-12-01,6957731,-8392875.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,6957.731,-8392.875
-12484,2012,2012-12-01,-5424,45943.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-5.424,45.943
-12487,2012,2012-12-01,-59770,-1100801.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-59.77,-1100.801
-1788,2013,2013-12-01,249509778,16138326.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,249509.778,16138.326
-1809,2013,2013-12-01,88570252,197242065.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,88570.252,197242.065
-1810,2013,2013-12-01,-43098963,-127554789.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-43098.963,-127554.789
-1811,2013,2013-12-01,-6973532,-22428624.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-6973.532,-22428.624
-1815,2013,2013-12-01,-7111959,-19903346.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-7111.959,-19903.346
-1818,2013,2013-12-01,2528586,-12532941.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,2528.586,-12532.941
-12484,2013,2013-12-01,-2,-1675.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.002,-1.675
-12487,2013,2013-12-01,48593,1314564.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,48.593,1314.564
-1788,2014,2014-12-01,263528517,14018739.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,263528.517,14018.739
-1809,2014,2014-12-01,43320612,-76307204.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,43320.612,-76307.204
-1810,2014,2014-12-01,-17938494,-668486.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-17938.494,-668.486
-1811,2014,2014-12-01,-27192559,16274839.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-27192.559,16274.839
-1815,2014,2014-12-01,6483102,56163369.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,6483.102,56163.369
-1818,2014,2014-12-01,185497,1227406.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,185.497,1227.406
-12484,2014,2014-12-01,0,-45.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,0.0,-0.045
-12487,2014,2014-12-01,17044874,17329053.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,17044.874,17329.053
-1788,2015,2015-12-01,255288922,-8239595.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,255288.922,-8239.595
-1809,2015,2015-12-01,-18963647,-124016063.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,-18963.647,-124016.063
-1810,2015,2015-12-01,31966901,59665808.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,31966.901,59665.808
-1811,2015,2015-12-01,-1077380,-15037710.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-1077.38,-15037.71
-1815,2015,2015-12-01,-7713625,-24740332.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-7713.625,-24740.332
-1818,2015,2015-12-01,437373,6233098.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,437.373,6233.098
-12484,2015,2015-12-01,-1959,-593.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-1.959,-0.593
-12487,2015,2015-12-01,7794459,89657153.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,7794.459,89657.153
-29004,2015,2015-12-01,-41100110,-123479463.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-41100.11,-123479.463
-29006,2015,2015-12-01,22136463,-536600.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,22136.463,-536.6
-1788,2016,2016-12-01,270287146,14998224.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,270287.146,14998.224
-1809,2016,2016-12-01,79414034,32267880.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,79414.034,32267.88
-1810,2016,2016-12-01,-52397634,12284191.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-52397.634,12284.191
-1811,2016,2016-12-01,352478,32532733.0,12,dezembro,Operações com o setor externo,setor_externo,fator,352.478,32532.733
-1815,2016,2016-12-01,1612164,6054528.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,1612.164,6054.528
-1818,2016,2016-12-01,244327,7424617.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,244.327,7424.617
-12484,2016,2016-12-01,-27,-3179.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.027,-3.179
-12487,2016,2016-12-01,-3858120,-75562373.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-3858.12,-75562.373
-29004,2016,2016-12-01,7559278,31896944.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,7559.278,31896.944
-29006,2016,2016-12-01,71854756,370936.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,71854.756,370.936
-1788,2017,2017-12-01,296755456,26468310.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,296755.456,26468.31
-1809,2017,2017-12-01,45249193,-26792966.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,45249.193,-26792.966
-1810,2017,2017-12-01,7163590,52132877.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,7163.59,52132.877
-1811,2017,2017-12-01,-26027013,1396743.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-26027.013,1396.743
-1815,2017,2017-12-01,4770938,867627.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,4770.938,867.627
-1818,2017,2017-12-01,-55314,5896818.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-55.314,5896.818
-12484,2017,2017-12-01,-8920,-181.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-8.92,-0.181
-12487,2017,2017-12-01,1443181,-7032535.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,1443.181,-7032.535
-29004,2017,2017-12-01,-30684804,-111168532.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-30684.804,-111168.532
-29006,2017,2017-12-01,75933997,84375566.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,75933.997,84375.566
-1788,2018,2018-12-01,302049461,5294005.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,302049.461,5294.005
-1809,2018,2018-12-01,36530769,35093592.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,36530.769,35093.592
-1810,2018,2018-12-01,20453395,-44486130.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,20453.395,-44486.13
-1811,2018,2018-12-01,-30488340,-17348770.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-30488.34,-17348.77
-1815,2018,2018-12-01,-6759022,13987567.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-6759.022,13987.567
-1818,2018,2018-12-01,1520697,2909758.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,1520.697,2909.758
-12484,2018,2018-12-01,13279,13200.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,13.279,13.2
-12487,2018,2018-12-01,1519905,15125016.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,1519.905,15125.016
-29004,2018,2018-12-01,-29615079,32704358.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-29615.079,32704.358
-29006,2018,2018-12-01,66145848,2389234.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,66145.848,2389.234
-1788,2019,2019-12-01,316586707,14537246.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,316586.707,14537.246
-1809,2019,2019-12-01,127568060,227324959.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,127568.06,227324.959
-1810,2019,2019-12-01,-43975649,-89301052.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-43975.649,-89301.052
-1811,2019,2019-12-01,-46838632,-141168328.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-46838.632,-141168.328
-1815,2019,2019-12-01,-6659602,16690766.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-6659.602,16690.766
-1818,2019,2019-12-01,-3362213,-6634019.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-3362.213,-6634.019
-12484,2019,2019-12-01,-60,-14549.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,-0.06,-14.549
-12487,2019,2019-12-01,-6928091,7639551.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-6928.091,7639.551
-29004,2019,2019-12-01,-15623582,-15720656.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-15623.582,-15720.656
-29006,2019,2019-12-01,143191642,243045615.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,143191.642,243045.615
-1788,2020,2020-12-01,431536653,114949946.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,431536.653,114949.946
-1809,2020,2020-12-01,-19509913,-630037433.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,-19509.913,-630037.433
-1810,2020,2020-12-01,25213146,704194538.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,25213.146,704194.538
-1811,2020,2020-12-01,-12809786,-117733553.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-12809.786,-117733.553
-1815,2020,2020-12-01,3009625,69829095.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,3009.625,69829.095
-1818,2020,2020-12-01,-1835660,-19343055.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-1835.66,-19343.055
-12484,2020,2020-12-01,2383,3485.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,2.383,3.485
-12487,2020,2020-12-01,-8028787,40800821.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-8028.787,40800.821
-28724,2020,2020-12-01,27816100,65828662.0,8,dezembro,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,27816.1,65828.662
-29004,2020,2020-12-01,-179441373,-365463108.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-179441.373,-365463.108
-29006,2020,2020-12-01,159931460,-264574325.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,159931.46,-264574.325
-1788,2021,2021-12-01,409183519,-22353134.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,409183.519,-22353.134
-1809,2021,2021-12-01,76002281,182431271.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,76002.281,182431.271
-1810,2021,2021-12-01,-42883828,-81290481.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-42883.828,-81290.481
-1811,2021,2021-12-01,-35033500,-36630770.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-35033.5,-36630.77
-1815,2021,2021-12-01,246624,-26059891.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,246.624,-26059.891
-1818,2021,2021-12-01,-11219235,-30402627.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-11219.235,-30402.627
-12484,2021,2021-12-01,50194,44990.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,50.194,44.99
-12487,2021,2021-12-01,3983847,22323949.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,3983.847,22323.949
-28724,2021,2021-12-01,4765473,-52769578.0,12,dezembro,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,4765.473,-52769.578
-29004,2021,2021-12-01,-61753191,-121550764.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-61753.191,-121550.764
-29006,2021,2021-12-01,137755472,303982035.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,137755.472,303982.035
-1788,2022,2022-12-01,419659918,10476399.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,419659.918,10476.399
-1809,2022,2022-12-01,139533680,437174227.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,139533.68,437174.227
-1810,2022,2022-12-01,-35780006,-152518591.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-35780.006,-152518.591
-1811,2022,2022-12-01,-46541023,-56620783.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-46541.023,-56620.783
-1815,2022,2022-12-01,13351980,-54168500.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,13351.98,-54168.5
-1818,2022,2022-12-01,-19082092,-80194454.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-19082.092,-80194.454
-12484,2022,2022-12-01,26424,-27398.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,26.424,-27.398
-12487,2022,2022-12-01,-5739568,-92265400.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-5739.568,-92265.4
-28724,2022,2022-12-01,-17642115,9097299.0,12,dezembro,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,-17642.115,9097.299
-29004,2022,2022-12-01,-22231419,251182278.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-22231.419,251182.278
-29006,2022,2022-12-01,161765099,185991949.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,161765.099,185991.949
-1788,2023,2023-12-01,422718628,3058710.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,422718.628,3058.71
-1809,2023,2023-12-01,-18023368,-56588088.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,-18023.368,-56588.088
-1810,2023,2023-12-01,80331787,206854972.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,80331.787,206854.972
-1811,2023,2023-12-01,233715,78236910.0,12,dezembro,Operações com o setor externo,setor_externo,fator,233.715,78236.91
-1815,2023,2023-12-01,-16363195,-45370899.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-16363.195,-45370.899
-1818,2023,2023-12-01,-22381990,-75435615.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-22381.99,-75435.615
-12484,2023,2023-12-01,0,-29715.0,12,dezembro,Redesconto do Banco Central,redesconto,fator,0.0,-29.715
-12487,2023,2023-12-01,-6628462,-70871662.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,-6628.462,-70871.662
-28724,2023,2023-12-01,0,-33737198.0,12,dezembro,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,0.0,-33737.198
-29004,2023,2023-12-01,-127402891,73732460.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-127402.891,73732.46
-29006,2023,2023-12-01,109379523,-130320548.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,109379.523,-130320.548
-1788,2024,2024-12-01,451213588,28494960.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,451213.588,28494.96
-1809,2024,2024-12-01,211370114,158704826.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,211370.114,158704.826
-1810,2024,2024-12-01,-55712578,65831935.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-55712.578,65831.935
-1811,2024,2024-12-01,-186347058,-212477334.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-186347.058,-212477.334
-1815,2024,2024-12-01,35522321,-706950.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,35522.321,-706.95
-1818,2024,2024-12-01,-10450304,-98786795.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,-10450.304,-98786.795
-12484,2024,2024-07-01,0,-788.0,7,ultimo_07/2024,Redesconto do Banco Central,redesconto,fator,0.0,-0.788
-12487,2024,2024-12-01,19928148,115930245.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,19928.148,115930.245
-28724,2024,2024-12-01,0,-21.0,12,dezembro,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,0.0,-0.021
-29004,2024,2024-12-01,-30736668,65135039.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-30736.668,65135.039
-29006,2024,2024-12-01,242106782,93569787.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,242106.782,93569.787
-1788,2025,2025-12-01,447096654,-4116934.0,12,dezembro,Base monetária restrita,base_monetaria_restrita,resultado,447096.654,-4116.934
-1809,2025,2025-12-01,73663510,54036513.0,12,dezembro,Títulos públicos federais — Total,titulos_publicos_total,fator,73663.51,54036.513
-1810,2025,2025-12-01,-35402732,94770505.0,12,dezembro,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-35402.732,94770.505
-1811,2025,2025-12-01,-22296357,8357906.0,12,dezembro,Operações com o setor externo,setor_externo,fator,-22296.357,8357.906
-1815,2025,2025-12-01,-20160853,45376981.0,12,dezembro,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-20160.853,45376.981
-1818,2025,2025-12-01,2448268,-100762164.0,12,dezembro,Autoridade Monetária — Outras operações,outras_operacoes,fator,2448.268,-100762.164
-12487,2025,2025-12-01,18302009,-105895906.0,12,dezembro,Derivativos — ajustes,derivativos_ajustes,fator,18302.009,-105895.906
-28724,2025,2025-12-01,0,-24.0,12,dezembro,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,0.0,-0.024
-29004,2025,2025-12-01,-77293578,-376560608.0,12,dezembro,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-77293.578,-376560.608
-29006,2025,2025-12-01,150957088,430597121.0,12,dezembro,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,150957.088,430597.121
-1788,2026,2026-06-01,431100998,-15995656.0,6,ultimo_06/2026,Base monetária restrita,base_monetaria_restrita,resultado,431100.998,-15995.656
-1809,2026,2026-06-01,-55189171,-72034109.0,6,ultimo_06/2026,Títulos públicos federais — Total,titulos_publicos_total,fator,-55189.171,-72034.109
-1810,2026,2026-06-01,60858785,131825207.0,6,ultimo_06/2026,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,60858.785,131825.207
-1811,2026,2026-06-01,2919547,52583317.0,6,ultimo_06/2026,Operações com o setor externo,setor_externo,fator,2919.547,52583.317
-1815,2026,2026-06-01,3858149,14472391.0,6,ultimo_06/2026,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,3858.149,14472.391
-1818,2026,2026-06-01,-19230225,-81478091.0,6,ultimo_06/2026,Autoridade Monetária — Outras operações,outras_operacoes,fator,-19230.225,-81478.091
-12487,2026,2026-06-01,9276611,-62162632.0,6,ultimo_06/2026,Derivativos — ajustes,derivativos_ajustes,fator,9276.611,-62162.632
-28724,2026,2026-06-01,800000,800000.0,6,ultimo_06/2026,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,800.0,800.0
-29004,2026,2026-06-01,-125795713,20176538.0,6,ultimo_06/2026,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-125795.713,20176.538
-29006,2026,2026-06-01,70606542,-92210646.0,6,ultimo_06/2026,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,70606.542,-92210.646
+1788,1995,1995-12-31,21681591,,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,21681.591,
+1809,1995,1995-12-31,2456133,-14604987.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,2456.133,-14604.987
+1810,1995,1995-12-31,913253,-3979704.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,913.253,-3979.704
+1811,1995,1995-12-31,268337,14900094.0,12,31/12,Operações com o setor externo,setor_externo,fator,268.337,14900.094
+1815,1995,1995-12-31,941339,4075931.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,941.339,4075.931
+1818,1995,1995-12-31,385638,2977769.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,385.638,2977.769
+1788,1996,1996-12-31,19795697,-1885894.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,19795.697,-1885.894
+1809,1996,1996-12-31,2309305,-29670499.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,2309.305,-29670.499
+1810,1996,1996-12-31,443623,5513388.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,443.623,5513.388
+1811,1996,1996-12-31,234088,9988202.0,12,31/12,Operações com o setor externo,setor_externo,fator,234.088,9988.202
+1815,1996,1996-12-31,-1399092,-2146231.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1399.092,-2146.231
+1818,1996,1996-12-31,3491052,10027648.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,3491.052,10027.648
+1788,1997,1997-12-31,31828332,12032635.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,31828.332,12032.635
+1809,1997,1997-12-31,9731576,22158700.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,9731.576,22158.7
+1810,1997,1997-12-31,-1614296,-5074927.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-1614.296,-5074.927
+1811,1997,1997-12-31,-653416,-9049683.0,12,31/12,Operações com o setor externo,setor_externo,fator,-653.416,-9049.683
+1815,1997,1997-12-31,-572405,-8790445.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-572.405,-8790.445
+1818,1997,1997-12-31,-392392,1698923.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-392.392,1698.923
+1788,1998,1998-12-31,39184378,7356046.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,39184.378,7356.046
+1809,1998,1998-12-31,7008447,27854801.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,7008.447,27854.801
+1810,1998,1998-12-31,-691282,-15106533.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-691.282,-15106.533
+1811,1998,1998-12-31,-6553666,-21429065.0,12,31/12,Operações com o setor externo,setor_externo,fator,-6553.666,-21429.065
+1815,1998,1998-12-31,8602,20282878.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,8.602,20282.878
+1818,1998,1998-12-31,-17107,179863.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-17.107,179.863
+1788,1999,1999-12-31,48430157,9245779.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,48430.157,9245.779
+1809,1999,1999-12-31,13671946,34925161.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,13671.946,34925.161
+1810,1999,1999-12-31,221121,-15563288.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,221.121,-15563.288
+1811,1999,1999-12-31,-2758670,-14877571.0,12,31/12,Operações com o setor externo,setor_externo,fator,-2758.67,-14877.571
+1815,1999,1999-12-31,8346,2114291.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,8.346,2114.291
+1818,1999,1999-12-31,-34728,32201.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-34.728,32.201
+1788,2000,2000-12-31,47686213,-743944.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,47686.213,-743.944
+1809,2000,2000-12-31,9094619,21398839.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,9094.619,21398.839
+1810,2000,2000-12-31,-90184,-26539148.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-90.184,-26539.148
+1811,2000,2000-12-31,-1941905,4402641.0,12,31/12,Operações com o setor externo,setor_externo,fator,-1941.905,4402.641
+1815,2000,2000-12-31,-127452,1478559.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-127.452,1478.559
+1818,2000,2000-12-31,20253,-839262.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,20.253,-839.262
+12484,2000,2000-12-31,0,-614971.0,10,31/12,Redesconto do Banco Central,redesconto,fator,0.0,-614.971
+1788,2001,2001-12-31,53255971,5569758.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,53255.971,5569.758
+1809,2001,2001-12-31,1536537,41318272.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,1536.537,41318.272
+1810,2001,2001-12-31,8397878,-11944926.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,8397.878,-11944.926
+1811,2001,2001-12-31,-2232312,-18572367.0,12,31/12,Operações com o setor externo,setor_externo,fator,-2232.312,-18572.367
+1815,2001,2001-12-31,-614102,-1806911.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-614.102,-1806.911
+1818,2001,2001-12-31,-66297,-3424281.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-66.297,-3424.281
+12484,2001,2001-12-31,0,0.0,12,31/12,Redesconto do Banco Central,redesconto,fator,0.0,0.0
+1788,2002,2002-12-31,73302272,20046301.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,73302.272,20046.301
+1809,2002,2002-12-31,15954153,90722091.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,15954.153,90722.091
+1810,2002,2002-12-31,196734,-20483697.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,196.734,-20483.697
+1811,2002,2002-12-31,-4981600,-26426605.0,12,31/12,Operações com o setor externo,setor_externo,fator,-4981.6,-26426.605
+1815,2002,2002-12-31,-276310,-33769655.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-276.31,-33769.655
+1818,2002,2002-12-31,143984,-1338211.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,143.984,-1338.211
+12484,2002,2002-12-31,-932,400375.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.932,400.375
+12487,2002,2002-12-31,1707304,10564640.0,7,31/12,Derivativos — ajustes,derivativos_ajustes,fator,1707.304,10564.64
+1788,2003,2003-12-31,73219136,-83136.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,73219.136,-83.136
+1809,2003,2003-12-31,3231403,11180802.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,3231.403,11180.802
+1810,2003,2003-12-31,11711648,-1064493.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,11711.648,-1064.493
+1811,2003,2003-12-31,13499,643224.0,12,31/12,Operações com o setor externo,setor_externo,fator,13.499,643.224
+1815,2003,2003-12-31,-1665840,6729147.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1665.84,6729.147
+1818,2003,2003-12-31,22977,-1941998.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,22.977,-1941.998
+12484,2003,2003-12-31,-3965,2247.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-3.965,2.247
+12487,2003,2003-12-31,-2507953,-15632065.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-2507.953,-15632.065
+1788,2004,2004-12-31,88732677,15513541.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,88732.677,15513.541
+1809,2004,2004-12-31,12183568,57838483.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,12183.568,57838.483
+1810,2004,2004-12-31,-2788872,-48292470.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-2788.872,-48292.47
+1811,2004,2004-12-31,7186047,14556008.0,12,31/12,Operações com o setor externo,setor_externo,fator,7186.047,14556.008
+1815,2004,2004-12-31,-1577674,-2400391.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1577.674,-2400.391
+1818,2004,2004-12-31,214898,-148935.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,214.898,-148.935
+12484,2004,2004-12-31,-1331,-7140.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-1.331,-7.14
+12487,2004,2004-12-31,-1581560,-6032014.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-1581.56,-6032.014
+1788,2005,2005-12-31,101247235,12514558.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,101247.235,12514.558
+1809,2005,2005-12-31,9945445,2808482.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,9945.445,2808.482
+1810,2005,2005-12-31,-1519602,-43007731.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-1519.602,-43007.731
+1811,2005,2005-12-31,9261061,52394883.0,12,31/12,Operações com o setor externo,setor_externo,fator,9261.061,52394.883
+1815,2005,2005-12-31,-1927550,2373784.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1927.55,2373.784
+1818,2005,2005-12-31,144777,632906.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,144.777,632.906
+12484,2005,2005-12-31,-102,-3343.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.102,-3.343
+12487,2005,2005-12-31,-172064,-2684423.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-172.064,-2684.423
+1788,2006,2006-12-31,121102001,19854766.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,121102.001,19854.766
+1809,2006,2006-12-31,13309467,-686574.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,13309.467,-686.574
+1810,2006,2006-12-31,-2159061,-59510709.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-2159.061,-59510.709
+1811,2006,2006-12-31,5568509,74368942.0,12,31/12,Operações com o setor externo,setor_externo,fator,5568.509,74368.942
+1815,2006,2006-12-31,-1645963,-764370.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-1645.963,-764.37
+1818,2006,2006-12-31,195164,1012499.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,195.164,1012.499
+12484,2006,2006-12-31,-39,-1476.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.039,-1.476
+12487,2006,2006-12-31,498916,5436454.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,498.916,5436.454
+1788,2007,2007-12-31,146616867,25514866.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,146616.867,25514.866
+1809,2007,2007-12-31,19229181,-73974527.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,19229.181,-73974.527
+1810,2007,2007-12-31,-4826282,-55600882.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-4826.282,-55600.882
+1811,2007,2007-12-31,4210354,155390627.0,12,31/12,Operações com o setor externo,setor_externo,fator,4210.354,155390.627
+1815,2007,2007-12-31,-3466240,-10600939.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-3466.24,-10600.939
+1818,2007,2007-12-31,137516,1491448.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,137.516,1491.448
+12484,2007,2007-12-31,-50,-3017.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.05,-3.017
+12487,2007,2007-12-31,484911,8812156.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,484.911,8812.156
+1788,2008,2008-12-31,147549705,932838.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,147549.705,932.838
+1809,2008,2008-12-31,-18947937,34058554.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,-18947.937,34058.554
+1810,2008,2008-12-31,-3477074,-74312396.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-3477.074,-74312.396
+1811,2008,2008-12-31,-7846766,-12124211.0,12,31/12,Operações com o setor externo,setor_externo,fator,-7846.766,-12124.211
+1815,2008,2008-12-31,44336711,57041220.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,44336.711,57041.22
+1818,2008,2008-12-31,182436,1071994.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,182.436,1071.994
+12484,2008,2008-12-31,-7,-1073.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.007,-1.073
+12487,2008,2008-12-31,983582,-4801250.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,983.582,-4801.25
+1788,2009,2009-12-31,166072835,18523130.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,166072.835,18523.13
+1809,2009,2009-12-31,19521306,11280602.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,19521.306,11280.602
+1810,2009,2009-12-31,-15185319,-52311507.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-15185.319,-52311.507
+1811,2009,2009-12-31,6337003,62936723.0,12,31/12,Operações com o setor externo,setor_externo,fator,6337.003,62936.723
+1815,2009,2009-12-31,-2009398,-3425469.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-2009.398,-3425.469
+1818,2009,2009-12-31,541211,3242878.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,541.211,3242.878
+12484,2009,2009-12-31,-31,-1181.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.031,-1.181
+12487,2009,2009-12-31,0,-3198916.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,0.0,-3198.916
+1788,2010,2010-12-31,206853322,40780487.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,206853.322,40780.487
+1809,2010,2010-12-31,111543835,249513458.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,111543.835,249513.458
+1810,2010,2010-12-31,-22880052,-51203673.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-22880.052,-51203.673
+1811,2010,2010-12-31,4276126,75552632.0,12,31/12,Operações com o setor externo,setor_externo,fator,4276.126,75552.632
+1815,2010,2010-12-31,-65142760,-236911071.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-65142.76,-236911.071
+1818,2010,2010-12-31,704969,3829680.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,704.969,3829.68
+12484,2010,2010-12-31,-134314,-539.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-134.314,-0.539
+12487,2010,2010-12-31,0,0.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,0.0,0.0
+1788,2011,2011-12-31,214235311,7381989.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,214235.311,7381.989
+1809,2011,2011-12-31,44910037,70196203.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,44910.037,70196.203
+1810,2011,2011-12-31,-17945760,-125632863.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-17945.76,-125632.863
+1811,2011,2011-12-31,303625,85156228.0,12,31/12,Operações com o setor externo,setor_externo,fator,303.625,85156.228
+1815,2011,2011-12-31,4361607,-24388014.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,4361.607,-24388.014
+1818,2011,2011-12-31,-33262,2756678.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-33.262,2756.678
+12484,2011,2011-12-31,-1,-560.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.001,-0.56
+12487,2011,2011-12-31,-31850,-705683.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-31.85,-705.683
+1788,2012,2012-12-31,233371452,19136141.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,233371.452,19136.141
+1809,2012,2012-12-31,64648943,5653172.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,64648.943,5653.172
+1810,2012,2012-12-31,-39380522,-121648972.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-39380.522,-121648.972
+1811,2012,2012-12-31,-10975444,25896973.0,12,31/12,Operações com o setor externo,setor_externo,fator,-10975.444,25896.973
+1815,2012,2012-12-31,3161327,118682701.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,3161.327,118682.701
+1818,2012,2012-12-31,6957731,-8392875.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,6957.731,-8392.875
+12484,2012,2012-12-31,-5424,45943.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-5.424,45.943
+12487,2012,2012-12-31,-59770,-1100801.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-59.77,-1100.801
+1788,2013,2013-12-31,249509778,16138326.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,249509.778,16138.326
+1809,2013,2013-12-31,88570252,197242065.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,88570.252,197242.065
+1810,2013,2013-12-31,-43098963,-127554789.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-43098.963,-127554.789
+1811,2013,2013-12-31,-6973532,-22428624.0,12,31/12,Operações com o setor externo,setor_externo,fator,-6973.532,-22428.624
+1815,2013,2013-12-31,-7111959,-19903346.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-7111.959,-19903.346
+1818,2013,2013-12-31,2528586,-12532941.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,2528.586,-12532.941
+12484,2013,2013-12-31,-2,-1675.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.002,-1.675
+12487,2013,2013-12-31,48593,1314564.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,48.593,1314.564
+1788,2014,2014-12-31,263528517,14018739.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,263528.517,14018.739
+1809,2014,2014-12-31,43320612,-76307204.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,43320.612,-76307.204
+1810,2014,2014-12-31,-17938494,-668486.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-17938.494,-668.486
+1811,2014,2014-12-31,-27192559,16274839.0,12,31/12,Operações com o setor externo,setor_externo,fator,-27192.559,16274.839
+1815,2014,2014-12-31,6483102,56163369.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,6483.102,56163.369
+1818,2014,2014-12-31,185497,1227406.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,185.497,1227.406
+12484,2014,2014-12-31,0,-45.0,12,31/12,Redesconto do Banco Central,redesconto,fator,0.0,-0.045
+12487,2014,2014-12-31,17044874,17329053.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,17044.874,17329.053
+1788,2015,2015-12-31,255288922,-8239595.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,255288.922,-8239.595
+1809,2015,2015-12-31,-18963647,-124016063.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,-18963.647,-124016.063
+1810,2015,2015-12-31,31966901,59665808.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,31966.901,59665.808
+1811,2015,2015-12-31,-1077380,-15037710.0,12,31/12,Operações com o setor externo,setor_externo,fator,-1077.38,-15037.71
+1815,2015,2015-12-31,-7713625,-24740332.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-7713.625,-24740.332
+1818,2015,2015-12-31,437373,6233098.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,437.373,6233.098
+12484,2015,2015-12-31,-1959,-593.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-1.959,-0.593
+12487,2015,2015-12-31,7794459,89657153.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,7794.459,89657.153
+29004,2015,2015-12-31,-41100110,-123479463.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-41100.11,-123479.463
+29006,2015,2015-12-31,22136463,-536600.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,22136.463,-536.6
+1788,2016,2016-12-31,270287146,14998224.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,270287.146,14998.224
+1809,2016,2016-12-31,79414034,32267880.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,79414.034,32267.88
+1810,2016,2016-12-31,-52397634,12284191.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-52397.634,12284.191
+1811,2016,2016-12-31,352478,32532733.0,12,31/12,Operações com o setor externo,setor_externo,fator,352.478,32532.733
+1815,2016,2016-12-31,1612164,6054528.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,1612.164,6054.528
+1818,2016,2016-12-31,244327,7424617.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,244.327,7424.617
+12484,2016,2016-12-31,-27,-3179.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.027,-3.179
+12487,2016,2016-12-31,-3858120,-75562373.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-3858.12,-75562.373
+29004,2016,2016-12-31,7559278,31896944.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,7559.278,31896.944
+29006,2016,2016-12-31,71854756,370936.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,71854.756,370.936
+1788,2017,2017-12-31,296755456,26468310.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,296755.456,26468.31
+1809,2017,2017-12-31,45249193,-26792966.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,45249.193,-26792.966
+1810,2017,2017-12-31,7163590,52132877.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,7163.59,52132.877
+1811,2017,2017-12-31,-26027013,1396743.0,12,31/12,Operações com o setor externo,setor_externo,fator,-26027.013,1396.743
+1815,2017,2017-12-31,4770938,867627.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,4770.938,867.627
+1818,2017,2017-12-31,-55314,5896818.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-55.314,5896.818
+12484,2017,2017-12-31,-8920,-181.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-8.92,-0.181
+12487,2017,2017-12-31,1443181,-7032535.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,1443.181,-7032.535
+29004,2017,2017-12-31,-30684804,-111168532.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-30684.804,-111168.532
+29006,2017,2017-12-31,75933997,84375566.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,75933.997,84375.566
+1788,2018,2018-12-31,302049461,5294005.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,302049.461,5294.005
+1809,2018,2018-12-31,36530769,35093592.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,36530.769,35093.592
+1810,2018,2018-12-31,20453395,-44486130.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,20453.395,-44486.13
+1811,2018,2018-12-31,-30488340,-17348770.0,12,31/12,Operações com o setor externo,setor_externo,fator,-30488.34,-17348.77
+1815,2018,2018-12-31,-6759022,13987567.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-6759.022,13987.567
+1818,2018,2018-12-31,1520697,2909758.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,1520.697,2909.758
+12484,2018,2018-12-31,13279,13200.0,12,31/12,Redesconto do Banco Central,redesconto,fator,13.279,13.2
+12487,2018,2018-12-31,1519905,15125016.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,1519.905,15125.016
+29004,2018,2018-12-31,-29615079,32704358.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-29615.079,32704.358
+29006,2018,2018-12-31,66145848,2389234.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,66145.848,2389.234
+1788,2019,2019-12-31,316586707,14537246.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,316586.707,14537.246
+1809,2019,2019-12-31,127568060,227324959.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,127568.06,227324.959
+1810,2019,2019-12-31,-43975649,-89301052.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-43975.649,-89301.052
+1811,2019,2019-12-31,-46838632,-141168328.0,12,31/12,Operações com o setor externo,setor_externo,fator,-46838.632,-141168.328
+1815,2019,2019-12-31,-6659602,16690766.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-6659.602,16690.766
+1818,2019,2019-12-31,-3362213,-6634019.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-3362.213,-6634.019
+12484,2019,2019-12-31,-60,-14549.0,12,31/12,Redesconto do Banco Central,redesconto,fator,-0.06,-14.549
+12487,2019,2019-12-31,-6928091,7639551.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-6928.091,7639.551
+29004,2019,2019-12-31,-15623582,-15720656.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-15623.582,-15720.656
+29006,2019,2019-12-31,143191642,243045615.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,143191.642,243045.615
+1788,2020,2020-12-31,431536653,114949946.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,431536.653,114949.946
+1809,2020,2020-12-31,-19509913,-630037433.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,-19509.913,-630037.433
+1810,2020,2020-12-31,25213146,704194538.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,25213.146,704194.538
+1811,2020,2020-12-31,-12809786,-117733553.0,12,31/12,Operações com o setor externo,setor_externo,fator,-12809.786,-117733.553
+1815,2020,2020-12-31,3009625,69829095.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,3009.625,69829.095
+1818,2020,2020-12-31,-1835660,-19343055.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-1835.66,-19343.055
+12484,2020,2020-12-31,2383,3485.0,12,31/12,Redesconto do Banco Central,redesconto,fator,2.383,3.485
+12487,2020,2020-12-31,-8028787,40800821.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-8028.787,40800.821
+28724,2020,2020-12-31,27816100,65828662.0,8,31/12,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,27816.1,65828.662
+29004,2020,2020-12-31,-179441373,-365463108.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-179441.373,-365463.108
+29006,2020,2020-12-31,159931460,-264574325.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,159931.46,-264574.325
+1788,2021,2021-12-31,409183519,-22353134.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,409183.519,-22353.134
+1809,2021,2021-12-31,76002281,182431271.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,76002.281,182431.271
+1810,2021,2021-12-31,-42883828,-81290481.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-42883.828,-81290.481
+1811,2021,2021-12-31,-35033500,-36630770.0,12,31/12,Operações com o setor externo,setor_externo,fator,-35033.5,-36630.77
+1815,2021,2021-12-31,246624,-26059891.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,246.624,-26059.891
+1818,2021,2021-12-31,-11219235,-30402627.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-11219.235,-30402.627
+12484,2021,2021-12-31,50194,44990.0,12,31/12,Redesconto do Banco Central,redesconto,fator,50.194,44.99
+12487,2021,2021-12-31,3983847,22323949.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,3983.847,22323.949
+28724,2021,2021-12-31,4765473,-52769578.0,12,31/12,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,4765.473,-52769.578
+29004,2021,2021-12-31,-61753191,-121550764.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-61753.191,-121550.764
+29006,2021,2021-12-31,137755472,303982035.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,137755.472,303982.035
+1788,2022,2022-12-31,419659918,10476399.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,419659.918,10476.399
+1809,2022,2022-12-31,139533680,437174227.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,139533.68,437174.227
+1810,2022,2022-12-31,-35780006,-152518591.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-35780.006,-152518.591
+1811,2022,2022-12-31,-46541023,-56620783.0,12,31/12,Operações com o setor externo,setor_externo,fator,-46541.023,-56620.783
+1815,2022,2022-12-31,13351980,-54168500.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,13351.98,-54168.5
+1818,2022,2022-12-31,-19082092,-80194454.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-19082.092,-80194.454
+12484,2022,2022-12-31,26424,-27398.0,12,31/12,Redesconto do Banco Central,redesconto,fator,26.424,-27.398
+12487,2022,2022-12-31,-5739568,-92265400.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-5739.568,-92265.4
+28724,2022,2022-12-31,-17642115,9097299.0,12,31/12,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,-17642.115,9097.299
+29004,2022,2022-12-31,-22231419,251182278.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-22231.419,251182.278
+29006,2022,2022-12-31,161765099,185991949.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,161765.099,185991.949
+1788,2023,2023-12-31,422718628,3058710.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,422718.628,3058.71
+1809,2023,2023-12-31,-18023368,-56588088.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,-18023.368,-56588.088
+1810,2023,2023-12-31,80331787,206854972.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,80331.787,206854.972
+1811,2023,2023-12-31,233715,78236910.0,12,31/12,Operações com o setor externo,setor_externo,fator,233.715,78236.91
+1815,2023,2023-12-31,-16363195,-45370899.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-16363.195,-45370.899
+1818,2023,2023-12-31,-22381990,-75435615.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-22381.99,-75435.615
+12484,2023,2023-12-31,0,-29715.0,12,31/12,Redesconto do Banco Central,redesconto,fator,0.0,-29.715
+12487,2023,2023-12-31,-6628462,-70871662.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,-6628.462,-70871.662
+28724,2023,2023-12-31,0,-33737198.0,12,31/12,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,0.0,-33737.198
+29004,2023,2023-12-31,-127402891,73732460.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-127402.891,73732.46
+29006,2023,2023-12-31,109379523,-130320548.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,109379.523,-130320.548
+1788,2024,2024-12-31,451213588,28494960.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,451213.588,28494.96
+1809,2024,2024-12-31,211370114,158704826.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,211370.114,158704.826
+1810,2024,2024-12-31,-55712578,65831935.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-55712.578,65831.935
+1811,2024,2024-12-31,-186347058,-212477334.0,12,31/12,Operações com o setor externo,setor_externo,fator,-186347.058,-212477.334
+1815,2024,2024-12-31,35522321,-706950.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,35522.321,-706.95
+1818,2024,2024-12-31,-10450304,-98786795.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,-10450.304,-98786.795
+12484,2024,2024-07-31,0,-788.0,7,ultimo_31/07/2024,Redesconto do Banco Central,redesconto,fator,0.0,-0.788
+12487,2024,2024-12-31,19928148,115930245.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,19928.148,115930.245
+28724,2024,2024-12-31,0,-21.0,12,31/12,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,0.0,-0.021
+29004,2024,2024-12-31,-30736668,65135039.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-30736.668,65135.039
+29006,2024,2024-12-31,242106782,93569787.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,242106.782,93569.787
+1788,2025,2025-12-31,447096654,-4116934.0,12,31/12,Base monetária restrita,base_monetaria_restrita,resultado,447096.654,-4116.934
+1809,2025,2025-12-31,73663510,54036513.0,12,31/12,Títulos públicos federais — Total,titulos_publicos_total,fator,73663.51,54036.513
+1810,2025,2025-12-31,-35402732,94770505.0,12,31/12,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,-35402.732,94770.505
+1811,2025,2025-12-31,-22296357,8357906.0,12,31/12,Operações com o setor externo,setor_externo,fator,-22296.357,8357.906
+1815,2025,2025-12-31,-20160853,45376981.0,12,31/12,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,-20160.853,45376.981
+1818,2025,2025-12-31,2448268,-100762164.0,12,31/12,Autoridade Monetária — Outras operações,outras_operacoes,fator,2448.268,-100762.164
+12487,2025,2025-12-31,18302009,-105895906.0,12,31/12,Derivativos — ajustes,derivativos_ajustes,fator,18302.009,-105895.906
+28724,2025,2025-12-31,0,-24.0,12,31/12,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,0.0,-0.024
+29004,2025,2025-12-31,-77293578,-376560608.0,12,31/12,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-77293.578,-376560.608
+29006,2025,2025-12-31,150957088,430597121.0,12,31/12,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,150957.088,430597.121
+1788,2026,2026-06-30,431100998,-15995656.0,6,ultimo_30/06/2026,Base monetária restrita,base_monetaria_restrita,resultado,431100.998,-15995.656
+1809,2026,2026-06-30,-55189171,-72034109.0,6,ultimo_30/06/2026,Títulos públicos federais — Total,titulos_publicos_total,fator,-55189.171,-72034.109
+1810,2026,2026-06-30,60858785,131825207.0,6,ultimo_30/06/2026,Tesouro Nacional — Conta única,tesouro_conta_unica,fator,60858.785,131825.207
+1811,2026,2026-06-30,2919547,52583317.0,6,ultimo_30/06/2026,Operações com o setor externo,setor_externo,fator,2919.547,52583.317
+1815,2026,2026-06-30,3858149,14472391.0,6,ultimo_30/06/2026,Depósitos de instituições financeiras,depositos_instituicoes_financeiras,fator,3858.149,14472.391
+1818,2026,2026-06-30,-19230225,-81478091.0,6,ultimo_30/06/2026,Autoridade Monetária — Outras operações,outras_operacoes,fator,-19230.225,-81478.091
+12487,2026,2026-06-30,9276611,-62162632.0,6,ultimo_30/06/2026,Derivativos — ajustes,derivativos_ajustes,fator,9276.611,-62162.632
+28724,2026,2026-06-30,800000,800000.0,6,ultimo_30/06/2026,Linhas temporárias especiais de liquidez,linhas_temporarias_liquidez,fator,800.0,800.0
+29004,2026,2026-06-30,-125795713,20176538.0,6,ultimo_30/06/2026,Títulos públicos — mercado primário,titulos_mercado_primario,desdobramento,-125795.713,20176.538
+29006,2026,2026-06-30,70606542,-92210646.0,6,ultimo_30/06/2026,Títulos públicos — mercado secundário,titulos_mercado_secundario,desdobramento,70606.542,-92210.646

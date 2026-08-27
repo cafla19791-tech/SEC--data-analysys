@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-"""Saldos e variações anuais dos fatores condicionantes da base monetária.
+"""Saldo no último dia do ano dos fatores condicionantes da base monetária.
 
-Fonte: Banco Central do Brasil, SGS (saldo em final de período).
-Unidade original: milhares de unidades monetárias correntes (R$ mil).
-Divulgação: R$ milhões (valor SGS ÷ 1.000).
+Fonte: Banco Central do Brasil, SGS — *saldo em final de período* (mensal).
+Não há série diária desses fatores. O valor de dezembro é o saldo do último
+dia do ano (último dia do mês de referência). A API data o mês como 01/MM;
+este script grava 31/12 (ou o último dia do mês disponível).
 
-As séries dos *fatores* medem a contribuição de cada item no mês
-(variação da base atribuída ao fator). Por isso o script publica:
-
-- valor de dezembro (última observação do ano na série SGS);
-- variação acumulada no ano (soma dos meses) — fecha com Δ da base;
-- saldo da base monetária restrita no fim do ano (estoque, SGS 1788).
-
-O ano corrente usa o último mês disponível.
+Unidade original: R$ mil. Divulgação: R$ milhões (÷ 1.000).
+O ano corrente usa o último mês publicado.
 """
 
 from __future__ import annotations
@@ -217,6 +212,11 @@ def _rotulo_mes(ts: pd.Timestamp) -> str:
     return f"{ts.month:02d}/{ts.year}"
 
 
+def ultimo_dia_periodo(ts: pd.Timestamp) -> pd.Timestamp:
+    """SGS mensal vem como dia 1; o saldo é o do último dia daquele mês."""
+    return pd.Timestamp(ts) + pd.offsets.MonthEnd(0)
+
+
 def agregados_anuais(df: pd.DataFrame, anos: list[int]) -> pd.DataFrame:
     """Para cada ano: valor de dezembro (ou último mês) e soma dos meses."""
     cols = [
@@ -236,8 +236,9 @@ def agregados_anuais(df: pd.DataFrame, anos: list[int]) -> pd.DataFrame:
     if work.empty:
         return pd.DataFrame(columns=cols)
     last = work.sort_values("data").groupby("ano", as_index=False).tail(1)
+    last["data"] = last["data"].map(ultimo_dia_periodo)
     last["fechamento"] = last["data"].map(
-        lambda ts: "dezembro" if ts.month == 12 else f"ultimo_{_rotulo_mes(ts)}"
+        lambda ts: "31/12" if ts.month == 12 else f"ultimo_{ts.strftime('%d/%m/%Y')}"
     )
     last = last.rename(columns={"valor": "valor_dezembro_rs_mil"})
     soma = (
@@ -332,12 +333,10 @@ def _anexar_status(largo: pd.DataFrame, longo: pd.DataFrame) -> pd.DataFrame:
         .max()
         .rename(columns={"data": "data_ref"})
     )
-    status = (
-        longo.groupby("ano")["fechamento"]
-        .agg(lambda s: "dezembro" if (s == "dezembro").all() else "parcial")
-        .reset_index()
+    refs["fechamento"] = refs["data_ref"].map(
+        lambda ts: "31/12" if pd.Timestamp(ts).month == 12 else "parcial"
     )
-    out = largo.merge(refs, on="ano").merge(status, on="ano")
+    out = largo.merge(refs, on="ano")
     frente = ["ano", "data_ref", "fechamento"]
     resto = [c for c in out.columns if c not in frente]
     return out[frente + resto]
@@ -379,7 +378,7 @@ def markdown_tabela(
     catalogo = catalogo if catalogo is not None else SERIES
     visiveis = _colunas_visiveis(largo, catalogo)
     extra_cols = [c for c in (extras or []) if c in largo.columns]
-    cab = ["Ano", "Mês ref."] + [m["nome"] for m in visiveis]
+    cab = ["Ano", "Último dia"] + [m["nome"] for m in visiveis]
     nomes_extra = {
         "soma_fatores": "Soma dos fatores",
         "variacao_base": "Δ base monetária",
@@ -396,7 +395,7 @@ def markdown_tabela(
         "|" + "|".join(["---"] * 2 + ["---:"] * (len(visiveis) + len(extra_cols))) + "|",
     ]
     for _, row in largo.iterrows():
-        mes = pd.Timestamp(row["data_ref"]).strftime("%m/%Y")
+        mes = pd.Timestamp(row["data_ref"]).strftime("%d/%m/%Y")
         vals = [formatar_milhoes(row[m["coluna"]]) for m in visiveis]
         vals += [formatar_milhoes(row[c]) for c in extra_cols]
         linhas.append(f"| {int(row['ano'])} | {mes} | " + " | ".join(vals) + " |")
@@ -433,10 +432,10 @@ def gravar_saidas(
 ) -> dict[str, Path]:
     pasta.mkdir(parents=True, exist_ok=True)
     csv_longo = pasta / f"{stem}_anual_longo.csv"
-    csv_dez = pasta / f"{stem}_dezembro_r$_milhoes.csv"
+    csv_dez = pasta / f"{stem}_saldo_31_12_r$_milhoes.csv"
     csv_var = pasta / f"{stem}_variacao_anual_r$_milhoes.csv"
     xlsx = pasta / f"{stem}_anual.xlsx"
-    md_dez = pasta / f"{stem}_dezembro.md"
+    md_dez = pasta / f"{stem}_saldo_31_12.md"
     md_var = pasta / f"{stem}_variacao_anual.md"
 
     longo_out = longo.copy()
@@ -451,15 +450,15 @@ def gravar_saidas(
     var_out.to_csv(csv_var, index=False)
 
     with pd.ExcelWriter(xlsx, engine="openpyxl") as writer:
+        dez_out.to_excel(writer, sheet_name="Saldo_ultimo_dia_ano", index=False)
         var_out.to_excel(writer, sheet_name="Variacao_no_ano", index=False)
-        dez_out.to_excel(writer, sheet_name="Valor_dezembro_SGS", index=False)
         longo_out.to_excel(writer, sheet_name="Agregado_anual_longo", index=False)
         pd.DataFrame(SERIES).to_excel(writer, sheet_name="Codigos_SGS", index=False)
 
     nota_dez = (
         "Fonte: Banco Central do Brasil, SGS — *saldo em final de período*. "
-        "Para os fatores, o valor de dezembro é a **contribuição daquele mês** "
-        "(não é estoque). A base monetária restrita é estoque."
+        "Não há série diária. O valor de dezembro é o saldo do **último dia do ano**. "
+        "2026 usa o último mês publicado."
     )
     nota_var = (
         "Fonte: Banco Central do Brasil, SGS. "
@@ -469,7 +468,7 @@ def gravar_saidas(
     md_dez.write_text(
         markdown_tabela(
             dezembro,
-            "Fatores condicionantes — valor de dezembro (SGS)",
+            "Saldo no último dia do ano — fatores condicionantes da base monetária",
             nota_dez,
         ),
         encoding="utf-8",
@@ -523,7 +522,7 @@ def coletar(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Saldos de dezembro e variação anual dos fatores condicionantes "
+            "Saldo no último dia do ano dos fatores condicionantes "
             "da base monetária (Bacen SGS)."
         )
     )
@@ -541,8 +540,8 @@ def main(argv: list[str] | None = None) -> int:
     print(
         markdown_tabela(
             dezembro,
-            "Fatores condicionantes — valor de dezembro (SGS)",
-            "Contribuição do mês de dezembro. Base monetária = estoque.",
+            "Saldo no último dia do ano — fatores condicionantes da base monetária",
+            "Saldo SGS em 31/12 de cada ano (último dia do período).",
         )
     )
     print(

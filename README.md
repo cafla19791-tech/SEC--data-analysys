@@ -214,7 +214,7 @@ python3 scripts/gerar_fluxos.py --download \
 
 ## Fatores condicionantes da base monetária (Bacen SGS)
 
-Saldos de dezembro e variação anual (1995–2026), em R$ milhões:
+Saldo no último dia do ano (31/12) e variação anual (1995–2026), em R$ milhões:
 
 ```bash
 PYTHONPATH=. python3 scripts/fatores_condicionantes_base_monetaria.py

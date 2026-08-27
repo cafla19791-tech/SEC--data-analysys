@@ -37,8 +37,10 @@ output/*_stats.json
 !output/desembolsos_1995_2001_ipca.md
 !output/desembolsos_1995_2001_ipca.xlsx
 !output/fatores_condicionantes_base_monetaria_dezembro.md
+!output/fatores_condicionantes_base_monetaria_saldo_31_12.md
 !output/fatores_condicionantes_base_monetaria_variacao_anual.md
 !output/fatores_condicionantes_base_monetaria_dezembro_r$_milhoes.csv
+!output/fatores_condicionantes_base_monetaria_saldo_31_12_r$_milhoes.csv
 !output/fatores_condicionantes_base_monetaria_variacao_anual_r$_milhoes.csv
 !output/fatores_condicionantes_base_monetaria_anual_longo.csv
 output/indiretas_automaticas_ipca/*.xlsx

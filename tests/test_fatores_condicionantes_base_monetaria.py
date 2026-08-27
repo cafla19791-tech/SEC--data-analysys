@@ -14,6 +14,7 @@ from scripts.fatores_condicionantes_base_monetaria import (
     gravar_saidas,
     markdown_tabela,
     montar_tabelas,
+    ultimo_dia_periodo,
 )
 
 
@@ -27,6 +28,11 @@ def _serie(codigo: int, datas: list[str], valores: list[float]) -> pd.DataFrame:
     )
 
 
+def test_ultimo_dia_periodo_converte_dia_1_em_31_12():
+    assert ultimo_dia_periodo(pd.Timestamp("1995-12-01")) == pd.Timestamp("1995-12-31")
+    assert ultimo_dia_periodo(pd.Timestamp("2026-06-01")) == pd.Timestamp("2026-06-30")
+
+
 def test_agregados_dezembro_e_soma_do_ano():
     df = _serie(
         1810,
@@ -37,7 +43,8 @@ def test_agregados_dezembro_e_soma_do_ano():
     assert list(out["ano"]) == [1995, 1996]
     assert list(out["valor_dezembro_rs_mil"]) == [20.0, 7.0]
     assert list(out["variacao_ano_rs_mil"]) == [30.0, 12.0]
-    assert set(out["fechamento"]) == {"dezembro"}
+    assert set(out["fechamento"]) == {"31/12"}
+    assert list(pd.to_datetime(out["data"]).dt.day.unique()) == [31]
 
 
 def test_agregados_ano_corrente_parcial():
@@ -45,7 +52,8 @@ def test_agregados_ano_corrente_parcial():
     out = agregados_anuais(df, [2026])
     assert out.iloc[0]["valor_dezembro_rs_mil"] == 110.0
     assert out.iloc[0]["variacao_ano_rs_mil"] == 210.0
-    assert out.iloc[0]["fechamento"] == "ultimo_06/2026"
+    assert out.iloc[0]["fechamento"] == "ultimo_30/06/2026"
+    assert pd.Timestamp(out.iloc[0]["data"]) == pd.Timestamp("2026-06-30")
     assert out.iloc[0]["n_meses"] == 2
 
 
@@ -108,6 +116,6 @@ def test_gravar_saidas_e_markdown(tmp_path: Path):
     md = caminhos["md_dezembro"].read_text(encoding="utf-8")
     assert formatar_milhoes(1500.0) in md
     xl = pd.ExcelFile(caminhos["xlsx"])
+    assert "Saldo_ultimo_dia_ano" in xl.sheet_names
     assert "Variacao_no_ano" in xl.sheet_names
-    assert "Valor_dezembro_SGS" in xl.sheet_names
     assert "1810" in markdown_tabela(dez, "t", "n", catalogo=catalogo)
