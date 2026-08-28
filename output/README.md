@@ -37,3 +37,11 @@ Run completo (fatores SELIC Bacen SGS 11 → ContAgil): 348.864 contratos ·
 72 agentes.
 
 Interface web: `streamlit run app.py`
+
+## Cotejamento IPCA × CPI All Items (1990–2025)
+
+```bash
+PYTHONPATH=. python3 scripts/cotejamento_ipca_cpi.py
+```
+
+- `cotejamento_ipca_cpi_all_items_1990_2025.md` / `.csv` / `.xlsx` — variação dez/dez, diferença em p.p. e índices encadeados (dez/1989=100)
