@@ -37,3 +37,11 @@ Run completo (fatores SELIC Bacen SGS 11 → ContAgil): 348.864 contratos ·
 72 agentes.
 
 Interface web: `streamlit run app.py`
+
+## Índices oficiais de inflação — EUA e Brasil (1990–2025)
+
+```bash
+PYTHONPATH=. python3 scripts/indices_inflacao_eua_brasil.py
+```
+
+- `indices_inflacao_eua_brasil_1990_2025.md` / `.csv` / `.xlsx` — variação dezembro/dezembro: IPCA, INPC, IGP-M, IGP-DI, CPI-U e PCE
