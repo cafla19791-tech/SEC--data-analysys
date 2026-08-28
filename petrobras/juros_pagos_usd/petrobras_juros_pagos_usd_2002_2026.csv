@@ -1,0 +1,26 @@
+ano,juros_pagos_usd_milhoes,juros_pagos_usd_bi,cobertura,fonte,filing_url
+2002,200.0,0.2,ano cheio,20-F supplemental: Cash paid for Interest,https://www.sec.gov/Archives/edgar/data/1119639/000095012303007204/y87469e20vf.htm
+2003,622.0,0.622,ano cheio,20-F supplemental: Cash paid for Interest,https://www.sec.gov/Archives/edgar/data/1119639/000119312504112315/d20f.htm
+2004,995.0,0.995,ano cheio,"20-F supplemental: Interest, net of amount capitalized",https://www.sec.gov/Archives/edgar/data/1119639/000119312505135283/d20f.htm
+2005,1083.0,1.083,ano cheio,"20-F supplemental: Interest, net of amount capitalized",https://www.sec.gov/Archives/edgar/data/1119639/000095012306008263/y22597e20vf.htm
+2006,877.0,0.877,ano cheio,"20-F supplemental: Interest, net of amount capitalized",https://www.sec.gov/Archives/edgar/data/1119639/000095012307009192/y36368e20vf.htm
+2007,1684.0,1.684,ano cheio,"20-F supplemental: Interest, net of amount capitalized",https://www.sec.gov/Archives/edgar/data/1119639/000136231008002879/c73239e20vf.htm
+2008,1515.0,1.515,ano cheio,"20-F supplemental: Interest, net of amount capitalized",https://www.sec.gov/Archives/edgar/data/1119639/000095012309009383/y76586e20vf.htm
+2009,3059.0,3.059,ano cheio,"20-F supplemental: Interest, net of amount capitalized",https://www.sec.gov/Archives/edgar/data/1119639/000129281410001665/pbraform20f2009.htm
+2010,3700.0,3.7,ano cheio,"20-F supplemental: Interest, net of amount capitalized",https://www.sec.gov/Archives/edgar/data/1119639/000129281411001552/pbraform20f2010.htm
+2011,4574.0,4.574,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000129281412000786/pbraform20f_2011.htm
+2012,4772.0,4.772,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000129281413000928/pbraform20f_2012.htm
+2013,5066.0,5.066,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000129281414001060/pbraform20f_2013.htm
+2014,5995.0,5.995,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000129281415001242/pbraform20f_2014.htm
+2015,6305.0,6.305,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000129281416004364/pbraform20f_2015.htm
+2016,7308.0,7.308,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000119312517140235/d375139d20f.htm
+2017,6981.0,6.981,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000119312518120259/d521855d20f.htm
+2018,5791.0,5.791,ano cheio,20-F CF: Repayment of interest,https://www.sec.gov/Archives/edgar/data/1119639/000119312519093231/d692671d20f.htm
+2019,4501.0,4.501,ano cheio,20-F CF: Repayment of finance debt - interest,https://www.sec.gov/Archives/edgar/data/1119639/000119312520080953/d883642d20f.htm
+2020,3157.0,3.157,ano cheio,20-F CF: interest - finance debt,https://www.sec.gov/Archives/edgar/data/1119639/000129281421001152/pbraform20f_2020.htm
+2021,2229.0,2.229,ano cheio,20-F CF: interest - finance debt,https://www.sec.gov/Archives/edgar/data/1119639/000129281422001285/pbraform20f_2021.htm
+2022,1850.0,1.85,ano cheio,20-F CF: interest - finance debt,https://www.sec.gov/Archives/edgar/data/1119639/000129281423001253/pbrform20f_2022.htm
+2023,1978.0,1.978,ano cheio,20-F CF: Repayment of interest - finance debt,https://www.sec.gov/Archives/edgar/data/1119639/000129281424001340/pbrform20f_2023.htm
+2024,1918.0,1.918,ano cheio,20-F CF: Repayment of interest - finance debt,https://www.sec.gov/Archives/edgar/data/1119639/000129281425001352/pbrform20f_2024.htm
+2025,1836.0,1.836,ano cheio,20-F CF: Repayment of interest - finance debt,https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm
+2026,1070.0,1.07,YTD 1H2026,6-K FS USD 2Q26: Repayment of interest - finance debt (Jan–Jun/2026); ano incompleto,https://www.sec.gov/Archives/edgar/data/1119639/000129281426004133/pbrfs2q26usd_6k.htm
