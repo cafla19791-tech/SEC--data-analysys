@@ -37,3 +37,11 @@ Run completo (fatores SELIC Bacen SGS 11 → ContAgil): 348.864 contratos ·
 72 agentes.
 
 Interface web: `streamlit run app.py`
+
+## Eleições 2022 — presidente, 2º turno por UF
+
+```bash
+PYTHONPATH=. python3 scripts/eleicoes_2022_presidente_2t.py
+```
+
+- `eleicoes_2022_presidente_2t_por_uf.xlsx` — resultado oficial do TSE (26 estados + DF; aba com Brasil e exterior)
