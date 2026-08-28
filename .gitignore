@@ -41,6 +41,8 @@ output/*_stats.json
 !output/fatores_condicionantes_base_monetaria_variacao_anual.md
 !output/fatores_condicionantes_base_monetaria_dezembro_r$_milhoes.csv
 !output/fatores_condicionantes_base_monetaria_saldo_31_12_r$_milhoes.csv
+!output/ranking_juro_real_2019_2021.csv
+!output/ranking_juro_real_2019_2021.md
 !output/fatores_condicionantes_base_monetaria_variacao_anual_r$_milhoes.csv
 !output/fatores_condicionantes_base_monetaria_anual_longo.csv
 output/indiretas_automaticas_ipca/*.xlsx

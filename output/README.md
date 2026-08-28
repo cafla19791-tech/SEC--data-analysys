@@ -47,4 +47,5 @@ PYTHONPATH=. python3 scripts/fatores_condicionantes_base_monetaria.py
 - `fatores_condicionantes_base_monetaria_saldo_31_12.md` / `.csv` — saldo no último dia do ano (31/12; SGS saldo em final de período)
 - `fatores_condicionantes_base_monetaria_variacao_anual.md` / `.csv` — soma das contribuições no ano (fecha com Δ da base)
 - `fatores_condicionantes_base_monetaria_anual.xlsx` — aba **Saldo_ultimo_dia_ano** + variação + códigos SGS
+- `ranking_juro_real_2019_2021.md` / `.csv` / `.xlsx` — juro real básico acumulado 1/1/2019–31/12/2021 (BIS)
 
