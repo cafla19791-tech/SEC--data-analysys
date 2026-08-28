@@ -49,6 +49,7 @@ COUNTRY_COL_PRIORITY = (
     "REF_AREA",
     "BORROWERS_CTY",
     "L_REP_CTY",
+    "DER_REP_CTY",
     "REPORTING_COUNTRY",
     "ISSUER_RES",
     "ISSUER_CTY",
@@ -56,6 +57,8 @@ COUNTRY_COL_PRIORITY = (
     "COUNTRY",
     "REF_CTY",
     "PARENT_CTY",
+    "XD_EXCHANGE",
+    "DER_CPC",
 )
 
 LOW_FREQ = ("A", "Q", "M")
@@ -316,15 +319,61 @@ def eh_agregado(codigo: str, nome: str) -> bool:
     return any(p in n for p in palavras)
 
 
-def detectar_coluna_pais(colunas: Iterable[str]) -> str | None:
+def _candidatos_pais(colunas: Iterable[str]) -> list[str]:
     mapa = {codigo_coluna(c).upper(): c for c in colunas}
+    ordered: list[str] = []
+    vistos: set[str] = set()
     for chave in COUNTRY_COL_PRIORITY:
         if chave in mapa:
-            return mapa[chave]
+            ordered.append(mapa[chave])
+            vistos.add(chave)
     for codigo, original in mapa.items():
-        if "COUNTRY" in codigo or codigo.endswith("_CTY") or codigo.endswith("_AREA"):
-            return original
-    return None
+        if codigo in vistos:
+            continue
+        rotulo = rotulo_coluna(original).lower()
+        if (
+            "COUNTRY" in codigo
+            or codigo.endswith("_CTY")
+            or codigo.endswith("_AREA")
+            or codigo.endswith("_EXCHANGE")
+            or "country" in rotulo
+            or "reference area" in rotulo
+            or "location of trade" in rotulo
+        ):
+            ordered.append(original)
+            vistos.add(codigo)
+    return ordered
+
+
+def detectar_coluna_pais(colunas: Iterable[str], df: pd.DataFrame | None = None) -> str | None:
+    """Escolhe a dimensão de país.
+
+    Prefere área de referência / país declarante. Se essa coluna só tiver
+    agregados (ex.: OTC ``5J: All countries``), usa a que tiver mais países reais
+    (contraparte, local de negociação etc.).
+    """
+    candidatos = _candidatos_pais(colunas)
+    if not candidatos:
+        return None
+    if df is None or df.empty:
+        return candidatos[0]
+    preferidos = set(COUNTRY_COL_PRIORITY)
+    preferida_com_pais: str | None = None
+    melhor: str | None = None
+    melhor_score = -1
+    for col in candidatos:
+        if col not in df.columns:
+            continue
+        paises = paises_de_serie(df[col])
+        n_paises = sum(1 for p in paises.values() if not p.agregado)
+        score = n_paises * 1000 + len(paises)
+        codigo = codigo_coluna(col).upper()
+        if n_paises > 0 and codigo in preferidos and preferida_com_pais is None:
+            preferida_com_pais = col
+        if score > melhor_score:
+            melhor_score = score
+            melhor = col
+    return preferida_com_pais or melhor
 
 
 def detectar_coluna_freq(colunas: Iterable[str]) -> str | None:
@@ -616,7 +665,7 @@ def carregar_dataset_particionado(
     col_freq = col_tempo = None
     for i, chunk in enumerate(ler_csv_zip(zip_path, chunksize=chunksize)):
         if i == 0:
-            col_pais = detectar_coluna_pais(chunk.columns)
+            col_pais = detectar_coluna_pais(chunk.columns, chunk)
             col_freq = detectar_coluna_freq(chunk.columns)
             col_tempo = detectar_coluna_tempo(chunk.columns)
             if not col_pais:
@@ -830,7 +879,7 @@ def gerar_tema(
         if not frames:
             raise RuntimeError(f"Sem dados para o tema {topico['id']}")
         dados = pd.concat(frames, ignore_index=True, sort=False)
-        col_pais = detectar_coluna_pais(dados.columns)
+        col_pais = detectar_coluna_pais(dados.columns, dados)
         if not col_pais:
             raise RuntimeError(
                 f"Tema {topico['id']}: coluna de país não identificada ({list(dados.columns)})"

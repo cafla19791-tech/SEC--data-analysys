@@ -67,6 +67,37 @@ def test_detectar_coluna_pais_prioriza_ref_area():
         "L_REP_CTY:Reporting country"
     )
     assert detectar_coluna_pais(["FOO:Bar"]) is None
+    assert detectar_coluna_pais(
+        ["XD_EXCHANGE:Location of trade (Exchange or country)", "ISSUE_CUR:Issue currency"]
+    ) == "XD_EXCHANGE:Location of trade (Exchange or country)"
+
+
+def test_detectar_coluna_pais_fallback_quando_declarante_so_tem_agregado():
+    df = pd.DataFrame(
+        {
+            "DER_REP_CTY:Reporting country": ["5J: All countries"] * 4,
+            "DER_CPC:Counterparty country": [
+                "5J: All countries",
+                "US: United States",
+                "JP: Japan",
+                "US: United States",
+            ],
+        }
+    )
+    assert detectar_coluna_pais(df.columns, df) == "DER_CPC:Counterparty country"
+
+    lbs = pd.DataFrame(
+        {
+            "L_REP_CTY:Reporting country": ["BR: Brazil", "US: United States", "BR: Brazil"],
+            "L_CP_COUNTRY:Counterparty country": [
+                "DE: Germany",
+                "FR: France",
+                "JP: Japan",
+            ],
+        }
+    )
+    # mantém o país declarante mesmo se a contraparte tiver mais códigos
+    assert detectar_coluna_pais(lbs.columns, lbs) == "L_REP_CTY:Reporting country"
 
 
 def test_filtrar_frequencia_descarta_diario_quando_ha_mensal():
