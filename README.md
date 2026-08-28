@@ -214,7 +214,13 @@ python3 scripts/gerar_fluxos.py --download \
 
 ## Fatores condicionantes da base monetária (Bacen SGS)
 
-Saldo no último dia do ano (31/12) e variação anual (1995–2026), em R$ milhões:
+Saldo no último dia do ano (31/12) e variação anual (1995–2026), em R$ milhões.
+
+Ranking do juro real básico acumulado (BIS, Fisher):
+
+```bash
+PYTHONPATH=. python3 scripts/ranking_juro_real_acumulado.py --ano-inicio 2019 --ano-fim 2022
+```
 
 ```bash
 PYTHONPATH=. python3 scripts/fatores_condicionantes_base_monetaria.py
