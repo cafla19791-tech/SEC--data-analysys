@@ -97,6 +97,12 @@ python3 scripts/discriminativo_ranking_juros_reais.py
 # ContAgil: discriminativo_ranking_juros_reais.bat
 # Saída: output/discriminativo_ranking_juros_reais.xlsx
 
+# PDF (marcadores/sumário) + HTML com faixa de abas
+python3 scripts/discriminativo_para_pdf.py \
+  --entrada output/discriminativo_ranking_juros_reais.xlsx
+python3 scripts/discriminativo_para_pdf.py \
+  --entrada output/discriminativo_juros_reais_paises.xlsx
+
 # Resumo por contrato + por ano (script ContAgil / WinPython saida/fluxos_0.csv)
 python3 scripts/resumo_fluxos.py \
   --fluxos "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida\fluxos_0.csv"

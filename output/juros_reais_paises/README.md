@@ -27,3 +27,15 @@ Saída: `output/discriminativo_ranking_juros_reais.xlsx`
 - **Capa** / **Resumo** (pódio + posição do Brasil) / **Brasil**
 - **Uma aba por ano** (1995–2026): posição, país, real acumulada, inflação acumulada, nominal composta, meses e cobertura
 - Anos com dezembro e 12 meses entram no ranking oficial; 2026 é parcial (acumulado até o último mês BIS)
+
+## PDF e HTML (navegação entre abas)
+
+O PDF **não** tem abas nativas. O conversor gera:
+
+- **PDF** com página Índice, marcadores (sumário do leitor) e links anterior/próxima
+- **HTML** com faixa de abas clicáveis, equivalente ao Excel
+
+```bash
+python3 scripts/discriminativo_para_pdf.py --entrada output/discriminativo_ranking_juros_reais.xlsx
+python3 scripts/discriminativo_para_pdf.py --entrada output/discriminativo_juros_reais_paises.xlsx
+```

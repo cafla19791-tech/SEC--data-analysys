@@ -44,5 +44,7 @@ python3 scripts/discriminativo_juros_reais_paises.py
 
 - `discriminativo_juros_reais_paises.xlsx` — uma aba por país (nominal, IPC, real mensal, acumulada no ano)
 - `discriminativo_ranking_juros_reais.xlsx` — ranking da real anual, uma aba por ano (1995–2026)
+- `discriminativo_ranking_juros_reais.pdf` / `.html` — PDF com marcadores e HTML com abas
+- `discriminativo_juros_reais_paises.pdf` / `.html` — idem para o discriminativo por país
 
 Interface web: `streamlit run app.py`
