@@ -113,9 +113,13 @@ def test_montar_rankings_e_resumo_abas(tmp_path: Path):
     headers = [c.value for c in wb["2024"][4]]
     assert headers[0] == COL_POS
     assert headers[1] == COL_PAIS
-    assert headers[3] == COL_REAL
+    assert "acumulada no ano" in (headers[3] or "").replace("\n", " ")
     assert wb["2024"]["B5"].value == "Brasil"
     assert wb["2024"]["A5"].value == 1
+    assert wb["2024"].column_dimensions["D"].width >= 24
+    assert wb["2024"].row_dimensions[4].height >= 40
+    assert wb["2024"]["D4"].alignment.wrap_text is True
+    assert "A1:J1" in {str(r) for r in wb["2024"].merged_cells.ranges}
 
 
 def test_processar_cli_sintetico(tmp_path: Path):

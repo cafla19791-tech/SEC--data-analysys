@@ -165,8 +165,23 @@ def ler_aba(ws) -> dict:
     larguras = []
     for c in range(1, ultima_c + 1):
         w = ws.column_dimensions[get_column_letter(c)].width
-        larguras.append(float(w) if w else 12.0)
-    return {"nome": ws.title, "grid": grid, "larguras": larguras}
+        larguras.append(max(float(w) if w else 12.0, 10.0))
+    # títulos longos na 1ª coluna (célula mesclada) não podem ficar com 10–12
+    if grid and grid[0] and len(grid[0][0]["texto"]) > 40:
+        larguras[0] = max(larguras[0], 36.0)
+    merges = []
+    for rng in ws.merged_cells.ranges:
+        if rng.min_row > ultima_r or rng.min_col > ultima_c:
+            continue
+        merges.append(
+            (
+                rng.min_row,
+                rng.min_col,
+                min(rng.max_row, ultima_r),
+                min(rng.max_col, ultima_c),
+            )
+        )
+    return {"nome": ws.title, "grid": grid, "larguras": larguras, "merges": merges}
 
 
 def ler_workbook(path: Path, abas: list[str] | None = None) -> list[dict]:
@@ -307,8 +322,15 @@ def _tabela_aba(aba: dict, sty: dict, largura_util: float) -> Table:
     if not grid:
         return Table([[Paragraph("(aba vazia)", sty["corpo"])]])
     n_col = max(len(r) for r in grid)
-    pesos = list(aba["larguras"]) + [12.0] * (n_col - len(aba["larguras"]))
+    pesos = list(aba["larguras"]) + [14.0] * (n_col - len(aba["larguras"]))
     pesos = pesos[:n_col]
+    # cabeçalho longo: garante largura mínima pela maior linha de texto da coluna
+    for j in range(n_col):
+        maior = 0
+        for linha in grid[:8]:
+            if j < len(linha):
+                maior = max(maior, max((len(p) for p in linha[j]["texto"].split("\n")), default=0))
+        pesos[j] = max(pesos[j], min(maior * 0.85, 36.0))
     s = sum(pesos) or 1.0
     col_w = [largura_util * p / s for p in pesos]
     data = []
@@ -320,12 +342,14 @@ def _tabela_aba(aba: dict, sty: dict, largura_util: float) -> Table:
     tab = Table(data, colWidths=col_w, repeatRows=0)
     cmds = [
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 2),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 2),
-        ("TOPPADDING", (0, 0), (-1, -1), 1.5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
+        ("LEFTPADDING", (0, 0), (-1, -1), 3),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 3),
+        ("TOPPADDING", (0, 0), (-1, -1), 3),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
         ("GRID", (0, 0), (-1, -1), 0.2, colors.HexColor("#B0BEC5")),
     ]
+    for r1, c1, r2, c2 in aba.get("merges") or []:
+        cmds.append(("SPAN", (c1 - 1, r1 - 1), (c2 - 1, r2 - 1)))
     for i, linha in enumerate(grid):
         for j, cel in enumerate(linha[:n_col]):
             fill = cel["fill"]
@@ -427,6 +451,20 @@ def exportar_pdf(abas: list[dict], saida: Path, titulo: str) -> Path:
     return saida
 
 
+def _spans_html(aba: dict) -> tuple[dict[tuple[int, int], tuple[int, int]], set[tuple[int, int]]]:
+    origem: dict[tuple[int, int], tuple[int, int]] = {}
+    pular: set[tuple[int, int]] = set()
+    n_r = len(aba["grid"])
+    n_c = max((len(ln) for ln in aba["grid"]), default=0)
+    for r1, c1, r2, c2 in aba.get("merges") or []:
+        origem[(r1 - 1, c1 - 1)] = (r2 - r1 + 1, c2 - c1 + 1)
+        for r in range(r1 - 1, min(r2, n_r)):
+            for c in range(c1 - 1, min(c2, n_c)):
+                if (r, c) != (r1 - 1, c1 - 1):
+                    pular.add((r, c))
+    return origem, pular
+
+
 def exportar_html(abas: list[dict], saida: Path, titulo: str) -> Path:
     """HTML com faixa de abas — navegação equivalente à do Excel."""
     saida.parent.mkdir(parents=True, exist_ok=True)
@@ -451,7 +489,8 @@ def exportar_html(abas: list[dict], saida: Path, titulo: str) -> Path:
         "input[type=radio]{display:none}",
         ".sheet{display:none;padding:12px 16px 32px;overflow:auto;background:#fff}",
         "table{border-collapse:collapse;font-size:12px}",
-        "td{border:1px solid #b0bec5;padding:3px 6px;white-space:nowrap}",
+        "td{border:1px solid #b0bec5;padding:6px 8px;white-space:normal;vertical-align:middle}",
+        "tr:first-child td, tr:nth-child(4) td{min-width:7em}",
         f"{''.join(f'#{s}:checked~#{s}_box{{display:block}}#{s}:checked~div.tabs label[for={s}]{{background:#fff;font-weight:bold;color:#1B4F72}}' for s in slugs)}",
         "</style></head><body>",
         f"<div class='bar'>{html.escape(titulo)} — clique nas abas (equivalente às folhas do Excel)</div>",
@@ -464,18 +503,29 @@ def exportar_html(abas: list[dict], saida: Path, titulo: str) -> Path:
         partes.append(f"<label for='{s}'>{html.escape(a['nome'])}</label>")
     partes.append("</div>")
     for a, s in zip(abas, slugs):
+        origem, pular = _spans_html(a)
         partes.append(f"<div class='sheet' id='{s}_box'><table>")
-        for linha in a["grid"]:
+        for i, linha in enumerate(a["grid"]):
             partes.append("<tr>")
-            for cel in linha:
+            for j, cel in enumerate(linha):
+                if (i, j) in pular:
+                    continue
+                rs, cs = origem.get((i, j), (1, 1))
+                span = ""
+                if rs > 1:
+                    span += f" rowspan='{rs}'"
+                if cs > 1:
+                    span += f" colspan='{cs}'"
                 fill = f"background:{cel['fill']};" if cel["fill"] else ""
                 cor = f"color:{cel['font']};" if cel["font"] else ""
                 if (cel["fill"] or "").upper() == "#1B4F72" and not cel["font"]:
                     cor = "color:#fff;"
                 peso = "font-weight:bold;" if cel["bold"] else ""
                 al = {"LEFT": "left", "RIGHT": "right", "CENTER": "center"}[cel["align"]]
+                txt = html.escape(cel["texto"]).replace("\n", "<br>")
                 partes.append(
-                    f"<td style='{fill}{cor}{peso}text-align:{al}'>{html.escape(cel['texto'])}</td>"
+                    f"<td{span} style='{fill}{cor}{peso}text-align:{al};white-space:normal;"
+                    f"min-width:6em'>{txt}</td>"
                 )
             partes.append("</tr>")
         partes.append("</table></div>")

@@ -66,6 +66,34 @@ COLS_RANK = (
     COL_VAR,
 )
 
+# Cabeçalhos com quebra de linha para caber sem reticências.
+HEADERS_RANK = (
+    "Posição",
+    "País",
+    "Código",
+    "Taxa básica real\nacumulada no ano (%)",
+    "Inflação acumulada\nno ano (%)",
+    "Taxa básica nominal\ncomposta no ano (%)",
+    "Taxa básica nominal\nno fim do período (% a.a.)",
+    "Meses",
+    "Cobertura",
+    "Variação da real vs\nano anterior (p.p.)",
+)
+
+# Larguras em caracteres Excel — cabem o título completo + valores %.
+LARGURAS_ABA_ANO = {
+    1: 12,
+    2: 28,
+    3: 12,
+    4: 28,
+    5: 24,
+    6: 28,
+    7: 32,
+    8: 12,
+    9: 30,
+    10: 26,
+}
+
 
 def consolidar_anuais(por_serie: dict[str, pd.DataFrame]) -> pd.DataFrame:
     frames = [estatisticas_anuais(s) for s in por_serie.values() if not s.empty]
@@ -289,7 +317,7 @@ def escrever_resumo(wb: Workbook, resumo: pd.DataFrame, sty: dict) -> None:
                 cell.number_format = sty["pct"]
     _aplicar_larguras(
         ws,
-        {1: 8, 2: 14, 3: 20, 4: 20, 5: 14, 6: 20, 7: 14, 8: 20, 9: 14, 10: 18, 11: 20, 12: 18},
+        {1: 8, 2: 16, 3: 22, 4: 22, 5: 16, 6: 22, 7: 16, 8: 22, 9: 16, 10: 20, 11: 22, 12: 20},
     )
 
 
@@ -342,7 +370,7 @@ def escrever_brasil(wb: Workbook, evo: pd.DataFrame, sty: dict) -> None:
             cell.fill = fill
             if j in (3, 4, 5, 6) and val is not None and pd.notna(val):
                 cell.number_format = sty["pct"]
-    _aplicar_larguras(ws, {1: 8, 2: 10, 3: 36, 4: 28, 5: 36, 6: 40, 7: 10, 8: 28, 9: 36, 10: 18})
+    _aplicar_larguras(ws, {1: 10, 2: 12, 3: 36, 4: 28, 5: 36, 6: 42, 7: 12, 8: 30, 9: 36, 10: 20})
 
 
 def escrever_aba_ano(wb: Workbook, ano: int, ranking: pd.DataFrame, sty: dict) -> None:
@@ -355,7 +383,9 @@ def escrever_aba_ano(wb: Workbook, ano: int, ranking: pd.DataFrame, sty: dict) -
         titulo += " (parcial)"
     ws["A1"] = titulo
     ws["A1"].font = sty["title"]
+    ws["A1"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws.merge_cells("A1:J1")
+    ws.row_dimensions[1].height = 22
     ws["A2"] = (
         "Ordem: maior juro real → menor. "
         "Oficial: 12 meses com dezembro. "
@@ -363,15 +393,18 @@ def escrever_aba_ano(wb: Workbook, ano: int, ranking: pd.DataFrame, sty: dict) -
         f"Fonte: BIS CBPOL + CPI. {MARKER}"
     )
     ws["A2"].font = sty["subtitle"]
+    ws["A2"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
     ws.merge_cells("A2:J2")
+    ws.row_dimensions[2].height = 28
 
-    for j, h in enumerate(COLS_RANK, start=1):
+    wrap_cab = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    for j, h in enumerate(HEADERS_RANK, start=1):
         cell = ws.cell(4, j, h)
         cell.font = sty["header"]
         cell.fill = sty["header_fill"]
-        cell.alignment = sty["center"]
+        cell.alignment = wrap_cab
         cell.border = sty["thin"]
-    ws.row_dimensions[4].height = 32
+    ws.row_dimensions[4].height = 48
     ws.freeze_panes = "A5"
     if ranking.empty:
         ws["A5"] = "Sem países com taxa real neste ano."
@@ -422,14 +455,16 @@ def escrever_aba_ano(wb: Workbook, ano: int, ranking: pd.DataFrame, sty: dict) -
                 cell.alignment = sty["center"]
         r += 1
 
-    _aplicar_larguras(
-        ws,
-        {1: 10, 2: 22, 3: 10, 4: 38, 5: 30, 6: 40, 7: 42, 8: 10, 9: 28, 10: 38},
-    )
+    _aplicar_larguras(ws, LARGURAS_ABA_ANO)
     ws.page_setup.orientation = "landscape"
-    ws.page_setup.fitToPage = True
-    ws.page_setup.fitToWidth = 1
+    ws.page_setup.paperSize = ws.PAPERSIZE_A4
+    ws.page_setup.horizontalCentered = True
+    ws.page_setup.fitToWidth = 0
     ws.page_setup.fitToHeight = 0
+    if ws.sheet_properties.pageSetUpPr is not None:
+        ws.sheet_properties.pageSetUpPr.fitToPage = False
+    ws.sheet_view.zoomScale = 100
+    ws.sheet_view.view = "normal"
 
 
 def escrever_planilha(
