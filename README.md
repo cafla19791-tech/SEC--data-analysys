@@ -83,6 +83,15 @@ python3 scripts/discriminativos_indiretas_ano_contrato.py --pasta saida
 # ContAgil: discriminativos_indiretas_ano_contrato.bat
 # Saída: saida/discriminativos_ano_contrato/fluxos_ano_contrato_YYYY.csv
 
+# Discriminativo de taxas básicas de juros reais por país (BIS)
+# Fonte: https://data.bis.org/bulkdownload  (WS_CBPOL + WS_LONG_CPI)
+# Uma aba por país: Mês/ano, nominal, IPC, inflação no mês, real no mês;
+# após dezembro: real acumulada no ano (Fisher composto).
+python3 scripts/discriminativo_juros_reais_paises.py
+python3 scripts/discriminativo_juros_reais_paises.py --ano-inicio 2000
+# ContAgil: discriminativo_juros_reais_paises.bat
+# Saída: output/discriminativo_juros_reais_paises.xlsx
+
 # Resumo por contrato + por ano (script ContAgil / WinPython saida/fluxos_0.csv)
 python3 scripts/resumo_fluxos.py \
   --fluxos "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida\fluxos_0.csv"
@@ -133,6 +142,7 @@ streamlit run app.py
 | `output/resumo_por_agente.csv` | Ranking: Qtd Contratos, Total Subsídio, Impacto Fiscal 2026 |
 | `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
 | `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto ContAgil agregados por ano de pagamento |
+| `output/discriminativo_juros_reais_paises.xlsx` | Uma aba por país: taxa básica nominal BIS, IPC oficial, real mensal e acumulada no ano |
 | `resumo_contratos.xlsx` | Por contrato: total subsídio, impacto e saldo final (pasta do CSV de entrada) |
 | `resumo_por_ano.xlsx` | Por contrato × ano: total subsídio e impacto |
 | `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |

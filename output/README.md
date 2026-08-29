@@ -36,4 +36,12 @@ Run completo (fatores SELIC Bacen SGS 11 → ContAgil): 348.864 contratos ·
 22.151.051 parcelas · subsídio R$ 23,45 bi · impacto fiscal 2026 R$ 90,17 bi ·
 72 agentes.
 
+Discriminativo internacional (BIS):
+
+```bash
+python3 scripts/discriminativo_juros_reais_paises.py
+```
+
+- `discriminativo_juros_reais_paises.xlsx` — uma aba por país (nominal, IPC, real mensal, acumulada no ano)
+
 Interface web: `streamlit run app.py`
