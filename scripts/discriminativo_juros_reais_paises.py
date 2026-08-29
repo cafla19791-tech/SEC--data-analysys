@@ -392,7 +392,7 @@ def pivot_anual(
     *,
     ano_minimo: int = ANO_INICIO_DEFAULT,
 ) -> pd.DataFrame:
-    """Anos × países com a taxa real acumulada no ano (decimal)."""
+    """Anos × países com a taxa real acumulada no ano (decimal). A aba Anual transpôe isso."""
     frames = []
     for codigo, linhas in por_pais.items():
         anuais = linhas[linhas[COL_TIPO] == "acumulado"][[COL_MES, COL_REAL_ANO, "ano"]].copy()
@@ -571,8 +571,8 @@ def escrever_capa(wb: Workbook, resumos: list[dict], sty: dict, gerado: datetime
         ("Marker", MARKER),
         (
             "Observação",
-            "Países da Zona do Euro mantêm a série nacional histórica; "
-            "a taxa vigente do BCE está na aba Zona do Euro.",
+            "Recorte a partir de 1995. Países da Zona do Euro mantêm a série nacional "
+            "histórica; a taxa vigente do BCE está na aba Zona do Euro.",
         ),
     ]
     ws["A3"] = "Campo"
@@ -654,43 +654,56 @@ def escrever_resumo(wb: Workbook, resumos: list[dict], sty: dict) -> None:
     )
 
 
+LARGURA_ANUAL_PAIS = 24
+LARGURA_ANUAL_ANO = 12
+
+
 def escrever_anual(wb: Workbook, pivot: pd.DataFrame, sty: dict) -> None:
+    """Uma linha por país, uma coluna por ano (a partir de 1995). Evita colunas estreitas."""
     ws = wb.create_sheet("Anual")
     ws["A1"] = "Taxa básica de juros real acumulada no ano — comparação entre países"
     ws["A1"].font = sty["title"]
     if pivot.empty:
         ws["A3"] = "Sem anos completos para comparar."
         return
-    n_cols = len(pivot.columns) + 1
+    anos = [int(a) for a in pivot.index]
+    paises = list(pivot.columns)
+    n_cols = 1 + len(anos)
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=n_cols)
-    ws["A2"] = f"Período: {int(pivot.index.min())}–{int(pivot.index.max())}. Valores em % a.a. (Fisher composto)."
+    ws["A2"] = (
+        f"Período: {anos[0]}–{anos[-1]}. Uma linha por país; colunas = anos. "
+        "Valores em % a.a. (Fisher composto)."
+    )
     ws["A2"].font = sty["subtitle"]
     ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=n_cols)
-    ws["A3"] = "Ano"
+    alinha_cab = Alignment(horizontal="center", vertical="center", wrap_text=False)
+    alinha_num = Alignment(horizontal="center", vertical="center", wrap_text=False)
+    alinha_pais = Alignment(horizontal="left", vertical="center", wrap_text=False)
+    ws["A3"] = "País"
     ws["A3"].font = sty["header"]
     ws["A3"].fill = sty["header_fill"]
-    ws["A3"].alignment = sty["center"]
+    ws["A3"].alignment = alinha_cab
     ws["A3"].border = sty["thin"]
-    alinha_num = Alignment(horizontal="center", vertical="center", wrap_text=False)
-    alinha_cab = Alignment(horizontal="center", vertical="center", textRotation=90, wrap_text=True)
-    for j, col in enumerate(pivot.columns, start=2):
-        cell = ws.cell(3, j, col)
+    for j, ano in enumerate(anos, start=2):
+        cell = ws.cell(3, j, ano)
         cell.font = sty["header"]
         cell.fill = sty["header_fill"]
         cell.alignment = alinha_cab
         cell.border = sty["thin"]
-        ws.column_dimensions[get_column_letter(j)].width = 14
-    ws.row_dimensions[3].height = 110
+        ws.column_dimensions[get_column_letter(j)].width = LARGURA_ANUAL_ANO
+    ws.column_dimensions["A"].width = LARGURA_ANUAL_PAIS
+    ws.row_dimensions[3].height = 22
     ws.freeze_panes = "B4"
-    for i, (ano, rec) in enumerate(pivot.iterrows(), start=4):
-        ws.cell(i, 1, int(ano)).font = Font(name="Calibri", bold=True, size=10)
-        ws.cell(i, 1).border = sty["thin"]
-        ws.cell(i, 1).alignment = sty["center"]
+    for i, pais in enumerate(paises, start=4):
+        nome = ws.cell(i, 1, pais)
+        nome.font = Font(name="Calibri", bold=True, size=10)
+        nome.border = sty["thin"]
+        nome.alignment = alinha_pais
         fill = sty["alt"] if i % 2 == 0 else None
         if fill:
-            ws.cell(i, 1).fill = fill
+            nome.fill = fill
         ws.row_dimensions[i].height = 18
-        for j, val in enumerate(rec.tolist(), start=2):
+        for j, val in enumerate(pivot[pais].tolist(), start=2):
             cell = ws.cell(i, j)
             cell.border = sty["thin"]
             cell.alignment = alinha_num
@@ -699,14 +712,18 @@ def escrever_anual(wb: Workbook, pivot: pd.DataFrame, sty: dict) -> None:
             if pd.notna(val):
                 cell.value = float(val)
                 cell.number_format = sty["pct"]
-    ws.column_dimensions["A"].width = 10
-    ws.auto_filter.ref = f"A3:{get_column_letter(len(pivot.columns) + 1)}{3 + len(pivot)}"
+    ws.auto_filter.ref = f"A3:{get_column_letter(n_cols)}{3 + len(paises)}"
+    ws.page_setup.orientation = "landscape"
+    ws.page_setup.fitToPage = False
+    ws.sheet_view.zoomScale = 100
 
 
 def escrever_planilha(
     por_serie: dict[str, pd.DataFrame],
     por_linhas: dict[str, pd.DataFrame],
     saida: Path,
+    *,
+    ano_minimo: int = ANO_INICIO_DEFAULT,
 ) -> Path:
     saida.parent.mkdir(parents=True, exist_ok=True)
     sty = _estilo_base()
@@ -719,7 +736,7 @@ def escrever_planilha(
 
     escrever_capa(wb, resumos, sty, datetime.now())
     escrever_resumo(wb, resumos, sty)
-    escrever_anual(wb, pivot_anual(por_linhas), sty)
+    escrever_anual(wb, pivot_anual(por_linhas, ano_minimo=ano_minimo), sty)
     for codigo in codigos:
         print(f"[ABA] {nome_pais(codigo)} ({codigo}): {len(por_linhas[codigo]):,} linhas")
         escrever_aba_pais(wb, codigo, por_serie[codigo], por_linhas[codigo], sty)
@@ -851,7 +868,12 @@ def processar(
         cbpol_zip=cbpol_zip,
         cpi_zip=cpi_zip,
     )
-    return escrever_planilha(por_serie, por_linhas, saida)
+    return escrever_planilha(
+        por_serie,
+        por_linhas,
+        saida,
+        ano_minimo=ano_inicio if ano_inicio is not None else ANO_INICIO_DEFAULT,
+    )
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

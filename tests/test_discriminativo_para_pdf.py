@@ -87,6 +87,7 @@ def test_pdf_marcadores_e_html_abas(tmp_path: Path):
     assert "2024" in html_txt
     assert "Brasil" in html_txt
     assert "5,84%" in html_txt
+    assert "white-space:nowrap" in html_txt
     assert "colspan='3'" in html_txt or 'colspan="3"' in html_txt
     from scripts.discriminativo_para_pdf import ler_workbook
 

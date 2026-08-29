@@ -229,10 +229,13 @@ def test_processar_gera_abas(tmp_path: Path):
     assert acum is not None
     assert acum[5] is not None
     anual = wb["Anual"]
-    anos = [c.value for c in anual["A"] if isinstance(c.value, int)]
+    assert anual["A3"].value == "País"
+    anos = [c.value for c in anual[3] if isinstance(c.value, int)]
     assert anos
     assert min(anos) >= 1995
+    assert anual["A4"].value == "Brasil"
     assert anual.column_dimensions["B"].width >= 12
+    assert not anual["B4"].alignment.wrap_text
 
 
 def test_pivot_anual_so_desde_1995():

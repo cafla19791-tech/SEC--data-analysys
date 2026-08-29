@@ -345,8 +345,14 @@ def _tabela_aba(aba: dict, sty: dict, largura_util: float, colunas: list[int] | 
             if cj < len(linha):
                 maior = max(maior, max((len(p) for p in linha[cj]["texto"].split("\n")), default=0))
         pesos[j] = max(pesos[j], min(maior * 0.85, 36.0))
+        # percentuais curtos ("2,94%") não podem encolher até quebrar
+        for linha in grid:
+            if cj < len(linha) and "%" in linha[cj]["texto"] and len(linha[cj]["texto"]) <= 10:
+                pesos[j] = max(pesos[j], 12.0)
+                break
     s = sum(pesos) or 1.0
     col_w = [largura_util * p / s for p in pesos]
+    # se ainda ficar estreito demais para um percentual, o caller deve fatiar mais
     data = []
     for linha in grid:
         vazio = {"texto": "", "fill": None, "font": None, "bold": False, "align": "LEFT"}
@@ -511,9 +517,9 @@ def exportar_html(abas: list[dict], saida: Path, titulo: str) -> Path:
         ".tabs label:hover{background:#fff}",
         "input[type=radio]{display:none}",
         ".sheet{display:none;padding:12px 16px 32px;overflow:auto;background:#fff}",
-        "table{border-collapse:collapse;font-size:12px}",
-        "td{border:1px solid #b0bec5;padding:6px 8px;white-space:normal;vertical-align:middle}",
-        "tr:first-child td, tr:nth-child(4) td{min-width:7em}",
+        "table{border-collapse:collapse;font-size:12px;table-layout:auto}",
+        "td{border:1px solid #b0bec5;padding:4px 8px;white-space:nowrap;vertical-align:middle}",
+        "td.num{min-width:6.5em;text-align:center}",
         f"{''.join(f'#{s}:checked~#{s}_box{{display:block}}#{s}:checked~div.tabs label[for={s}]{{background:#fff;font-weight:bold;color:#1B4F72}}' for s in slugs)}",
         "</style></head><body>",
         f"<div class='bar'>{html.escape(titulo)} — clique nas abas (equivalente às folhas do Excel)</div>",
@@ -546,9 +552,10 @@ def exportar_html(abas: list[dict], saida: Path, titulo: str) -> Path:
                 peso = "font-weight:bold;" if cel["bold"] else ""
                 al = {"LEFT": "left", "RIGHT": "right", "CENTER": "center"}[cel["align"]]
                 txt = html.escape(cel["texto"]).replace("\n", "<br>")
+                nowrap = "white-space:nowrap;"
+                minw = "min-width:6.5em;" if "%" in cel["texto"] or (cel["texto"].isdigit() and len(cel["texto"]) == 4) else "min-width:8em;"
                 partes.append(
-                    f"<td{span} style='{fill}{cor}{peso}text-align:{al};white-space:normal;"
-                    f"min-width:6em'>{txt}</td>"
+                    f"<td{span} style='{fill}{cor}{peso}text-align:{al};{nowrap}{minw}'>{txt}</td>"
                 )
             partes.append("</tr>")
         partes.append("</table></div>")
