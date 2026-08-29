@@ -16,6 +16,7 @@ from scripts.discriminativo_juros_reais_paises import (
     COL_NOMINAL,
     COL_REAL_ANO,
     COL_REAL_MES,
+    COL_TIPO,
     MARKER,
     acumular_fator,
     carregar_cbpol_mensal,
@@ -23,6 +24,7 @@ from scripts.discriminativo_juros_reais_paises import (
     linhas_discriminativo,
     montar_serie_pais,
     nome_aba,
+    pivot_anual,
     processar,
     resumo_pais,
     taxa_mensal_composta,
@@ -226,3 +228,25 @@ def test_processar_gera_abas(tmp_path: Path):
     assert "12/2023" in meses
     assert acum is not None
     assert acum[5] is not None
+    anual = wb["Anual"]
+    anos = [c.value for c in anual["A"] if isinstance(c.value, int)]
+    assert anos
+    assert min(anos) >= 1995
+    assert anual.column_dimensions["B"].width >= 12
+
+
+def test_pivot_anual_so_desde_1995():
+    def _linhas(*anos: int) -> pd.DataFrame:
+        return pd.DataFrame(
+            {
+                COL_MES: [f"ACUMULADO {a}" for a in anos],
+                COL_REAL_ANO: [0.01 * (i + 1) for i in range(len(anos))],
+                "ano": list(anos),
+                COL_TIPO: ["acumulado"] * len(anos),
+            }
+        )
+
+    p = pivot_anual({"BR": _linhas(1980, 1994, 1995, 2001), "US": _linhas(1990, 2000)})
+    assert list(p.index) == [1995, 2000, 2001]
+    assert 1980 not in p.index
+    assert "Brasil" in p.columns

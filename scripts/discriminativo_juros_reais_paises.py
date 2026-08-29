@@ -27,7 +27,8 @@ Fontes (bulk download BIS)::
 Uso::
 
   python scripts/discriminativo_juros_reais_paises.py
-  python scripts/discriminativo_juros_reais_paises.py --ano-inicio 2000
+  python scripts/discriminativo_juros_reais_paises.py
+  python scripts/discriminativo_juros_reais_paises.py --ano-inicio 1995
 """
 
 from __future__ import annotations
@@ -51,6 +52,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 MARKER = "juros-reais-paises-20260829"
+ANO_INICIO_DEFAULT = 1995
 BIS_BULK = "https://data.bis.org/bulkdownload"
 URL_CBPOL = "https://data.bis.org/static/bulk/WS_CBPOL_csv_flat.zip"
 URL_CPI = "https://data.bis.org/static/bulk/WS_LONG_CPI_csv_flat.zip"
@@ -385,11 +387,19 @@ def resumo_pais(serie: pd.DataFrame, linhas: pd.DataFrame) -> dict:
     }
 
 
-def pivot_anual(por_pais: dict[str, pd.DataFrame]) -> pd.DataFrame:
+def pivot_anual(
+    por_pais: dict[str, pd.DataFrame],
+    *,
+    ano_minimo: int = ANO_INICIO_DEFAULT,
+) -> pd.DataFrame:
     """Anos × países com a taxa real acumulada no ano (decimal)."""
     frames = []
     for codigo, linhas in por_pais.items():
         anuais = linhas[linhas[COL_TIPO] == "acumulado"][[COL_MES, COL_REAL_ANO, "ano"]].copy()
+        if anuais.empty:
+            continue
+        if ano_minimo is not None:
+            anuais = anuais[anuais["ano"] >= int(ano_minimo)]
         if anuais.empty:
             continue
         anuais = anuais.rename(columns={COL_REAL_ANO: nome_pais(codigo)})
@@ -397,7 +407,7 @@ def pivot_anual(por_pais: dict[str, pd.DataFrame]) -> pd.DataFrame:
     if not frames:
         return pd.DataFrame()
     out = pd.concat(frames, axis=1).sort_index()
-    # Brasil primeiro, depois ordem alfabética em português
+    out = out.dropna(axis=1, how="all")
     cols = list(out.columns)
     if "Brasil" in cols:
         cols = ["Brasil"] + sorted([c for c in cols if c != "Brasil"], key=str.casefold)
@@ -651,20 +661,26 @@ def escrever_anual(wb: Workbook, pivot: pd.DataFrame, sty: dict) -> None:
     if pivot.empty:
         ws["A3"] = "Sem anos completos para comparar."
         return
-    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=min(len(pivot.columns) + 1, 20))
+    n_cols = len(pivot.columns) + 1
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=n_cols)
+    ws["A2"] = f"Período: {int(pivot.index.min())}–{int(pivot.index.max())}. Valores em % a.a. (Fisher composto)."
+    ws["A2"].font = sty["subtitle"]
+    ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=n_cols)
     ws["A3"] = "Ano"
     ws["A3"].font = sty["header"]
     ws["A3"].fill = sty["header_fill"]
     ws["A3"].alignment = sty["center"]
     ws["A3"].border = sty["thin"]
+    alinha_num = Alignment(horizontal="center", vertical="center", wrap_text=False)
+    alinha_cab = Alignment(horizontal="center", vertical="center", textRotation=90, wrap_text=True)
     for j, col in enumerate(pivot.columns, start=2):
         cell = ws.cell(3, j, col)
         cell.font = sty["header"]
         cell.fill = sty["header_fill"]
-        cell.alignment = Alignment(horizontal="center", vertical="center", textRotation=90, wrap_text=True)
+        cell.alignment = alinha_cab
         cell.border = sty["thin"]
-        ws.column_dimensions[get_column_letter(j)].width = 8
-    ws.row_dimensions[3].height = 90
+        ws.column_dimensions[get_column_letter(j)].width = 14
+    ws.row_dimensions[3].height = 110
     ws.freeze_panes = "B4"
     for i, (ano, rec) in enumerate(pivot.iterrows(), start=4):
         ws.cell(i, 1, int(ano)).font = Font(name="Calibri", bold=True, size=10)
@@ -673,15 +689,17 @@ def escrever_anual(wb: Workbook, pivot: pd.DataFrame, sty: dict) -> None:
         fill = sty["alt"] if i % 2 == 0 else None
         if fill:
             ws.cell(i, 1).fill = fill
+        ws.row_dimensions[i].height = 18
         for j, val in enumerate(rec.tolist(), start=2):
             cell = ws.cell(i, j)
             cell.border = sty["thin"]
+            cell.alignment = alinha_num
             if fill:
                 cell.fill = fill
             if pd.notna(val):
                 cell.value = float(val)
                 cell.number_format = sty["pct"]
-    ws.column_dimensions["A"].width = 8
+    ws.column_dimensions["A"].width = 10
     ws.auto_filter.ref = f"A3:{get_column_letter(len(pivot.columns) + 1)}{3 + len(pivot)}"
 
 
@@ -852,7 +870,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=ROOT / "output" / "discriminativo_juros_reais_paises.xlsx",
         help="Excel de saída",
     )
-    p.add_argument("--ano-inicio", type=int, default=None, help="Primeiro ano (inclusive)")
+    p.add_argument(
+        "--ano-inicio",
+        type=int,
+        default=ANO_INICIO_DEFAULT,
+        help=f"Primeiro ano (inclusive, default {ANO_INICIO_DEFAULT})",
+    )
     p.add_argument("--ano-fim", type=int, default=None, help="Último ano (inclusive)")
     p.add_argument(
         "--paises",

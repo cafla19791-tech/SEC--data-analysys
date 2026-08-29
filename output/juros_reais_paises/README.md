@@ -4,7 +4,7 @@ Gere a planilha com os bulk downloads do [BIS Data Portal](https://data.bis.org/
 
 ```bash
 python3 scripts/discriminativo_juros_reais_paises.py
-python3 scripts/discriminativo_juros_reais_paises.py --ano-inicio 2000
+python3 scripts/discriminativo_juros_reais_paises.py --ano-inicio 1995
 ```
 
 Saída: `output/discriminativo_juros_reais_paises.xlsx`

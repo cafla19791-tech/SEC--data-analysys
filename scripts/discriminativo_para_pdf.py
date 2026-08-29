@@ -317,28 +317,41 @@ def _par_cel(cel: dict, sty: dict) -> Paragraph:
     return Paragraph(texto, local)
 
 
-def _tabela_aba(aba: dict, sty: dict, largura_util: float) -> Table:
+def _fatias_colunas(n_col: int, max_dados: int = 12) -> list[list[int]]:
+    """Parte tabelas largas (ex.: Anual) para o percentual caber numa linha."""
+    if n_col <= max_dados + 1:
+        return [list(range(n_col))]
+    fatias = []
+    for i in range(1, n_col, max_dados):
+        fatias.append([0] + list(range(i, min(i + max_dados, n_col))))
+    return fatias
+
+
+def _tabela_aba(aba: dict, sty: dict, largura_util: float, colunas: list[int] | None = None) -> Table:
     grid = aba["grid"]
     if not grid:
         return Table([[Paragraph("(aba vazia)", sty["corpo"])]])
-    n_col = max(len(r) for r in grid)
-    pesos = list(aba["larguras"]) + [14.0] * (n_col - len(aba["larguras"]))
-    pesos = pesos[:n_col]
+    n_col_full = max(len(r) for r in grid)
+    if colunas is None:
+        colunas = list(range(n_col_full))
+    n_col = len(colunas)
+    pesos_full = list(aba["larguras"]) + [14.0] * (n_col_full - len(aba["larguras"]))
+    pesos = [pesos_full[j] if j < len(pesos_full) else 14.0 for j in colunas]
     # cabeçalho longo: garante largura mínima pela maior linha de texto da coluna
     for j in range(n_col):
         maior = 0
+        cj = colunas[j]
         for linha in grid[:8]:
-            if j < len(linha):
-                maior = max(maior, max((len(p) for p in linha[j]["texto"].split("\n")), default=0))
+            if cj < len(linha):
+                maior = max(maior, max((len(p) for p in linha[cj]["texto"].split("\n")), default=0))
         pesos[j] = max(pesos[j], min(maior * 0.85, 36.0))
     s = sum(pesos) or 1.0
     col_w = [largura_util * p / s for p in pesos]
     data = []
     for linha in grid:
-        linha = linha + [{"texto": "", "fill": None, "font": None, "bold": False, "align": "LEFT"}] * (
-            n_col - len(linha)
-        )
-        data.append([_par_cel(c, sty) for c in linha[:n_col]])
+        vazio = {"texto": "", "fill": None, "font": None, "bold": False, "align": "LEFT"}
+        recorte = [(linha[j] if j < len(linha) else vazio) for j in colunas]
+        data.append([_par_cel(c, sty) for c in recorte])
     tab = Table(data, colWidths=col_w, repeatRows=0)
     cmds = [
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
@@ -348,13 +361,15 @@ def _tabela_aba(aba: dict, sty: dict, largura_util: float) -> Table:
         ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
         ("GRID", (0, 0), (-1, -1), 0.2, colors.HexColor("#B0BEC5")),
     ]
-    for r1, c1, r2, c2 in aba.get("merges") or []:
-        cmds.append(("SPAN", (c1 - 1, r1 - 1), (c2 - 1, r2 - 1)))
+    if colunas == list(range(n_col_full)):
+        for r1, c1, r2, c2 in aba.get("merges") or []:
+            cmds.append(("SPAN", (c1 - 1, r1 - 1), (c2 - 1, r2 - 1)))
     for i, linha in enumerate(grid):
-        for j, cel in enumerate(linha[:n_col]):
-            fill = cel["fill"]
-            if fill:
-                cmds.append(("BACKGROUND", (j, i), (j, i), _rgb(fill)))
+        for j, cj in enumerate(colunas):
+            if cj < len(linha):
+                fill = linha[cj]["fill"]
+                if fill:
+                    cmds.append(("BACKGROUND", (j, i), (j, i), _rgb(fill)))
     tab.setStyle(TableStyle(cmds))
     return tab
 
@@ -426,14 +441,22 @@ def exportar_pdf(abas: list[dict], saida: Path, titulo: str) -> Path:
     largura_util = page[0] - 2 * margem
     for aba, slug in zip(abas, slugs):
         story.append(PageBreak())
-        bloco = [
-            Destino(slug, aba["nome"], 0),
-            Paragraph(html.escape(aba["nome"]), sty["titulo"]),
-            _tabela_aba(aba, sty, largura_util),
-        ]
-        story.append(KeepTogether(bloco[:2]))
-        # KeepTogether só no título; tabela pode quebrar páginas
-        story.append(bloco[2])
+        story.append(Destino(slug, aba["nome"], 0))
+        story.append(Paragraph(html.escape(aba["nome"]), sty["titulo"]))
+        n_col = max((len(r) for r in aba["grid"]), default=0)
+        fatias = _fatias_colunas(n_col)
+        if len(fatias) == 1:
+            story.append(_tabela_aba(aba, sty, largura_util))
+        else:
+            for k, cols in enumerate(fatias, start=1):
+                story.append(
+                    Paragraph(
+                        f"{html.escape(aba['nome'])} — bloco {k} de {len(fatias)}",
+                        sty["corpo"],
+                    )
+                )
+                story.append(_tabela_aba(aba, sty, largura_util, colunas=cols))
+                story.append(Spacer(1, 8))
 
     # injeta nome da aba no doc a cada destino via afterFlowable
     def after(flowable):

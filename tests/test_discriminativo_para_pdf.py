@@ -8,7 +8,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
 from pypdf import PdfReader
 
-from scripts.discriminativo_para_pdf import MARKER, formatar_valor, processar
+from scripts.discriminativo_para_pdf import MARKER, _fatias_colunas, formatar_valor, processar
 
 
 def _xlsx_minimo(path: Path) -> Path:
@@ -34,6 +34,13 @@ def _xlsx_minimo(path: Path) -> Path:
     ws.column_dimensions["C"].width = 28
     wb.save(path)
     return path
+
+
+def test_fatias_anual_repete_coluna_ano():
+    fatias = _fatias_colunas(30, max_dados=12)
+    assert fatias[0][0] == 0
+    assert fatias[1][0] == 0
+    assert 1 in fatias[0] and 13 in fatias[1]
 
 
 def test_formatar_percentual():
