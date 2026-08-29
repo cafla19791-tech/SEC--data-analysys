@@ -92,6 +92,11 @@ python3 scripts/discriminativo_juros_reais_paises.py --ano-inicio 2000
 # ContAgil: discriminativo_juros_reais_paises.bat
 # Saída: output/discriminativo_juros_reais_paises.xlsx
 
+# Ranking anual das taxas reais (uma aba por ano, 1995–2026)
+python3 scripts/discriminativo_ranking_juros_reais.py
+# ContAgil: discriminativo_ranking_juros_reais.bat
+# Saída: output/discriminativo_ranking_juros_reais.xlsx
+
 # Resumo por contrato + por ano (script ContAgil / WinPython saida/fluxos_0.csv)
 python3 scripts/resumo_fluxos.py \
   --fluxos "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\saida\fluxos_0.csv"
@@ -143,6 +148,7 @@ streamlit run app.py
 | `output/resumo_por_agente.xlsx` | Mesmo ranking em Excel |
 | `output/impacto_fiscal_por_ano.xlsx` | Subsídio + impacto ContAgil agregados por ano de pagamento |
 | `output/discriminativo_juros_reais_paises.xlsx` | Uma aba por país: taxa básica nominal BIS, IPC oficial, real mensal e acumulada no ano |
+| `output/discriminativo_ranking_juros_reais.xlsx` | Ranking da real anual: uma aba por ano (1995–2026), pódio e posição do Brasil |
 | `resumo_contratos.xlsx` | Por contrato: total subsídio, impacto e saldo final (pasta do CSV de entrada) |
 | `resumo_por_ano.xlsx` | Por contrato × ano: total subsídio e impacto |
 | `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |

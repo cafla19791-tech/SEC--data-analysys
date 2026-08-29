@@ -15,3 +15,15 @@ Saída: `output/discriminativo_juros_reais_paises.xlsx`
 - **Uma aba por país** — Mês/ano, taxa básica nominal (% a.a.), índice de inflação oficial (2010=100), inflação no mês, taxa real no mês; linha **ACUMULADO AAAA** após dezembro
 
 Fórmula: `r_m = (1+i_aa)^(1/12) / (1 + IPC_t/IPC_{t-1} − 1) − 1` e `R_ano = Π(1+r_m) − 1`.
+
+## Ranking anual (1995–2026)
+
+```bash
+python3 scripts/discriminativo_ranking_juros_reais.py
+```
+
+Saída: `output/discriminativo_ranking_juros_reais.xlsx`
+
+- **Capa** / **Resumo** (pódio + posição do Brasil) / **Brasil**
+- **Uma aba por ano** (1995–2026): posição, país, real acumulada, inflação acumulada, nominal composta, meses e cobertura
+- Anos com dezembro e 12 meses entram no ranking oficial; 2026 é parcial (acumulado até o último mês BIS)

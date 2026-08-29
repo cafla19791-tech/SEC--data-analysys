@@ -711,9 +711,51 @@ def escrever_planilha(
     return saida
 
 
-def processar(
+def estatisticas_anuais(serie: pd.DataFrame) -> pd.DataFrame:
+    """Uma linha por ano-calendário: real, inflação e nominal compostos no ano."""
+    if serie.empty:
+        return pd.DataFrame(
+            columns=[
+                "ano",
+                "codigo",
+                "pais",
+                "real_aa",
+                "inflacao_aa",
+                "nominal_composta",
+                "nominal_fim",
+                "n_meses",
+                "completo",
+            ]
+        )
+    codigo = str(serie["codigo"].iloc[0])
+    pais_en = str(serie["pais_en"].iloc[0]) if "pais_en" in serie.columns else codigo
+    pais = nome_pais(codigo, pais_en)
+    rows: list[dict] = []
+    for ano, bloco in serie.groupby("ano", sort=True):
+        bloco = bloco.sort_values("mes")
+        n = int(bloco["real_am"].notna().sum())
+        if n == 0:
+            continue
+        tem_dezembro = bool((bloco["mes"].dt.month == 12).any())
+        ultimo = bloco.dropna(subset=["nominal_aa"]).iloc[-1] if bloco["nominal_aa"].notna().any() else None
+        rows.append(
+            {
+                "ano": int(ano),
+                "codigo": codigo,
+                "pais": pais,
+                "real_aa": acumular_fator(bloco["real_am"]),
+                "inflacao_aa": acumular_fator(bloco["inflacao_am"]),
+                "nominal_composta": acumular_fator(bloco["nominal_am"]),
+                "nominal_fim": float(ultimo["nominal_aa"]) if ultimo is not None else float("nan"),
+                "n_meses": n,
+                "completo": tem_dezembro and n >= 12,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def carregar_series_paises(
     pasta_cache: Path,
-    saida: Path,
     *,
     baixar: bool = True,
     ano_inicio: int | None = None,
@@ -721,7 +763,8 @@ def processar(
     paises: set[str] | None = None,
     cbpol_zip: Path | None = None,
     cpi_zip: Path | None = None,
-) -> Path:
+) -> tuple[dict[str, pd.DataFrame], dict[str, pd.DataFrame]]:
+    """Baixa/lê BIS e devolve ``(por_serie, por_linhas)`` por código de país."""
     print(f"[{MARKER}]")
     if cbpol_zip is None:
         cbpol_zip = pasta_cache / ZIP_CBPOL
@@ -767,6 +810,29 @@ def processar(
 
     if not por_linhas:
         raise ValueError("Nenhuma série gerada no recorte pedido.")
+    return por_serie, por_linhas
+
+
+def processar(
+    pasta_cache: Path,
+    saida: Path,
+    *,
+    baixar: bool = True,
+    ano_inicio: int | None = None,
+    ano_fim: int | None = None,
+    paises: set[str] | None = None,
+    cbpol_zip: Path | None = None,
+    cpi_zip: Path | None = None,
+) -> Path:
+    por_serie, por_linhas = carregar_series_paises(
+        pasta_cache,
+        baixar=baixar,
+        ano_inicio=ano_inicio,
+        ano_fim=ano_fim,
+        paises=paises,
+        cbpol_zip=cbpol_zip,
+        cpi_zip=cpi_zip,
+    )
     return escrever_planilha(por_serie, por_linhas, saida)
 
 
