@@ -556,33 +556,93 @@ def indice_paises(paises: dict[str, Pais], comparativo: pd.DataFrame) -> pd.Data
     return base.merge(extra, on="codigo", how="left")
 
 
-def baixar_arquivo(url: str, destino: Path, timeout: int = 180) -> Path:
+def _zip_ok(path: Path) -> bool:
+    if not path.exists() or path.stat().st_size < 64:
+        return False
+    if not zipfile.is_zipfile(path):
+        return False
+    try:
+        with zipfile.ZipFile(path) as zf:
+            bad = zf.testzip()
+            return bad is None
+    except zipfile.BadZipFile:
+        return False
+
+
+def baixar_arquivo(url: str, destino: Path, timeout: int = 600, tentativas: int = 4) -> Path:
     destino.parent.mkdir(parents=True, exist_ok=True)
-    if destino.exists() and destino.stat().st_size > 0:
+    if _zip_ok(destino):
         return destino
-    tmp = destino.with_suffix(destino.suffix + ".part")
-    req = Request(url, headers={"User-Agent": USER_AGENT})
-    with urlopen(req, timeout=timeout) as resp, open(tmp, "wb") as fh:
-        while True:
-            chunk = resp.read(1024 * 256)
-            if not chunk:
-                break
-            fh.write(chunk)
-    tmp.replace(destino)
-    return destino
+    if destino.exists():
+        destino.unlink()
+    ultimo_erro: Exception | None = None
+    for i in range(1, tentativas + 1):
+        tmp = destino.with_suffix(destino.suffix + ".part")
+        if tmp.exists():
+            tmp.unlink()
+        try:
+            req = Request(url, headers={"User-Agent": USER_AGENT})
+            with urlopen(req, timeout=timeout) as resp, open(tmp, "wb") as fh:
+                esperado = resp.headers.get("Content-Length")
+                lidos = 0
+                while True:
+                    chunk = resp.read(1024 * 256)
+                    if not chunk:
+                        break
+                    fh.write(chunk)
+                    lidos += len(chunk)
+            if esperado and int(esperado) != lidos:
+                raise OSError(f"download incompleto: {lidos} de {esperado} bytes")
+            if not _zip_ok(tmp):
+                raise zipfile.BadZipFile(f"ZIP inválido após download ({tmp.stat().st_size} bytes)")
+            tmp.replace(destino)
+            return destino
+        except Exception as exc:  # noqa: BLE001 — retry de rede
+            ultimo_erro = exc
+            print(f"  download falhou ({i}/{tentativas}): {exc}", flush=True)
+            if tmp.exists():
+                tmp.unlink()
+    raise RuntimeError(f"Falha ao baixar {url}: {ultimo_erro}")
+
+
+def consertar_cabecalho(colunas: list[str]) -> list[str]:
+    """Recompõe rótulos SDMX partidos por vírgula não aspas (ex.: DSS)."""
+    out: list[str] = []
+    for col in colunas:
+        if out and (col.startswith(" ") or (col and col[0].islower() and ":" not in col)):
+            out[-1] = f"{out[-1]},{col}"
+        else:
+            out.append(col)
+    return out
 
 
 def ler_csv_zip(zip_path: Path, chunksize: int | None = None):
+    import csv
+
     with zipfile.ZipFile(zip_path) as zf:
         nomes = [n for n in zf.namelist() if n.lower().endswith(".csv")]
         if not nomes:
             raise FileNotFoundError(f"Nenhum CSV em {zip_path}")
         with zf.open(nomes[0]) as raw:
             buf = io.TextIOWrapper(raw, encoding="utf-8", errors="replace")
-            if chunksize:
-                yield from pd.read_csv(buf, dtype=str, chunksize=chunksize, low_memory=False)
-            else:
-                yield pd.read_csv(buf, dtype=str, low_memory=False)
+            reader = csv.reader(buf)
+            try:
+                header = consertar_cabecalho(next(reader))
+            except StopIteration as exc:
+                raise RuntimeError(f"CSV vazio em {zip_path}") from exc
+            lote: list[list[str]] = []
+            nheader = len(header)
+            for row in reader:
+                if len(row) < nheader:
+                    row = row + [""] * (nheader - len(row))
+                elif len(row) > nheader:
+                    row = row[:nheader]
+                lote.append(row)
+                if chunksize and len(lote) >= chunksize:
+                    yield pd.DataFrame(lote, columns=header)
+                    lote = []
+            if lote or not chunksize:
+                yield pd.DataFrame(lote, columns=header)
 
 
 def _aplicar_filtros_chunk(

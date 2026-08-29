@@ -10,6 +10,8 @@ from openpyxl import load_workbook
 from scripts.bis_bulk_excel import (
     TOPICOS,
     Pais,
+    _zip_ok,
+    consertar_cabecalho,
     comparativo_paises,
     detectar_coluna_pais,
     eh_agregado,
@@ -25,6 +27,39 @@ from scripts.bis_bulk_excel import (
     selecionar_topicos,
     escrever_excel,
 )
+
+
+def test_consertar_cabecalho_recompõe_rotulos_partidos():
+    cols = [
+        "REF_AREA:Reference area",
+        "STO:Stocks",
+        " Transactions",
+        " Other Flows",
+        "EXPENDITURE:Expenditure (COFOG",
+        " COICOP",
+        " COPP or COPNI)",
+        "TIME_PERIOD:Time period",
+    ]
+    out = consertar_cabecalho(cols)
+    assert out == [
+        "REF_AREA:Reference area",
+        "STO:Stocks, Transactions, Other Flows",
+        "EXPENDITURE:Expenditure (COFOG, COICOP, COPP or COPNI)",
+        "TIME_PERIOD:Time period",
+    ]
+
+
+def test_zip_ok_rejeita_arquivo_truncado(tmp_path: Path):
+    import zipfile
+
+    bom = tmp_path / "ok.zip"
+    with zipfile.ZipFile(bom, "w") as zf:
+        zf.writestr("a.csv", "x,y\n1,2\n")
+    assert _zip_ok(bom) is True
+    ruim = tmp_path / "bad.zip"
+    ruim.write_bytes(b"PK\x03\x04truncado")
+    assert _zip_ok(ruim) is False
+    assert _zip_ok(tmp_path / "nao_existe.zip") is False
 
 
 def test_catalogo_tem_os_20_topicos_do_portal():
