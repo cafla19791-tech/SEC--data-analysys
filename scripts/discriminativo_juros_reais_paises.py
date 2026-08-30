@@ -3,7 +3,7 @@
 """Discriminativo de taxas básicas de juros reais acumuladas e CAGR.
 
 Compara as taxas básicas (policy rates) do BIS, deflacionadas pelo IPC
-mensal do próprio BIS, em quatro recortes solicitados. Cada período vira
+mensal do próprio BIS, em cinco recortes solicitados. Cada período vira
 uma aba, com ranking em ordem decrescente da taxa básica real acumulada.
 
 Uso::
@@ -145,9 +145,16 @@ PERIODOS: tuple[Periodo, ...] = (
     ),
     Periodo(
         4,
+        date(2019, 1, 1),
+        date(2022, 12, 31),
+        "4_2019-01_2022-12",
+        "01/01/2019 a 31/12/2022",
+    ),
+    Periodo(
+        5,
         date(2023, 1, 1),
         date(2026, 8, 28),
-        "4_2023-01_2026-08-28",
+        "5_2023-01_2026-08-28",
         "01/01/2023 a 28/08/2026",
     ),
 )
@@ -801,7 +808,7 @@ def _aba_metodologia(wb: Workbook, gerado_em: datetime, n_paises: int) -> None:
             " ; ".join(f"{p.id}) {p.titulo}" for p in PERIODOS),
         ),
         (
-            "Período 4 / defasagem",
+            "Período 5 / defasagem",
             "O pedido vai até 28/08/2026. As séries mensais do BIS em geral fecham "
             "no último mês publicado (tipicamente o mês anterior). "
             "A coluna Observação registra o recorte efetivo quando a série termina antes.",
@@ -873,7 +880,7 @@ def _aba_comparativo(
     ws = wb.create_sheet("Comparativo")
     ws["A1"] = "Comparativo entre períodos — ranking da taxa básica real acumulada"
     ws["A1"].font = Font(name="Calibri", size=14, bold=True, color=AZUL)
-    ws.merge_cells("A1:L1")
+    ws.merge_cells("A1:Q1")
 
     paises = sorted(
         {r.codigo for lista in por_periodo.values() for r in lista},

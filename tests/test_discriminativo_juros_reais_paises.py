@@ -28,6 +28,20 @@ from scripts.discriminativo_juros_reais_paises import (
 )
 
 
+def test_periodos_oficiais_cinco_recortes():
+    assert len(PERIODOS) == 5
+    assert [p.id for p in PERIODOS] == [1, 2, 3, 4, 5]
+    assert (PERIODOS[0].inicio, PERIODOS[0].fim) == (date(1995, 1, 1), date(2002, 12, 31))
+    assert (PERIODOS[1].inicio, PERIODOS[1].fim) == (date(2003, 1, 1), date(2016, 5, 11))
+    assert (PERIODOS[2].inicio, PERIODOS[2].fim) == (date(2016, 5, 12), date(2018, 12, 31))
+    assert (PERIODOS[3].inicio, PERIODOS[3].fim) == (date(2019, 1, 1), date(2022, 12, 31))
+    assert (PERIODOS[4].inicio, PERIODOS[4].fim) == (date(2023, 1, 1), date(2026, 8, 28))
+    abas = [p.aba for p in PERIODOS]
+    assert len(set(abas)) == 5
+    assert abas[3].startswith("4_2019")
+    assert abas[4].startswith("5_2023")
+
+
 def test_fisher_basico():
     assert taxa_real_fisher(0.15, 0.05) == pytest.approx((1.15 / 1.05) - 1)
     assert taxa_real_fisher(0.10, 0.10) == pytest.approx(0.0)
@@ -251,7 +265,7 @@ def test_cli_com_csv_local(tmp_path: Path):
     cpi = _bis_cpi_csv(tmp_path)
     saida = tmp_path / "disc.xlsx"
     # Períodos oficiais quase sem overlap com 2000-01/02 — ainda assim a planilha
-    # precisa nascer com as 4 abas.
+    # precisa nascer com as 5 abas.
     path = processar(
         pasta_cache=tmp_path / "cache",
         saida=saida,
