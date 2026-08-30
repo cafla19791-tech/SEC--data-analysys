@@ -49,3 +49,4 @@ output/indiretas_automaticas_ipca/*.xlsx
 amostra_fluxos.xlsx
 data/bndes/*.xlsx
 data/bndes_automaticas/
+data/bis/
