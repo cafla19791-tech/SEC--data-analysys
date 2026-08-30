@@ -1,0 +1,11 @@
+{
+  "name": "SEC--data-analysys",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "streamlit",
+      "command": "bash .cursor/start.sh"
+    }
+  ],
+  "ports": [{ "name": "streamlit", "port": 8501 }]
+}
