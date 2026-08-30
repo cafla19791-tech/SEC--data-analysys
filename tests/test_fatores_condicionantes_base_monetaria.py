@@ -11,6 +11,7 @@ import pytest
 from scripts.fatores_condicionantes_base_monetaria import (
     ESTOQUES,
     FATORES_SOMA,
+    PREENCHIMENTO_DIARIO,
     SERIES,
     carregar_painel,
     estoque_fim,
@@ -21,6 +22,7 @@ from scripts.fatores_condicionantes_base_monetaria import (
     tabela_anual,
     tabela_dezembro,
     tabela_mensal,
+    ultimo_dia_do_mes,
 )
 
 
@@ -173,6 +175,20 @@ def test_carregar_painel_e_planilha(tmp_path: Path):
     assert any("Tesouro Nacional" in str(x) for x in anual["Item"])
     # 2000 e 2001 presentes; 2026 ausente no sintético
     assert 2000 in anual.columns or "2000" in [str(c) for c in anual.columns]
+
+
+def test_preenchimento_diario_fecha_furo():
+    assert PREENCHIMENTO_DIARIO[12487] == 12485
+    assert PREENCHIMENTO_DIARIO[28724] == 28723
+    diario = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2020-04-17", "2020-04-30", "2020-05-15"]),
+            "valor": [100.0, 1407.0, 99.0],
+        }
+    )
+    fech = ultimo_dia_do_mes(diario)
+    assert fech.loc[pd.Timestamp("2020-04-01")] == 1407.0
+    assert fech.loc[pd.Timestamp("2020-05-01")] == 99.0
 
 
 def test_carregar_painel_local(tmp_path: Path):

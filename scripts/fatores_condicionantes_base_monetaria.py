@@ -49,7 +49,7 @@ ANO_INICIO = 2000
 ANO_FIM = 2026
 # Unidade SGS = milhares de R$. A Nota para a Imprensa publica em R$ milhões.
 ESCALA_MILHOES = 1_000.0
-TOLERANCIA_IDENTIDADE = 2.0  # R$ mil no nível SGS (arredondamento)
+TOLERANCIA_IDENTIDADE = 500.0  # R$ mil no nível SGS (R$ 0,5 milhão; arredondamento)
 
 
 @dataclass(frozen=True)
@@ -86,6 +86,13 @@ FATORES_SOMA = tuple(s for s in SERIES if s.inclui_soma)
 DETALHES = tuple(s for s in SERIES if s.papel == "detalhe")
 ESTOQUES = tuple(s for s in SERIES if s.papel == "estoque")
 
+# Série mensal começa depois da diária correspondente: usa o último
+# dia do mês só onde o mensal ainda não existe (evita furo na identidade).
+PREENCHIMENTO_DIARIO: dict[int, int] = {
+    12487: 12485,  # derivativos-ajustes (diário desde mai/2002; mensal desde jun/2002)
+    28724: 28723,  # LTEL (diário desde abr/2020; mensal desde mai/2020)
+}
+
 
 def _http_get(url: str, params: dict, tentativas: int = 5) -> list:
     ultimo: Exception | None = None
@@ -93,6 +100,9 @@ def _http_get(url: str, params: dict, tentativas: int = 5) -> list:
     for i in range(tentativas):
         try:
             resp = requests.get(url, params=params, headers=headers, timeout=120)
+            # Janela anterior ao início da série (ex.: 29004 só existe desde 2015).
+            if resp.status_code == 404:
+                return []
             if resp.status_code != 200 or not resp.text.strip():
                 raise RuntimeError(f"HTTP {resp.status_code} vazio")
             if resp.text.lstrip().startswith("<") or resp.text.lstrip().startswith("<?xml"):
@@ -192,7 +202,57 @@ def carregar_painel(
         raise RuntimeError("nenhuma série SGS carregada")
     painel = pd.DataFrame(cols).sort_index()
     painel.index.name = "mes"
-    return painel
+    return preencher_com_diario(
+        painel,
+        pasta_cache=pasta_cache,
+        usar_cache=usar_cache,
+        arquivos=arquivos,
+        inicio=inicio,
+        fim=fim,
+    )
+
+
+def ultimo_dia_do_mes(diario: pd.DataFrame) -> pd.Series:
+    """Última observação de cada mês civil."""
+    tmp = diario.dropna(subset=["mes", "valor"]).copy()
+    tmp["ref"] = pd.to_datetime(tmp["mes"]).dt.to_period("M").dt.to_timestamp()
+    return tmp.sort_values("mes").groupby("ref")["valor"].last()
+
+
+def preencher_com_diario(
+    painel: pd.DataFrame,
+    *,
+    pasta_cache: Path,
+    usar_cache: bool,
+    arquivos: dict[int, Path] | None,
+    inicio: date,
+    fim: date,
+) -> pd.DataFrame:
+    """Completa furos do mensal com o fechamento da série diária irmã."""
+    out = painel.copy()
+    for mensal, diario_cod in PREENCHIMENTO_DIARIO.items():
+        if arquivos is not None:
+            if diario_cod not in arquivos:
+                continue
+            bruto = pd.read_csv(arquivos[diario_cod], parse_dates=["mes"])
+            bruto["valor"] = pd.to_numeric(bruto["valor"], errors="coerce")
+        else:
+            print(f"[SGS] {diario_cod} (diário → preenche {mensal})")
+            bruto = baixar_sgs(
+                diario_cod,
+                inicio,
+                fim,
+                cache=pasta_cache / f"sgs_{diario_cod}.csv",
+                usar_cache=usar_cache,
+            )
+        if bruto.empty:
+            continue
+        fechamento = ultimo_dia_do_mes(bruto)
+        if mensal not in out.columns:
+            out[mensal] = fechamento
+        else:
+            out[mensal] = out[mensal].combine_first(fechamento)
+    return out.sort_index()
 
 
 def ultimo_mes_ano(painel: pd.DataFrame, ano: int) -> pd.Timestamp | None:
@@ -460,7 +520,10 @@ def _aba_metodologia(
             "Identidade",
             "Σ fatores_t = Base_t − Base_{t−1}. Primário (29004) + secundário "
             "(29006) = total de títulos (1809), a partir de 2015. Primário e "
-            "secundário não entram de novo na soma.",
+            "secundário não entram de novo na soma. "
+            "O mensal de derivativos (12487) e o das linhas LTEL (28724) "
+            "nascem um mês depois das séries diárias 12485 e 28723; o "
+            "fechamento diário preenche esse primeiro mês (mai/2002 e abr/2020).",
         ),
         (
             "Sinal",
@@ -481,7 +544,16 @@ def _aba_metodologia(
         (
             "2026",
             "Ano incompleto: fatores somados até o último mês publicado; "
-            "estoque da base nesse mesmo mês. Coluna marcada com *.",
+            "estoque da base nesse mesmo mês. Coluna marcada com *. "
+            "Os meses mais recentes ainda podem ser revisados pelo Bacen "
+            "(resíduo de cerca de R$ 100 milhões em 2026).",
+        ),
+        (
+            "Resíduos conhecidos",
+            "A identidade anual fecha (resíduo < R$ 1 milhão) em 24 dos 27 anos. "
+            "Exceções: 2000 (R$ 31 milhões, meses de fev e jun) e 2026 "
+            "(revisão das estatísticas mais recentes). 2002 e 2020 fecham "
+            "após o preenchimento do primeiro mês das séries diárias.",
         ),
     ]
     _cab(ws, ["Campo", "Descrição"], 3)
