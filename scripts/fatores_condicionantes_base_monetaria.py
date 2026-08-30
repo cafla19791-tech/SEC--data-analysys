@@ -466,8 +466,13 @@ AZUL_CLARO = "D6E3F0"
 DOURADO = "FFF2CC"
 VERDE = "C6EFCE"
 VERMELHO = "FCE4D6"
+VERMELHO_TEXTO = "9B1B1B"
+VERMELHO_FUNDO = "FFC7CE"
 CINZA = "F2F2F2"
 BRANCO = "FFFFFF"
+# Sinal menos tipográfico (U+2212), mais visível que o hífen e que o (1.234,5).
+MENOS = "\u2212"
+FMT_NUM = f'#,##0.0;"{MENOS}"#,##0.0;"—"'
 THIN = Border(
     left=Side(style="thin", color="B0B0B0"),
     right=Side(style="thin", color="B0B0B0"),
@@ -494,16 +499,32 @@ def _fmt_milhoes(valor: float) -> float:
 
 
 def _pintar_numero(cell, valor: float, papel: str) -> None:
-    cell.number_format = '#,##0.0;(#,##0.0);"—"'
+    cell.number_format = FMT_NUM
     if pd.isna(valor):
         cell.value = None
         return
     cell.value = _fmt_milhoes(valor)
-    if papel in {"fator", "detalhe", "total"} and abs(valor) > 0.5:
-        if valor > 0:
-            cell.font = Font(name="Calibri", size=9, color="006100")
-        else:
-            cell.font = Font(name="Calibri", size=9, color="9C0006")
+    if papel == "estoque":
+        return
+    if float(valor) < -0.5:
+        cell.font = Font(name="Calibri", size=9, bold=True, color=VERMELHO_TEXTO)
+        cell.fill = PatternFill("solid", fgColor=VERMELHO_FUNDO)
+    elif float(valor) > 0.5 and papel in {"fator", "detalhe", "total"}:
+        cell.font = Font(name="Calibri", size=9, color="006100")
+
+
+def _estilo_sinal(cell, valor_sgs: float, *, fill_se_positivo=None) -> None:
+    """Aplica − vermelho negrito + fundo quando o valor (R$ mil SGS) é negativo."""
+    cell.number_format = FMT_NUM
+    if valor_sgs is None or (isinstance(valor_sgs, float) and pd.isna(valor_sgs)):
+        return
+    if float(valor_sgs) < -0.5:
+        cell.font = Font(name="Calibri", size=9, bold=True, color=VERMELHO_TEXTO)
+        cell.fill = PatternFill("solid", fgColor=VERMELHO_FUNDO)
+    else:
+        cell.font = Font(name="Calibri", size=9, bold=True)
+        if fill_se_positivo is not None:
+            cell.fill = fill_se_positivo
 
 
 def _aba_metodologia(
@@ -689,7 +710,7 @@ def _aba_mensal(wb: Workbook, mensal: pd.DataFrame) -> None:
             cell.border = THIN
             cell.font = Font(name="Calibri", size=8)
             if headers[col - 1] not in {"mes", "ano", "mes_num"} and isinstance(valor, float):
-                cell.number_format = '#,##0.0;(#,##0.0);"—"'
+                cell.number_format = FMT_NUM
             if i % 2 == 0:
                 cell.fill = PatternFill("solid", fgColor=CINZA)
     ws.freeze_panes = "D4"
@@ -725,7 +746,7 @@ def _aba_identidade(wb: Workbook, ident: pd.DataFrame) -> None:
             cell.border = THIN
             cell.font = Font(name="Calibri", size=8)
             if col > 1:
-                cell.number_format = '#,##0.0;(#,##0.0);"—"'
+                cell.number_format = FMT_NUM
             cell.fill = PatternFill("solid", fgColor=VERDE if ok else VERMELHO)
     ws.freeze_panes = "A5"
     for i, w in enumerate([12, 16, 14, 14, 12], start=1):
@@ -744,7 +765,7 @@ def _aba_grafico(wb: Workbook, anual: pd.DataFrame, anos: list[int]) -> None:
         ws.cell(i, 1).font = Font(name="Calibri", size=8)
         for j, a in enumerate(anos, start=2):
             cell = ws.cell(i, j, _fmt_milhoes(row[a]))
-            cell.number_format = '#,##0.0;(#,##0.0);"—"'
+            cell.number_format = FMT_NUM
             cell.border = THIN
     # Bloco transposto (anos nas linhas) para o gráfico empilhado
     start = 5 + len(fatores)
@@ -802,7 +823,8 @@ def _aba_discriminativo(
         "Cada linha é um ano. As colunas dos fatores são o fluxo acumulado no ano "
         f"(R$ milhões). A coluna «{COL_VARIACAO}» é a soma algébrica dos oito "
         "fatores (fórmula SOMA; primário e secundário são detalhe do total de "
-        "títulos e não entram de novo). 2026* = até o último mês publicado."
+        "títulos e não entram de novo). 2026* = até o último mês publicado. "
+        "Valores negativos: sinal − em vermelho negrito, com fundo vermelho."
     )
     ws["A2"].font = Font(name="Calibri", size=10, italic=True)
     ws["A2"].alignment = Alignment(wrap_text=True)
@@ -842,15 +864,11 @@ def _aba_discriminativo(
             cell = ws.cell(i, j)
             cell.border = THIN
             _pintar_numero(cell, float(valores[nome]), "fator")
-            if i % 2 == 0 and cell.fill.fgColor is None:
-                cell.fill = PatternFill("solid", fgColor=CINZA)
 
         c_var = ws.cell(i, col_var)
         c_var.value = f"=SUM({letra_ini}{i}:{letra_fim}{i})"
-        c_var.number_format = '#,##0.0;(#,##0.0);"—"'
-        c_var.font = Font(name="Calibri", size=9, bold=True)
         c_var.border = THIN
-        c_var.fill = fill_var
+        _estilo_sinal(c_var, float(valores[COL_VARIACAO]), fill_se_positivo=fill_var)
 
         col = col_var + 1
         for nome in nomes_detalhe:
@@ -876,7 +894,7 @@ def _aba_discriminativo(
     for j in range(2, col_var + 1):
         letra = get_column_letter(j)
         cell = ws.cell(tot, j, f"=SUM({letra}{primeira}:{letra}{ultima})")
-        cell.number_format = '#,##0.0;(#,##0.0);"—"'
+        cell.number_format = FMT_NUM
         cell.font = Font(name="Calibri", size=9, bold=True)
         cell.fill = fill_var
         cell.border = THIN
@@ -901,7 +919,8 @@ def _aba_discriminativo(
         tot + 2,
         1,
         "Valores em R$ milhões. Verde = expansão; vermelho = contração. "
-        f"«{COL_VARIACAO}» = SOMA algébrica das oito colunas de fatores da mesma linha.",
+        f"«{COL_VARIACAO}» = SOMA algébrica das oito colunas de fatores da mesma linha. "
+        "Negativos: sinal − vermelho negrito sobre fundo vermelho.",
     ).font = Font(name="Calibri", size=8, italic=True, color="666666")
 
 

@@ -25,6 +25,9 @@ from scripts.fatores_condicionantes_base_monetaria import (
     tabela_mensal,
     ultimo_dia_do_mes,
     COL_VARIACAO,
+    FMT_NUM,
+    MENOS,
+    VERMELHO_FUNDO,
 )
 
 
@@ -202,6 +205,12 @@ def test_carregar_painel_e_planilha(tmp_path: Path):
     assert idx_var == 1 + len(FATORES_SOMA)
     # fórmula SOMA algébrica dos oito fatores da linha
     assert str(ws.cell(5, idx_var + 1).value).startswith("=SUM(")
+    assert MENOS in FMT_NUM
+    idx_tit = headers.index("Operações com títulos públicos federais — Total")
+    cel_neg = ws.cell(5, idx_tit + 1)  # 2000: títulos negativos no sintético
+    assert MENOS in (cel_neg.number_format or "")
+    assert VERMELHO_FUNDO in str(cel_neg.fill.fgColor.rgb or "")
+    assert cel_neg.font.bold is True
     anual = pd.read_excel(path, sheet_name="Anual", header=3)
     assert "Item" in anual.columns
     assert any("Tesouro Nacional" in str(x) for x in anual["Item"])
