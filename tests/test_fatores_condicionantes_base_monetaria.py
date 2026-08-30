@@ -21,8 +21,10 @@ from scripts.fatores_condicionantes_base_monetaria import (
     soma_fatores_mes,
     tabela_anual,
     tabela_dezembro,
+    tabela_discriminativo,
     tabela_mensal,
     ultimo_dia_do_mes,
+    COL_VARIACAO,
 )
 
 
@@ -101,6 +103,24 @@ def test_identidade_mensal_sintetica():
     assert estoque_fim(p, 1788, 2000) == pytest.approx(112_000.0)
 
 
+def test_discriminativo_coluna_variacao_e_soma_algebrica():
+    p = _painel_sintetico()
+    disc = tabela_discriminativo(p, [2000, 2001])
+    assert list(disc["Ano"]) == [2000, 2001]
+    assert COL_VARIACAO in disc.columns
+    fatores = [s.nome for s in FATORES_SOMA]
+    for _, row in disc.iterrows():
+        soma = sum(float(row[n]) for n in fatores)
+        assert row[COL_VARIACAO] == pytest.approx(soma)
+    # 2000: 12 × 1.000; 2001: 12 × 2.000
+    assert disc.loc[disc["Ano"] == 2000, COL_VARIACAO].iloc[0] == pytest.approx(12_000.0)
+    assert disc.loc[disc["Ano"] == 2001, COL_VARIACAO].iloc[0] == pytest.approx(24_000.0)
+    # primário/secundário não entram de novo
+    assert disc.loc[disc["Ano"] == 2000, "Títulos — mercado primário"].iloc[0] == pytest.approx(
+        -0.10 * 12_000 * 0.4
+    )
+
+
 def test_fluxo_anual_e_delta_estoque():
     p = _painel_sintetico()
     # 12 meses × 1.000 em 2000
@@ -168,8 +188,20 @@ def test_carregar_painel_e_planilha(tmp_path: Path):
     assert path.exists()
     nomes = pd.ExcelFile(path).sheet_names
     assert nomes[0] == "Metodologia"
+    assert "Discriminativo" in nomes
     for aba in ("Anual", "Dezembro", "Mensal", "Identidade", "Grafico"):
         assert aba in nomes
+    from openpyxl import load_workbook
+
+    wb = load_workbook(path)
+    ws = wb["Discriminativo"]
+    headers = [c.value for c in ws[4]]
+    assert headers[0] == "Ano"
+    assert COL_VARIACAO in headers
+    idx_var = headers.index(COL_VARIACAO)
+    assert idx_var == 1 + len(FATORES_SOMA)
+    # fórmula SOMA algébrica dos oito fatores da linha
+    assert str(ws.cell(5, idx_var + 1).value).startswith("=SUM(")
     anual = pd.read_excel(path, sheet_name="Anual", header=3)
     assert "Item" in anual.columns
     assert any("Tesouro Nacional" in str(x) for x in anual["Item"])

@@ -50,6 +50,7 @@ ANO_FIM = 2026
 # Unidade SGS = milhares de R$. A Nota para a Imprensa publica em R$ milhões.
 ESCALA_MILHOES = 1_000.0
 TOLERANCIA_IDENTIDADE = 500.0  # R$ mil no nível SGS (R$ 0,5 milhão; arredondamento)
+COL_VARIACAO = "Variação da base monetária"
 
 
 @dataclass(frozen=True)
@@ -394,6 +395,30 @@ def tabela_anual(painel: pd.DataFrame, anos: Iterable[int] | None = None) -> pd.
     return out
 
 
+def tabela_discriminativo(
+    painel: pd.DataFrame, anos: Iterable[int] | None = None
+) -> pd.DataFrame:
+    """Um ano por linha; fatores em colunas; última coluna-chave = soma algébrica."""
+    if anos is None:
+        anos = anos_com_dados(painel)
+    anos = list(anos)
+    linhas = []
+    for a in anos:
+        row: dict[str, object] = {"Ano": a}
+        soma = 0.0
+        for s in FATORES_SOMA:
+            v = fluxo_ano(painel, s.codigo, a)
+            row[s.nome] = v
+            soma += v
+        row[COL_VARIACAO] = soma
+        for s in DETALHES:
+            row[s.nome] = fluxo_ano(painel, s.codigo, a)
+        for s in ESTOQUES:
+            row[s.nome] = estoque_fim(painel, s.codigo, a)
+        linhas.append(row)
+    return pd.DataFrame(linhas)
+
+
 def tabela_dezembro(painel: pd.DataFrame, anos: Iterable[int] | None = None) -> pd.DataFrame:
     """Fluxo do mês de dezembro (ou último mês, se o ano ainda não fechou)."""
     if anos is None:
@@ -533,8 +558,11 @@ def _aba_metodologia(
         ),
         (
             "Abas",
-            "Anual — fluxo acumulado no ano + estoque de 31/12 (ou último mês). "
-            "Dezembro — fluxo só do mês de dezembro (definição literal do SGS). "
+            "Discriminativo — um ano por linha, um fator por coluna, "
+            f"e a coluna «{COL_VARIACAO}» = soma algébrica dos oito fatores "
+            "(fórmula Excel SOMA, sem primário/secundário). "
+            "Anual — a mesma informação transposta (fatores nas linhas). "
+            "Dezembro — fluxo só do mês de dezembro. "
             "Mensal — painel completo. Identidade — resíduo mês a mês.",
         ),
         (
@@ -755,9 +783,132 @@ def _aba_grafico(wb: Workbook, anual: pd.DataFrame, anos: list[int]) -> None:
         ws.column_dimensions[get_column_letter(i)].width = 11
 
 
+def _aba_discriminativo(
+    wb: Workbook,
+    disc: pd.DataFrame,
+    ultimo: pd.Timestamp,
+) -> None:
+    """Anos nas linhas, fatores nas colunas, variação = SOMA algébrica."""
+    ws = wb.create_sheet("Discriminativo", 1)
+    n_fatores = len(FATORES_SOMA)
+    col_var = 2 + n_fatores  # 1=Ano, 2..9=fatores, 10=variação
+    ultima_col = 1 + len(disc.columns)
+    ws["A1"] = (
+        "Discriminativo — fatores que influenciam a base monetária (2000–2026)"
+    )
+    ws["A1"].font = Font(name="Calibri", size=14, bold=True, color=AZUL)
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=ultima_col)
+    ws["A2"] = (
+        "Cada linha é um ano. As colunas dos fatores são o fluxo acumulado no ano "
+        f"(R$ milhões). A coluna «{COL_VARIACAO}» é a soma algébrica dos oito "
+        "fatores (fórmula SOMA; primário e secundário são detalhe do total de "
+        "títulos e não entram de novo). 2026* = até o último mês publicado."
+    )
+    ws["A2"].font = Font(name="Calibri", size=10, italic=True)
+    ws["A2"].alignment = Alignment(wrap_text=True)
+    ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=ultima_col)
+    ws.row_dimensions[2].height = 36
+
+    nomes_fatores = [s.nome for s in FATORES_SOMA]
+    nomes_detalhe = [s.nome for s in DETALHES]
+    nomes_estoque = [s.nome for s in ESTOQUES]
+    headers = (
+        ["Ano"]
+        + nomes_fatores
+        + [COL_VARIACAO]
+        + nomes_detalhe
+        + nomes_estoque
+    )
+    _cab(ws, headers, 4)
+
+    fill_var = PatternFill("solid", fgColor=DOURADO)
+    fill_est = PatternFill("solid", fgColor=AZUL_CLARO)
+    letra_ini = get_column_letter(2)
+    letra_fim = get_column_letter(1 + n_fatores)
+
+    for i, row in enumerate(disc.itertuples(index=False), start=5):
+        ano = int(row.Ano)
+        rotulo = f"{ano}*" if ano == ultimo.year and ultimo.month < 12 else str(ano)
+        c_ano = ws.cell(i, 1, rotulo)
+        c_ano.border = THIN
+        c_ano.font = Font(name="Calibri", size=10, bold=True)
+        c_ano.alignment = Alignment(horizontal="center")
+        if i % 2 == 0:
+            c_ano.fill = PatternFill("solid", fgColor=CINZA)
+
+        valores = {disc.columns[j]: row[j] for j in range(len(disc.columns))}
+
+        for j, nome in enumerate(nomes_fatores, start=2):
+            cell = ws.cell(i, j)
+            cell.border = THIN
+            _pintar_numero(cell, float(valores[nome]), "fator")
+            if i % 2 == 0 and cell.fill.fgColor is None:
+                cell.fill = PatternFill("solid", fgColor=CINZA)
+
+        c_var = ws.cell(i, col_var)
+        c_var.value = f"=SUM({letra_ini}{i}:{letra_fim}{i})"
+        c_var.number_format = '#,##0.0;(#,##0.0);"—"'
+        c_var.font = Font(name="Calibri", size=9, bold=True)
+        c_var.border = THIN
+        c_var.fill = fill_var
+
+        col = col_var + 1
+        for nome in nomes_detalhe:
+            cell = ws.cell(i, col)
+            cell.border = THIN
+            _pintar_numero(cell, float(valores[nome]) if pd.notna(valores[nome]) else float("nan"), "detalhe")
+            col += 1
+        for nome in nomes_estoque:
+            cell = ws.cell(i, col)
+            cell.border = THIN
+            cell.fill = fill_est
+            _pintar_numero(cell, float(valores[nome]) if pd.notna(valores[nome]) else float("nan"), "estoque")
+            cell.font = Font(name="Calibri", size=9, bold=True)
+            col += 1
+
+    # linha de totais 2000–2026 (soma dos fluxos; estoque = último ano)
+    tot = 5 + len(disc)
+    ws.cell(tot, 1, "Total fluxos").font = Font(name="Calibri", size=10, bold=True)
+    ws.cell(tot, 1).fill = fill_var
+    ws.cell(tot, 1).border = THIN
+    primeira = 5
+    ultima = 4 + len(disc)
+    for j in range(2, col_var + 1):
+        letra = get_column_letter(j)
+        cell = ws.cell(tot, j, f"=SUM({letra}{primeira}:{letra}{ultima})")
+        cell.number_format = '#,##0.0;(#,##0.0);"—"'
+        cell.font = Font(name="Calibri", size=9, bold=True)
+        cell.fill = fill_var
+        cell.border = THIN
+    for j in range(col_var + 1, ultima_col + 1):
+        ws.cell(tot, j).border = THIN
+        ws.cell(tot, j).fill = fill_var
+
+    ws.column_dimensions["A"].width = 12
+    for j, nome in enumerate(headers, start=1):
+        if j == 1:
+            continue
+        ws.column_dimensions[get_column_letter(j)].width = 16 if j != col_var else 18
+    ws.freeze_panes = "B5"
+    ws.auto_filter.ref = f"A4:{get_column_letter(ultima_col)}{ultima}"
+    ws.row_dimensions[4].height = 42
+    ws.page_setup.orientation = "landscape"
+    ws.page_setup.fitToPage = True
+    ws.page_setup.fitToWidth = 1
+    ws.page_setup.fitToHeight = 1
+    ws.sheet_properties.pageSetUpPr.fitToPage = True
+    ws.cell(
+        tot + 2,
+        1,
+        "Valores em R$ milhões. Verde = expansão; vermelho = contração. "
+        f"«{COL_VARIACAO}» = SOMA algébrica das oito colunas de fatores da mesma linha.",
+    ).font = Font(name="Calibri", size=8, italic=True, color="666666")
+
+
 def escrever_planilha(
     *,
     anual: pd.DataFrame,
+    discriminativo: pd.DataFrame,
     dezembro: pd.DataFrame,
     mensal: pd.DataFrame,
     ident: pd.DataFrame,
@@ -768,6 +919,7 @@ def escrever_planilha(
     anos = [c for c in anual.columns if isinstance(c, int)]
     wb = Workbook()
     _aba_metodologia(wb, datetime.now(), ultimo, len(mensal))
+    _aba_discriminativo(wb, discriminativo, ultimo)
     ws_a = wb.create_sheet("Anual")
     _escrever_matriz(
         ws_a,
@@ -809,6 +961,7 @@ def processar(
     ultimo = painel.index.max()
     print(f"[INFO] painel {painel.index.min().date()} → {ultimo.date()} | anos={anos[0]}–{anos[-1]}")
     anual = tabela_anual(painel, anos)
+    disc = tabela_discriminativo(painel, anos)
     dezembro = tabela_dezembro(painel, anos)
     mensal = tabela_mensal(painel)
     ident = identidade_mensal(painel)
@@ -817,6 +970,7 @@ def processar(
         print(f"[INFO] identidade mensal ok em {ok:.1%} dos meses")
     path = escrever_planilha(
         anual=anual,
+        discriminativo=disc,
         dezembro=dezembro,
         mensal=mensal,
         ident=ident,
