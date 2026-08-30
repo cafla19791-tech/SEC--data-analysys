@@ -792,7 +792,7 @@ def _aba_discriminativo(
     ws = wb.create_sheet("Discriminativo", 1)
     n_fatores = len(FATORES_SOMA)
     col_var = 2 + n_fatores  # 1=Ano, 2..9=fatores, 10=variação
-    ultima_col = 1 + len(disc.columns)
+    ultima_col = 1 + n_fatores + 1 + len(DETALHES) + len(ESTOQUES)
     ws["A1"] = (
         "Discriminativo — fatores que influenciam a base monetária (2000–2026)"
     )
