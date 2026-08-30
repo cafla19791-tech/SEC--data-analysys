@@ -40,6 +40,12 @@ MARKER = "discriminativo-juros-reais-paises-20260830"
 DIAS_ANO = 365.25
 COBERTURA_MINIMA = 0.80
 
+# Membros da zona do euro presentes no BIS CBPOL. Após o fim da série
+# nacional, a taxa do BCE (XM) é usada com o IPC do próprio país.
+EURO_MEMBROS = frozenset(
+    {"AT", "BE", "DE", "ES", "FR", "GR", "HR", "IT", "NL", "PT"}
+)
+
 BIS_CBPOL = (
     "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_CBPOL/1.0/M"
     "?format=csvfile&startPeriod=1994-01"
@@ -282,6 +288,41 @@ def preparar_policy(df: pd.DataFrame) -> pd.DataFrame:
     return (
         out[["REF_AREA", "mes", "taxa_aa"]]
         .drop_duplicates(["REF_AREA", "mes"], keep="last")
+        .sort_values(["REF_AREA", "mes"])
+        .reset_index(drop=True)
+    )
+
+
+def completar_policy_euro(policy: pd.DataFrame) -> pd.DataFrame:
+    """Depois do fim da série nacional, usa a taxa do BCE (XM)."""
+    xm = policy.loc[policy["REF_AREA"] == "XM", ["mes", "taxa_aa"]].set_index("mes")[
+        "taxa_aa"
+    ]
+    if xm.empty:
+        return policy
+    extra: list[pd.DataFrame] = []
+    for codigo in sorted(EURO_MEMBROS):
+        nativo = policy.loc[policy["REF_AREA"] == codigo, "mes"]
+        if nativo.empty:
+            meses = xm.index
+        else:
+            meses = xm.index[xm.index > nativo.max()]
+        if len(meses) == 0:
+            continue
+        extra.append(
+            pd.DataFrame(
+                {
+                    "REF_AREA": codigo,
+                    "mes": list(meses),
+                    "taxa_aa": xm.loc[meses].to_numpy(),
+                }
+            )
+        )
+    if not extra:
+        return policy
+    out = pd.concat([policy, *extra], ignore_index=True)
+    return (
+        out.drop_duplicates(["REF_AREA", "mes"], keep="first")
         .sort_values(["REF_AREA", "mes"])
         .reset_index(drop=True)
     )
@@ -767,8 +808,9 @@ def _aba_metodologia(wb: Workbook, gerado_em: datetime, n_paises: int) -> None:
         ),
         (
             "Zona do Euro",
-            "A série XM é a taxa do BCE. Países da zona do euro também aparecem "
-            "com a série nacional do BIS (em geral alinhada ao BCE após 1999).",
+            "A série XM é a taxa do BCE. Depois que o BIS encerra a série nacional "
+            "(adoção do euro), AT/BE/DE/ES/FR/GR/HR/IT/NL/PT passam a usar a taxa "
+            "do BCE com o IPC nacional, para permanecerem no ranking.",
         ),
         (
             "O que este número mede",
@@ -963,7 +1005,7 @@ def carregar_fontes(
         cpi_bruto = baixar_ou_cache(
             BIS_CPI, pasta_cache / "bis_long_cpi_m.csv", usar_cache=usar_cache
         )
-    policy = preparar_policy(policy_bruto)
+    policy = completar_policy_euro(preparar_policy(policy_bruto))
     ipc, yoy = preparar_cpi(cpi_bruto)
     print(
         f"[INFO] policy={policy['REF_AREA'].nunique()} países, "

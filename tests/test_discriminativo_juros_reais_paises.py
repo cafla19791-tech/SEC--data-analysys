@@ -14,6 +14,7 @@ from scripts.discriminativo_juros_reais_paises import (
     calcular_pais,
     calcular_periodos,
     cagr,
+    completar_policy_euro,
     fator_inflacao_ipc,
     fator_nominal_policy,
     fator_proporcional,
@@ -160,6 +161,28 @@ def _bis_cpi_csv(path: Path) -> Path:
     dest = path / "cpi.csv"
     dest.write_text("\n".join(rows), encoding="utf-8")
     return dest
+
+
+def test_completar_policy_euro():
+    policy = pd.DataFrame(
+        {
+            "REF_AREA": ["DE", "DE", "XM", "XM", "XM"],
+            "mes": [
+                date(1998, 11, 1),
+                date(1998, 12, 1),
+                date(1998, 12, 1),
+                date(1999, 1, 1),
+                date(1999, 2, 1),
+            ],
+            "taxa_aa": [0.03, 0.03, 0.025, 0.03, 0.03],
+        }
+    )
+    out = completar_policy_euro(policy)
+    de = out[out.REF_AREA == "DE"].set_index("mes")["taxa_aa"]
+    assert date(1998, 12, 1) in de.index
+    assert de.loc[date(1998, 12, 1)] == pytest.approx(0.03)  # nacional prevalece
+    assert de.loc[date(1999, 1, 1)] == pytest.approx(0.03)
+    assert de.loc[date(1999, 2, 1)] == pytest.approx(0.03)
 
 
 def test_preparar_series(tmp_path: Path):
