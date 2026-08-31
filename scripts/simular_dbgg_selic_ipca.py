@@ -54,9 +54,13 @@ URL_DBGG = (
     "Tabelas_especiais/Dbggindexp.xlsx"
 )
 DBGG_PIB_COD = 4513  # DBGG / PIB (%) — SGS
+PIB_12M_COD = 4382  # PIB acumulado em 12 meses (R$ milhões)
+DPMFI_COD = 4181  # Dívida mobiliária — posição em carteira (R$ milhões)
+DPMFI_SELIC_PCT_COD = 4177  # Participação Over/Selic na DPMFi (%)
 SPREAD_DEFAULT = 0.37
 MES_INICIO_DEFAULT = pd.Timestamp("2007-01-01")
 MES_FIM_DEFAULT = pd.Timestamp("2026-06-01")
+ANOS_OBSERVADOS_DEFAULT: tuple[int, ...] = ()
 UA = "SEC-data-analysys/dbgg-selic-ipca"
 
 MESES_PT = {
@@ -182,6 +186,168 @@ def carregar_dbgg(path: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
     return estoque, juros, emissoes
 
 
+def _mes_ts(serie: pd.Series) -> pd.Series:
+    return pd.to_datetime(serie).dt.to_period("M").dt.to_timestamp()
+
+
+def _linha_indexadores(mes: pd.Timestamp, selic: float, total: float) -> dict:
+    rec = {c: 0.0 for c in COLUNAS_INDEX}
+    rec.update(
+        {
+            "mes": pd.Timestamp(mes).to_period("M").to_timestamp(),
+            "ano": int(pd.Timestamp(mes).year),
+            "mes_n": int(pd.Timestamp(mes).month),
+            "selic": float(selic),
+            "total": float(total),
+        }
+    )
+    return rec
+
+
+def reconstruir_pre_oficial(
+    estoque_oficial: pd.DataFrame,
+    selic_m: pd.DataFrame,
+    dpmfi: pd.DataFrame,
+    share_selic: pd.DataFrame,
+    pib_12m: pd.DataFrame,
+    dbgg_pib: pd.DataFrame,
+    mes_primeiro: pd.Timestamp,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Estoque/juros/emissões Selic de ``mes_primeiro−1`` até o mês anterior ao oficial.
+
+    O estoque Selic é o produto DPMFi (SGS 4181) × participação Over/Selic
+    (SGS 4177), reescalonado para coincidir com o primeiro estoque oficial
+    (dez/2006). A DBGG total usa 4513 × PIB 12 meses (4382), também
+    reescalonada no mesmo mês de emenda. Juros = estoque anterior × Selic
+    mensal (SGS 4390); emissão líquida fecha o estoque.
+    """
+    mes_primeiro = pd.Timestamp(mes_primeiro).to_period("M").to_timestamp()
+    mes0 = mes_primeiro - pd.DateOffset(months=1)
+    of_min = pd.Timestamp(estoque_oficial["mes"].min()).to_period("M").to_timestamp()
+    if mes0 >= of_min:
+        vazio = estoque_oficial.iloc[0:0].copy()
+        return vazio, vazio.copy(), vazio.copy()
+
+    def _prep(df: pd.DataFrame, nome: str) -> pd.DataFrame:
+        out = df.rename(columns={"valor": nome}).copy()
+        out["mes"] = _mes_ts(out["mes"])
+        return out[["mes", nome]].drop_duplicates("mes")
+
+    prox = _prep(dpmfi, "dpmfi").merge(_prep(share_selic, "share"), on="mes")
+    prox["proxy"] = prox["dpmfi"] * prox["share"] / 100.0
+    pib = _prep(pib_12m, "pib").merge(_prep(dbgg_pib, "pib_pct"), on="mes")
+    pib["dbgg_imp"] = pib["pib"] * pib["pib_pct"] / 100.0
+
+    of0 = estoque_oficial.loc[estoque_oficial["mes"] == of_min].iloc[0]
+    if of_min not in set(prox["mes"]) or of_min not in set(pib["mes"]):
+        raise ValueError(
+            f"SGS 4181/4177/4382/4513 sem o mês de emenda {of_min.strftime('%Y-%m')}"
+        )
+    proxy0 = float(prox.loc[prox["mes"] == of_min, "proxy"].iloc[0])
+    dbgg0 = float(pib.loc[pib["mes"] == of_min, "dbgg_imp"].iloc[0])
+    if proxy0 <= 0 or dbgg0 <= 0:
+        raise ValueError("Proxy DPMFi/Selic ou DBGG implícita nula no mês de emenda")
+    escala_s = float(of0["selic"]) / proxy0
+    escala_d = float(of0["total"]) / dbgg0
+
+    meses = pd.date_range(mes0, of_min - pd.DateOffset(months=1), freq="MS")
+    sel = _prep(selic_m, "selic_am")
+    base = pd.DataFrame({"mes": meses}).merge(prox[["mes", "proxy"]], on="mes", how="left")
+    base = base.merge(pib[["mes", "dbgg_imp"]], on="mes", how="left")
+    base = base.merge(sel, on="mes", how="left")
+    if base[["proxy", "dbgg_imp"]].isna().any().any():
+        raise ValueError("Faltam DPMFi/PIB para recuar a DBGG antes da planilha oficial")
+
+    base["selic"] = base["proxy"] * escala_s
+    base["total"] = base["dbgg_imp"] * escala_d
+    # Selic do mês 0 (estoque inicial) não entra em juros; preenche 0
+    base["selic_am"] = base["selic_am"].fillna(0.0)
+
+    est_rows = [_linha_indexadores(r.mes, r.selic, r.total) for r in base.itertuples()]
+    ju_rows = []
+    em_rows = []
+    s_prev = float(base.iloc[0]["selic"])
+    for i, r in enumerate(base.itertuples()):
+        if i == 0:
+            continue
+        j = s_prev * float(r.selic_am) / 100.0
+        e = float(r.selic) - s_prev - j
+        ju_rows.append(_linha_indexadores(r.mes, j, j))
+        em_rows.append(_linha_indexadores(r.mes, e, e))
+        s_prev = float(r.selic)
+    # Mês de emenda (dez/2006): estoque oficial; juros/emissão fecham com o recuo.
+    r_emenda = float(sel.loc[sel["mes"] == of_min, "selic_am"].iloc[0]) if of_min in set(sel["mes"]) else 0.0
+    j_emenda = s_prev * r_emenda / 100.0
+    e_emenda = float(of0["selic"]) - s_prev - j_emenda
+    ju_rows.append(_linha_indexadores(of_min, j_emenda, j_emenda))
+    em_rows.append(_linha_indexadores(of_min, e_emenda, e_emenda))
+    return (
+        pd.DataFrame(est_rows),
+        pd.DataFrame(ju_rows),
+        pd.DataFrame(em_rows),
+    )
+
+
+def projetar_meses_apos_oficial(
+    estoque: pd.DataFrame,
+    juros: pd.DataFrame,
+    emissoes: pd.DataFrame,
+    selic_m: pd.DataFrame,
+    mes_fim: pd.Timestamp,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Prolonga estoque/juros/emissões até ``mes_fim`` com emissão líquida zero.
+
+    Juros do mês = estoque Selic anterior × Selic SGS 4390. A DBGG total
+    sobe só pelo juro da parcela Selic (demais indexadores ficam congelados).
+    """
+    mes_fim = pd.Timestamp(mes_fim).to_period("M").to_timestamp()
+    est = estoque.sort_values("mes").copy()
+    ju = juros.copy() if juros.empty or "mes" not in juros.columns else juros.sort_values("mes").copy()
+    em = emissoes.copy() if emissoes.empty or "mes" not in emissoes.columns else emissoes.sort_values("mes").copy()
+    last = est.iloc[-1]
+    cursor = pd.Timestamp(last["mes"]).to_period("M").to_timestamp()
+    sel = selic_m.rename(columns={"valor": "selic_am"}).copy()
+    sel["mes"] = _mes_ts(sel["mes"])
+    sel = sel.set_index("mes")["selic_am"]
+    s = float(last["selic"])
+    tot = float(last["total"])
+    while cursor < mes_fim:
+        nxt = cursor + pd.DateOffset(months=1)
+        if nxt not in sel.index:
+            raise ValueError(f"Selic SGS 4390 ausente para projetar {nxt.strftime('%Y-%m')}")
+        r = float(sel.loc[nxt])
+        j = s * r / 100.0
+        s = s + j
+        tot = tot + j
+        est = pd.concat([est, pd.DataFrame([_linha_indexadores(nxt, s, tot)])], ignore_index=True)
+        ju = pd.concat([ju, pd.DataFrame([_linha_indexadores(nxt, j, j)])], ignore_index=True)
+        em = pd.concat([em, pd.DataFrame([_linha_indexadores(nxt, 0.0, 0.0)])], ignore_index=True)
+        cursor = nxt
+    return est.reset_index(drop=True), ju.reset_index(drop=True), em.reset_index(drop=True)
+
+
+def fundir_pre_oficial(
+    recon_est: pd.DataFrame,
+    recon_ju: pd.DataFrame,
+    recon_em: pd.DataFrame,
+    est: pd.DataFrame,
+    ju: pd.DataFrame,
+    em: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Concatena o recuo com a planilha oficial, sem duplicar o mês de emenda."""
+    if recon_est.empty:
+        return est, ju, em
+    of_min = pd.Timestamp(est["mes"].min())
+    est2 = pd.concat([recon_est[recon_est["mes"] < of_min], est], ignore_index=True)
+    ju2 = pd.concat([recon_ju[~recon_ju["mes"].isin(set(ju["mes"]))], ju], ignore_index=True)
+    em2 = pd.concat([recon_em[~recon_em["mes"].isin(set(em["mes"]))], em], ignore_index=True)
+    return (
+        est2.sort_values("mes").drop_duplicates("mes").reset_index(drop=True),
+        ju2.sort_values("mes").drop_duplicates("mes").reset_index(drop=True),
+        em2.sort_values("mes").drop_duplicates("mes").reset_index(drop=True),
+    )
+
+
 def ipca_por_ano(ipca: pd.DataFrame, meses: pd.Series) -> pd.DataFrame:
     """IPCA acumulado e Selic contrafactual por ano civil da amostra.
 
@@ -215,8 +381,14 @@ def taxas_mensais_cf(
     ipca_anos: pd.DataFrame,
     meses: pd.Series,
     spread_pp: float,
+    selic: pd.DataFrame | None = None,
+    anos_observados: tuple[int, ...] | list[int] = (),
 ) -> pd.DataFrame:
-    """Taxa mensal contrafactual constante dentro de cada ano civil."""
+    """Taxa mensal contrafactual constante dentro de cada ano civil.
+
+    Em ``anos_observados`` a Selic contrafactual é a observada (SGS 4390),
+    não IPCA + spread.
+    """
     anos = ipca_anos.copy()
     anos["selic_cf_acum_pct"] = anos["ipca_acum_pct"] + spread_pp * (
         anos["n_meses"] / 12.0
@@ -243,6 +415,26 @@ def taxas_mensais_cf(
         on="ano",
         how="left",
     )
+    out["selic_alterada"] = ~out["ano"].isin(set(anos_observados))
+    if selic is not None and anos_observados:
+        base = selic.rename(columns={"valor": "selic_am"}).copy()
+        base["mes"] = pd.to_datetime(base["mes"]).dt.to_period("M").dt.to_timestamp()
+        out = out.merge(base[["mes", "selic_am"]], on="mes", how="left")
+        mask = ~out["selic_alterada"]
+        if mask.any() and out.loc[mask, "selic_am"].isna().any():
+            faltando = out.loc[mask & out["selic_am"].isna(), "mes"]
+            raise ValueError(
+                "Selic observada ausente nos anos sem alteração: "
+                + ", ".join(faltando.dt.strftime("%Y-%m").tolist()[:8])
+            )
+        out.loc[mask, "selic_cf_am"] = out.loc[mask, "selic_am"]
+        for ano in set(anos_observados):
+            m_ano = out["ano"] == ano
+            if not m_ano.any():
+                continue
+            fator = float((1.0 + out.loc[m_ano, "selic_cf_am"] / 100.0).prod())
+            out.loc[m_ano, "selic_cf_acum_pct"] = (fator - 1.0) * 100.0
+        out = out.drop(columns=["selic_am"])
     return out
 
 
@@ -688,6 +880,8 @@ def escrever_discriminativo(
     *,
     spread_pp: float,
     gerado_em: str,
+    periodo: str = "janeiro/2007 a junho/2026",
+    anos_observados: tuple[int, ...] | list[int] = (),
 ) -> None:
     """Markdown só com o discriminativo anual das reduções."""
     if disc.empty:
@@ -698,8 +892,14 @@ def escrever_discriminativo(
     linhas = [
         "# Discriminativo das reduções da DBGG",
         "",
-        f"**Hipótese:** Selic anual = IPCA do ano + {_fmt_pct(spread_pp)}.",
-        "**Período:** janeiro/2007 a junho/2026 (2026 incompleto).",
+        f"**Hipótese:** Selic anual = IPCA do ano + {_fmt_pct(spread_pp)}"
+        + (
+            f", exceto {', '.join(str(a) for a in anos_observados)} "
+            "(Selic observada)."
+            if anos_observados
+            else "."
+        ),
+        f"**Período:** {periodo}.",
         f"**Gerado em:** {gerado_em}",
         "",
         f"Redução acumulada ao final: **{_fmt_tri(tot_acum)}** "
@@ -745,15 +945,38 @@ def escrever_discriminativo(
     linhas.extend(
         [
             "",
-            "Unidades: taxas em % no ano (2026 = jan–jun); juros e reduções "
+            "Unidades: taxas em % no período de cada ano; juros e reduções "
             "em R$ bilhões.",
+            "",
+        ]
+    )
+    if anos_observados:
+        linhas.extend(
+            [
+                "Em "
+                + ", ".join(str(a) for a in anos_observados)
+                + " a Selic contrafactual é a **observada**: a redução "
+                "daqueles anos vem só do estoque Selic menor herdado dos "
+                "anos anteriores (mesma taxa, base menor).",
+                "",
+            ]
+        )
+    linhas.extend(
+        [
+            "2003–nov/2006: estoque Selic recuado com DPMFi × participação "
+            "Over/Selic (SGS 4181 e 4177), emendado no primeiro mês da "
+            "planilha oficial. Julho/2026, se ainda não publicado pelo BCB, "
+            "é projetado com emissão líquida zero e juro = estoque × Selic "
+            "do mês.",
             "",
         ]
     )
     path.write_text("\n".join(linhas), encoding="utf-8")
 
 
-def gravar_grafico_discriminativo(disc: pd.DataFrame, pasta: Path) -> Path:
+def gravar_grafico_discriminativo(
+    disc: pd.DataFrame, pasta: Path, stem: str = "dbgg_selic_ipca_2007_2026"
+) -> Path:
     import matplotlib.pyplot as plt
 
     d = disc.sort_values("ano")
@@ -766,13 +989,18 @@ def gravar_grafico_discriminativo(disc: pd.DataFrame, pasta: Path) -> Path:
     ax.grid(True, axis="y", alpha=0.3)
     fig.autofmt_xdate(rotation=45)
     fig.tight_layout()
-    png = pasta / "dbgg_selic_ipca_discriminativo.png"
+    png = pasta / f"{stem}_discriminativo.png"
     fig.savefig(png, dpi=140)
     plt.close(fig)
     return png
 
 
-def gravar_graficos(mensal: pd.DataFrame, anual: pd.DataFrame, pasta: Path) -> list[Path]:
+def gravar_graficos(
+    mensal: pd.DataFrame,
+    anual: pd.DataFrame,
+    pasta: Path,
+    stem: str = "dbgg_selic_ipca_2007_2026",
+) -> list[Path]:
     import matplotlib.pyplot as plt
 
     sim = mensal[mensal["selic_am"].notna()].copy()
@@ -846,7 +1074,7 @@ def gravar_graficos(mensal: pd.DataFrame, anual: pd.DataFrame, pasta: Path) -> l
     ax.grid(True, alpha=0.3)
 
     fig.tight_layout()
-    png = pasta / "dbgg_selic_ipca_2007_2026.png"
+    png = pasta / f"{stem}.png"
     fig.savefig(png, dpi=140)
     plt.close(fig)
     caminhos.append(png)
@@ -926,7 +1154,7 @@ def gravar_graficos(mensal: pd.DataFrame, anual: pd.DataFrame, pasta: Path) -> l
             height=720,
             showlegend=True,
         )
-        html = pasta / "dbgg_selic_ipca_2007_2026.html"
+        html = pasta / f"{stem}.html"
         figp.write_html(html, include_plotlyjs="cdn")
         caminhos.append(html)
     except Exception as exc:  # pragma: no cover - plotly opcional na prática
@@ -941,9 +1169,11 @@ def gravar_saidas(
     *,
     spread_pp: float,
     fonte_planilha: str,
+    stem: str = "dbgg_selic_ipca_2007_2026",
+    periodo: str = "janeiro/2007 a junho/2026",
+    anos_observados: tuple[int, ...] | list[int] = (),
 ) -> dict[str, Path]:
     saida_dir.mkdir(parents=True, exist_ok=True)
-    stem = "dbgg_selic_ipca_2007_2026"
     csv_m = saida_dir / f"{stem}.csv"
     csv_a = saida_dir / f"{stem}_anual.csv"
     xlsx = saida_dir / f"{stem}.xlsx"
@@ -965,13 +1195,15 @@ def gravar_saidas(
                     "fonte",
                     "url",
                     "periodo",
+                    "anos_observados",
                     "metodologia",
                 ],
                 "valor": [
                     spread_pp,
                     fonte_planilha,
                     URL_DBGG,
-                    "2007-01 a 2026-06",
+                    periodo,
+                    ",".join(str(a) for a in anos_observados) or "—",
                     "Selic cf = IPCA do ano + spread; só parcela Selic",
                 ],
             }
@@ -987,11 +1219,16 @@ def gravar_saidas(
         fonte_planilha=fonte_planilha,
     )
     escrever_discriminativo(
-        disc, md_d, spread_pp=spread_pp, gerado_em=gerado
+        disc,
+        md_d,
+        spread_pp=spread_pp,
+        gerado_em=gerado,
+        periodo=periodo,
+        anos_observados=anos_observados,
     )
-    graficos = gravar_graficos(mensal, anual, saida_dir)
+    graficos = gravar_graficos(mensal, anual, saida_dir, stem=stem)
     if not disc.empty:
-        graficos.append(gravar_grafico_discriminativo(disc, saida_dir))
+        graficos.append(gravar_grafico_discriminativo(disc, saida_dir, stem=stem))
     out = {
         "mensal_csv": csv_m,
         "anual_csv": csv_a,
@@ -1016,6 +1253,10 @@ def processar(
     mes_fim: pd.Timestamp = MES_FIM_DEFAULT,
     forcar_download: bool = False,
     baixar_pib: bool = True,
+    anos_observados: tuple[int, ...] | list[int] = ANOS_OBSERVADOS_DEFAULT,
+    recuar_pre_oficial: bool = True,
+    projetar_apos_oficial: bool = True,
+    stem: str | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     cache = ROOT / "data" / "Dbggindexp.xlsx"
     if planilha is not None and planilha.exists():
@@ -1026,30 +1267,56 @@ def processar(
 
     print(f"[2/4] Lendo estoque, juros e emissões ({path}) …", flush=True)
     estoque, juros, emissoes = carregar_dbgg(path)
+    mes0 = pd.Timestamp(mes_inicio).to_period("M").to_timestamp() - pd.DateOffset(
+        months=1
+    )
+    sgs_ini = min(mes0, pd.Timestamp(estoque["mes"].min())).strftime("%d/%m/%Y")
+    sgs_fim = pd.Timestamp(mes_fim).strftime("%d/%m/%Y")
 
     print("[3/4] IPCA (SGS 433) e Selic mensal (SGS 4390) …", flush=True)
     if ipca_path is not None:
         ipca = carregar_ipca(ipca_path)
     else:
-        ipca = _baixar_sgs(IPCA_COD, inicio="01/01/2006", fim=mes_fim.strftime("%d/%m/%Y"))
+        ipca = _baixar_sgs(IPCA_COD, inicio=sgs_ini, fim=sgs_fim)
         ipca = ipca.sort_values("mes").drop_duplicates("mes").reset_index(drop=True)
         ipca["fator"] = (1.0 + ipca["valor"] / 100.0).cumprod()
-    # Não usar data/selic_mensal.xlsx do ContAgil (começa em 2009 e pode ser
-    # placeholder). Sem --selic, baixa a série oficial SGS 4390.
     if selic_path is not None:
         selic = carregar_selic_mensal(selic_path)
     else:
-        selic = _baixar_sgs(
-            SELIC_MENSAL_COD,
-            inicio="01/01/2006",
-            fim=mes_fim.strftime("%d/%m/%Y"),
+        selic = _baixar_sgs(SELIC_MENSAL_COD, inicio=sgs_ini, fim=sgs_fim)
+
+    if recuar_pre_oficial and mes0 < pd.Timestamp(estoque["mes"].min()):
+        print("     Recuando 2003–2006 via DPMFi Over/Selic (SGS 4181/4177) …", flush=True)
+        dpmfi = _baixar_sgs(DPMFI_COD, inicio=sgs_ini, fim=sgs_fim)
+        share = _baixar_sgs(DPMFI_SELIC_PCT_COD, inicio=sgs_ini, fim=sgs_fim)
+        pib = _baixar_sgs(PIB_12M_COD, inicio=sgs_ini, fim=sgs_fim)
+        dbgg_pib_s = _baixar_sgs(DBGG_PIB_COD, inicio=sgs_ini, fim=sgs_fim)
+        r_est, r_ju, r_em = reconstruir_pre_oficial(
+            estoque, selic, dpmfi, share, pib, dbgg_pib_s, mes_inicio
+        )
+        estoque, juros, emissoes = fundir_pre_oficial(
+            r_est, r_ju, r_em, estoque, juros, emissoes
+        )
+
+    if projetar_apos_oficial and pd.Timestamp(mes_fim) > pd.Timestamp(juros["mes"].max()):
+        print(
+            f"     Projetando até {pd.Timestamp(mes_fim).strftime('%Y-%m')} "
+            "(emissão líquida zero) …",
+            flush=True,
+        )
+        estoque, juros, emissoes = projetar_meses_apos_oficial(
+            estoque, juros, emissoes, selic, mes_fim
         )
 
     meses = pd.date_range(mes_inicio, mes_fim, freq="MS")
     ipca_anos = ipca_por_ano(ipca, pd.Series(meses))
-    taxas_cf = taxas_mensais_cf(ipca_anos, pd.Series(meses), spread_pp)
-    # anexa selic observada anual só para consistência interna
-    _ = selic_acumulada_por_ano(selic, pd.Series(meses))
+    taxas_cf = taxas_mensais_cf(
+        ipca_anos,
+        pd.Series(meses),
+        spread_pp,
+        selic=selic,
+        anos_observados=tuple(anos_observados),
+    )
 
     print("[4/4] Simulando estoque Selic e DBGG …", flush=True)
     mensal = simular_parcela_selic(
@@ -1065,22 +1332,32 @@ def processar(
     dbgg_pib = None
     if baixar_pib:
         try:
-            dbgg_pib = _baixar_sgs(
-                DBGG_PIB_COD,
-                inicio="01/01/2006",
-                fim=mes_fim.strftime("%d/%m/%Y"),
-            )
+            dbgg_pib = _baixar_sgs(DBGG_PIB_COD, inicio=sgs_ini, fim=sgs_fim)
         except Exception as exc:
             print(f"[AVISO] SGS 4513 (DBGG/PIB) indisponível: {exc}", flush=True)
     mensal = anexar_pib(mensal, dbgg_pib)
     anual = agregar_anual(mensal)
 
+    if stem is None:
+        stem = (
+            f"dbgg_selic_ipca_{mes_inicio.year}_{mes_fim.year}"
+            f"{mes_fim.month:02d}"
+        )
+        if anos_observados:
+            stem += "_exc" + "".join(str(a)[-2:] for a in anos_observados)
+    periodo = (
+        f"{pd.Timestamp(mes_inicio).strftime('%b/%Y')} a "
+        f"{pd.Timestamp(mes_fim).strftime('%b/%Y')}"
+    )
     caminhos = gravar_saidas(
         mensal,
         anual,
         saida_dir,
         spread_pp=spread_pp,
         fonte_planilha=str(path),
+        stem=stem,
+        periodo=periodo,
+        anos_observados=tuple(anos_observados),
     )
     for nome, p in caminhos.items():
         print(f"[OK] {nome}: {p}", flush=True)
@@ -1120,6 +1397,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Último mês da simulação (YYYY-MM).",
     )
     p.add_argument(
+        "--anos-observados",
+        type=str,
+        default="",
+        help="Anos civis em que a Selic permanece a observada (ex.: 2020,2021).",
+    )
+    p.add_argument(
+        "--stem",
+        type=str,
+        default=None,
+        help="Prefixo dos arquivos de saída.",
+    )
+    p.add_argument(
         "--saida-dir",
         type=Path,
         default=ROOT / "output",
@@ -1143,6 +1432,9 @@ def main(argv: list[str] | None = None) -> int:
     inicio = pd.Timestamp(args.inicio).to_period("M").to_timestamp()
     fim = pd.Timestamp(args.fim).to_period("M").to_timestamp()
     try:
+        anos_obs = tuple(
+            int(x) for x in args.anos_observados.split(",") if x.strip()
+        )
         processar(
             args.saida_dir,
             planilha=args.planilha,
@@ -1153,6 +1445,8 @@ def main(argv: list[str] | None = None) -> int:
             mes_fim=fim,
             forcar_download=args.forcar_download,
             baixar_pib=not args.sem_pib,
+            anos_observados=anos_obs,
+            stem=args.stem,
         )
     except Exception as exc:
         print(f"ERRO: {exc}", file=sys.stderr)

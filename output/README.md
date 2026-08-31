@@ -57,3 +57,13 @@ python3 scripts/simular_dbgg_selic_ipca.py
 - `dbgg_selic_ipca_2007_2026.csv` / `_anual.csv` / `_discriminativo.csv` / `.xlsx` / `.md`
 - `dbgg_selic_ipca_2007_2026_discriminativo.md` — redução em cada ano
 - `dbgg_selic_ipca_2007_2026.png` / `.html` / `dbgg_selic_ipca_discriminativo.png`
+
+Cenário 01/01/2003–31/07/2026, com Selic observada em 2020 e 2021:
+
+```bash
+python3 scripts/simular_dbgg_selic_ipca.py \
+  --inicio 2003-01 --fim 2026-07 --anos-observados 2020,2021 \
+  --stem dbgg_selic_ipca_2003_2026
+```
+
+- `dbgg_selic_ipca_2003_2026_discriminativo.md` / `.csv` / `.xlsx`

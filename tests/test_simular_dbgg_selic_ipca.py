@@ -18,6 +18,8 @@ from scripts.simular_dbgg_selic_ipca import (
     ler_aba_indexadores,
     montar_discriminativo,
     processar,
+    projetar_meses_apos_oficial,
+    reconstruir_pre_oficial,
     simular_parcela_selic,
     taxas_mensais_cf,
 )
@@ -131,6 +133,125 @@ def test_ipca_por_ano_e_taxa_cf_prorrata():
     r_m = ((1 + esperado_acum / 100) ** (1 / 2) - 1) * 100
     assert abs(float(cf.iloc[0]["selic_cf_am"]) - r_m) < 1e-9
     assert float(cf.iloc[0]["selic_cf_am"]) == float(cf.iloc[1]["selic_cf_am"])
+
+
+def test_anos_observados_usam_selic_oficial():
+    ipca = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2020-01-01", "2020-02-01"]),
+            "valor": [0.5, 0.5],
+        }
+    )
+    selic = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2020-01-01", "2020-02-01"]),
+            "valor": [0.3, 0.4],
+        }
+    )
+    meses = pd.Series(selic["mes"])
+    cf = taxas_mensais_cf(
+        ipca_por_ano(ipca, meses),
+        meses,
+        0.37,
+        selic=selic,
+        anos_observados=(2020,),
+    )
+    assert list(cf["selic_cf_am"].round(8)) == [0.3, 0.4]
+    assert not bool(cf["selic_alterada"].iloc[0])
+    acum = ((1.003 * 1.004) - 1) * 100
+    assert abs(float(cf.iloc[0]["selic_cf_acum_pct"]) - acum) < 1e-9
+
+
+def test_reconstruir_pre_oficial_emenda_no_estoque():
+    of = pd.DataFrame(
+        [
+            {
+                "mes": pd.Timestamp("2006-12-01"),
+                "ano": 2006,
+                "mes_n": 12,
+                "selic": 100.0,
+                "total": 200.0,
+            }
+        ]
+    )
+    selic = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2006-11-01", "2006-12-01"]),
+            "valor": [1.0, 1.0],
+        }
+    )
+    dpmfi = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2006-11-01", "2006-12-01"]),
+            "valor": [80.0, 80.0],
+        }
+    )
+    share = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2006-11-01", "2006-12-01"]),
+            "valor": [50.0, 50.0],
+        }
+    )
+    pib = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2006-11-01", "2006-12-01"]),
+            "valor": [1000.0, 1000.0],
+        }
+    )
+    dbgg_pib = pd.DataFrame(
+        {
+            "mes": pd.to_datetime(["2006-11-01", "2006-12-01"]),
+            "valor": [20.0, 20.0],
+        }
+    )
+    est, ju, em = reconstruir_pre_oficial(
+        of, selic, dpmfi, share, pib, dbgg_pib, pd.Timestamp("2006-12-01")
+    )
+    # proxy dez = 40; escala = 100/40 = 2,5 → nov = 40*2,5 = 100
+    assert len(est) == 1
+    assert abs(float(est.iloc[0]["selic"]) - 100.0) < 1e-9
+    # juros/emissão do mês de emenda (dez/2006)
+    assert len(ju) == 1
+    assert ju.iloc[0]["mes"] == pd.Timestamp("2006-12-01")
+
+
+def test_projetar_mes_seguinte_emissao_zero():
+    est = pd.DataFrame(
+        [_linha("2006-12-01", 100.0, 200.0)]
+    )
+    ju = pd.DataFrame()
+    em = pd.DataFrame()
+    selic = pd.DataFrame(
+        {"mes": pd.to_datetime(["2007-01-01"]), "valor": [2.0]}
+    )
+    est2, ju2, em2 = projetar_meses_apos_oficial(
+        est, ju, em, selic, pd.Timestamp("2007-01-01")
+    )
+    assert abs(float(est2.iloc[-1]["selic"]) - 102.0) < 1e-9
+    assert abs(float(ju2.iloc[-1]["selic"]) - 2.0) < 1e-9
+    assert float(em2.iloc[-1]["selic"]) == 0.0
+
+
+def _linha(mes: str, selic: float, total: float) -> dict:
+    ts = pd.Timestamp(mes)
+    return {
+        "mes": ts,
+        "ano": int(ts.year),
+        "mes_n": int(ts.month),
+        "selic": selic,
+        "total": total,
+        "cambial_interna": 0.0,
+        "cambial_externa": 0.0,
+        "cambial_total": 0.0,
+        "igpm": 0.0,
+        "igpdi": 0.0,
+        "ipca": 0.0,
+        "indices_total": 0.0,
+        "tjlp_tlp": 0.0,
+        "tr": 0.0,
+        "prefixado": 0.0,
+        "outros": 0.0,
+    }
 
 
 def test_simulacao_reescala_juros_e_composto_estoque(tmp_path: Path):
@@ -348,6 +469,9 @@ def test_processar_offline_com_planilha_e_series(tmp_path: Path):
         mes_inicio=pd.Timestamp("2007-01-01"),
         mes_fim=pd.Timestamp("2007-02-01"),
         baixar_pib=False,
+        recuar_pre_oficial=False,
+        projetar_apos_oficial=False,
+        stem="dbgg_selic_ipca_2007_2026",
     )
     assert (saida / "dbgg_selic_ipca_2007_2026.md").exists()
     assert (saida / "dbgg_selic_ipca_2007_2026_discriminativo.md").exists()
