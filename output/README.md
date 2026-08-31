@@ -46,3 +46,13 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+Simulação da DBGG com Selic anual = IPCA do ano + 0,37 p.p. (jan/2007–jun/2026),
+a partir da planilha especial do BCB (`Dbggindexp.xlsx`):
+
+```bash
+python3 scripts/simular_dbgg_selic_ipca.py
+```
+
+- `dbgg_selic_ipca_2007_2026.csv` / `_anual.csv` / `.xlsx` / `.md`
+- `dbgg_selic_ipca_2007_2026.png` / `.html`
