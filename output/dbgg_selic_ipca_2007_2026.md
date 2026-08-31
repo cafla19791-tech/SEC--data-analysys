@@ -1,7 +1,7 @@
 # Simulação da DBGG — Selic anual = IPCA do ano + 0,37%
 
 **Período:** Jan/2007 a Jun/2026 (estoque inicial: dez/2006).
-**Gerado em:** 2026-08-31 01:59 UTC
+**Gerado em:** 2026-08-31 02:13 UTC
 
 ## Resultado no último mês
 
@@ -56,6 +56,36 @@ Valores de estoque e DBGG no **último mês** de cada ano na amostra (dezembro; 
 | 2026 | 6 | 3,36% | 6,84% | 3,55% | 10.809,5 | 8.364,3 | 2.445,2 | 379,3 | 117,0 |
 
 Δ DBGG = observada − simulada (R$ bilhões). Juros em R$ bilhões.
+
+## Discriminativo das reduções por ano
+
+A **redução no ano** é a economia de juros nominais da parcela Selic naquele exercício (fluxo). A **redução acumulada** é a diferença de estoque da DBGG no último mês do ano. Participação = redução do ano / soma das reduções do período.
+
+| Ano | Selic obs. | Selic cf. | Juros Selic obs. | Juros cf. | Redução no ano | Redução acum. | Part. |
+|----:|-----------:|----------:|-----------------:|----------:|---------------:|--------------:|------:|
+| 2007 | 11,85% | 4,83% | 63,6 | 25,9 | 37,7 | 37,7 | 1,54% |
+| 2008 | 12,48% | 6,27% | 81,6 | 38,5 | 43,1 | 80,8 | 1,76% |
+| 2009 | 9,92% | 4,68% | 85,1 | 36,5 | 48,6 | 129,4 | 1,99% |
+| 2010 | 9,78% | 6,28% | 81,9 | 45,1 | 36,7 | 166,1 | 1,50% |
+| 2011 | 11,62% | 6,87% | 95,8 | 45,9 | 49,9 | 216,0 | 2,04% |
+| 2012 | 8,48% | 6,21% | 77,3 | 43,3 | 34,0 | 249,9 | 1,39% |
+| 2013 | 8,21% | 6,28% | 85,8 | 50,1 | 35,7 | 285,6 | 1,46% |
+| 2014 | 10,91% | 6,78% | 107,1 | 48,6 | 58,5 | 344,1 | 2,39% |
+| 2015 | 13,29% | 11,04% | 170,4 | 104,0 | 66,4 | 410,5 | 2,72% |
+| 2016 | 14,03% | 6,66% | 232,3 | 83,1 | 149,1 | 559,6 | 6,10% |
+| 2017 | 9,96% | 3,32% | 195,1 | 47,5 | 147,6 | 707,2 | 6,04% |
+| 2018 | 6,42% | 4,12% | 140,7 | 62,9 | 77,8 | 785,0 | 3,18% |
+| 2019 | 5,95% | 4,68% | 153,2 | 85,2 | 68,0 | 852,9 | 2,78% |
+| 2020 | 2,75% | 4,89% | 79,8 | 104,5 | -24,7 | 828,3 | -1,01% |
+| 2021 | 4,44% | 10,43% | 138,6 | 239,0 | -100,4 | 727,8 | -4,11% |
+| 2022 | 12,38% | 6,15% | 396,4 | 151,3 | 245,1 | 972,9 | 10,02% |
+| 2023 | 13,03% | 4,99% | 464,9 | 127,9 | 337,0 | 1.309,9 | 13,78% |
+| 2024 | 10,89% | 5,20% | 483,6 | 160,4 | 323,2 | 1.633,1 | 13,22% |
+| 2025 | 14,33% | 4,63% | 697,5 | 147,9 | 549,7 | 2.182,8 | 22,48% |
+| 2026 | 6,84% | 3,55% | 379,3 | 117,0 | 262,3 | 2.445,2 | 10,73% |
+| **Total** | | | 4.209,9 | 1.764,8 | 2.445,2 | 2.445,2 | 100,00% |
+
+Valores em R$ bilhões. Sinal negativo = a Selic observada ficou abaixo de IPCA + spread (a simulação *aumenta* os juros naquele ano).
 
 Em 2020–2021 a Selic observada ficou **abaixo** de IPCA + 0,37% (ciclo de juros reais negativos). Nesses anos a simulação *aumenta* os juros da parcela Selic e a diferença de estoque recua — o que confere o sinal do exercício.
 

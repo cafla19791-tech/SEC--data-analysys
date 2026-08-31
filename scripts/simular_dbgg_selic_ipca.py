@@ -436,6 +436,29 @@ def agregar_anual(mensal: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+def montar_discriminativo(anual: pd.DataFrame) -> pd.DataFrame:
+    """Redução da DBGG em cada ano (fluxo) e acumulada (estoque).
+
+    A redução do ano é a economia de juros nominais da parcela Selic
+    (``economia_juros``), igual à variação da diferença de estoque
+    ``ΔDBGG_t − ΔDBGG_{t−1}``.
+    """
+    if anual.empty:
+        return anual.copy()
+    out = anual.sort_values("ano").reset_index(drop=True).copy()
+    out["reducao_ano"] = out["economia_juros"]
+    out["reducao_acumulada"] = out["delta_dbgg"]
+    prev = out["delta_dbgg"].shift(1).fillna(0.0)
+    out["variacao_delta_dbgg"] = out["delta_dbgg"] - prev
+    total = float(out["reducao_ano"].sum())
+    if total == 0:
+        out["participacao_pct"] = 0.0
+    else:
+        out["participacao_pct"] = 100.0 * out["reducao_ano"] / total
+    out["spread_selic_menos_cf"] = out["selic_acum_pct"] - out["selic_cf_acum_pct"]
+    return out
+
+
 def _fmt_bi(valor: float) -> str:
     return (
         f"R$ {valor / 1000.0:,.1f} bi"
@@ -586,6 +609,58 @@ def escrever_markdown(
             "",
             "Δ DBGG = observada − simulada (R$ bilhões). Juros em R$ bilhões.",
             "",
+            "## Discriminativo das reduções por ano",
+            "",
+        ]
+    )
+    disc = montar_discriminativo(anual)
+    linhas.extend(
+        [
+            "A **redução no ano** é a economia de juros nominais da parcela "
+            "Selic naquele exercício (fluxo). A **redução acumulada** é a "
+            "diferença de estoque da DBGG no último mês do ano. Participação "
+            "= redução do ano / soma das reduções do período.",
+            "",
+            "| Ano | Selic obs. | Selic cf. | "
+            "Juros Selic obs. | Juros cf. | "
+            "Redução no ano | Redução acum. | Part. |",
+            "|----:|-----------:|----------:|"
+            "-----------------:|----------:|"
+            "---------------:|--------------:|------:|",
+        ]
+    )
+    for row in disc.itertuples(index=False):
+        linhas.append(
+            "| {ano} | {selic} | {cf} | {jobs} | {jcf} | {red} | {acum} | {part} |".format(
+                ano=int(row.ano),
+                selic=_fmt_pct(float(row.selic_acum_pct)),
+                cf=_fmt_pct(float(row.selic_cf_acum_pct)),
+                jobs=_fmt_num(float(row.juros_selic_act) / 1000.0),
+                jcf=_fmt_num(float(row.juros_selic_cf) / 1000.0),
+                red=_fmt_num(float(row.reducao_ano) / 1000.0),
+                acum=_fmt_num(float(row.reducao_acumulada) / 1000.0),
+                part=_fmt_pct(float(row.participacao_pct)),
+            )
+        )
+    tot_red = float(disc["reducao_ano"].sum())
+    tot_acum = float(disc["reducao_acumulada"].iloc[-1]) if len(disc) else 0.0
+    tot_jobs = float(disc["juros_selic_act"].sum())
+    tot_jcf = float(disc["juros_selic_cf"].sum())
+    linhas.append(
+        "| **Total** | | | {jobs} | {jcf} | {red} | {acum} | {part} |".format(
+            jobs=_fmt_num(tot_jobs / 1000.0),
+            jcf=_fmt_num(tot_jcf / 1000.0),
+            red=_fmt_num(tot_red / 1000.0),
+            acum=_fmt_num(tot_acum / 1000.0),
+            part=_fmt_pct(100.0),
+        )
+    )
+    linhas.extend(
+        [
+            "",
+            "Valores em R$ bilhões. Sinal negativo = a Selic observada ficou "
+            "abaixo de IPCA + spread (a simulação *aumenta* os juros naquele ano).",
+            "",
             "Em 2020–2021 a Selic observada ficou **abaixo** de IPCA + "
             f"{_fmt_pct(spread_pp)} (ciclo de juros reais negativos). Nesses "
             "anos a simulação *aumenta* os juros da parcela Selic e a "
@@ -605,6 +680,96 @@ def escrever_markdown(
         ]
     )
     path.write_text("\n".join(linhas), encoding="utf-8")
+
+
+def escrever_discriminativo(
+    disc: pd.DataFrame,
+    path: Path,
+    *,
+    spread_pp: float,
+    gerado_em: str,
+) -> None:
+    """Markdown só com o discriminativo anual das reduções."""
+    if disc.empty:
+        path.write_text("# Discriminativo das reduções da DBGG\n\n(sem dados)\n")
+        return
+    tot_red = float(disc["reducao_ano"].sum())
+    tot_acum = float(disc["reducao_acumulada"].iloc[-1])
+    linhas = [
+        "# Discriminativo das reduções da DBGG",
+        "",
+        f"**Hipótese:** Selic anual = IPCA do ano + {_fmt_pct(spread_pp)}.",
+        "**Período:** janeiro/2007 a junho/2026 (2026 incompleto).",
+        f"**Gerado em:** {gerado_em}",
+        "",
+        f"Redução acumulada ao final: **{_fmt_tri(tot_acum)}** "
+        f"({_fmt_bi(tot_acum)}).",
+        f"Soma das reduções anuais (economia de juros da parcela Selic): "
+        f"**{_fmt_tri(tot_red)}**.",
+        "",
+        "A redução **no ano** é o fluxo (juros Selic observados − simulados). "
+        "A redução **acumulada** é o estoque (DBGG observada − simulada) no "
+        "último mês do ano. Participação = redução do ano / soma do período. "
+        "Sinal negativo: naquele ano a Selic observada ficou abaixo de "
+        f"IPCA + {_fmt_pct(spread_pp)}.",
+        "",
+        "| Ano | n | IPCA | Selic obs. | Selic cf. | "
+        "Juros obs. | Juros cf. | Redução no ano | Redução acum. | Part. |",
+        "|----:|--:|-----:|-----------:|----------:|"
+        "-----------:|----------:|---------------:|--------------:|------:|",
+    ]
+    for row in disc.itertuples(index=False):
+        linhas.append(
+            "| {ano} | {n} | {ipca} | {selic} | {cf} | "
+            "{jobs} | {jcf} | {red} | {acum} | {part} |".format(
+                ano=int(row.ano),
+                n=int(row.n_meses),
+                ipca=_fmt_pct(float(row.ipca_acum_pct)),
+                selic=_fmt_pct(float(row.selic_acum_pct)),
+                cf=_fmt_pct(float(row.selic_cf_acum_pct)),
+                jobs=_fmt_num(float(row.juros_selic_act) / 1000.0),
+                jcf=_fmt_num(float(row.juros_selic_cf) / 1000.0),
+                red=_fmt_num(float(row.reducao_ano) / 1000.0),
+                acum=_fmt_num(float(row.reducao_acumulada) / 1000.0),
+                part=_fmt_pct(float(row.participacao_pct)),
+            )
+        )
+    linhas.append(
+        "| **Total** | | | | | {jobs} | {jcf} | {red} | {acum} | 100,00% |".format(
+            jobs=_fmt_num(float(disc["juros_selic_act"].sum()) / 1000.0),
+            jcf=_fmt_num(float(disc["juros_selic_cf"].sum()) / 1000.0),
+            red=_fmt_num(tot_red / 1000.0),
+            acum=_fmt_num(tot_acum / 1000.0),
+        )
+    )
+    linhas.extend(
+        [
+            "",
+            "Unidades: taxas em % no ano (2026 = jan–jun); juros e reduções "
+            "em R$ bilhões.",
+            "",
+        ]
+    )
+    path.write_text("\n".join(linhas), encoding="utf-8")
+
+
+def gravar_grafico_discriminativo(disc: pd.DataFrame, pasta: Path) -> Path:
+    import matplotlib.pyplot as plt
+
+    d = disc.sort_values("ano")
+    cores = ["#c45911" if v >= 0 else "#1f4e79" for v in d["reducao_ano"]]
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.bar(d["ano"].astype(int).astype(str), d["reducao_ano"] / 1000.0, color=cores)
+    ax.axhline(0, color="#333", linewidth=0.8)
+    ax.set_ylabel("R$ bilhões")
+    ax.set_title("Redução da DBGG em cada ano (economia de juros da parcela Selic)")
+    ax.grid(True, axis="y", alpha=0.3)
+    fig.autofmt_xdate(rotation=45)
+    fig.tight_layout()
+    png = pasta / "dbgg_selic_ipca_discriminativo.png"
+    fig.savefig(png, dpi=140)
+    plt.close(fig)
+    return png
 
 
 def gravar_graficos(mensal: pd.DataFrame, anual: pd.DataFrame, pasta: Path) -> list[Path]:
@@ -783,11 +948,16 @@ def gravar_saidas(
     csv_a = saida_dir / f"{stem}_anual.csv"
     xlsx = saida_dir / f"{stem}.xlsx"
     md = saida_dir / f"{stem}.md"
+    disc = montar_discriminativo(anual)
+    csv_d = saida_dir / f"{stem}_discriminativo.csv"
+    md_d = saida_dir / f"{stem}_discriminativo.md"
     mensal.to_csv(csv_m, index=False, float_format="%.8f")
     anual.to_csv(csv_a, index=False, float_format="%.8f")
+    disc.to_csv(csv_d, index=False, float_format="%.8f")
     with pd.ExcelWriter(xlsx, engine="xlsxwriter") as writer:
         mensal.to_excel(writer, sheet_name="Mensal", index=False)
         anual.to_excel(writer, sheet_name="Anual", index=False)
+        disc.to_excel(writer, sheet_name="Discriminativo", index=False)
         meta = pd.DataFrame(
             {
                 "campo": [
@@ -816,10 +986,17 @@ def gravar_saidas(
         gerado_em=gerado,
         fonte_planilha=fonte_planilha,
     )
+    escrever_discriminativo(
+        disc, md_d, spread_pp=spread_pp, gerado_em=gerado
+    )
     graficos = gravar_graficos(mensal, anual, saida_dir)
+    if not disc.empty:
+        graficos.append(gravar_grafico_discriminativo(disc, saida_dir))
     out = {
         "mensal_csv": csv_m,
         "anual_csv": csv_a,
+        "discriminativo_csv": csv_d,
+        "discriminativo_md": md_d,
         "xlsx": xlsx,
         "md": md,
     }

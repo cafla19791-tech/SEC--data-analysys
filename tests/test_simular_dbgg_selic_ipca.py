@@ -5,16 +5,18 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 
 from scripts.simular_dbgg_selic_ipca import (
     agregar_anual,
     anexar_pib,
     carregar_dbgg,
+    escrever_discriminativo,
     escrever_markdown,
     gravar_saidas,
     ipca_por_ano,
     ler_aba_indexadores,
+    montar_discriminativo,
     processar,
     simular_parcela_selic,
     taxas_mensais_cf,
@@ -218,6 +220,57 @@ def test_agregar_anual_ultimo_mes_e_soma_juros(tmp_path: Path):
     assert float(anual.iloc[0]["dbgg_pib_cf"]) < float(anual.iloc[0]["dbgg_pib_act"])
 
 
+def test_montar_discriminativo_fluxo_e_acumulado():
+    anual = pd.DataFrame(
+        {
+            "ano": [2007, 2008, 2009],
+            "n_meses": [12, 12, 12],
+            "ipca_acum_pct": [4.0, 5.0, 4.5],
+            "selic_acum_pct": [12.0, 13.0, 10.0],
+            "selic_cf_acum_pct": [4.37, 5.37, 4.87],
+            "juros_selic_act": [100.0, 120.0, 80.0],
+            "juros_selic_cf": [40.0, 50.0, 90.0],
+            "economia_juros": [60.0, 70.0, -10.0],
+            "delta_dbgg": [60.0, 130.0, 120.0],
+            "dbgg_act": [1000.0, 1100.0, 1200.0],
+            "dbgg_cf": [940.0, 970.0, 1080.0],
+        }
+    )
+    disc = montar_discriminativo(anual)
+    assert list(disc["reducao_ano"]) == [60.0, 70.0, -10.0]
+    assert list(disc["reducao_acumulada"]) == [60.0, 130.0, 120.0]
+    assert abs(float(disc["variacao_delta_dbgg"].iloc[1]) - 70.0) < 1e-9
+    assert abs(float(disc["participacao_pct"].sum()) - 100.0) < 1e-9
+    assert float(disc.loc[disc["ano"] == 2009, "participacao_pct"].iloc[0]) < 0
+
+
+def test_escrever_discriminativo_contem_anos_e_total(tmp_path: Path):
+    anual = pd.DataFrame(
+        {
+            "ano": [2007, 2008],
+            "n_meses": [12, 12],
+            "ipca_acum_pct": [4.46, 5.90],
+            "selic_acum_pct": [11.85, 12.48],
+            "selic_cf_acum_pct": [4.83, 6.27],
+            "juros_selic_act": [63620.0, 81637.0],
+            "juros_selic_cf": [25947.0, 38490.0],
+            "economia_juros": [37673.0, 43147.0],
+            "delta_dbgg": [37673.0, 80820.0],
+            "dbgg_act": [1.5e6, 1.7e6],
+            "dbgg_cf": [1.46e6, 1.62e6],
+        }
+    )
+    disc = montar_discriminativo(anual)
+    path = tmp_path / "disc.md"
+    escrever_discriminativo(disc, path, spread_pp=0.37, gerado_em="2026-08-31")
+    texto = path.read_text(encoding="utf-8")
+    assert "Discriminativo das reduções" in texto
+    assert "2007" in texto
+    assert "2008" in texto
+    assert "Total" in texto
+    assert "0,37" in texto
+
+
 def test_markdown_e_saidas(tmp_path: Path):
     path = _planilha_minima(tmp_path / "dbgg.xlsx")
     est, ju, em = carregar_dbgg(path)
@@ -258,6 +311,7 @@ def test_markdown_e_saidas(tmp_path: Path):
     assert "0,37" in texto
     assert "Metodologia" in texto
     assert "2007" in texto
+    assert "Discriminativo das reduções" in texto
 
     saidas = gravar_saidas(
         mensal, anual, tmp_path / "out", spread_pp=0.37, fonte_planilha=str(path)
@@ -265,6 +319,10 @@ def test_markdown_e_saidas(tmp_path: Path):
     assert saidas["xlsx"].exists()
     assert saidas["mensal_csv"].exists()
     assert saidas["md"].exists()
+    assert saidas["discriminativo_csv"].exists()
+    assert saidas["discriminativo_md"].exists()
+    wb = load_workbook(saidas["xlsx"])
+    assert "Discriminativo" in wb.sheetnames
 
 
 def test_processar_offline_com_planilha_e_series(tmp_path: Path):
@@ -292,5 +350,6 @@ def test_processar_offline_com_planilha_e_series(tmp_path: Path):
         baixar_pib=False,
     )
     assert (saida / "dbgg_selic_ipca_2007_2026.md").exists()
+    assert (saida / "dbgg_selic_ipca_2007_2026_discriminativo.md").exists()
     assert float(mensal[mensal["selic_am"].notna()].iloc[-1]["dbgg_cf"]) < 2120.0
     assert int(anual.iloc[0]["ano"]) == 2007

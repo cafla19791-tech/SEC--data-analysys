@@ -54,5 +54,6 @@ a partir da planilha especial do BCB (`Dbggindexp.xlsx`):
 python3 scripts/simular_dbgg_selic_ipca.py
 ```
 
-- `dbgg_selic_ipca_2007_2026.csv` / `_anual.csv` / `.xlsx` / `.md`
-- `dbgg_selic_ipca_2007_2026.png` / `.html`
+- `dbgg_selic_ipca_2007_2026.csv` / `_anual.csv` / `_discriminativo.csv` / `.xlsx` / `.md`
+- `dbgg_selic_ipca_2007_2026_discriminativo.md` — redução em cada ano
+- `dbgg_selic_ipca_2007_2026.png` / `.html` / `dbgg_selic_ipca_discriminativo.png`
