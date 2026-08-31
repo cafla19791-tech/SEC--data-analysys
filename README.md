@@ -212,6 +212,16 @@ python3 scripts/gerar_fluxos.py --download \
   --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
 ```
 
+## Simulação da DBGG (Selic = IPCA + 0,37 p.p.)
+
+Planilha especial do BCB (`Dbggindexp.xlsx`), jan/2007–jun/2026:
+
+```bash
+python3 scripts/simular_dbgg_selic_ipca.py
+```
+
+Saídas: `output/dbgg_selic_ipca_2007_2026.md` / `.csv` / `.xlsx` / `.png`.
+
 ## Testes
 
 ```bash
