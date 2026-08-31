@@ -1,7 +1,7 @@
 # Simulação da DBGG — Selic anual = IPCA do ano + 0,37%
 
-**Período:** Jan/2003 a Jul/2026 (estoque inicial: dez/2006).
-**Gerado em:** 2026-08-31 02:53 UTC
+**Período:** Jan/2003 a Jul/2026.
+**Gerado em:** 2026-08-31 03:10 UTC
 
 ## Resultado no último mês
 
@@ -18,7 +18,7 @@ Fonte da dívida: planilha especial do Banco Central [Dbggindexp.xlsx](https://w
 
 A coluna **Selic** do BCB reúne LFT, LFT-A, LFT-B, operações compromissadas (recompra e revenda), dívida bancária e securitizadas indexadas à Selic.
 
-Hipótese: em cada ano civil a Selic acumulada no ano é igual ao IPCA acumulado no mesmo conjunto de meses **mais 0,37% proporcionais** (`spread × n/12`). A taxa mensal contrafactual é a equivalente composta, constante dentro do ano. Em 2026 o ano está incompleto (janeiro–junho): o IPCA e a Selic contrafactual são os acumulados do semestre, com o spread de 0,37% × 6/12 = 0,185%.
+Hipótese: em cada ano civil a Selic acumulada no ano é igual ao IPCA acumulado no mesmo conjunto de meses **mais 0,37% proporcionais** (`spread × n/12`). A taxa mensal contrafactual é a equivalente composta, constante dentro do ano. Em 2026 o ano está incompleto (janeiro–julho): o IPCA e a Selic contrafactual são os acumulados do período, com o spread de 0,37% × 7/12 = 0,216%. Em 2020, 2021 a Selic permanece a **observada** (não se aplica IPCA + 0,37%).
 
 Os juros Selic observados (contabilidade BCB) são reescalonados pela razão entre as taxas mensais (SGS 4390 vs. contrafactual) e pela razão dos estoques Selic do mês anterior (efeito de estoque menor). As emissões líquidas por indexador permanecem as observadas. O resíduo de fechamento do BCB (`Δestoque − emissão − juros`) é replicado no cenário simulado, para não atribuir quebras estatísticas à Selic.
 
@@ -28,7 +28,7 @@ Séries auxiliares: IPCA SGS 433 (% a.m.); Selic SGS 4390 (% a.m.); DBGG/PIB SGS
 
 ## Série anual
 
-Valores de estoque e DBGG no **último mês** de cada ano na amostra (dezembro; em 2026, junho). Juros e IPCA/Selic são acumulados no ano. Unidades: R$ bilhões (estoques e juros) e % a.a. (ou % no período, quando n < 12).
+Valores de estoque e DBGG no **último mês** de cada ano na amostra (dezembro; no último ano, julho). Juros e IPCA/Selic são acumulados no ano. Unidades: R$ bilhões (estoques e juros) e % a.a. (ou % no período, quando n < 12).
 
 | Ano | n | IPCA | Selic obs. | Selic cf. | DBGG obs. | DBGG cf. | Δ DBGG | Juros Selic obs. | Juros cf. |
 |----:|--:|-----:|-----------:|----------:|-----------:|---------:|-------:|-----------------:|----------:|
@@ -93,7 +93,7 @@ A **redução no ano** é a economia de juros nominais da parcela Selic naquele 
 
 Valores em R$ bilhões. Sinal negativo = a Selic observada ficou abaixo de IPCA + spread (a simulação *aumenta* os juros naquele ano).
 
-Em 2020–2021 a Selic observada ficou **abaixo** de IPCA + 0,37% (ciclo de juros reais negativos). Nesses anos a simulação *aumenta* os juros da parcela Selic e a diferença de estoque recua — o que confere o sinal do exercício.
+Em 2020, 2021 a Selic contrafactual é a **observada**: a redução daqueles anos vem só do estoque Selic menor herdado dos anos anteriores (mesma taxa, base menor).
 
 ## Premissas e limitações
 

@@ -2,7 +2,7 @@
 
 **Hipótese:** Selic anual = IPCA do ano + 0,37%, exceto 2020, 2021 (Selic observada).
 **Período:** Jan/2003 a Jul/2026.
-**Gerado em:** 2026-08-31 02:53 UTC
+**Gerado em:** 2026-08-31 03:10 UTC
 
 Redução acumulada ao final: **R$ 3,58 tri** (R$ 3.581,9 bi).
 Soma das reduções anuais (economia de juros da parcela Selic): **R$ 3,58 tri**.

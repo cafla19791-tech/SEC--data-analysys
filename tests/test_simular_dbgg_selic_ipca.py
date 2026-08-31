@@ -433,6 +433,24 @@ def test_markdown_e_saidas(tmp_path: Path):
     assert "Metodologia" in texto
     assert "2007" in texto
     assert "Discriminativo das reduções" in texto
+    assert "2020–2021" in texto
+
+    md_obs = tmp_path / "r_obs.md"
+    escrever_markdown(
+        anual,
+        mensal,
+        md_obs,
+        spread_pp=0.37,
+        gerado_em="2026-08-31",
+        fonte_planilha=str(path),
+        periodo="Jan/2003 a Jul/2026",
+        anos_observados=(2020, 2021),
+    )
+    texto_obs = md_obs.read_text(encoding="utf-8")
+    assert "Jan/2003 a Jul/2026" in texto_obs
+    assert "2020, 2021" in texto_obs
+    assert "permanece a **observada**" in texto_obs
+    assert "ciclo de juros reais negativos" not in texto_obs
 
     saidas = gravar_saidas(
         mensal, anual, tmp_path / "out", spread_pp=0.37, fonte_planilha=str(path)

@@ -678,6 +678,40 @@ def _fmt_num(valor: float, casas: int = 1) -> str:
     return f"{valor:,.{casas}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
+def _nota_ano_incompleto(anual: pd.DataFrame, spread_pp: float) -> str:
+    """Texto do último ano quando a amostra não fecha em dezembro."""
+    if anual.empty:
+        return ""
+    last = anual.iloc[-1]
+    n = int(last["n_meses"])
+    if n >= 12:
+        return (
+            "A taxa mensal contrafactual é a equivalente composta, constante "
+            "dentro do ano."
+        )
+    ano = int(last["ano"])
+    mes_nome = {
+        1: "janeiro",
+        2: "fevereiro",
+        3: "março",
+        4: "abril",
+        5: "maio",
+        6: "junho",
+        7: "julho",
+        8: "agosto",
+        9: "setembro",
+        10: "outubro",
+        11: "novembro",
+    }.get(n, f"{n} meses")
+    return (
+        "A taxa mensal contrafactual é a equivalente composta, constante "
+        f"dentro do ano. Em {ano} o ano está incompleto (janeiro–{mes_nome}): "
+        "o IPCA e a Selic contrafactual são os acumulados do período, com "
+        f"o spread de {_fmt_pct(spread_pp)} × {n}/12 = "
+        f"{_fmt_pct(spread_pp * n / 12.0, 3)}."
+    )
+
+
 def escrever_markdown(
     anual: pd.DataFrame,
     mensal: pd.DataFrame,
@@ -686,6 +720,8 @@ def escrever_markdown(
     spread_pp: float,
     gerado_em: str,
     fonte_planilha: str,
+    periodo: str | None = None,
+    anos_observados: tuple[int, ...] | list[int] = (),
 ) -> None:
     sim = mensal[mensal["selic_am"].notna()]
     last = sim.iloc[-1]
@@ -693,13 +729,34 @@ def escrever_markdown(
     economia_juros = float(
         sim["juros_selic_act"].sum() - sim["juros_selic_cf"].sum()
     )
+    periodo_txt = periodo or (
+        f"{first['mes'].strftime('%b/%Y')} a {last['mes'].strftime('%b/%Y')}"
+    )
+    last_ano = anual.iloc[-1] if not anual.empty else None
+    meses_nome = {
+        1: "janeiro",
+        2: "fevereiro",
+        3: "março",
+        4: "abril",
+        5: "maio",
+        6: "junho",
+        7: "julho",
+        8: "agosto",
+        9: "setembro",
+        10: "outubro",
+        11: "novembro",
+        12: "dezembro",
+    }
+    mes_final_txt = (
+        meses_nome.get(int(pd.Timestamp(last_ano["mes_final"]).month), "dezembro")
+        if last_ano is not None
+        else "dezembro"
+    )
     linhas = [
         "# Simulação da DBGG — Selic anual = IPCA do ano + "
         f"{_fmt_pct(spread_pp)}",
         "",
-        f"**Período:** {first['mes'].strftime('%b/%Y')} a "
-        f"{last['mes'].strftime('%b/%Y')} "
-        "(estoque inicial: dez/2006).",
+        f"**Período:** {periodo_txt}.",
         f"**Gerado em:** {gerado_em}",
         "",
         "## Resultado no último mês",
@@ -743,11 +800,15 @@ def escrever_markdown(
             f"Hipótese: em cada ano civil a Selic acumulada no ano é igual ao "
             f"IPCA acumulado no mesmo conjunto de meses **mais "
             f"{_fmt_pct(spread_pp)} proporcionais** (`spread × n/12`). "
-            "A taxa mensal contrafactual é a equivalente composta, constante "
-            "dentro do ano. Em 2026 o ano está incompleto (janeiro–junho): o "
-            "IPCA e a Selic contrafactual são os acumulados do semestre, com "
-            f"o spread de {_fmt_pct(spread_pp)} × 6/12 = "
-            f"{_fmt_pct(spread_pp * 6.0 / 12.0, 3)}.",
+            + _nota_ano_incompleto(anual, spread_pp)
+            + (
+                " Em "
+                + ", ".join(str(a) for a in anos_observados)
+                + " a Selic permanece a **observada** (não se aplica IPCA + "
+                f"{_fmt_pct(spread_pp)})."
+                if anos_observados
+                else ""
+            ),
             "",
             "Os juros Selic observados (contabilidade BCB) são reescalonados pela "
             "razão entre as taxas mensais (SGS 4390 vs. contrafactual) e pela "
@@ -770,9 +831,9 @@ def escrever_markdown(
             "## Série anual",
             "",
             "Valores de estoque e DBGG no **último mês** de cada ano na amostra "
-            "(dezembro; em 2026, junho). Juros e IPCA/Selic são acumulados no "
-            "ano. Unidades: R$ bilhões (estoques e juros) e % a.a. (ou % no "
-            "período, quando n < 12).",
+            f"(dezembro; no último ano, {mes_final_txt}). Juros e IPCA/Selic "
+            "são acumulados no ano. Unidades: R$ bilhões (estoques e juros) e "
+            "% a.a. (ou % no período, quando n < 12).",
             "",
             "| Ano | n | IPCA | Selic obs. | Selic cf. | "
             "DBGG obs. | DBGG cf. | Δ DBGG | Juros Selic obs. | Juros cf. |",
@@ -853,11 +914,32 @@ def escrever_markdown(
             "Valores em R$ bilhões. Sinal negativo = a Selic observada ficou "
             "abaixo de IPCA + spread (a simulação *aumenta* os juros naquele ano).",
             "",
-            "Em 2020–2021 a Selic observada ficou **abaixo** de IPCA + "
-            f"{_fmt_pct(spread_pp)} (ciclo de juros reais negativos). Nesses "
-            "anos a simulação *aumenta* os juros da parcela Selic e a "
-            "diferença de estoque recua — o que confere o sinal do exercício.",
-            "",
+        ]
+    )
+    if anos_observados:
+        linhas.extend(
+            [
+                "Em "
+                + ", ".join(str(a) for a in anos_observados)
+                + " a Selic contrafactual é a **observada**: a redução "
+                "daqueles anos vem só do estoque Selic menor herdado dos "
+                "anos anteriores (mesma taxa, base menor).",
+                "",
+            ]
+        )
+    else:
+        linhas.extend(
+            [
+                "Em 2020–2021 a Selic observada ficou **abaixo** de IPCA + "
+                f"{_fmt_pct(spread_pp)} (ciclo de juros reais negativos). "
+                "Nesses anos a simulação *aumenta* os juros da parcela Selic "
+                "e a diferença de estoque recua — o que confere o sinal do "
+                "exercício.",
+                "",
+            ]
+        )
+    linhas.extend(
+        [
             "## Premissas e limitações",
             "",
             "- Só a remuneração da **parcela indexada à Selic** muda.",
@@ -1217,6 +1299,8 @@ def gravar_saidas(
         spread_pp=spread_pp,
         gerado_em=gerado,
         fonte_planilha=fonte_planilha,
+        periodo=periodo,
+        anos_observados=anos_observados,
     )
     escrever_discriminativo(
         disc,
