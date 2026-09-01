@@ -139,6 +139,7 @@ streamlit run app.py
 | `resumo_fluxos_polars_final.xlsx` | Polars FINAL: Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais_Gerais |
 | `RELATORIO_EXECUTIVO.md` | Relatório markdown (totais + top agentes) |
 | `output/petrobras_divida_bruta_20f_2002_2025.*` | Dívida bruta Petrobras nos 20-F (2002–2025) + página EDGAR |
+| `output/petrobras_juros_pagos_20f_2002_2026.*` | Juros pagos (caixa) Petrobras nos 20-F 2002–2025 + 6-K 1S2026 |
 | `grafico_interativo.html` | Impacto fiscal por ano (Plotly) |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 

@@ -54,3 +54,11 @@ python3 scripts/petrobras_divida_bruta_20f.py
 ```
 
 - `petrobras_divida_bruta_20f_2002_2025.csv` / `.xlsx` / `.md` / `.png`
+
+Juros pagos pela Petrobras (caixa) nos Forms 20-F 2002–2025 e no 6-K do 1S2026:
+
+```bash
+python3 scripts/petrobras_juros_pagos_20f.py
+```
+
+- `petrobras_juros_pagos_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
