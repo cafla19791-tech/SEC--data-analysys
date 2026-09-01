@@ -46,3 +46,11 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+Dívida bruta da Petrobras nos Forms 20-F (2002–2025), com página e link do EDGAR:
+
+```bash
+python3 scripts/petrobras_divida_bruta_20f.py
+```
+
+- `petrobras_divida_bruta_20f_2002_2025.csv` / `.xlsx` / `.md` / `.png`

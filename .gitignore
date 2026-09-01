@@ -39,6 +39,10 @@ output/*_stats.json
 !output/montantes_contratos_indiretas_2002_2026.csv
 !output/montantes_contratos_indiretas_2002_2026.md
 !output/montantes_contratos_indiretas_2002_2026.xlsx
+!output/petrobras_divida_bruta_20f_2002_2025.csv
+!output/petrobras_divida_bruta_20f_2002_2025.md
+!output/petrobras_divida_bruta_20f_2002_2025.xlsx
+!output/petrobras_divida_bruta_20f_2002_2025.png
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
 !output/indiretas_automaticas_ipca/README.md

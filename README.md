@@ -138,6 +138,7 @@ streamlit run app.py
 | `resumo_fluxos_avancado.xlsx` | Workbook ContAgil: Contratos (+ metadados), Por_Ano, Por_Agente, Impacto_Por_Ano, Totais |
 | `resumo_fluxos_polars_final.xlsx` | Polars FINAL: Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais_Gerais |
 | `RELATORIO_EXECUTIVO.md` | Relatório markdown (totais + top agentes) |
+| `output/petrobras_divida_bruta_20f_2002_2025.*` | Dívida bruta Petrobras nos 20-F (2002–2025) + página EDGAR |
 | `grafico_interativo.html` | Impacto fiscal por ano (Plotly) |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
