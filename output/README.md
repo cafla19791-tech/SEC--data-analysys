@@ -70,3 +70,7 @@ python3 scripts/petrobras_lucro_liquido_20f.py
 ```
 
 - `petrobras_lucro_liquido_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
+
+Transcrição das conversas de 1º/set/2026 sobre os 20-F da Petrobras:
+
+- `conversas_petrobras_20f_2026-09-01.pdf`
