@@ -62,3 +62,11 @@ python3 scripts/petrobras_juros_pagos_20f.py
 ```
 
 - `petrobras_juros_pagos_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
+
+Lucro líquido atribuível aos acionistas da Petrobras nos Forms 20-F 2002–2025 e no 6-K do 1S2026:
+
+```bash
+python3 scripts/petrobras_lucro_liquido_20f.py
+```
+
+- `petrobras_lucro_liquido_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
