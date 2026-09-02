@@ -74,3 +74,12 @@ python3 scripts/petrobras_lucro_liquido_20f.py
 Transcrição das conversas de 1º/set/2026 sobre os 20-F da Petrobras:
 
 - `conversas_petrobras_20f_2026-09-01.pdf`
+
+Relatório formal da evolução da dívida bruta, dos juros pagos e do lucro líquido
+(tabelas iguais às dos discriminativos):
+
+```bash
+python3 scripts/gerar_relatorio_petrobras_20f.py
+```
+
+- `relatorio_petrobras_20f_divida_juros_lucro.md` / `.pdf`
