@@ -83,7 +83,7 @@ CANDIDATOS: dict[tuple[int, int], dict[int, str]] = {
         15: "MEIRELLES",
         51: "DACIOLO",
         19: "ALVARO_DIAS",
-        54: "AMOEDO",
+        30: "AMOEDO",
         16: "VERA",
         27: "EYMAEL",
         31: "JOAO_GOULART",

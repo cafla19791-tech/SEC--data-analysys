@@ -111,4 +111,6 @@ def test_nome_saida_e_candidatos():
     assert nome_arquivo_saida(2022, 1) == "urnas_1t_presidente.csv"
     assert 17 in CANDIDATOS[(2018, 1)]
     assert CANDIDATOS[(2018, 1)][17] == "BOLSONARO"
+    assert CANDIDATOS[(2018, 1)][30] == "AMOEDO"
+    assert 54 not in CANDIDATOS[(2018, 1)]
     assert CANDIDATOS[(2014, 2)][13] == "DILMA"
