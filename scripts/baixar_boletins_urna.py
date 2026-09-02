@@ -767,11 +767,13 @@ def main(argv: list[str] | None = None) -> int:
     detalhe = saida / nome_arquivo_saida(ano, turno)
     gz = gravar_csv_e_gz(tabela, detalhe)
     resumo_por_uf(tabela, ano, turno).to_csv(
-        saida / "resumo_por_uf.csv", index=False, encoding="utf-8"
+        saida / f"resumo_{turno}t_por_uf.csv", index=False, encoding="utf-8"
     )
     por_modelo = resumo_por_modelo(tabela, ano, turno)
     if not por_modelo.empty:
-        por_modelo.to_csv(saida / "resumo_por_modelo.csv", index=False, encoding="utf-8")
+        por_modelo.to_csv(
+            saida / f"resumo_{turno}t_por_modelo.csv", index=False, encoding="utf-8"
+        )
 
     print()
     print(f"Urnas/seções: {len(tabela):,}".replace(",", "."))

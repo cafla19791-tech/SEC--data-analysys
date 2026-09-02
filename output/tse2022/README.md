@@ -7,7 +7,11 @@ CSV nacional: uma linha por urna/seção, com número de série (`NR_URNA_EFETIV
 
 Fonte: Dados Abertos do TSE / captura Archive.org, processados por `scripts/baixar_boletins_urna.py` (1º turno) e `scripts/baixar_boletins_urna_2022.py` (2º turno).
 
-Totais (conferem com o resultado oficial do 2º turno):
+Totais 1º turno (conferem com o TSE):
+- 472.028 urnas/seções com série preenchida
+- Lula 57.259.504 · Bolsonaro 51.072.345 · Tebet 4.915.423 · Ciro 3.599.287
+
+Totais 2º turno (conferem com o TSE):
 - 472.028 urnas/seções com série preenchida
 - Lula 60.345.999
 - Bolsonaro 58.206.354
@@ -26,6 +30,7 @@ Na RFB (TSE 403, Archive.org TLS quebrado), baixe estes arquivos pelo GitHub:
 
 ```bat
 python baixar_boletins_urna_2022.py --somente-resultado-github
+python baixar_boletins_urna.py --somente-resultado-github --ano 2022 --turno 1
 ```
 
 ou `baixar_resultado_urna_github.bat`.
