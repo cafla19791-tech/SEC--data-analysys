@@ -9,6 +9,16 @@ Totais (conferem com o resultado oficial do 2º turno):
 - Lula 60.345.999
 - Bolsonaro 58.206.354
 
+Discriminativo municipal (UE2020 vs modelos anteriores a 2020):
+- `discriminativo_municipio_ue2020.xlsx`
+- `discriminativo_municipio_ue2020.csv`
+
+No ContAgil, com o CSV de urnas já baixado:
+
+```bat
+python discriminativo_urnas_municipio.py
+```
+
 Na RFB (TSE 403, Archive.org TLS quebrado), baixe estes arquivos pelo GitHub:
 
 ```bat

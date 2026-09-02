@@ -257,42 +257,74 @@ def discriminar_ufs(mun: pd.DataFrame) -> pd.DataFrame:
     return g.sort_values("SG_UF").reset_index(drop=True)
 
 
-def discriminar_brasil(mun: pd.DataFrame) -> pd.DataFrame:
+def _linha_brasil(recorte: str, pre: pd.DataFrame, ue: pd.DataFrame, *, mun_comp: pd.DataFrame | None = None) -> dict:
+    lula_pre = float(pre["QT_VOTOS_LULA"].fillna(0).sum()) if "QT_VOTOS_LULA" in pre.columns else float(pre.get("QT_VOTOS_LULA_PRE2020", pd.Series(dtype=float)).fillna(0).sum())
+    # Usado só no recorte municipal agregado (colunas já sufixadas).
+    if "QT_VOTOS_LULA_PRE2020" in (mun_comp.columns if mun_comp is not None else []):
+        bloco = mun_comp
+        lula_pre = int(bloco["QT_VOTOS_LULA_PRE2020"].sum())
+        bolso_pre = int(bloco["QT_VOTOS_BOLSONARO_PRE2020"].sum())
+        val_pre = int(bloco["QT_VOTOS_VALIDOS_PRE2020"].sum())
+        lula_ue = int(bloco["QT_VOTOS_LULA_UE2020"].sum())
+        bolso_ue = int(bloco["QT_VOTOS_BOLSONARO_UE2020"].sum())
+        val_ue = int(bloco["QT_VOTOS_VALIDOS_UE2020"].sum())
+        n_mun = int(len(bloco))
+        n_inv = int((bloco["INVERTEU_VENCEDOR_VOTOS"] == "S").sum())
+        urnas_pre = int(bloco["QT_URNAS_PRE2020"].sum())
+        urnas_ue = int(bloco["QT_URNAS_UE2020"].sum())
+    else:
+        bolso_pre = float(pre["QT_VOTOS_BOLSONARO"].fillna(0).sum())
+        val_pre = float(pre["QT_VOTOS_VALIDOS"].fillna(0).sum())
+        lula_ue = float(ue["QT_VOTOS_LULA"].fillna(0).sum())
+        bolso_ue = float(ue["QT_VOTOS_BOLSONARO"].fillna(0).sum())
+        val_ue = float(ue["QT_VOTOS_VALIDOS"].fillna(0).sum())
+        n_mun = None
+        n_inv = None
+        urnas_pre = int(len(pre))
+        urnas_ue = int(len(ue))
+    pct_pre = _pct(lula_pre, val_pre)
+    pct_ue = _pct(lula_ue, val_ue)
+    return {
+        "RECORTE": recorte,
+        "QT_MUNICIPIOS": n_mun,
+        "QT_INVERTERAM": n_inv,
+        "PCT_MUN_INVERTERAM": _pct(n_inv, n_mun) if n_mun else None,
+        "QT_URNAS_PRE2020": urnas_pre,
+        "QT_URNAS_UE2020": urnas_ue,
+        "PCT_LULA_PRE2020": pct_pre,
+        "PCT_LULA_UE2020": pct_ue,
+        "DIF_PCT_LULA": round(pct_ue - pct_pre, 2)
+        if pct_pre is not None and pct_ue is not None
+        else None,
+        "PCT_BOLSONARO_PRE2020": _pct(bolso_pre, val_pre),
+        "PCT_BOLSONARO_UE2020": _pct(bolso_ue, val_ue),
+        "VENCEDOR_VOTOS_PRE2020": vencedor_votos(lula_pre, bolso_pre),
+        "VENCEDOR_VOTOS_UE2020": vencedor_votos(lula_ue, bolso_ue),
+    }
+
+
+def discriminar_brasil(mun: pd.DataFrame, urnas: pd.DataFrame | None = None) -> pd.DataFrame:
     comparavel = mun.loc[mun["COMPARAVEL"] == "S"]
     if comparavel.empty:
         comparavel = mun
-    lula_pre = int(comparavel["QT_VOTOS_LULA_PRE2020"].sum())
-    bolso_pre = int(comparavel["QT_VOTOS_BOLSONARO_PRE2020"].sum())
-    val_pre = int(comparavel["QT_VOTOS_VALIDOS_PRE2020"].sum())
-    lula_ue = int(comparavel["QT_VOTOS_LULA_UE2020"].sum())
-    bolso_ue = int(comparavel["QT_VOTOS_BOLSONARO_UE2020"].sum())
-    val_ue = int(comparavel["QT_VOTOS_VALIDOS_UE2020"].sum())
-    pct_pre = _pct(lula_pre, val_pre)
-    pct_ue = _pct(lula_ue, val_ue)
-    return pd.DataFrame(
-        [
-            {
-                "RECORTE": "Municípios com os dois tipos de urna",
-                "QT_MUNICIPIOS": int(len(comparavel)),
-                "QT_INVERTERAM": int((comparavel["INVERTEU_VENCEDOR_VOTOS"] == "S").sum()),
-                "PCT_MUN_INVERTERAM": _pct(
-                    int((comparavel["INVERTEU_VENCEDOR_VOTOS"] == "S").sum()),
-                    len(comparavel),
-                ),
-                "QT_URNAS_PRE2020": int(comparavel["QT_URNAS_PRE2020"].sum()),
-                "QT_URNAS_UE2020": int(comparavel["QT_URNAS_UE2020"].sum()),
-                "PCT_LULA_PRE2020": pct_pre,
-                "PCT_LULA_UE2020": pct_ue,
-                "DIF_PCT_LULA": round(pct_ue - pct_pre, 2)
-                if pct_pre is not None and pct_ue is not None
-                else None,
-                "PCT_BOLSONARO_PRE2020": _pct(bolso_pre, val_pre),
-                "PCT_BOLSONARO_UE2020": _pct(bolso_ue, val_ue),
-                "VENCEDOR_VOTOS_PRE2020": vencedor_votos(lula_pre, bolso_pre),
-                "VENCEDOR_VOTOS_UE2020": vencedor_votos(lula_ue, bolso_ue),
-            }
-        ]
-    )
+    linhas = [
+        _linha_brasil(
+            "Municípios com os dois tipos de urna",
+            pd.DataFrame(),
+            pd.DataFrame(),
+            mun_comp=comparavel,
+        )
+    ]
+    if urnas is not None:
+        prep = preparar_urnas(urnas)
+        linhas.append(
+            _linha_brasil(
+                "Todas as urnas do país",
+                prep.loc[prep["GERACAO"] == GERACAO_ANTERIOR],
+                prep.loc[prep["GERACAO"] == GERACAO_UE2020],
+            )
+        )
+    return pd.DataFrame(linhas)
 
 
 def ler_urnas(caminho: Path) -> pd.DataFrame:
@@ -450,7 +482,7 @@ def main(argv: list[str] | None = None) -> int:
     urnas = ler_urnas(entrada)
     mun = discriminar_municipios(urnas)
     ufs = discriminar_ufs(mun)
-    brasil = discriminar_brasil(mun)
+    brasil = discriminar_brasil(mun, urnas)
     csv_path = saida / "discriminativo_municipio_ue2020.csv"
     xlsx_path = saida / "discriminativo_municipio_ue2020.xlsx"
     mun.to_csv(csv_path, index=False, encoding="utf-8")

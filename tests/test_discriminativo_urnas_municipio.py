@@ -85,13 +85,15 @@ def test_resumo_uf_e_brasil_so_comparaveis():
     )
     mun = discriminar_municipios(df)
     ufs = discriminar_ufs(mun)
-    brasil = discriminar_brasil(mun)
+    brasil = discriminar_brasil(mun, df)
     assert len(ufs) == 1
     assert int(ufs.iloc[0]["QT_MUNICIPIOS"]) == 1
     assert int(ufs.iloc[0]["QT_INVERTERAM"]) == 1
     assert brasil.iloc[0]["QT_INVERTERAM"] == 1
     assert brasil.iloc[0]["VENCEDOR_VOTOS_PRE2020"] == "Lula"
     assert brasil.iloc[0]["VENCEDOR_VOTOS_UE2020"] == "Bolsonaro"
+    assert len(brasil) == 2
+    assert brasil.iloc[1]["RECORTE"] == "Todas as urnas do país"
 
 
 def test_escreve_xlsx(tmp_path):
