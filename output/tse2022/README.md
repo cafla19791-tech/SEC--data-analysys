@@ -1,8 +1,11 @@
-# Boletins de Urna 2022 (2º turno, Presidente)
+# Boletins de Urna 2022 (Presidente)
 
 CSV nacional: uma linha por urna/seção, com número de série (`NR_URNA_EFETIVADA`), modelo (UE2009–UE2020) e votos.
 
-Fonte: ZIPs oficiais `bweb_2t_{UF}_311020221535.zip` (TSE / captura Archive.org 2022-11-08), processados por `scripts/baixar_boletins_urna_2022.py`.
+- 2º turno: `urnas_2t_presidente.csv.gz` — ZIPs `bweb_2t_{UF}_311020221535.zip`
+- 1º turno: `urnas_1t_presidente.csv.gz` — ZIPs `bweb_1t_{UF}_051020221321.zip`
+
+Fonte: Dados Abertos do TSE / captura Archive.org, processados por `scripts/baixar_boletins_urna.py` (1º turno) e `scripts/baixar_boletins_urna_2022.py` (2º turno).
 
 Totais (conferem com o resultado oficial do 2º turno):
 - 472.028 urnas/seções com série preenchida
