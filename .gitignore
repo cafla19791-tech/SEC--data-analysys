@@ -44,6 +44,8 @@ output/tse2022/*.parquet
 !output/tse2022/resumo_por_uf.csv
 !output/tse2022/resumo_por_modelo.csv
 !output/tse2022/urnas_2t_presidente.csv.gz
+!output/tse2022/discriminativo_municipio_ue2020.csv
+!output/tse2022/discriminativo_municipio_ue2020.xlsx
 !output/tse2022/README.md
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep

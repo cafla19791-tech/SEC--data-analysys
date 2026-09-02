@@ -34,7 +34,10 @@ $map = @(
     @{ Remote = "baixar_zips_urna_curl.bat"; Local = "baixar_zips_urna_curl.bat" },
     @{ Remote = "baixar_zips_urna.ps1"; Local = "baixar_zips_urna.ps1" },
     @{ Remote = "baixar_resultado_urna_github.bat"; Local = "baixar_resultado_urna_github.bat" },
-    @{ Remote = "scripts/baixar_boletins_urna_2022.py"; Local = "sec_scripts/baixar_boletins_urna_2022.py" }
+    @{ Remote = "discriminativo_urnas_municipio.py"; Local = "discriminativo_urnas_municipio.py" },
+    @{ Remote = "discriminativo_urnas_municipio.bat"; Local = "discriminativo_urnas_municipio.bat" },
+    @{ Remote = "scripts/baixar_boletins_urna_2022.py"; Local = "sec_scripts/baixar_boletins_urna_2022.py" },
+    @{ Remote = "scripts/discriminativo_urnas_municipio.py"; Local = "sec_scripts/discriminativo_urnas_municipio.py" }
 )
 
 foreach ($item in $map) {
