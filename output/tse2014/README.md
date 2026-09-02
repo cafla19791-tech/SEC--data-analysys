@@ -20,3 +20,9 @@ python baixar_boletins_urna.py --ano 2014 --turno 2 --somente-processar
 
 Totais oficiais para conferência: Dilma 43.267.668 / Aécio 34.897.211 / Marina 22.176.619 (1º);
 Dilma 54.501.118 / Aécio 51.041.155 (2º).
+
+Depois dos CSVs, as planilhas por região / UF / município / zona / urna saem com:
+
+```bat
+python planilha_resultados_presidente.py --ano 2014
+```

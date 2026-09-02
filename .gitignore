@@ -74,6 +74,14 @@ output/tse2014/*.parquet
 !output/tse2014/resumo_2t_por_modelo.csv
 !output/tse2014/urnas_1t_presidente.csv.gz
 !output/tse2014/urnas_2t_presidente.csv.gz
+!output/tse2014/secoes_1t_presidente.csv.gz
+!output/tse2014/secoes_2t_presidente.csv.gz
+output/tse_planilhas/*.csv
+output/tse_planilhas/*.parquet
+!output/tse_planilhas/.gitkeep
+!output/tse_planilhas/README.md
+!output/tse_planilhas/*.xlsx
+!output/tse_planilhas/*.csv.gz
 data/tse2018/raw/
 data/tse2014/raw/
 !data/tse_catalog/boletins_urna_urls.json
