@@ -1,6 +1,6 @@
 # Discriminativo — Juros pagos pela Petrobras (20-F 2002–2025 e 6-K 1S2026)
 
-**Gerado em:** 2026-09-01 23:05 UTC
+**Gerado em:** 2026-09-02 01:06 UTC
 
 Valores em **US$ milhões**, **caixa** do exercício (não despesa de juros pelo regime de competência). Fonte: Form 20-F original de Petróleo Brasileiro S.A. — Petrobras (CIK 0001119639), demonstração dos fluxos de caixa consolidada.
 
@@ -44,7 +44,10 @@ A coluna **Página** é o folio das demonstrações financeiras (F-N) ou a pági
 | 2024 | ano | 2025-04-03 | 1.918 | -60 | -3.0% | F-6 | Repayment of interest - finance debt | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281425001352/pbrform20f_2024.htm) |
 | 2025 | ano | 2026-04-09 | 1.836 | -82 | -4.3% | F-6 | Repayment of interest - finance debt | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm) |
 | 2026 | 1S (jan–jun) | 2026-08-07 | 1.070 | — | — | 6 | Repayment of interest - finance debt (1S2026) | [6-K](https://www.sec.gov/Archives/edgar/data/1119639/000129281426004133/pbrfs2q26usd_6k.htm) |
+| **Total 2002–2025** | 24 anos | — | **77.996** | — | — | — | soma dos anos completos | — |
+| **Total + 1S2026** | 24 anos + 1S | — | **79.066** | — | — | — | inclui 6-K incompleto | — |
 
+**Total 2002–2025 (anos completos):** US$ 77.996 milhões. **Total incluindo 1S2026:** US$ 79.066 milhões.
 Pico (anos completos): **US$ 7.308 milhões** em 2016 (página F-8).
 Mínimo (anos completos): **US$ 200 milhões** em 2002 (página F-8).
 

@@ -47,6 +47,8 @@ def test_urls_edgar_e_markdown_tem_pagina():
     md = escrever_markdown(montar_dataframe(), "teste")
     assert "página 180" in md.lower() or "180 / F-22" in md
     assert "87.121" in md or "87,121" in md or "87.121" in md.replace(",", ".")
+    assert "55.113" in md
+    assert "Total 2002" in md
 
 
 def pd_isna(value) -> bool:

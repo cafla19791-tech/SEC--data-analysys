@@ -556,11 +556,24 @@ def escrever_markdown(df: pd.DataFrame, gerado: str) -> str:
             f"{r.pagina} | {r.norma} | [{r.tipo}]({r.url_documento}) |"
         )
     anuais = df[df["periodo"] == "ano"]
+    parcial = df[df["periodo"] != "ano"]
+    total_anos = int(anuais["lucro_liquido_usd_milhoes"].sum())
+    total_com_1s = total_anos + int(parcial["lucro_liquido_usd_milhoes"].sum())
+    linhas.append(
+        f"| **Total 2002–2025** | 24 anos | — | **{_fmt_mi(total_anos)}** | — | — | — | "
+        f"soma US GAAP+IFRS | — |"
+    )
+    linhas.append(
+        f"| **Total + 1S2026** | 24 anos + 1S | — | **{_fmt_mi(total_com_1s)}** | — | — | — | "
+        f"inclui 6-K incompleto | — |"
+    )
     pico = anuais.loc[anuais["lucro_liquido_usd_milhoes"].idxmax()]
     vale = anuais.loc[anuais["lucro_liquido_usd_milhoes"].idxmin()]
     linhas.extend(
         [
             "",
+            f"**Total 2002–2025 (anos completos):** US$ {_fmt_mi(total_anos)} milhões. "
+            f"**Total incluindo 1S2026:** US$ {_fmt_mi(total_com_1s)} milhões.",
             f"Pico (anos completos): **US$ {_fmt_mi(pico.lucro_liquido_usd_milhoes)} milhões** "
             f"em {int(pico.ano)} (página {pico.pagina}).",
             f"Mínimo (anos completos): **US$ {_fmt_mi(vale.lucro_liquido_usd_milhoes)} milhões** "

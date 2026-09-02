@@ -76,3 +76,6 @@ def test_urls_edgar_e_markdown_tem_pagina() -> None:
     assert "F-4" in md
     assert "descontinuadas" in md
     assert "6-K" in md
+    assert "253.447" in md
+    assert "270.074" in md
+    assert "Total 2002–2025" in md

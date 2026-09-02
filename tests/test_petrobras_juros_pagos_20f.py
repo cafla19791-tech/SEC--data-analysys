@@ -75,3 +75,6 @@ def test_urls_edgar_e_markdown_tem_pagina() -> None:
     assert "F-6" in md
     assert "6-K" in md
     assert "net of amount capitalized" in md
+    assert "77.996" in md
+    assert "79.066" in md
+    assert "Total 2002–2025" in md

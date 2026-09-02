@@ -520,6 +520,16 @@ def escrever_markdown(df: pd.DataFrame, gerado: str) -> str:
             f"{_fmt_mi(r.variacao_usd_milhoes)} | {_fmt_pct(r.variacao_pct)} | "
             f"{r.pagina} | {r.metrica} | [20-F]({r.url_documento}) |"
         )
+    inicial = df.iloc[0]
+    final = df.iloc[-1]
+    var_acum = int(final.divida_bruta_usd_milhoes - inicial.divida_bruta_usd_milhoes)
+    var_pct_acum = var_acum / abs(int(inicial.divida_bruta_usd_milhoes))
+    linhas.append(
+        f"| **Total 2002→2025** | posição em 31/12 | "
+        f"**{_fmt_mi(final.divida_bruta_usd_milhoes)}** | "
+        f"**{_fmt_mi(var_acum)}** | **{_fmt_pct(var_pct_acum)}** | — | "
+        f"estoque (não se soma): {_fmt_mi(inicial.divida_bruta_usd_milhoes)} em 2002 | — |"
+    )
     pico = df.loc[df["divida_bruta_usd_milhoes"].idxmax()]
     vale_pos2014 = df[df["ano"] >= 2014].loc[
         df[df["ano"] >= 2014]["divida_bruta_usd_milhoes"].idxmin()
@@ -527,6 +537,10 @@ def escrever_markdown(df: pd.DataFrame, gerado: str) -> str:
     linhas.extend(
         [
             "",
+            f"**Totais da série (estoque em 31/12, não se soma ano a ano):** "
+            f"posição 2002 US$ {_fmt_mi(inicial.divida_bruta_usd_milhoes)} milhões; "
+            f"posição 2025 US$ {_fmt_mi(final.divida_bruta_usd_milhoes)} milhões; "
+            f"variação acumulada US$ {_fmt_mi(var_acum)} milhões ({_fmt_pct(var_pct_acum)}).",
             f"Pico da série: **US$ {_fmt_mi(pico.divida_bruta_usd_milhoes)} milhões** "
             f"em {int(pico.ano)} (página {pico.pagina}).",
             f"Mínimo após 2014: **US$ {_fmt_mi(vale_pos2014.divida_bruta_usd_milhoes)} milhões** "

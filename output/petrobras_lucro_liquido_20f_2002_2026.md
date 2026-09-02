@@ -1,6 +1,6 @@
 # Discriminativo — Lucro líquido da Petrobras (20-F 2002–2025 e 6-K 1S2026)
 
-**Gerado em:** 2026-09-01 23:19 UTC
+**Gerado em:** 2026-09-02 01:06 UTC
 
 Valores em **US$ milhões**, **lucro (prejuízo) líquido atribuível aos acionistas da Petrobras** (não inclui participação de não controladores). Fonte: Form 20-F original de Petróleo Brasileiro S.A. — Petrobras (CIK 0001119639), demonstração do resultado consolidada do próprio exercício (não a reapresentação em 20-F posteriores).
 
@@ -47,7 +47,10 @@ A coluna **Página** é o folio da DRE (F-N) ou a página 4 do 6-K 2T26.
 | 2024 | ano | 2025-04-03 | 7.528 | -17.356 | -69.8% | F-4 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281425001352/pbrform20f_2024.htm) |
 | 2025 | ano | 2026-04-09 | 19.634 | 12.106 | +160.8% | F-4 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm) |
 | 2026 | 1S (jan–jun) | 2026-08-07 | 16.627 | — | — | 4 | IFRS | [6-K](https://www.sec.gov/Archives/edgar/data/1119639/000129281426004133/pbrfs2q26usd_6k.htm) |
+| **Total 2002–2025** | 24 anos | — | **253.447** | — | — | — | soma US GAAP+IFRS | — |
+| **Total + 1S2026** | 24 anos + 1S | — | **270.074** | — | — | — | inclui 6-K incompleto | — |
 
+**Total 2002–2025 (anos completos):** US$ 253.447 milhões. **Total incluindo 1S2026:** US$ 270.074 milhões.
 Pico (anos completos): **US$ 36.623 milhões** em 2022 (página F-4).
 Mínimo (anos completos): **US$ -8.450 milhões** em 2015 (página F-5).
 

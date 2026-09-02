@@ -1,6 +1,6 @@
 # Discriminativo — Dívida bruta da Petrobras (Forms 20-F, 2002–2025)
 
-**Gerado em:** 2026-09-01 22:50 UTC
+**Gerado em:** 2026-09-02 01:06 UTC
 
 Valores em **US$ milhões**, posição em **31 de dezembro** do exercício, extraídos do Form 20-F original de Petróleo Brasileiro S.A. — Petrobras (CIK 0001119639).
 
@@ -43,7 +43,9 @@ A coluna **Página** é o número impresso no próprio 20-F (rodapé, “N Table
 | 2023 | 2024-04-12 | 62.600 | 8.801 | +16.4% | F-21 | Gross Debt (finance debt + lease liabilities) | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281424001340/pbrform20f_2023.htm) |
 | 2024 | 2025-04-03 | 60.311 | -2.289 | -3.7% | Nota 7 / Item 5 — Debt | Gross Debt (finance debt + lease liabilities) | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281425001352/pbrform20f_2024.htm) |
 | 2025 | 2026-04-09 | 69.793 | 9.482 | +15.7% | 180 / F-22 | Gross Debt (finance debt + lease liabilities) | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm) |
+| **Total 2002→2025** | posição em 31/12 | **69.793** | **55.113** | **+375.4%** | — | estoque (não se soma): 14.680 em 2002 | — |
 
+**Totais da série (estoque em 31/12, não se soma ano a ano):** posição 2002 US$ 14.680 milhões; posição 2025 US$ 69.793 milhões; variação acumulada US$ 55.113 milhões (+375.4%).
 Pico da série: **US$ 132.158 milhões** em 2014 (página Nota — Capital management / Item 3).
 Mínimo após 2014: **US$ 53.799 milhões** em 2022 (página 204).
 
