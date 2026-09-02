@@ -60,6 +60,10 @@ output/tse2018/*.parquet
 !output/tse2018/resumo_2t_por_modelo.csv
 !output/tse2018/urnas_1t_presidente.csv.gz
 !output/tse2018/urnas_2t_presidente.csv.gz
+!output/tse2018/secoes_1t_presidente.csv.gz
+!output/tse2018/secoes_2t_presidente.csv.gz
+!output/tse2018/resumo_secao_1t_por_uf.csv
+!output/tse2018/resumo_secao_2t_por_uf.csv
 output/tse2014/*.csv
 output/tse2014/*.parquet
 !output/tse2014/.gitkeep

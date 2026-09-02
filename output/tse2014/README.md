@@ -1,12 +1,22 @@
-# Boletins de Urna 2014 (Presidente)
+# Eleições 2014 — Presidente por urna
 
-Uma linha por urna/seção, com série (`NR_URNA_EFETIVADA`), modelo e votos.
+O TSE publica Boletins de Urna por UF (TXT posicional **com** `NR_URNA_EFETIVADA`).
+O script `scripts/baixar_boletins_urna.py --ano 2014 --turno 1` já lê esse layout.
 
-Fonte: ZIPs oficiais `bweb_{1t|2t}_{UF}_*.zip` (TXT posicional do TSE), processados por `scripts/baixar_boletins_urna.py`.
+Desta rede o CDN do TSE devolve **HTTP 403** e o Internet Archive **não guardou** os ZIPs
+de 2014 (nem o `votacao_secao_2014`). Por isso o CSV nacional ainda não está neste repositório.
 
-No ContAgil (RFB), baixe o CSV já consolidado:
+URLs oficiais (catálogo em `data/tse_catalog/boletins_urna_urls.json`):
+
+- 1º turno: `bweb_1t_{UF}_14102014*.zip`
+- 2º turno: `bweb_2t_{UF}_28102014*.zip`
+
+Se os ZIPs forem salvos em `dados\tse2014\raw` (Edge/rede que alcance o TSE):
 
 ```bat
-python baixar_boletins_urna.py --somente-resultado-github --ano 2014 --turno 1
-python baixar_boletins_urna.py --somente-resultado-github --ano 2014 --turno 2
+python baixar_boletins_urna.py --ano 2014 --turno 1 --somente-processar
+python baixar_boletins_urna.py --ano 2014 --turno 2 --somente-processar
 ```
+
+Totais oficiais para conferência: Dilma 43.267.668 / Aécio 34.897.211 / Marina 22.176.619 (1º);
+Dilma 54.501.118 / Aécio 51.041.155 (2º).

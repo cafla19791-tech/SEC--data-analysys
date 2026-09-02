@@ -112,5 +112,5 @@ def test_nome_saida_e_candidatos():
     assert 17 in CANDIDATOS[(2018, 1)]
     assert CANDIDATOS[(2018, 1)][17] == "BOLSONARO"
     assert CANDIDATOS[(2018, 1)][30] == "AMOEDO"
-    assert 54 not in CANDIDATOS[(2018, 1)]
+    assert CANDIDATOS[(2018, 1)][54] == "JOAO_GOULART"
     assert CANDIDATOS[(2014, 2)][13] == "DILMA"

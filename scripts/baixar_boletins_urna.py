@@ -86,7 +86,7 @@ CANDIDATOS: dict[tuple[int, int], dict[int, str]] = {
         30: "AMOEDO",
         16: "VERA",
         27: "EYMAEL",
-        31: "JOAO_GOULART",
+        54: "JOAO_GOULART",
     },
     (2018, 2): {17: "BOLSONARO", 13: "HADDAD"},
     (2014, 1): {
@@ -186,6 +186,10 @@ ARQUIVOS_GITHUB = {
     (2018, 2): "tse2018/urnas_2t_presidente.csv.gz",
     (2014, 1): "tse2014/urnas_1t_presidente.csv.gz",
     (2014, 2): "tse2014/urnas_2t_presidente.csv.gz",
+}
+ARQUIVOS_GITHUB_EXTRA = {
+    (2018, 1): ("tse2018/secoes_1t_presidente.csv.gz",),
+    (2018, 2): ("tse2018/secoes_2t_presidente.csv.gz",),
 }
 
 
@@ -661,8 +665,11 @@ def baixar_resultado_github(
     saida_raiz.mkdir(parents=True, exist_ok=True)
     obtidos: list[Path] = []
     alvos = pares or list(ARQUIVOS_GITHUB)
+    rels: list[str] = []
     for chave in alvos:
-        rel = ARQUIVOS_GITHUB[chave]
+        rels.append(ARQUIVOS_GITHUB[chave])
+        rels.extend(ARQUIVOS_GITHUB_EXTRA.get(chave, ()))
+    for rel in rels:
         dest = saida_raiz / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
         url = RESULTADO_GITHUB_BASE + rel
