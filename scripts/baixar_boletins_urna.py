@@ -526,13 +526,62 @@ def _nome_dados_no_zip(zf: zipfile.ZipFile) -> str:
     return nomes[-1]
 
 
+def _partes_linha_2014(linha: str) -> list[str] | None:
+    partes = [p.strip().strip('"') for p in linha.split(";")]
+    if len(partes) < 26:
+        return None
+    if len(partes) > len(BWEB_2014_COLS):
+        partes = partes[: len(BWEB_2014_COLS)]
+    elif len(partes) < len(BWEB_2014_COLS):
+        partes = partes + [""] * (len(BWEB_2014_COLS) - len(partes))
+    return partes
+
+
+def processar_zip_bweb_2014(
+    zip_path: Path, faixas: pd.DataFrame, *, turno: int, chunk: int = 80_000
+) -> pd.DataFrame:
+    """Processa BU 2014 em lotes para não carregar o TXT inteiro de SP."""
+    raw = arquivo_dentro_do_zip(zip_path)
+    texto = raw.decode("latin-1")
+    del raw
+    linhas = [ln for ln in texto.splitlines() if ln.strip()]
+    del texto
+    if linhas and _parece_cabecalho(linhas[0]):
+        linhas = linhas[1:]
+    lotes: list[pd.DataFrame] = []
+    buf: list[list[str]] = []
+    for linha in linhas:
+        rec = _partes_linha_2014(linha)
+        if rec is None:
+            continue
+        buf.append(rec)
+        if len(buf) >= chunk:
+            df = pd.DataFrame(buf, columns=BWEB_2014_COLS)
+            lotes.append(consolidar_urnas(df, faixas, ano=2014, turno=turno))
+            buf = []
+    del linhas
+    if buf:
+        df = pd.DataFrame(buf, columns=BWEB_2014_COLS)
+        lotes.append(consolidar_urnas(df, faixas, ano=2014, turno=turno))
+    if not lotes:
+        return pd.DataFrame()
+    if len(lotes) == 1:
+        return lotes[0]
+    junto = pd.concat(lotes, ignore_index=True)
+    chaves = [c for c in CHAVES_URNA if c in junto.columns]
+    soma = [c for c in junto.columns if str(c).startswith("QT_VOTOS_")]
+    primeiro = [c for c in junto.columns if c not in chaves and c not in soma]
+    agg = {c: "first" for c in primeiro}
+    agg.update({c: "sum" for c in soma})
+    return junto.groupby(chaves, dropna=False).agg(agg).reset_index()
+
+
 def processar_zip_bweb(
     zip_path: Path, faixas: pd.DataFrame, *, ano: int, turno: int
 ) -> pd.DataFrame:
     """Lê o ZIP em pedaços (1º turno de SP passa de 1 GB descompactado)."""
     if ano == 2014:
-        df = ler_bweb_zip(zip_path, ano)
-        return consolidar_urnas(df, faixas, ano=ano, turno=turno)
+        return processar_zip_bweb_2014(zip_path, faixas, turno=turno)
 
     partes: list[pd.DataFrame] = []
     with zipfile.ZipFile(zip_path) as zf:

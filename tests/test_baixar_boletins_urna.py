@@ -97,6 +97,17 @@ def test_2014_txt_posicional_com_serie():
     assert out["DS_MODELO_URNA"].iloc[0] == "UE2009"
 
 
+def test_processar_zip_2014_em_lotes(tmp_path: Path):
+    zip_path = tmp_path / "bweb_1t_RR_14102014140241.zip"
+    with zipfile.ZipFile(zip_path, "w") as zf:
+        zf.write(BU / "bweb_1t_2014_XX.txt", arcname="bweb_1t_RR_14102014140241.txt")
+    faixas = carregar_faixas_modelo(FAIXAS)
+    tabela = processar_zip_bweb(zip_path, faixas, ano=2014, turno=1)
+    assert len(tabela) == 1
+    assert int(tabela["QT_VOTOS_DILMA"].iloc[0]) == 80
+    assert int(tabela["NR_URNA_EFETIVADA"].iloc[0]) == 1_054_014
+
+
 def test_processar_zip_1t(tmp_path: Path):
     zip_path = tmp_path / "bweb_1t_RR_051020221321.zip"
     with zipfile.ZipFile(zip_path, "w") as zf:
