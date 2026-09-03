@@ -144,8 +144,8 @@ def ler_csv(caminho: Path) -> pd.DataFrame:
     if not caminho.exists():
         raise FileNotFoundError(caminho)
     if str(caminho).endswith(".gz"):
-        return pd.read_csv(caminho, compression="gzip")
-    return pd.read_csv(caminho)
+        return pd.read_csv(caminho, compression="gzip", low_memory=False)
+    return pd.read_csv(caminho, low_memory=False)
 
 
 def enriquecer_serie(detalhe: pd.DataFrame, serie: pd.DataFrame) -> pd.DataFrame:

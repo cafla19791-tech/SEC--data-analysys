@@ -12,8 +12,9 @@ https://drive.google.com/drive/folders/1EpLQeAQlwvTR9bCY7XDtBxjqIM-5Kiea
 
 ## 1º turno (`urnas_1t_presidente.csv.gz`)
 
-Processado quando os ZIPs `bweb_1t_*14102014*` estiverem em `data/tse2014/raw`.
-Nesta pasta falta **TO**. Oficiais: Dilma 43.267.668 · Aécio 34.897.211 · Marina 22.176.619.
+- 425.377 seções
+- Dilma 42.899.237 · Aécio 34.694.028 · Marina 22.025.929
+- **Falta TO** nesta pasta do Drive (TSE oficial: Dilma 43.267.668 · Aécio 34.897.211 · Marina 22.176.619)
 
 ```bat
 python baixar_boletins_urna.py --ano 2014 --turno 2 --somente-processar
