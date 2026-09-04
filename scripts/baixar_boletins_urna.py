@@ -416,8 +416,12 @@ def consolidar_urnas(
     ]
     agrupado["ANO_ELEICAO"] = ano
     agrupado["NR_TURNO"] = turno
+    return alinhar_colunas_urna(agrupado, ano, turno)
 
-    ordem = [
+
+def colunas_detalhe_urna(ano: int, turno: int) -> list[str]:
+    cand_cols = [coluna_candidato(r) for r in CANDIDATOS[(ano, turno)].values()]
+    return [
         "ANO_ELEICAO",
         "NR_TURNO",
         "SG_UF",
@@ -441,7 +445,15 @@ def consolidar_urnas(
         "DT_ENCERRAMENTO",
         "DS_TIPO_URNA",
     ]
-    return agrupado[[c for c in ordem if c in agrupado.columns]]
+
+
+def alinhar_colunas_urna(df: pd.DataFrame, ano: int, turno: int) -> pd.DataFrame:
+    """Garante a mesma ordem de colunas em todas as UFs (evita CSV deslocado)."""
+    if df.empty:
+        return df
+    ordem = [c for c in colunas_detalhe_urna(ano, turno) if c in df.columns]
+    extras = [c for c in df.columns if c not in ordem]
+    return df.reindex(columns=ordem + extras)
 
 
 def _parece_cabecalho(linha: str) -> bool:
@@ -566,14 +578,15 @@ def processar_zip_bweb_2014(
     if not lotes:
         return pd.DataFrame()
     if len(lotes) == 1:
-        return lotes[0]
+        return alinhar_colunas_urna(lotes[0], 2014, turno)
     junto = pd.concat(lotes, ignore_index=True)
     chaves = [c for c in CHAVES_URNA if c in junto.columns]
     soma = [c for c in junto.columns if str(c).startswith("QT_VOTOS_")]
     primeiro = [c for c in junto.columns if c not in chaves and c not in soma]
     agg = {c: "first" for c in primeiro}
     agg.update({c: "sum" for c in soma})
-    return junto.groupby(chaves, dropna=False).agg(agg).reset_index()
+    out = junto.groupby(chaves, dropna=False).agg(agg).reset_index()
+    return alinhar_colunas_urna(out, 2014, turno)
 
 
 def processar_zip_bweb(
@@ -635,8 +648,12 @@ def resumo_por_modelo(df: pd.DataFrame, ano: int, turno: int) -> pd.DataFrame:
     ]
     if "DS_MODELO_URNA" not in df.columns:
         return pd.DataFrame()
+    trabalho = df.copy()
+    for c in cand_cols + ["QT_VOTOS_VALIDOS"]:
+        if c in trabalho.columns:
+            trabalho[c] = pd.to_numeric(trabalho[c], errors="coerce").fillna(0)
     g = (
-        df.groupby(["NR_MODELO", "DS_MODELO_URNA"], dropna=False)
+        trabalho.groupby(["NR_MODELO", "DS_MODELO_URNA"], dropna=False)
         .agg(
             QT_URNAS=("NR_URNA_EFETIVADA", "nunique"),
             **{c: (c, "sum") for c in cand_cols},
@@ -819,6 +836,7 @@ def main(argv: list[str] | None = None) -> int:
     tabela = pd.concat(partes, ignore_index=True) if partes else pd.DataFrame()
     if tabela.empty:
         raise RuntimeError("Nenhuma urna processada.")
+    tabela = alinhar_colunas_urna(tabela, ano, turno)
 
     detalhe = saida / nome_arquivo_saida(ano, turno)
     gz = gravar_csv_e_gz(tabela, detalhe)

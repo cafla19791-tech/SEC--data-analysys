@@ -486,8 +486,8 @@ def main(argv: list[str] | None = None) -> int:
                 ),
                 (
                     "2014",
-                    "Sem microdados nesta rede (TSE 403; Archive.org sem captura). "
-                    "O script gera as abas quando existirem output/tse2014/urnas_* ou secoes_*.",
+                    "Boletins de Urna (Drive). 1º turno: totais iguais ao TSE "
+                    "(inclui TO e Exterior). 2º turno: faltam CE e MA.",
                 ),
                 ("Urna", "Nas planilhas resultados_presidente_{ano}_{turno}t.xlsx (aba Urna)"),
             ],

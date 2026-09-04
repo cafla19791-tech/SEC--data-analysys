@@ -16,6 +16,7 @@ from scripts.baixar_boletins_urna import (
     nome_arquivo_saida,
     normalizar_colunas,
     processar_zip_bweb,
+    processar_zip_bweb_2014,
     recurso_catalogo,
     urls_espelho_historico,
 )
@@ -106,6 +107,10 @@ def test_processar_zip_2014_em_lotes(tmp_path: Path):
     assert len(tabela) == 1
     assert int(tabela["QT_VOTOS_DILMA"].iloc[0]) == 80
     assert int(tabela["NR_URNA_EFETIVADA"].iloc[0]) == 1_054_014
+    lotes = processar_zip_bweb_2014(zip_path, faixas, turno=1, chunk=1)
+    assert list(lotes.columns) == list(tabela.columns)
+    assert int(lotes["QT_VOTOS_DILMA"].iloc[0]) == 80
+    assert int(lotes["QT_VOTOS_AECIO"].iloc[0]) == 60
 
 
 def test_processar_zip_1t(tmp_path: Path):
