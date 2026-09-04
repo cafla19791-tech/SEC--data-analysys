@@ -142,6 +142,12 @@ def test_conferir_totais_oficial():
     assert any("DIFERE" in a for a in conferir_totais(df_errado, 2022, 2))
 
 
+# 2014 2º turno: pastas do Drive ainda sem os BUs de CE e MA.
+TOTAIS_PARCIAIS = {
+    (2014, 2): {"DILMA": 48_502_249, "AECIO": 49_305_163},
+}
+
+
 def test_totais_oficiais_nos_csv_publicados():
     dados = pasta_dados()
     for (ano, turno), esperados in TOTAIS_OFICIAIS.items():
@@ -150,8 +156,12 @@ def test_totais_oficiais_nos_csv_publicados():
         except FileNotFoundError:
             continue
         df = pd.read_csv(path, compression="gzip" if str(path).endswith(".gz") else None)
-        for nome, oficial in esperados.items():
+        alvo = TOTAIS_PARCIAIS.get((ano, turno), esperados)
+        for nome, esperado in alvo.items():
             col = f"QT_VOTOS_{nome}"
             if col not in df.columns:
                 continue
-            assert int(df[col].fillna(0).sum()) == oficial, f"{ano} T{turno} {nome}"
+            assert int(df[col].fillna(0).sum()) == esperado, f"{ano} T{turno} {nome}"
+        if (ano, turno) in TOTAIS_PARCIAIS:
+            for nome, oficial in esperados.items():
+                assert alvo[nome] < oficial, f"{ano} T{turno} {nome} deveria ser parcial"
