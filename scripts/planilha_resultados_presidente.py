@@ -487,7 +487,7 @@ def main(argv: list[str] | None = None) -> int:
                 (
                     "2014",
                     "Boletins de Urna (Drive). 1º turno: totais iguais ao TSE "
-                    "(inclui TO e Exterior). 2º turno: faltam CE e MA.",
+                    "(inclui TO e Exterior). 2º turno: falta CE (MA já incluído).",
                 ),
                 ("Urna", "Nas planilhas resultados_presidente_{ano}_{turno}t.xlsx (aba Urna)"),
             ],

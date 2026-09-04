@@ -111,6 +111,10 @@ def test_processar_zip_2014_em_lotes(tmp_path: Path):
     assert list(lotes.columns) == list(tabela.columns)
     assert int(lotes["QT_VOTOS_DILMA"].iloc[0]) == 80
     assert int(lotes["QT_VOTOS_AECIO"].iloc[0]) == 60
+    txt = tmp_path / "bweb_1t_RR_14102014140241.txt"
+    txt.write_bytes((BU / "bweb_1t_2014_XX.txt").read_bytes())
+    direto = processar_zip_bweb(txt, faixas, ano=2014, turno=1)
+    assert int(direto["QT_VOTOS_DILMA"].iloc[0]) == 80
 
 
 def test_processar_zip_1t(tmp_path: Path):

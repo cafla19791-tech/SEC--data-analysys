@@ -142,9 +142,9 @@ def test_conferir_totais_oficial():
     assert any("DIFERE" in a for a in conferir_totais(df_errado, 2022, 2))
 
 
-# 2014 2º turno: pastas do Drive ainda sem os BUs de CE e MA.
+# 2014 2º turno: pastas do Drive ainda sem o BU do Ceará.
 TOTAIS_PARCIAIS = {
-    (2014, 2): {"DILMA": 48_502_249, "AECIO": 49_305_163},
+    (2014, 2): {"DILMA": 50_978_234, "AECIO": 49_972_986},
 }
 
 

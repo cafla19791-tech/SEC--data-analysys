@@ -6,6 +6,7 @@ Fontes no Drive:
 
 - UFs em ZIP: https://drive.google.com/drive/folders/1EpLQeAQlwvTR9bCY7XDtBxjqIM-5Kiea
 - 1º turno TO (TXT): https://drive.google.com/drive/folders/1OVHfD0n1AnGQoaqks5Y5mF1KtgjAjY3A
+- 2º turno MA (TXT): https://drive.google.com/drive/folders/1wnxROCh2mUvFUtr0zuUoX9dc7WlFYh5k
 
 IDs em `data/tse_catalog/drive_bweb_2014.json`.
 
@@ -17,9 +18,9 @@ IDs em `data/tse_catalog/drive_bweb_2014.json`.
 
 ## 2º turno (`urnas_2t_presidente.csv.gz`)
 
-- 393.493 seções · 393.451 com série
-- Dilma 48.502.249 · Aécio 49.305.163
-- **Faltam CE e MA** nas pastas do Drive (TSE oficial: Dilma 54.501.118 · Aécio 51.041.155)
+- 408.958 seções · 408.916 com série
+- Dilma 50.978.234 · Aécio 49.972.986
+- **Falta CE** (TSE oficial: Dilma 54.501.118 · Aécio 51.041.155)
 
 ```bat
 python baixar_boletins_urna.py --ano 2014 --turno 1 --somente-processar

@@ -553,9 +553,12 @@ def processar_zip_bweb_2014(
     zip_path: Path, faixas: pd.DataFrame, *, turno: int, chunk: int = 80_000
 ) -> pd.DataFrame:
     """Processa BU 2014 em lotes para não carregar o TXT inteiro de SP."""
-    raw = arquivo_dentro_do_zip(zip_path)
-    texto = raw.decode("latin-1")
-    del raw
+    if zip_path.suffix.lower() == ".txt":
+        texto = zip_path.read_text(encoding="latin-1")
+    else:
+        raw = arquivo_dentro_do_zip(zip_path)
+        texto = raw.decode("latin-1")
+        del raw
     linhas = [ln for ln in texto.splitlines() if ln.strip()]
     del texto
     if linhas and _parece_cabecalho(linhas[0]):
@@ -673,6 +676,8 @@ def localizar_zip(raw_dir: Path, arquivo: str, uf: str, turno: int) -> Path | No
         f"bweb_{turno}t_{uf}_*.zip",
         f"BWEB_{turno}t_{uf}_*.zip",
         f"*{turno}t_{uf}_*.zip",
+        f"bweb_{turno}t_{uf}_*.txt",
+        f"BWEB_{turno}t_{uf}_*.txt",
     )
     for padrao in padroes:
         achados = sorted(raw_dir.glob(padrao))

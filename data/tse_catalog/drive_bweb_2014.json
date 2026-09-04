@@ -1,7 +1,8 @@
 {
   "pasta": "https://drive.google.com/drive/folders/1EpLQeAQlwvTR9bCY7XDtBxjqIM-5Kiea",
   "pasta_to_1t": "https://drive.google.com/drive/folders/1OVHfD0n1AnGQoaqks5Y5mF1KtgjAjY3A",
-  "nota": "IDs dos ZIPs bweb 2014 (melhor cópia, sem sufixo (1)). 1T TO veio como TXT na pasta pasta_to_1t. Faltam 2T CE e MA.",
+  "pasta_ma_2t": "https://drive.google.com/drive/folders/1wnxROCh2mUvFUtr0zuUoX9dc7WlFYh5k",
+  "nota": "IDs dos ZIPs bweb 2014 (melhor cópia, sem sufixo (1)). 1T TO e 2T MA vieram como TXT em pastas extras. Falta 2T CE.",
   "arquivos": [
     {"ano": 2014, "turno": 1, "uf": "AC", "id": "1b-B5Tej2HF-IqYf6dC9CGyx2PJtZgJYY", "arquivo": "bweb_1t_AC_14102014131600.zip"},
     {"ano": 2014, "turno": 1, "uf": "AL", "id": "1pRiQ3ZyNQg0aQ1Oa71De3fYVK7y9YetF", "arquivo": "bweb_1t_AL_14102014131724.zip"},
@@ -39,6 +40,7 @@
     {"ano": 2014, "turno": 2, "uf": "DF", "id": "1vS78LwxtF9V26q0jahz6z3Ji2navUY8p", "arquivo": "bweb_2t_DF_28102014121036.zip"},
     {"ano": 2014, "turno": 2, "uf": "ES", "id": "1ySeiM7Xu4OGNKIrFfyXoAd4HCGeI4fia", "arquivo": "bweb_2t_ES_28102014121431.zip"},
     {"ano": 2014, "turno": 2, "uf": "GO", "id": "1UM0nJYssEKYmE_4nnV2IBAwk6Lg0ovZd", "arquivo": "bweb_2t_GO_28102014121839.zip"},
+    {"ano": 2014, "turno": 2, "uf": "MA", "id": "1MfnEQS8YUUzRvxsS--JSkmCsyfdOeA0I", "arquivo": "bweb_2t_MA_28102014122307.txt", "pasta": "https://drive.google.com/drive/folders/1wnxROCh2mUvFUtr0zuUoX9dc7WlFYh5k"},
     {"ano": 2014, "turno": 2, "uf": "MG", "id": "1yvrkTVaoc3BkAI4dlsWdEXpMKdxclYGw", "arquivo": "bweb_2t_MG_28102014122730.zip"},
     {"ano": 2014, "turno": 2, "uf": "MS", "id": "19fWPnEThLXrb6NdDLhg9raOKustyf2e1", "arquivo": "bweb_2t_MS_28102014123155.zip"},
     {"ano": 2014, "turno": 2, "uf": "MT", "id": "1lYwwvRVO0ZM1SOEYZC7GkcoQklCzdtop", "arquivo": "bweb_2t_MT_28102014123633.zip"},
