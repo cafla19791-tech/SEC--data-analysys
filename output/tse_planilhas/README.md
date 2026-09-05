@@ -82,6 +82,13 @@ oposição. O XLSX por urna (`discriminativo_urnas_{ano}_{turno}t.xlsx`)
 python discriminativo_resultados_presidente.py --somente-urna
 ```
 
+Urnas em que **um único candidato teve 100% dos votos válidos** (1º ou 2º
+turno de 2014, 2018 e 2022): `urnas_100pct_votos_validos.xlsx`.
+
+```bat
+python scripts/urnas_100pct_votos_validos.py
+```
+
 ## Totais oficiais usados na conferência
 
 - 2022 1º: Lula 57.259.504 · Bolsonaro 51.072.345 · Tebet 4.915.423 · Ciro 3.599.287
