@@ -38,6 +38,9 @@ output/*_stats.json
 !output/RELATORIO_EXECUTIVO.md
 !output/desembolsos_1995_2001_ipca.md
 !output/desembolsos_1995_2001_ipca.xlsx
+!output/montantes_contratos_indiretas_2002_2026.csv
+!output/montantes_contratos_indiretas_2002_2026.md
+!output/montantes_contratos_indiretas_2002_2026.xlsx
 output/tse2022/*.csv
 output/tse2022/*.parquet
 !output/tse2022/.gitkeep
