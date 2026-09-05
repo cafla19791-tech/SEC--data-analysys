@@ -100,6 +100,23 @@ def test_cruza_municipio_e_detecta_inversao():
     assert sp["INVERTEU_2018_2022"] == "S"
 
 
+def test_totais_2t_alinhados_aos_oficiais():
+    from scripts.planilha_resultados_presidente import carregar_pleito, pasta_dados
+
+    esperados = {
+        2014: (54_501_118, 51_041_155, "Dilma"),
+        2018: (47_040_906, 57_797_847, "Bolsonaro"),
+        2022: (60_345_999, 58_206_354, "Lula"),
+    }
+    dados = pasta_dados()
+    for ano, (pt, opp, venc) in esperados.items():
+        df, _ = carregar_pleito(dados, ano, 2)
+        linha = linha_brasil_2t(preparar_2t(df, ano), ano)
+        assert linha["QT_VOTOS_PT"] == pt
+        assert linha["QT_VOTOS_OPP"] == opp
+        assert linha["VENCEDOR"] == venc
+
+
 def test_brasil_2t_soma():
     df = preparar_2t(
         pd.DataFrame(
