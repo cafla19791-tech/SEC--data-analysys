@@ -49,6 +49,7 @@ copy /Y "%REPO%\scripts\baixar_boletins_urna_2022.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\discriminativo_urnas_municipio.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\baixar_boletins_urna.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\planilha_resultados_presidente.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\discriminativo_resultados_presidente.py" "%WINPY%\sec_scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.py" "%WINPY%\" >nul
@@ -78,6 +79,8 @@ copy /Y "%REPO%\discriminativo_urnas_municipio.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\baixar_boletins_urna.py" "%WINPY%\" >nul
 copy /Y "%REPO%\planilha_resultados_presidente.py" "%WINPY%\" >nul
 copy /Y "%REPO%\planilha_resultados_presidente.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_resultados_presidente.py" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_resultados_presidente.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\requirements.txt" "%WINPY%\requirements_sec.txt" >nul
 
 echo OK. Arquivos copiados.

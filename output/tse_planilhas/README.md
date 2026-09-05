@@ -48,6 +48,18 @@ No repositório:
 
 ```bash
 python3 scripts/planilha_resultados_presidente.py
+python3 scripts/discriminativo_resultados_presidente.py
+```
+
+## Discriminativo 2014 × 2018 × 2022
+
+`discriminativo_presidente_2014_2018_2022.xlsx` compara os três 2º turnos
+no mesmo recorte político (lado PT = Dilma / Haddad / Lula; oposição =
+Aécio / Bolsonaro / Bolsonaro), com abas Brasil, região, UF, município e
+zona. Há também UF e região do 1º turno.
+
+```bat
+python discriminativo_resultados_presidente.py
 ```
 
 ## Totais oficiais usados na conferência
