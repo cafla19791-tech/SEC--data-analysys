@@ -43,6 +43,13 @@ copy /Y "%REPO%\scripts\numerar_contratos_indiretas.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\discriminativos_indiretas_ano_contrato.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\fluxos_por_ano_contrato_numerados.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\agregar_impacto_fluxos.py" "%WINPY%\scripts\" >nul
+if not exist "%WINPY%\sec_scripts" mkdir "%WINPY%\sec_scripts"
+copy /Y "%REPO%\scripts\baixar_boletins_urna_2022.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\baixar_boletins_urna_2022.py" "%WINPY%\scripts\" >nul
+copy /Y "%REPO%\scripts\discriminativo_urnas_municipio.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\baixar_boletins_urna.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\planilha_resultados_presidente.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\discriminativo_resultados_presidente.py" "%WINPY%\sec_scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.py" "%WINPY%\" >nul
@@ -61,6 +68,19 @@ copy /Y "%REPO%\discriminativos_indiretas_ano_contrato.py" "%WINPY%\" >nul
 copy /Y "%REPO%\discriminativos_indiretas_ano_contrato.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\fluxos_por_ano_contrato_numerados.py" "%WINPY%\" >nul
 copy /Y "%REPO%\fluxos_por_ano_contrato_numerados.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_boletins_urna_2022.py" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_boletins_urna_2022.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_boletins_urna_2022.ps1" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_zips_urna_curl.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_zips_urna.ps1" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_resultado_urna_github.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_urnas_municipio.py" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_urnas_municipio.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\baixar_boletins_urna.py" "%WINPY%\" >nul
+copy /Y "%REPO%\planilha_resultados_presidente.py" "%WINPY%\" >nul
+copy /Y "%REPO%\planilha_resultados_presidente.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_resultados_presidente.py" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_resultados_presidente.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\requirements.txt" "%WINPY%\requirements_sec.txt" >nul
 
 echo OK. Arquivos copiados.
@@ -74,6 +94,15 @@ echo   fluxos_por_ano_contrato_numerados.bat
 echo.
 echo Relatorio:
 echo   resumo_fluxos_contagil.bat
+echo.
+echo Boletins de urna 2022 ^(28 UFs, serie + modelo^):
+echo   baixar_resultado_urna_github.bat
+echo   baixar_zips_urna.ps1
+echo   baixar_zips_urna_curl.bat
+echo   baixar_boletins_urna_2022.bat
+echo   discriminativo_urnas_municipio.bat
+echo   Saida: %WINPY%\saida\tse2022\urnas_2t_presidente.csv
+echo          %WINPY%\saida\tse2022\discriminativo_municipio_ue2020.xlsx
 echo.
 endlocal
 exit /b 0

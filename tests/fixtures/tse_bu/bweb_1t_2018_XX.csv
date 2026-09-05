@@ -1,0 +1,5 @@
+"NR_TURNO";"SG_ UF";"CD_MUNICIPIO";"NM_MUNICIPIO";"NR_ZONA";"NR_SECAO";"NR_LOCAL_VOTACAO";"CD_CARGO_PERGUNTA";"DS_CARGO_PERGUNTA";"CD_TIPO_VOTAVEL";"DS_TIPO_VOTAVEL";"NR_VOTAVEL";"NM_VOTAVEL";"QT_VOTOS";"NR_URNA_EFETIVADA";"QT_APTOS";"QT_COMPARECIMENTO";"QT_ABSTENCOES";"DS_TIPO_URNA"
+"1";"RR";"03000";"BOA VISTA";"4";"11";"1015";"1";"Presidente";"1";"Nominal";"17";"JAIR BOLSONARO";"100";"1180872";"200";"180";"20";"Apurada"
+"1";"RR";"03000";"BOA VISTA";"4";"11";"1015";"1";"Presidente";"1";"Nominal";"13";"FERNANDO HADDAD";"50";"1180872";"200";"180";"20";"Apurada"
+"1";"RR";"03000";"BOA VISTA";"4";"11";"1015";"1";"Presidente";"2";"Branco";"95";"Branco";"2";"1180872";"200";"180";"20";"Apurada"
+"1";"RR";"03000";"BOA VISTA";"4";"11";"1015";"1";"Presidente";"3";"Nulo";"96";"Nulo";"3";"1180872";"200";"180";"20";"Apurada"
