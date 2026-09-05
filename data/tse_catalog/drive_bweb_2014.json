@@ -2,7 +2,8 @@
   "pasta": "https://drive.google.com/drive/folders/1EpLQeAQlwvTR9bCY7XDtBxjqIM-5Kiea",
   "pasta_to_1t": "https://drive.google.com/drive/folders/1OVHfD0n1AnGQoaqks5Y5mF1KtgjAjY3A",
   "pasta_ma_2t": "https://drive.google.com/drive/folders/1wnxROCh2mUvFUtr0zuUoX9dc7WlFYh5k",
-  "nota": "IDs dos ZIPs bweb 2014 (melhor cópia, sem sufixo (1)). 1T TO e 2T MA vieram como TXT em pastas extras. Falta 2T CE.",
+  "arquivo_ce_2t": "https://drive.google.com/file/d/1NxnSusxyROLC-lhoJ7Xd9aC5OoF3VB0S/view",
+  "nota": "IDs dos ZIPs bweb 2014 (melhor cópia, sem sufixo (1)). 1T TO, 2T MA e 2T CE vieram como TXT em links extras.",
   "arquivos": [
     {"ano": 2014, "turno": 1, "uf": "AC", "id": "1b-B5Tej2HF-IqYf6dC9CGyx2PJtZgJYY", "arquivo": "bweb_1t_AC_14102014131600.zip"},
     {"ano": 2014, "turno": 1, "uf": "AL", "id": "1pRiQ3ZyNQg0aQ1Oa71De3fYVK7y9YetF", "arquivo": "bweb_1t_AL_14102014131724.zip"},
@@ -37,6 +38,7 @@
     {"ano": 2014, "turno": 2, "uf": "AM", "id": "1bT_Ydnqld1CrUxmULMz6yMZrL0Ddom9B", "arquivo": "bweb_2t_AM_28102014115349.zip"},
     {"ano": 2014, "turno": 2, "uf": "AP", "id": "18xWiDTeUowxSksRrTEhr-5Ah3xo0QXb9", "arquivo": "bweb_2t_AP_28102014115835.zip"},
     {"ano": 2014, "turno": 2, "uf": "BA", "id": "1YGpxBbqChIln2cEfns5PCIeSPsIdpvNV", "arquivo": "bweb_2t_BA_28102014120236.zip"},
+    {"ano": 2014, "turno": 2, "uf": "CE", "id": "1NxnSusxyROLC-lhoJ7Xd9aC5OoF3VB0S", "arquivo": "bweb_2t_CE_28102014120643.txt", "pasta": "https://drive.google.com/file/d/1NxnSusxyROLC-lhoJ7Xd9aC5OoF3VB0S/view"},
     {"ano": 2014, "turno": 2, "uf": "DF", "id": "1vS78LwxtF9V26q0jahz6z3Ji2navUY8p", "arquivo": "bweb_2t_DF_28102014121036.zip"},
     {"ano": 2014, "turno": 2, "uf": "ES", "id": "1ySeiM7Xu4OGNKIrFfyXoAd4HCGeI4fia", "arquivo": "bweb_2t_ES_28102014121431.zip"},
     {"ano": 2014, "turno": 2, "uf": "GO", "id": "1UM0nJYssEKYmE_4nnV2IBAwk6Lg0ovZd", "arquivo": "bweb_2t_GO_28102014121839.zip"},

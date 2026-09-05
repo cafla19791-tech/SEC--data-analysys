@@ -24,11 +24,11 @@ que fica nas planilhas por ano/turno).
 | 2022 1º e 2º | Boletins de Urna (`bweb_*`) | Completa (`NR_URNA_EFETIVADA`) | Conferem |
 | 2018 1º e 2º | `votacao_secao` nacional | Parcial (só UFs com BU no Archive.org) | Conferem |
 | 2014 1º | Boletins de Urna (Drive, incl. TO) | Completa (27 UFs + Exterior) | Conferem |
-| 2014 2º | Boletins de Urna (Drive, incl. MA) | 26 UFs + Exterior | Falta CE |
+| 2014 2º | Boletins de Urna (Drive, incl. MA e CE) | Completa (27 UFs + Exterior) | Conferem |
 
 2014 veio das pastas do Drive com os ZIPs `bweb_*2014*` (número de série da urna)
-e os TXT de Tocantins (1º turno) e Maranhão (2º turno). O 1º turno nacional
-confere com o TSE. No 2º turno ainda falta o Ceará.
+e os TXT de Tocantins (1º turno), Maranhão e Ceará (2º turno). Os dois turnos
+nacionais conferem com o TSE.
 
 2018: uma seção = uma urna na prática. A coluna `NR_URNA_EFETIVADA` é preenchida
 só nas UFs cujo BU o Archive.org capturou (1º: AC AL AM AP BA CE DF ES GO MA MG RR;
@@ -57,4 +57,4 @@ python3 scripts/planilha_resultados_presidente.py
 - 2018 1º: Bolsonaro 49.277.010 · Haddad 31.342.051 · Ciro 13.344.371 · Amoêdo 2.679.745
 - 2018 2º: Bolsonaro 57.797.847 · Haddad 47.040.906
 - 2014 1º: Dilma 43.267.668 · Aécio 34.897.211 · Marina 22.176.619 (OK)
-- 2014 2º: Dilma 54.501.118 · Aécio 51.041.155 (processado: 50.978.234 / 49.972.986; falta CE)
+- 2014 2º: Dilma 54.501.118 · Aécio 51.041.155 (OK)
