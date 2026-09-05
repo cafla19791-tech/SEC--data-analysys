@@ -188,8 +188,18 @@ ARQUIVOS_GITHUB = {
     (2014, 2): "tse2014/urnas_2t_presidente.csv.gz",
 }
 ARQUIVOS_GITHUB_EXTRA = {
-    (2018, 1): ("tse2018/secoes_1t_presidente.csv.gz",),
-    (2018, 2): ("tse2018/secoes_2t_presidente.csv.gz",),
+    (2018, 1): (
+        "tse2018/secoes_1t_presidente.csv.gz",
+        "tse_planilhas/discriminativo_urnas_2018_1t.csv.gz",
+    ),
+    (2018, 2): (
+        "tse2018/secoes_2t_presidente.csv.gz",
+        "tse_planilhas/discriminativo_urnas_2018_2t.csv.gz",
+    ),
+    (2014, 1): ("tse_planilhas/discriminativo_urnas_2014_1t.csv.gz",),
+    (2014, 2): ("tse_planilhas/discriminativo_urnas_2014_2t.csv.gz",),
+    (2022, 1): ("tse_planilhas/discriminativo_urnas_2022_1t.csv.gz",),
+    (2022, 2): ("tse_planilhas/discriminativo_urnas_2022_2t.csv.gz",),
 }
 
 

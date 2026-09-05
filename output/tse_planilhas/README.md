@@ -62,6 +62,26 @@ zona. Há também UF e região do 1º turno.
 python discriminativo_resultados_presidente.py
 ```
 
+Há também **um discriminativo por urna** em cada turno de cada eleição:
+
+| Arquivo | Pleito |
+|---|---|
+| `discriminativo_urnas_2014_1t.csv.gz` | 2014 1º |
+| `discriminativo_urnas_2014_2t.csv.gz` | 2014 2º |
+| `discriminativo_urnas_2018_1t.csv.gz` | 2018 1º |
+| `discriminativo_urnas_2018_2t.csv.gz` | 2018 2º |
+| `discriminativo_urnas_2022_1t.csv.gz` | 2022 1º |
+| `discriminativo_urnas_2022_2t.csv.gz` | 2022 2º |
+
+Uma linha por urna/seção, com série (`NR_URNA_EFETIVADA` quando existir),
+modelo, votos, % e vencedor. No 2º turno entram também o lado PT e a
+oposição. O XLSX por urna (`discriminativo_urnas_{ano}_{turno}t.xlsx`)
+é gerado no ContAgil (os do 1º turno passam de 50 MB e não vão para o Git).
+
+```bat
+python discriminativo_resultados_presidente.py --somente-urna
+```
+
 ## Totais oficiais usados na conferência
 
 - 2022 1º: Lula 57.259.504 · Bolsonaro 51.072.345 · Tebet 4.915.423 · Ciro 3.599.287

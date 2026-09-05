@@ -10,10 +10,13 @@ Saída:
   output/tse_planilhas/discriminativo_presidente_2014_2018_2022.xlsx
   output/tse_planilhas/discriminativo_presidente_uf_2t.csv
   output/tse_planilhas/discriminativo_presidente_municipio_2t.csv
+  output/tse_planilhas/discriminativo_urnas_{ano}_{turno}t.csv.gz
+  output/tse_planilhas/discriminativo_urnas_{ano}_{turno}t.xlsx
 
 Uso:
   python3 scripts/discriminativo_resultados_presidente.py
-  python discriminativo_resultados_presidente.py
+  python discriminativo_resultados_presidente.py --somente-urna
+  python discriminativo_resultados_presidente.py --somente-urna --sem-xlsx
 """
 
 from __future__ import annotations
@@ -28,6 +31,7 @@ try:
     from scripts.planilha_resultados_presidente import (
         carregar_pleito,
         conferir_totais,
+        detalhe_urna,
         escrever_xlsx,
         pasta_dados,
         pastas_saida,
@@ -36,6 +40,7 @@ except ImportError:  # ContAgil
     from planilha_resultados_presidente import (  # type: ignore
         carregar_pleito,
         conferir_totais,
+        detalhe_urna,
         escrever_xlsx,
         pasta_dados,
         pastas_saida,
@@ -72,6 +77,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--dados", type=Path, default=None)
     p.add_argument("--saida", type=Path, default=None)
+    p.add_argument(
+        "--somente-urna",
+        action="store_true",
+        help="Só gera o discriminativo por urna (um arquivo por ano/turno).",
+    )
+    p.add_argument(
+        "--sem-xlsx",
+        action="store_true",
+        help="Não grava o XLSX por urna (só o CSV.gz).",
+    )
     return p.parse_args(argv)
 
 
@@ -353,6 +368,117 @@ def linha_brasil_2t(df: pd.DataFrame, ano: int) -> dict[str, object]:
     }
 
 
+def discriminar_urna(df: pd.DataFrame, ano: int, turno: int) -> pd.DataFrame:
+    """Uma linha por urna/seção, com % e vencedor."""
+    out = detalhe_urna(df)
+    out["ANO_ELEICAO"] = ano
+    out["NR_TURNO"] = turno
+    if turno != 2:
+        return out
+    info = LADOS_2T[ano]
+    pt_col = f"QT_VOTOS_{info['pt']}"
+    opp_col = f"QT_VOTOS_{info['opp']}"
+    out["CAND_PT"] = info["pt_nome"]
+    out["CAND_OPP"] = info["opp_nome"]
+    out["QT_VOTOS_PT"] = pd.to_numeric(out[pt_col], errors="coerce").fillna(0)
+    out["QT_VOTOS_OPP"] = pd.to_numeric(out[opp_col], errors="coerce").fillna(0)
+    if "QT_VOTOS_VALIDOS" in out.columns:
+        validos = pd.to_numeric(out["QT_VOTOS_VALIDOS"], errors="coerce").fillna(0)
+    else:
+        validos = out["QT_VOTOS_PT"] + out["QT_VOTOS_OPP"]
+        out["QT_VOTOS_VALIDOS"] = validos
+    out["PCT_PT"] = [_pct(p, v) for p, v in zip(out["QT_VOTOS_PT"], validos)]
+    out["PCT_OPP"] = [_pct(o, v) for o, v in zip(out["QT_VOTOS_OPP"], validos)]
+    out["LADO"] = [
+        lado_vencedor(p, o) for p, o in zip(out["QT_VOTOS_PT"], out["QT_VOTOS_OPP"])
+    ]
+    out["VENCEDOR"] = [nome_vencedor(ano, lado) for lado in out["LADO"]]
+    frente = [
+        "ANO_ELEICAO",
+        "NR_TURNO",
+        "REGIAO",
+        "SG_UF",
+        "CD_MUNICIPIO",
+        "NM_MUNICIPIO",
+        "NR_ZONA",
+        "NR_SECAO",
+        "NR_LOCAL_VOTACAO",
+        "NR_URNA_EFETIVADA",
+        "NR_MODELO",
+        "DS_MODELO_URNA",
+        "CAND_PT",
+        "CAND_OPP",
+        "QT_VOTOS_PT",
+        "QT_VOTOS_OPP",
+        "QT_VOTOS_VALIDOS",
+        "PCT_PT",
+        "PCT_OPP",
+        "VENCEDOR",
+        "LADO",
+    ]
+    resto = [c for c in out.columns if c not in frente]
+    return out.reindex(columns=[c for c in frente + resto if c in out.columns])
+
+
+def leia_me_urna(ano: int, turno: int, df: pd.DataFrame, fonte: str) -> list[tuple[str, str]]:
+    linhas = [
+        ("Eleição", f"Presidente {ano}, {turno}º turno — discriminativo por urna"),
+        ("Fonte", fonte),
+        ("Linhas", f"{len(df):,}".replace(",", ".")),
+        (
+            "Série preenchida",
+            f"{int(df['NR_URNA_EFETIVADA'].notna().sum()):,}".replace(",", ".")
+            if "NR_URNA_EFETIVADA" in df.columns
+            else "não se aplica",
+        ),
+        ("Aba", "Urna (uma linha por urna/seção)"),
+    ]
+    if turno == 2:
+        info = LADOS_2T[ano]
+        linhas.append(
+            (
+                "Lados",
+                f"PT = {info['pt_nome']} · oposição = {info['opp_nome']}",
+            )
+        )
+        linhas.append(
+            (
+                "PT",
+                f"{int(df['QT_VOTOS_PT'].fillna(0).sum()):,}".replace(",", "."),
+            )
+        )
+        linhas.append(
+            (
+                "Oposição",
+                f"{int(df['QT_VOTOS_OPP'].fillna(0).sum()):,}".replace(",", "."),
+            )
+        )
+    return linhas
+
+
+def gravar_discriminativo_urna(
+    df: pd.DataFrame,
+    ano: int,
+    turno: int,
+    saida: Path,
+    fonte: str,
+    *,
+    xlsx: bool,
+) -> list[Path]:
+    tabela = discriminar_urna(df, ano, turno)
+    stem = f"discriminativo_urnas_{ano}_{turno}t"
+    gz = saida / f"{stem}.csv.gz"
+    tabela.to_csv(gz, index=False, encoding="utf-8", compression="gzip")
+    print(f"  {gz} ({gz.stat().st_size / 1_048_576:.1f} MB, {len(tabela):,} urnas)", flush=True)
+    escritos = [gz]
+    if xlsx:
+        dest = saida / f"{stem}.xlsx"
+        escrever_xlsx(dest, leia_me_urna(ano, turno, tabela, fonte), {"Urna": tabela})
+        print(f"  {dest} ({dest.stat().st_size / 1_048_576:.1f} MB)", flush=True)
+        escritos.append(dest)
+    return escritos
+
+
 def leia_me(avisos: list[str]) -> list[tuple[str, str]]:
     linhas = [
         ("Conteúdo", "Discriminativo Presidente 2014 × 2018 × 2022"),
@@ -403,13 +529,25 @@ def main(argv: list[str] | None = None) -> int:
         for aviso in conferir_totais(df2, ano, 2):
             print(f"    {aviso}", flush=True)
             avisos.append(f"{ano} 2T {aviso}")
+        gravar_discriminativo_urna(
+            df2, ano, 2, saida, fonte2, xlsx=not args.sem_xlsx
+        )
         brutos_2t[ano] = preparar_2t(df2, ano)
+        del df2
         df1, fonte1 = carregar_pleito(dados, ano, 1)
         print(f"  {ano} T1: {len(df1):,} ← {fonte1}", flush=True)
         for aviso in conferir_totais(df1, ano, 1):
             print(f"    {aviso}", flush=True)
             avisos.append(f"{ano} 1T {aviso}")
+        gravar_discriminativo_urna(
+            df1, ano, 1, saida, fonte1, xlsx=not args.sem_xlsx
+        )
         brutos_1t[ano] = df1
+        del df1
+
+    if args.somente_urna:
+        print(f"Saída: {saida}")
+        return 0
 
     brasil = pd.DataFrame([linha_brasil_2t(brutos_2t[ano], ano) for ano in ANOS])
     recortes_2t = {

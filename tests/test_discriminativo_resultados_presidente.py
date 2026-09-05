@@ -7,6 +7,7 @@ import pandas as pd
 from scripts.discriminativo_resultados_presidente import (
     agregar_2t,
     cruzar_anos,
+    discriminar_urna,
     inverteram,
     lado_vencedor,
     linha_brasil_2t,
@@ -115,6 +116,24 @@ def test_totais_2t_alinhados_aos_oficiais():
         assert linha["QT_VOTOS_PT"] == pt
         assert linha["QT_VOTOS_OPP"] == opp
         assert linha["VENCEDOR"] == venc
+
+
+def test_discriminar_urna_2t():
+    from scripts.planilha_resultados_presidente import preparar
+
+    bruto = pd.DataFrame(
+        [
+            _urna(2022, "BA", 1, "SALVADOR", 10, 80, 20),
+            _urna(2022, "SP", 2, "SANTOS", 1, 30, 70),
+        ]
+    )
+    df = preparar(bruto, 2022, 2)
+    out = discriminar_urna(df, 2022, 2)
+    assert len(out) == 2
+    assert list(out["VENCEDOR"]) == ["Lula", "Bolsonaro"]
+    assert list(out["LADO"]) == ["PT", "OPP"]
+    assert out.loc[out["SG_UF"] == "BA", "PCT_PT"].iloc[0] == 80.0
+    assert int(out["QT_VOTOS_PT"].sum()) == 110
 
 
 def test_brasil_2t_soma():
