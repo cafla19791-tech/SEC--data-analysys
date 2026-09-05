@@ -82,6 +82,8 @@ output/tse_planilhas/*.parquet
 !output/tse_planilhas/README.md
 !output/tse_planilhas/*.xlsx
 !output/tse_planilhas/*.csv.gz
+!output/tse_planilhas/discriminativo_presidente_uf_2t.csv
+!output/tse_planilhas/discriminativo_presidente_municipio_2t.csv
 data/tse2018/raw/
 data/tse2014/raw/
 !data/tse_catalog/boletins_urna_urls.json
