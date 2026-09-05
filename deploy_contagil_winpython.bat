@@ -52,6 +52,7 @@ copy /Y "%REPO%\scripts\planilha_resultados_presidente.py" "%WINPY%\sec_scripts\
 copy /Y "%REPO%\scripts\discriminativo_resultados_presidente.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\discriminativo_interior_nordeste.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\discriminativo_interior_nordeste_ate_40mil.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\relatorio_similaridade_interior_nordeste.py" "%WINPY%\sec_scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.py" "%WINPY%\" >nul
@@ -87,6 +88,8 @@ copy /Y "%REPO%\discriminativo_interior_nordeste.py" "%WINPY%\" >nul
 copy /Y "%REPO%\discriminativo_interior_nordeste.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\discriminativo_interior_nordeste_ate_40mil.py" "%WINPY%\" >nul
 copy /Y "%REPO%\discriminativo_interior_nordeste_ate_40mil.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\relatorio_similaridade_interior_nordeste.py" "%WINPY%\" >nul
+copy /Y "%REPO%\relatorio_similaridade_interior_nordeste.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\requirements.txt" "%WINPY%\requirements_sec.txt" >nul
 
 echo OK. Arquivos copiados.
