@@ -39,18 +39,37 @@ except ImportError:  # ContAgil
 
 UFS_NORDESTE = ("AL", "BA", "CE", "MA", "PB", "PE", "PI", "RN", "SE")
 
-# Capitais estaduais (nome TSE). Chave (UF, nome normalizado).
-CAPITAIS_NE = {
+# Capitais estaduais (nome TSE, sem acento). Chave UF.
+CAPITAIS_BRASIL = {
+    "AC": "RIO BRANCO",
     "AL": "MACEIO",
+    "AM": "MANAUS",
+    "AP": "MACAPA",
     "BA": "SALVADOR",
     "CE": "FORTALEZA",
+    "DF": "BRASILIA",
+    "ES": "VITORIA",
+    "GO": "GOIANIA",
     "MA": "SAO LUIS",
+    "MG": "BELO HORIZONTE",
+    "MS": "CAMPO GRANDE",
+    "MT": "CUIABA",
+    "PA": "BELEM",
     "PB": "JOAO PESSOA",
     "PE": "RECIFE",
     "PI": "TERESINA",
+    "PR": "CURITIBA",
+    "RJ": "RIO DE JANEIRO",
     "RN": "NATAL",
+    "RO": "PORTO VELHO",
+    "RR": "BOA VISTA",
+    "RS": "PORTO ALEGRE",
+    "SC": "FLORIANOPOLIS",
     "SE": "ARACAJU",
+    "SP": "SAO PAULO",
+    "TO": "PALMAS",
 }
+CAPITAIS_NE = {uf: CAPITAIS_BRASIL[uf] for uf in UFS_NORDESTE}
 
 COLUNAS_SAIDA = [
     ("SG_UF", "UF", 6, "text"),
@@ -101,10 +120,15 @@ def normalizar_nome(nome: object) -> str:
     return " ".join(texto.upper().split())
 
 
+def eh_capital(uf: object, nome: object) -> bool:
+    sigla = "" if uf is None else str(uf).strip().upper()
+    esperado = CAPITAIS_BRASIL.get(sigla)
+    return esperado is not None and normalizar_nome(nome) == esperado
+
+
 def eh_capital_nordeste(uf: object, nome: object) -> bool:
     sigla = "" if uf is None else str(uf).strip().upper()
-    esperado = CAPITAIS_NE.get(sigla)
-    return esperado is not None and normalizar_nome(nome) == esperado
+    return sigla in CAPITAIS_NE and eh_capital(sigla, nome)
 
 
 def pct(parte: float, total: float) -> float | None:
@@ -122,7 +146,7 @@ def recorte_nordeste(df: pd.DataFrame) -> pd.DataFrame:
 def marcar_capital_interior(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
     out["EH_CAPITAL"] = [
-        eh_capital_nordeste(uf, nome)
+        eh_capital(uf, nome)
         for uf, nome in zip(out["SG_UF"], out["NM_MUNICIPIO"])
     ]
     out["RECORTE"] = out["EH_CAPITAL"].map({True: "Capital", False: "Interior"})

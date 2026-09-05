@@ -155,8 +155,12 @@ def stats_par(df: pd.DataFrame, a: int, b: int) -> dict:
     xb = df[f"PCT_PT_VALIDOS_{b}"]
     la = df[f"LADO_{a}"]
     lb = df[f"LADO_{b}"]
-    qa = pd.qcut(xa, 4, labels=["Q1", "Q2", "Q3", "Q4"], duplicates="drop")
-    qb = pd.qcut(xb, 4, labels=["Q1", "Q2", "Q3", "Q4"], duplicates="drop")
+    try:
+        qa = pd.qcut(xa, 4, labels=["Q1", "Q2", "Q3", "Q4"], duplicates="drop")
+        qb = pd.qcut(xb, 4, labels=["Q1", "Q2", "Q3", "Q4"], duplicates="drop")
+        mesmo_quartil = round(100.0 * float((qa.astype(str) == qb.astype(str)).mean()), 2)
+    except (ValueError, IndexError):
+        mesmo_quartil = None
     peso = df[f"QT_VOTOS_VALIDOS_{b}"]
     return {
         "Par": f"{a} × {b}",
@@ -170,7 +174,7 @@ def stats_par(df: pd.DataFrame, a: int, b: int) -> dict:
         "Viés médio (p.p.)": round(float((xb - xa).mean()), 2),
         "Persistência do vencedor (%)": round(100.0 * float((la == lb).mean()), 2),
         "Kappa (vencedor)": round(cohen_kappa(la, lb), 4),
-        "Mesmo quartil de % PT (%)": round(100.0 * float((qa.astype(str) == qb.astype(str)).mean()), 2),
+        "Mesmo quartil de % PT (%)": mesmo_quartil,
         "Inversões": int((la != lb).sum()),
     }
 
