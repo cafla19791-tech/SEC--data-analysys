@@ -27,6 +27,8 @@ echo   %WINPY%
 echo.
 
 if not exist "%WINPY%\scripts" mkdir "%WINPY%\scripts"
+if not exist "%WINPY%\data\tse_catalog" mkdir "%WINPY%\data\tse_catalog"
+copy /Y "%REPO%\data\tse_catalog\populacao_censo2022_tse.csv" "%WINPY%\data\tse_catalog\" >nul
 
 copy /Y "%REPO%\scripts\__init__.py" "%WINPY%\scripts\" >nul
 copy /Y "%REPO%\scripts\gerar_fluxos.py" "%WINPY%\scripts\" >nul
@@ -54,6 +56,7 @@ copy /Y "%REPO%\scripts\discriminativo_interior_nordeste.py" "%WINPY%\sec_script
 copy /Y "%REPO%\scripts\discriminativo_interior_nordeste_ate_40mil.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\relatorio_similaridade_interior_nordeste.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\relatorio_similaridade_interior_regioes.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\discriminativo_modelo_urna_ate_50mil.py" "%WINPY%\sec_scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.py" "%WINPY%\" >nul
@@ -93,6 +96,8 @@ copy /Y "%REPO%\relatorio_similaridade_interior_nordeste.py" "%WINPY%\" >nul
 copy /Y "%REPO%\relatorio_similaridade_interior_nordeste.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\relatorio_similaridade_interior_regioes.py" "%WINPY%\" >nul
 copy /Y "%REPO%\relatorio_similaridade_interior_regioes.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_modelo_urna_ate_50mil.py" "%WINPY%\" >nul
+copy /Y "%REPO%\discriminativo_modelo_urna_ate_50mil.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\requirements.txt" "%WINPY%\requirements_sec.txt" >nul
 
 echo OK. Arquivos copiados.
