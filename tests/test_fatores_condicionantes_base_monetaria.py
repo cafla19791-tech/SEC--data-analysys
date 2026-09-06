@@ -93,6 +93,10 @@ def test_catalogo_oficial():
         1811,
         1809,
         1815,
+        1816,
+        1812,
+        1813,
+        1814,
         12484,
         12487,
         28724,
@@ -100,7 +104,7 @@ def test_catalogo_oficial():
     }
     assert 29004 not in {s.codigo for s in FATORES_SOMA}
     assert {s.codigo for s in ESTOQUES} == {1788, 1786, 1787}
-    assert len(SERIES) == 13
+    assert len(SERIES) == 17
 
 
 def test_identidade_mensal_sintetica():

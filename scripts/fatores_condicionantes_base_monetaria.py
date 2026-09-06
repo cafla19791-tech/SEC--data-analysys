@@ -69,6 +69,10 @@ SERIES: tuple[Serie, ...] = (
     Serie(29004, "Títulos — mercado primário", "detalhe", False, 1),
     Serie(29006, "Títulos — mercado secundário", "detalhe", False, 1),
     Serie(1815, "Depósitos de instituições financeiras", "fator", True),
+    Serie(1816, "Depósitos de fundos de investimento", "fator", True),
+    Serie(1812, "Assistência financeira", "fator", True),
+    Serie(1813, "PROER", "fator", True),
+    Serie(1814, "PROES", "fator", True),
     Serie(12484, "Redesconto do Banco Central", "fator", True),
     Serie(12487, "Operações com derivativos — ajustes", "fator", True),
     Serie(
@@ -182,7 +186,9 @@ def carregar_painel(
     pasta_cache.mkdir(parents=True, exist_ok=True)
     cols: dict[int, pd.Series] = {}
     for s in series:
-        if arquivos and s.codigo in arquivos:
+        if arquivos is not None:
+            if s.codigo not in arquivos:
+                continue
             df = pd.read_csv(arquivos[s.codigo], parse_dates=["mes"])
             df["valor"] = pd.to_numeric(df["valor"], errors="coerce")
         else:
@@ -571,7 +577,11 @@ def _aba_metodologia(
             "secundário não entram de novo na soma. "
             "O mensal de derivativos (12487) e o das linhas LTEL (28724) "
             "nascem um mês depois das séries diárias 12485 e 28723; o "
-            "fechamento diário preenche esse primeiro mês (mai/2002 e abr/2020).",
+            "fechamento diário preenche esse primeiro mês (mai/2002 e abr/2020). "
+            "Na década de 1990 entram também assistência financeira (1812), "
+            "PROER (1813), PROES (1814) e depósitos de fundos (1816) — "
+            "fatores descontinuados, sem os quais a identidade não fecha "
+            "em 1996–1999.",
         ),
         (
             "Sinal",
@@ -582,7 +592,7 @@ def _aba_metodologia(
         (
             "Abas",
             "Discriminativo — um ano por linha, um fator por coluna, "
-            f"e a coluna «{COL_VARIACAO}» = soma algébrica dos oito fatores "
+            f"e a coluna «{COL_VARIACAO}» = soma algébrica dos fatores oficiais "
             "(fórmula Excel SOMA, sem primário/secundário). "
             "Anual — a mesma informação transposta (fatores nas linhas). "
             "Dezembro — fluxo só do mês de dezembro. "
@@ -595,17 +605,19 @@ def _aba_metodologia(
         (
             "1995–2025",
             "Anos civis fechados (dezembro). O Real já é a unidade em todo "
-            "o painel (Plano Real em julho/1994). Derivativos (12487) só "
-            "existem a partir de 2002 e as linhas LTEL (28724) a partir de "
-            "2020; nos anos anteriores o fator entra como zero. Primário e "
-            "secundário de títulos (29004/29006) existem desde 2015.",
+            "o painel (Plano Real em julho/1994). Assistência financeira, "
+            "PROER, PROES e depósitos de fundos cobrem 1995–2000 e depois "
+            "saem (zero). Derivativos (12487) desde 2002; LTEL (28724) desde "
+            "2020; primário/secundário de títulos (29004/29006) desde 2015.",
         ),
         (
             "Resíduos conhecidos",
-            "A identidade anual Σ fatores = Δ estoque é conferida mês a mês. "
-            "2002 e 2020 fecham após o preenchimento do primeiro mês das "
-            "séries diárias (derivativos e LTEL). Eventuais resíduos de "
-            "revisão do SGS aparecem na aba Identidade.",
+            "Com o catálogo completo, 1996–1999 e 2001–2025 fecham "
+            "(resíduo anual < R$ 15 milhões). Exceções: 1995 "
+            "(~R$ 4,2 bilhões em nov/1995, mês de largada do PROER — "
+            "a série mensal 1813 só começa em dez/1995) e 2000 "
+            "(~R$ 8 milhões, revisão). 2002 e 2020 fecham após o "
+            "preenchimento do primeiro mês das séries diárias.",
         ),
     ]
     _cab(ws, ["Campo", "Descrição"], 3)
@@ -824,8 +836,8 @@ def _aba_discriminativo(
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=ultima_col)
     ws["A2"] = (
         "Cada linha é um ano. As colunas dos fatores são o fluxo acumulado no ano "
-        f"(R$ milhões). A coluna «{COL_VARIACAO}» é a soma algébrica dos oito "
-        "fatores (fórmula SOMA; primário e secundário são detalhe do total de "
+        f"(R$ milhões). A coluna «{COL_VARIACAO}» é a soma algébrica dos "
+        "fatores oficiais (fórmula SOMA; primário e secundário são detalhe do total de "
         "títulos e não entram de novo). Anos civis fechados até dezembro. "
         "Valores negativos: sinal − em vermelho negrito, com fundo vermelho."
     )
@@ -922,7 +934,7 @@ def _aba_discriminativo(
         tot + 2,
         1,
         "Valores em R$ milhões. Verde = expansão; vermelho = contração. "
-        f"«{COL_VARIACAO}» = SOMA algébrica das oito colunas de fatores da mesma linha. "
+        f"«{COL_VARIACAO}» = SOMA algébrica das colunas de fatores da mesma linha. "
         "Negativos: sinal − vermelho negrito sobre fundo vermelho.",
     ).font = Font(name="Calibri", size=8, italic=True, color="666666")
 
