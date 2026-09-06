@@ -7,6 +7,7 @@ __pycache__/
 
 # Dados brutos / intermediários (grandes)
 data/raw/
+data/sgs/
 data/contagil_winpython/
 data/*.csv
 data/*.parquet
