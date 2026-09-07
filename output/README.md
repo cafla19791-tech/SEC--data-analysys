@@ -83,3 +83,12 @@ python3 scripts/gerar_relatorio_petrobras_20f.py
 ```
 
 - `relatorio_petrobras_20f_divida_juros_lucro.md` / `.pdf`
+
+Relatório do Acórdão TCU 1.839/2018-Plenário (Rnest, Comperj, Premium), com as
+tabelas do processo e o cruzamento com dívida, juros e lucro dos 20-F:
+
+```bash
+python3 scripts/gerar_relatorio_acordao_1839_2018.py
+```
+
+- `relatorio_acordao_1839_2018_petrobras.md` / `.pdf`

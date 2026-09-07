@@ -143,6 +143,7 @@ streamlit run app.py
 | `output/petrobras_lucro_liquido_20f_2002_2026.*` | Lucro líquido Petrobras nos 20-F 2002–2025 + 6-K 1S2026 |
 | `output/conversas_petrobras_20f_2026-09-01.pdf` | Transcrição das conversas de 1º/set/2026 sobre Petrobras 20-F |
 | `output/relatorio_petrobras_20f_divida_juros_lucro.md` / `.pdf` | Relatório formal: dívida bruta, juros pagos e lucro líquido (tabelas dos 20-F) |
+| `output/relatorio_acordao_1839_2018_petrobras.md` / `.pdf` | Relatório do Acórdão TCU 1.839/2018 (tabelas do processo + cruzamento 20-F) |
 | `grafico_interativo.html` | Impacto fiscal por ano (Plotly) |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
 
