@@ -34,6 +34,7 @@ output/*_stats.json
 !output/impacto_fiscal_por_ano_polars.csv
 !output/totais_gerais_polars.csv
 !output/RELATORIO_EXECUTIVO.md
+!output/politica_economica_contas_governo_1999_2025.md
 !output/desembolsos_1995_2001_ipca.md
 !output/desembolsos_1995_2001_ipca.xlsx
 !output/montantes_contratos_indiretas_2002_2026.csv
