@@ -1,0 +1,26 @@
+ano,metodologia,periodo_ref,dbgg_estoque_rs_mi,dbgg_pib_pct,pib_rs_mi,variacao_dbgg_pib_pp,juros_nominais_rs_mi,emissoes_liquidas_rs_mi,reconhecimento_privatizacoes_rs_mi,efeito_cambial_rs_mi,demais_ajustes_rs_mi,efeito_pib_nominal_rs_mi_equiv,juros_nominais_pp,emissoes_liquidas_pp,reconhecimento_privatizacoes_pp,efeito_cambial_pp,demais_ajustes_pp,efeito_pib_nominal_pp,fonte
+2002,antiga_ate_2007,ano,1132894,76.1,1488691.2,8.8,182563,-77506,2843,139087,,-116117.9,12.3,-5.2,0.2,9.3,,-7.8,BCB NT47 Tabela 8
+2003,antiga_ate_2007,ano,1228569,71.5,1718278.3,-4.6,179231,-20134,-14446,-48976,,-173546.1,10.4,-1.2,-0.8,-2.9,,-10.1,BCB NT47 Tabela 8
+2004,antiga_ate_2007,ano,1331761,68.0,1958472.1,-3.5,171251,-58570,5837,-15327,,-170387.1,8.7,-3.0,0.3,-0.8,,-8.7,BCB NT47 Tabela 8
+2005,antiga_ate_2007,ano,1453608,67.0,2169564.2,-1.0,206612,-46022,-4975,-33769,,-143191.2,9.5,-2.1,-0.2,-1.6,,-6.6,BCB NT47 Tabela 8
+2006,atual_desde_2008,ano,1336645,55.5,2408369.4,,,,,,,,,,,,,,BCB NT47 Tabela 7 (estoque base)
+2007,atual_desde_2008,ano,1542852,56.7,2721079.4,1.2,179139,42958,4448,-20338,,-176870.2,6.6,1.6,0.2,-0.7,,-6.5,BCB NT47 Tabela 7
+2008,atual_desde_2008,ano,1740888,56.0,3108728.6,-0.7,200938,-41963,3250,35811,,-223828.5,6.5,-1.3,0.1,1.2,,-7.2,BCB NT47 Tabela 7
+2009,atual_desde_2008,ano,1973424,59.2,3333486.5,3.2,191448,74329,1902,-35142,,-123339.0,5.7,2.2,0.1,-1.1,,-3.7,BCB NT47 Tabela 7
+2010,atual_desde_2008,ano,2011522,51.8,3883247.1,-7.4,216532,-180863,4715,-2287,,-322309.5,5.6,-4.7,0.1,-0.1,,-8.3,BCB NT47 Tabela 7
+2011,atual_desde_2008,ano,2243604,51.3,4373497.1,-0.5,253788,-40150,7406,11039,,-258036.3,5.8,-0.9,0.2,0.3,,-5.9,BCB NT47 Tabela 7
+2012,atual_desde_2008,ano,2583946,53.7,4811817.5,2.4,248927,77676,3476,10264,,-226155.4,5.2,1.6,0.1,0.2,,-4.7,BCB NT47 Tabela 7
+2013,atual_desde_2008,ano,2747997,51.5,5335916.5,-2.2,273207,-130876,785,20934,,-277467.7,5.1,-2.5,0.0,0.4,,-5.2,BCB NT47 Tabela 7
+2014,atual_desde_2008,ano,3252449,56.3,5776996.4,4.8,313211,168707,0,22534,,-225302.9,5.4,2.9,0.0,0.4,,-3.9,BCB NT47 Tabela 7
+2015,atual_desde_2008,ano,3927523,65.5,5996218.3,9.2,446963,135833,5717,86562,,-125920.6,7.5,2.3,0.1,1.4,,-2.1,BCB NT47 Tabela 7
+2016,atual_desde_2008,ano,4378486,70.0,6254980.0,4.5,511619,-18513,6464,-48607,,-168884.5,8.2,-0.3,0.1,-0.8,,-2.7,BCB NT47 Tabela 7
+2017,atual_desde_2008,ano,4854679,74.0,6560377.0,4.0,439776,24692,9123,2601,,-209932.1,6.7,0.4,0.1,0.0,,-3.2,BCB NT47 Tabela 7
+2018,atual_desde_2008,ano,5272000,76.7,6873533.2,2.6,405538.5,,,48114.7,-34367.7,-240573.7,5.9,,,0.7,-0.5,-3.5,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2019,atual_desde_2008,ano,5500100,75.8,7256068.6,-0.8,406339.8,-195913.9,,14512.1,,-282986.7,5.6,-2.7,,0.2,,-3.9,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2020,atual_desde_2008,ano,6615800,89.3,7408510.6,15.0,348200.0,674174.5,,96310.6,-7408.5,,4.7,9.1,,1.3,-0.1,,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2021,atual_desde_2008,ano,7000000,80.3,8717310.1,-8.3,505604.0,-183063.5,,34869.2,,-1072229.1,5.8,-2.1,,0.4,,-12.3,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2022,atual_desde_2008,ano,7200000,73.5,9795918.4,-4.8,734693.9,-440816.3,,,-29387.8,-734693.9,7.5,-4.5,,,-0.3,-7.5,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2023,atual_desde_2008,ano,8100000,74.3,10901749.7,2.7,817631.2,65410.5,,-32705.2,,-566891.0,7.5,0.6,,-0.3,,-5.2,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2024,atual_desde_2008,ano,9000000,76.1,11826544.0,2.2,886990.8,-106438.9,35479.6,118265.4,-23653.1,-638633.4,7.5,-0.9,0.3,1.0,-0.2,-5.4,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2025,atual_desde_2008,ano,10000000,78.7,12706480.3,2.4,1130876.7,-38119.4,25413.0,-63532.4,-25413.0,-724269.4,8.9,-0.3,0.2,-0.5,-0.2,-5.7,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
+2026,atual_desde_2008,ate_jul,10900000,82.5,13212121.2,3.9,753090.9,198181.8,,-39636.4,,-409575.8,5.7,1.5,,-0.3,,-3.1,BCB Nota Estatísticas Fiscais (pp convertidos via PIB implícito estoque/pct)
