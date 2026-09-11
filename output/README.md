@@ -10,6 +10,7 @@ python3 scripts/gerar_fluxos.py --download --baixar-selic
 
 Arquivos principais:
 
+- `dbgg_fatores_condicionantes_2002_2026.csv` / `.md` — discriminativo anual dos fatores condicionantes da DBGG (BCB NT 47 + Notas de Estatísticas Fiscais)
 - `fluxos_completos_final.xlsx` — abas Resumo, **Por_Agente**, Impacto_Mensal, Amostra_Parcelas (run completo 2009–2010)
 - `resumo_por_agente.csv` / `.xlsx` — ranking por Instituição Financeira Credenciada
 - `impacto_fiscal_por_ano.xlsx` / `.csv` — impacto capitalizado até 30/06/2026 por ano de pagamento
