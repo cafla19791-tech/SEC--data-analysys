@@ -1,0 +1,854 @@
+codigo_ibge,codigo_tse,nome_municipio,codigo_meso,nome_meso,codigo_micro,nome_micro
+3104502,40894,Arinos,1,Noroeste de Minas,1,Unaí
+3108206,41637,Bonfinópolis de Minas,1,Noroeste de Minas,1,Unaí
+3109303,41858,Buritis,1,Noroeste de Minas,1,Unaí
+3109451,41785,Cabeceira Grande,1,Noroeste de Minas,1,Unaí
+3122470,42048,Dom Bosco,1,Noroeste de Minas,1,Unaí
+3126208,45233,Formoso,1,Noroeste de Minas,1,Unaí
+3144375,41106,Natalândia,1,Noroeste de Minas,1,Unaí
+3170404,54070,Unaí,1,Noroeste de Minas,1,Unaí
+3170479,42463,Uruana de Minas,1,Noroeste de Minas,1,Unaí
+3108552,40045,Brasilândia de Minas,1,Noroeste de Minas,2,Paracatu
+3128600,45713,Guarda-Mor,1,Noroeste de Minas,2,Paracatu
+3136306,47252,João Pinheiro,1,Noroeste de Minas,2,Paracatu
+3137106,47414,Lagamar,1,Noroeste de Minas,2,Paracatu
+3137536,40347,Lagoa Grande,1,Noroeste de Minas,2,Paracatu
+3147006,49395,Paracatu,1,Noroeste de Minas,2,Paracatu
+3153400,50679,Presidente Olegário,1,Noroeste de Minas,2,Paracatu
+3161700,52337,São Gonçalo do Abaeté,1,Noroeste de Minas,2,Paracatu
+3170750,42501,Varjão de Minas,1,Noroeste de Minas,2,Paracatu
+3171006,54194,Vazante,1,Noroeste de Minas,2,Paracatu
+3108255,41742,Bonito de Minas,2,Norte de Minas,3,Januária
+3116159,41882,Chapada Gaúcha,2,Norte de Minas,3,Januária
+3117836,41904,Cônego Marinho,2,Norte de Minas,3,Januária
+3130051,40240,Icaraí de Minas,2,Norte de Minas,3,Januária
+3132107,46418,Itacarambi,2,Norte de Minas,3,Januária
+3135209,47031,Januária,2,Norte de Minas,3,Januária
+3136959,40940,Juvenília,2,Norte de Minas,3,Januária
+3139300,47856,Manga,2,Norte de Minas,3,Januária
+3140852,40444,Matias Cardoso,2,Norte de Minas,3,Januária
+3142254,41068,Miravânia,2,Norte de Minas,3,Januária
+3142700,48534,Montalvânia,2,Norte de Minas,3,Januária
+3149150,40541,Pedras de Maria da Cruz,2,Norte de Minas,3,Januária
+3150570,41386,Pintópolis,2,Norte de Minas,3,Januária
+3161106,52213,São Francisco,2,Norte de Minas,3,Januária
+3162450,41602,São João das Missões,2,Norte de Minas,3,Januária
+3170529,40886,Urucuia,2,Norte de Minas,3,Januária
+3115474,41866,Catuti,2,Norte de Minas,4,Janaúba
+3124302,44857,Espinosa,2,Norte de Minas,4,Janaúba
+3127339,42102,Gameleiras,2,Norte de Minas,4,Janaúba
+3135100,47015,Janaúba,2,Norte de Minas,4,Janaúba
+3135050,40282,Jaíba,2,Norte de Minas,4,Janaúba
+3139250,40401,Mamonas,2,Norte de Minas,4,Janaúba
+3141009,48194,Mato Verde,2,Norte de Minas,4,Janaúba
+3142908,48577,Monte Azul,2,Norte de Minas,4,Janaúba
+3145059,41165,Nova Porteirinha,2,Norte de Minas,4,Janaúba
+3146552,41289,Pai Pedro,2,Norte de Minas,4,Janaúba
+3152204,50431,Porteirinha,2,Norte de Minas,4,Janaúba
+3154507,50890,Riacho dos Machados,2,Norte de Minas,4,Janaúba
+3166956,42382,Serranópolis de Minas,2,Norte de Minas,4,Janaúba
+3106655,41726,Berizal,2,Norte de Minas,5,Salinas
+3120870,42005,Curral de Dentro,2,Norte de Minas,5,Salinas
+3122355,40126,Divisa Alegre,2,Norte de Minas,5,Salinas
+3127073,42080,Fruta de Leite,2,Norte de Minas,5,Salinas
+3130655,42242,Indaiabira,2,Norte de Minas,5,Salinas
+3143450,40460,Montezuma,2,Norte de Minas,5,Salinas
+3144656,41122,Ninheira,2,Norte de Minas,5,Salinas
+3145372,41181,Novorizonte,2,Norte de Minas,5,Salinas
+3155603,51110,Rio Pardo de Minas,2,Norte de Minas,5,Salinas
+3156502,51292,Rubelita,2,Norte de Minas,5,Salinas
+3157005,51390,Salinas,2,Norte de Minas,5,Salinas
+3157377,41483,Santa Cruz de Salinas,2,Norte de Minas,5,Salinas
+3160454,41521,Santo Antônio do Retiro,2,Norte de Minas,5,Salinas
+3162708,52531,São João do Paraíso,2,Norte de Minas,5,Salinas
+3168002,53597,Taiobeiras,2,Norte de Minas,5,Salinas
+3170651,42480,Vargem Grande do Rio Pardo,2,Norte de Minas,5,Salinas
+3101003,40193,Águas Vermelhas,2,Norte de Minas,5,Salinas
+3109402,41874,Buritizeiro,2,Norte de Minas,6,Pirapora
+3129608,45918,Ibiaí,2,Norte de Minas,6,Pirapora
+3135605,47112,Jequitaí,2,Norte de Minas,6,Pirapora
+3137304,47457,Lagoa dos Patos,2,Norte de Minas,6,Pirapora
+3138104,47619,Lassance,2,Norte de Minas,6,Pirapora
+3151206,50237,Pirapora,2,Norte de Minas,6,Pirapora
+3154457,40606,Riachinho,2,Norte de Minas,6,Pirapora
+3157609,51519,Santa Fé de Minas,2,Norte de Minas,6,Pirapora
+3164209,52833,São Romão,2,Norte de Minas,6,Pirapora
+3170800,54151,Várzea da Palma,2,Norte de Minas,6,Pirapora
+3108602,41718,Brasília de Minas,2,Norte de Minas,7,Montes Claros
+3111150,41807,Campo Azul,2,Norte de Minas,7,Montes Claros
+3112703,42536,Capitão Enéas,2,Norte de Minas,7,Montes Claros
+3116506,43290,Claro dos Poções,2,Norte de Minas,7,Montes Claros
+3118809,43753,Coração de Jesus,2,Norte de Minas,7,Montes Claros
+3126703,45330,Francisco Sá,2,Norte de Minas,7,Montes Claros
+3127354,42129,Glaucilândia,2,Norte de Minas,7,Montes Claros
+3129657,42200,Ibiracatu,2,Norte de Minas,7,Montes Claros
+3135357,42269,Japonvar,2,Norte de Minas,7,Montes Claros
+3136801,47350,Juramento,2,Norte de Minas,7,Montes Claros
+3138658,40380,Lontra,2,Norte de Minas,7,Montes Claros
+3138682,41009,Luislândia,2,Norte de Minas,7,Montes Claros
+3142007,48399,Mirabela,2,Norte de Minas,7,Montes Claros
+3143302,48658,Montes Claros,2,Norte de Minas,7,Montes Claros
+3147956,41300,Patis,2,Norte de Minas,7,Montes Claros
+3152131,41408,Ponto Chique,2,Norte de Minas,7,Montes Claros
+3162252,40703,São João da Lagoa,2,Norte de Minas,7,Montes Claros
+3162401,52477,São João da Ponte,2,Norte de Minas,7,Montes Claros
+3162658,40762,São João do Pacuí,2,Norte de Minas,7,Montes Claros
+3170008,53996,Ubaí,2,Norte de Minas,7,Montes Claros
+3170909,54178,Varzelândia,2,Norte de Minas,7,Montes Claros
+3171030,42528,Verdelândia,2,Norte de Minas,7,Montes Claros
+3108503,41696,Botumirim,2,Norte de Minas,8,Grão Mogol
+3120300,44059,Cristália,2,Norte de Minas,8,Grão Mogol
+3127800,45551,Grão Mogol,2,Norte de Minas,8,Grão Mogol
+3132008,46396,Itacambira,2,Norte de Minas,8,Grão Mogol
+3136579,40924,Josenópolis,2,Norte de Minas,8,Grão Mogol
+3146255,41262,Padre Carvalho,2,Norte de Minas,8,Grão Mogol
+3107307,41459,Bocaiúva,2,Norte de Minas,9,Bocaiúva
+3123809,44750,Engenheiro Navarro,2,Norte de Minas,9,Bocaiúva
+3126604,45314,Francisco Dumont,2,Norte de Minas,9,Bocaiúva
+3128253,42188,Guaraciama,2,Norte de Minas,9,Bocaiúva
+3145455,41203,Olhos-d'Água,2,Norte de Minas,9,Bocaiúva
+3120102,44016,Couto de Magalhães de Minas,3,Jequitinhonha,10,Diamantina
+3121001,44199,Datas,3,Jequitinhonha,10,Diamantina
+3121605,44318,Diamantina,3,Jequitinhonha,10,Diamantina
+3125408,45071,Felício dos Santos,3,Jequitinhonha,10,Diamantina
+3127602,45519,Gouveia,3,Jequitinhonha,10,Diamantina
+3153301,50652,Presidente Kubitschek,3,Jequitinhonha,10,Diamantina
+3165909,53171,Senador Modestino Gonçalves,3,Jequitinhonha,10,Diamantina
+3125507,45098,São Gonçalo do Rio Preto,3,Jequitinhonha,10,Diamantina
+3102852,41688,Angelândia,3,Jequitinhonha,11,Capelinha
+3104452,41700,Aricanduva,3,Jequitinhonha,11,Capelinha
+3106507,41297,Berilo,3,Jequitinhonha,11,Capelinha
+3112307,42455,Capelinha,3,Jequitinhonha,11,Capelinha
+3113503,42692,Carbonita,3,Jequitinhonha,11,Capelinha
+3116100,43214,Chapada do Norte,3,Jequitinhonha,11,Capelinha
+3126505,45292,Francisco Badaró,3,Jequitinhonha,11,Capelinha
+3132503,46493,Itamarandiba,3,Jequitinhonha,11,Capelinha
+3135456,42285,Jenipapo de Minas,3,Jequitinhonha,11,Capelinha
+3136520,42307,José Gonçalves de Minas,3,Jequitinhonha,11,Capelinha
+3138351,40967,Leme do Prado,3,Jequitinhonha,11,Capelinha
+3141801,48356,Minas Novas,3,Jequitinhonha,11,Capelinha
+3169703,53937,Turmalina,3,Jequitinhonha,11,Capelinha
+3171071,42544,Veredinha,3,Jequitinhonha,11,Capelinha
+3103405,40673,Araçuaí,3,Jequitinhonha,12,Araçuaí
+3113008,42595,Caraí,3,Jequitinhonha,12,Araçuaí
+3119500,43893,Coronel Murta,3,Jequitinhonha,12,Araçuaí
+3134004,46795,Itinga,3,Jequitinhonha,12,Araçuaí
+3145307,49050,Novo Cruzeiro,3,Jequitinhonha,12,Araçuaí
+3146305,49255,Padre Paraíso,3,Jequitinhonha,12,Araçuaí
+3152170,40584,Ponto dos Volantes,3,Jequitinhonha,12,Araçuaí
+3171600,54330,Virgem da Lapa,3,Jequitinhonha,12,Araçuaí
+3102704,40533,Cachoeira de Pajeú,3,Jequitinhonha,13,Pedra Azul
+3117009,43397,Comercinho,3,Jequitinhonha,13,Pedra Azul
+3133303,46655,Itaobim,3,Jequitinhonha,13,Pedra Azul
+3141405,48275,Medina,3,Jequitinhonha,13,Pedra Azul
+3148707,49735,Pedra Azul,3,Jequitinhonha,13,Pedra Azul
+3101706,40339,Almenara,3,Jequitinhonha,14,Almenara
+3105202,41033,Bandeira,3,Jequitinhonha,14,Almenara
+3122454,40142,Divisópolis,3,Jequitinhonha,14,Almenara
+3125606,45110,Felisburgo,3,Jequitinhonha,14,Almenara
+3134707,46930,Jacinto,3,Jequitinhonha,14,Almenara
+3135803,47155,Jequitinhonha,3,Jequitinhonha,14,Almenara
+3136009,47198,Joaíma,3,Jequitinhonha,14,Almenara
+3136504,47295,Jordânia,3,Jequitinhonha,14,Almenara
+3140555,40428,Mata Verde,3,Jequitinhonha,14,Almenara
+3143153,41084,Monte Formoso,3,Jequitinhonha,14,Almenara
+3146750,40525,Palmópolis,3,Jequitinhonha,14,Almenara
+3155108,51012,Rio do Prado,3,Jequitinhonha,14,Almenara
+3156601,51314,Rubim,3,Jequitinhonha,14,Almenara
+3157104,51411,Salto da Divisa,3,Jequitinhonha,14,Almenara
+3158102,51616,Santa Maria do Salto,3,Jequitinhonha,14,Almenara
+3160306,52051,Santo Antônio do Jacinto,3,Jequitinhonha,14,Almenara
+3104700,40932,Ataléia,4,Vale do Mucuri,15,Teófilo Otoni
+3115458,40100,Catuji,4,Vale do Mucuri,15,Teófilo Otoni
+3126752,40223,Franciscópolis,4,Vale do Mucuri,15,Teófilo Otoni
+3126802,45357,Frei Gaspar,4,Vale do Mucuri,15,Teófilo Otoni
+3132305,46450,Itaipé,4,Vale do Mucuri,15,Teófilo Otoni
+3137007,47392,Ladainha,4,Vale do Mucuri,15,Teófilo Otoni
+3139201,47830,Malacacheta,4,Vale do Mucuri,15,Teófilo Otoni
+3145356,40509,Novo Oriente de Minas,4,Vale do Mucuri,15,Teófilo Otoni
+3146206,49239,Ouro Verde de Minas,4,Vale do Mucuri,15,Teófilo Otoni
+3148509,49697,Pavão,4,Vale do Mucuri,15,Teófilo Otoni
+3152402,50474,Poté,4,Vale do Mucuri,15,Teófilo Otoni
+3165552,42404,Setubinha,4,Vale do Mucuri,15,Teófilo Otoni
+3168606,53716,Teófilo Otoni,4,Vale do Mucuri,15,Teófilo Otoni
+3106606,41319,Bertópolis,4,Vale do Mucuri,16,Nanuque
+3113701,42730,Carlos Chagas,4,Vale do Mucuri,16,Nanuque
+3120151,41963,Crisólita,4,Vale do Mucuri,16,Nanuque
+3127057,49352,Fronteira dos Vales,4,Vale do Mucuri,16,Nanuque
+3138906,47775,Machacalis,4,Vale do Mucuri,16,Nanuque
+3144300,48852,Nanuque,4,Vale do Mucuri,16,Nanuque
+3157658,41505,Santa Helena de Minas,4,Vale do Mucuri,16,Nanuque
+3166709,53333,Serra dos Aimorés,4,Vale do Mucuri,16,Nanuque
+3170305,54054,Umburatiba,4,Vale do Mucuri,16,Nanuque
+3100906,40177,Águas Formosas,4,Vale do Mucuri,16,Nanuque
+3109808,41955,Cachoeira Dourada,5,Triângulo Mineiro / Alto Paranaíba,17,Ituiutaba
+3112604,42510,Capinópolis,5,Triângulo Mineiro / Alto Paranaíba,17,Ituiutaba
+3129103,45810,Gurinhatã,5,Triângulo Mineiro / Alto Paranaíba,17,Ituiutaba
+3131406,46272,Ipiaçu,5,Triângulo Mineiro / Alto Paranaíba,17,Ituiutaba
+3134202,46833,Ituiutaba,5,Triângulo Mineiro / Alto Paranaíba,17,Ituiutaba
+3159803,51950,Santa Vitória,5,Triângulo Mineiro / Alto Paranaíba,17,Ituiutaba
+3103504,40690,Araguari,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3103751,40029,Araporã,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3111804,42358,Canápolis,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3115003,42994,Cascalho Rico,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3115805,43150,Centralina,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3130705,46132,Indianópolis,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3142809,48550,Monte Alegre de Minas,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3152808,50555,Prata,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3169604,53910,Tupaciguara,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3170206,54038,Uberlândia,5,Triângulo Mineiro / Alto Paranaíba,18,Uberlândia
+3100104,40010,Abadia dos Dourados,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3119302,43850,Coromandel,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3120706,44130,Cruzeiro da Fortaleza,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3123502,44695,Douradoquara,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3124807,44954,Estrela do Sul,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3127909,45578,Grupiara,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3131604,46310,Iraí de Minas,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3143104,48615,Monte Carmelo,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3148103,49611,Patrocínio,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3156403,51276,Romaria,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3166808,53350,Serra do Salitre,5,Triângulo Mineiro / Alto Paranaíba,19,Patrocínio
+3103801,40754,Arapuá,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3114303,42854,Carmo do Paranaíba,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3128907,45772,Guimarânia,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3137502,47490,Lagoa Formosa,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3141207,48232,Matutina,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3148004,49590,Patos de Minas,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3155504,51098,Rio Paranaíba,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3159704,51934,Santa Rosa da Serra,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3162104,52418,São Gotardo,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3168903,53775,Tiros,5,Triângulo Mineiro / Alto Paranaíba,20,Patos de Minas
+3111101,42218,Campina Verde,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3114550,40088,Carneirinho,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3116902,43370,Comendador Gomes,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3127008,45390,Fronteira,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3127107,45411,Frutal,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3133402,46671,Itapagipe,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3134400,46876,Iturama,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3138625,40363,Limeira do Oeste,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3150703,50130,Pirajuba,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3151602,50318,Planura,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3161304,52256,São Francisco de Sales,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3170438,42447,União de Minas,5,Triângulo Mineiro / Alto Paranaíba,21,Frutal
+3111408,42277,Campo Florido,5,Triângulo Mineiro / Alto Paranaíba,22,Uberaba
+3117306,43451,Conceição das Alagoas,5,Triângulo Mineiro / Alto Paranaíba,22,Uberaba
+3118205,43630,Conquista,5,Triângulo Mineiro / Alto Paranaíba,22,Uberaba
+3121258,42021,Delta,5,Triângulo Mineiro / Alto Paranaíba,22,Uberaba
+3170107,54011,Uberaba,5,Triângulo Mineiro / Alto Paranaíba,22,Uberaba
+3171105,54232,Veríssimo,5,Triângulo Mineiro / Alto Paranaíba,22,Uberaba
+3100708,40134,Água Comprida,5,Triângulo Mineiro / Alto Paranaíba,22,Uberaba
+3104007,40797,Araxá,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3111507,42293,Campos Altos,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3129509,45896,Ibiá,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3145000,48992,Nova Ponte,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3149200,49832,Pedrinópolis,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3149804,49956,Perdizes,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3153004,50598,Pratinha,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3156908,51373,Sacramento,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3157708,51535,Santa Juliana,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3168101,53619,Tapira,5,Triângulo Mineiro / Alto Paranaíba,23,Araxá
+3100203,40037,Abaeté,6,Central Mineira,24,Três Marias
+3107000,41394,Biquinhas,6,Central Mineira,24,Três Marias
+3115607,43117,Cedro do Abaeté,6,Central Mineira,24,Três Marias
+3143500,48690,Morada Nova de Minas,6,Central Mineira,24,Três Marias
+3146404,49271,Paineiras,6,Central Mineira,24,Três Marias
+3152006,50393,Pompéu,6,Central Mineira,24,Três Marias
+3169356,41157,Três Marias,6,Central Mineira,24,Três Marias
+3104809,40959,Augusto de Lima,6,Central Mineira,25,Curvelo
+3109204,41831,Buenópolis,6,Central Mineira,25,Curvelo
+3119104,43818,Corinto,6,Central Mineira,25,Curvelo
+3120904,44172,Curvelo,6,Central Mineira,25,Curvelo
+3125705,45136,Felixlândia,6,Central Mineira,25,Curvelo
+3131109,46213,Inimutaba,6,Central Mineira,25,Curvelo
+3136405,47279,Joaquim Felício,6,Central Mineira,25,Curvelo
+3142502,48496,Monjolos,6,Central Mineira,25,Curvelo
+3143609,48712,Morro da Garça,6,Central Mineira,25,Curvelo
+3153202,50636,Presidente Juscelino,6,Central Mineira,25,Curvelo
+3160603,52116,Santo Hipólito,6,Central Mineira,25,Curvelo
+3103900,40770,Araújos,6,Central Mineira,26,Bom Despacho
+3107406,41475,Bom Despacho,6,Central Mineira,26,Bom Despacho
+3123205,44636,Dores do Indaiá,6,Central Mineira,26,Bom Despacho
+3124708,44938,Estrela do Indaiá,6,Central Mineira,26,Bom Despacho
+3135308,47058,Japaraíba,6,Central Mineira,26,Bom Despacho
+3137205,47430,Lagoa da Prata,6,Central Mineira,26,Bom Despacho
+3138302,47651,Leandro Ferreira,6,Central Mineira,26,Bom Despacho
+3138807,47759,Luz,6,Central Mineira,26,Bom Despacho
+3140506,48097,Martinho Campos,6,Central Mineira,26,Bom Despacho
+3142403,48470,Moema,6,Central Mineira,26,Bom Despacho
+3153707,50733,Quartel Geral,6,Central Mineira,26,Bom Despacho
+3166600,53317,Serra da Saudade,6,Central Mineira,26,Bom Despacho
+3103207,40630,Araçaí,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3105004,40991,Baldim,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3109600,41912,Cachoeira da Prata,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3109907,41971,Caetanópolis,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3112505,42498,Capim Branco,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3118908,43770,Cordisburgo,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3126406,45276,Fortuna de Minas,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3127206,45438,Funilândia,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3131000,46191,Inhaúma,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3134608,46914,Jaboticatubas,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3135704,47139,Jequitibá,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3139706,47937,Maravilhas,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3141108,48216,Matozinhos,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3146909,49379,Papagaios,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3147402,49476,Paraopeba,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3149606,49913,Pequi,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3153608,50717,Prudente de Morais,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3158508,51691,Santana de Pirapama,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3159001,51799,Santana do Riacho,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3167202,53430,Sete Lagoas,7,Metropolitana de Belo Horizonte,27,Sete Lagoas
+3102407,40479,Alvorada de Minas,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3117504,43494,Conceição do Mato Dentro,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3118106,43613,Congonhas do Norte,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3122603,44512,Dom Joaquim,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3132800,46558,Itambé do Mato Dentro,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3143708,48739,Morro do Pilar,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3147501,49492,Passabém,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3156007,51195,Rio Vermelho,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3160207,52035,Santo Antônio do Itambé,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3160504,52094,Santo Antônio do Rio Abaixo,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3166501,53295,Serra Azul de Minas,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3167103,53414,Serro,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3164803,52957,São Sebastião do Rio Preto,7,Metropolitana de Belo Horizonte,28,Conceição do Mato Dentro
+3126000,45195,Florestal,7,Metropolitana de Belo Horizonte,29,Pará de Minas
+3145802,49158,Onça de Pitangui,7,Metropolitana de Belo Horizonte,29,Pará de Minas
+3147105,49417,Pará de Minas,7,Metropolitana de Belo Horizonte,29,Pará de Minas
+3151404,50270,Pitangui,7,Metropolitana de Belo Horizonte,29,Pará de Minas
+3163102,52612,São José da Varginha,7,Metropolitana de Belo Horizonte,29,Pará de Minas
+3106200,41238,Belo Horizonte,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3106705,41335,Betim,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3109006,41793,Brumadinho,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3110004,41998,Caeté,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3117876,41920,Confins,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3118601,43710,Contagem,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3124104,44814,Esmeraldas,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3129806,45950,Ibirité,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3130101,46019,Igarapé,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3136652,40320,Juatuba,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3137601,47511,Lagoa Santa,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3140704,48135,Mateus Leme,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3140159,41025,Mário Campos,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3144805,48950,Nova Lima,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3149309,49859,Pedro Leopoldo,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3153905,50776,Raposos,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3154606,50911,Ribeirão das Neves,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3154804,50954,Rio Acima,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3156700,51330,Sabará,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3157807,51551,Santa Luzia,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3165537,40800,Sarzedo,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3162922,41629,São Joaquim de Bicas,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3162955,40789,São José da Lapa,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3171204,54259,Vespasiano,7,Metropolitana de Belo Horizonte,30,Belo Horizonte
+3102308,40452,Alvinópolis,7,Metropolitana de Belo Horizonte,31,Itabira
+3105400,41076,Barão de Cocais,7,Metropolitana de Belo Horizonte,31,Itabira
+3106002,41190,Bela Vista de Minas,7,Metropolitana de Belo Horizonte,31,Itabira
+3107703,41530,Bom Jesus do Amparo,7,Metropolitana de Belo Horizonte,31,Itabira
+3115359,41840,Catas Altas,7,Metropolitana de Belo Horizonte,31,Itabira
+3121803,44350,Dionísio,7,Metropolitana de Belo Horizonte,31,Itabira
+3125903,45179,Ferros,7,Metropolitana de Belo Horizonte,31,Itabira
+3131703,46337,Itabira,7,Metropolitana de Belo Horizonte,31,Itabira
+3136207,47236,João Monlevade,7,Metropolitana de Belo Horizonte,31,Itabira
+3144706,48933,Nova Era,7,Metropolitana de Belo Horizonte,31,Itabira
+3136603,47317,Nova União,7,Metropolitana de Belo Horizonte,31,Itabira
+3155702,51136,Rio Piracicaba,7,Metropolitana de Belo Horizonte,31,Itabira
+3157203,51438,Santa Bárbara,7,Metropolitana de Belo Horizonte,31,Itabira
+3158003,51594,Santa Maria de Itabira,7,Metropolitana de Belo Horizonte,31,Itabira
+3161007,52191,São Domingos do Prata,7,Metropolitana de Belo Horizonte,31,Itabira
+3161908,52370,São Gonçalo do Rio Abaixo,7,Metropolitana de Belo Horizonte,31,Itabira
+3163409,52671,São José do Goiabal,7,Metropolitana de Belo Horizonte,31,Itabira
+3168309,53651,Taquaraçu de Minas,7,Metropolitana de Belo Horizonte,31,Itabira
+3106408,41270,Belo Vale,7,Metropolitana de Belo Horizonte,32,Itaguara
+3108107,41610,Bonfim,7,Metropolitana de Belo Horizonte,32,Itaguara
+3120607,44113,Crucilândia,7,Metropolitana de Belo Horizonte,32,Itaguara
+3132206,46434,Itaguara,7,Metropolitana de Belo Horizonte,32,Itaguara
+3133709,46736,Itatiaiuçu,7,Metropolitana de Belo Horizonte,32,Itaguara
+3135407,47074,Jeceaba,7,Metropolitana de Belo Horizonte,32,Itaguara
+3142304,48453,Moeda,7,Metropolitana de Belo Horizonte,32,Itaguara
+3150406,50075,Piedade dos Gerais,7,Metropolitana de Belo Horizonte,32,Itaguara
+3155306,51055,Rio Manso,7,Metropolitana de Belo Horizonte,32,Itaguara
+3121704,44334,Diogo de Vasconcelos,7,Metropolitana de Belo Horizonte,33,Ouro Preto
+3131901,46370,Itabirito,7,Metropolitana de Belo Horizonte,33,Ouro Preto
+3140001,47996,Mariana,7,Metropolitana de Belo Horizonte,33,Ouro Preto
+3146107,49212,Ouro Preto,7,Metropolitana de Belo Horizonte,33,Ouro Preto
+3114907,42978,Casa Grande,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3115409,43079,Catas Altas da Noruega,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3118007,43591,Congonhas,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3118304,43656,Conselheiro Lafaiete,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3120409,44075,Cristiano Otoni,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3121407,44270,Desterro de Entre Rios,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3123908,44776,Entre Rios de Minas,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3133907,46779,Itaverava,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3145901,49174,Ouro Branco,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3153806,50750,Queluzito,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3159100,51810,Santana dos Montes,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3160900,52175,São Brás do Suaçuí,7,Metropolitana de Belo Horizonte,34,Conselheiro Lafaiete
+3108800,41750,Braúnas,8,Vale do Rio Doce,35,Guanhães
+3113800,42757,Carmésia,8,Vale do Rio Doce,35,Guanhães
+3116803,43354,Coluna,8,Vale do Rio Doce,35,Guanhães
+3122207,44431,Divinolândia de Minas,8,Vale do Rio Doce,35,Guanhães
+3123106,44610,Dores de Guanhães,8,Vale do Rio Doce,35,Guanhães
+3127503,45497,Gonzaga,8,Vale do Rio Doce,35,Guanhães
+3128006,45594,Guanhães,8,Vale do Rio Doce,35,Guanhães
+3140605,48119,Materlândia,8,Vale do Rio Doce,35,Guanhães
+3148400,49670,Paulistas,8,Vale do Rio Doce,35,Guanhães
+3156809,51357,Sabinópolis,8,Vale do Rio Doce,35,Guanhães
+3157500,51497,Santa Efigênia de Minas,8,Vale do Rio Doce,35,Guanhães
+3165503,53090,Sardoá,8,Vale do Rio Doce,35,Guanhães
+3166105,53210,Senhora do Porto,8,Vale do Rio Doce,35,Guanhães
+3162807,52558,São João Evangelista,8,Vale do Rio Doce,35,Guanhães
+3171808,54372,Virginópolis,8,Vale do Rio Doce,35,Guanhães
+3112059,41823,Cantagalo,8,Vale do Rio Doce,36,Peçanha
+3126950,42064,Frei Lagonegro,8,Vale do Rio Doce,36,Peçanha
+3136553,42323,José Raydan,8,Vale do Rio Doce,36,Peçanha
+3148608,49719,Peçanha,8,Vale do Rio Doce,36,Peçanha
+3158201,51632,Santa Maria do Suaçuí,8,Vale do Rio Doce,36,Peçanha
+3163508,52698,São José do Jacuri,8,Vale do Rio Doce,36,Peçanha
+3164100,52817,São Pedro do Suaçuí,8,Vale do Rio Doce,36,Peçanha
+3164506,52892,São Sebastião do Maranhão,8,Vale do Rio Doce,36,Peçanha
+3100609,40118,Água Boa,8,Vale do Rio Doce,36,Peçanha
+3101805,40355,Alpercata,8,Vale do Rio Doce,37,Governador Valadares
+3110806,42153,Campanário,8,Vale do Rio Doce,37,Governador Valadares
+3112653,40061,Capitão Andrade,8,Vale do Rio Doce,37,Governador Valadares
+3119203,43834,Coroaci,8,Vale do Rio Doce,37,Governador Valadares
+3122108,44415,Divino das Laranjeiras,8,Vale do Rio Doce,37,Governador Valadares
+3123700,44733,Engenheiro Caldas,8,Vale do Rio Doce,37,Governador Valadares
+3125804,45152,Fernandes Tourinho,8,Vale do Rio Doce,37,Governador Valadares
+3126901,45373,Frei Inocêncio,8,Vale do Rio Doce,37,Governador Valadares
+3127305,45454,Galiléia,8,Vale do Rio Doce,37,Governador Valadares
+3127701,45535,Governador Valadares,8,Vale do Rio Doce,37,Governador Valadares
+3132701,46531,Itambacuri,8,Vale do Rio Doce,37,Governador Valadares
+3133204,46639,Itanhomi,8,Vale do Rio Doce,37,Governador Valadares
+3135076,40304,Jampruca,8,Vale do Rio Doce,37,Governador Valadares
+3140100,48011,Marilac,8,Vale do Rio Doce,37,Governador Valadares
+3171501,54313,Mathias Lobato,8,Vale do Rio Doce,37,Governador Valadares
+3144201,48836,Nacip Raydan,8,Vale do Rio Doce,37,Governador Valadares
+3144904,48976,Nova Módica,8,Vale do Rio Doce,37,Governador Valadares
+3150000,49999,Pescador,8,Vale do Rio Doce,37,Governador Valadares
+3167707,53538,Sobrália,8,Vale do Rio Doce,37,Governador Valadares
+3161601,52310,São Geraldo da Piedade,8,Vale do Rio Doce,37,Governador Valadares
+3161650,41580,São Geraldo do Baixio,8,Vale do Rio Doce,37,Governador Valadares
+3163003,52590,São José da Safira,8,Vale do Rio Doce,37,Governador Valadares
+3163300,52655,São José do Divino,8,Vale do Rio Doce,37,Governador Valadares
+3169505,53899,Tumiritinga,8,Vale do Rio Doce,37,Governador Valadares
+3171907,54399,Virgolândia,8,Vale do Rio Doce,37,Governador Valadares
+3115706,43133,Central de Minas,8,Vale do Rio Doce,38,Mantena
+3131802,46353,Itabirinha,8,Vale do Rio Doce,38,Mantena
+3139607,47910,Mantena,8,Vale do Rio Doce,38,Mantena
+3141504,48291,Mendes Pimentel,8,Vale do Rio Doce,38,Mantena
+3144672,41149,Nova Belém,8,Vale do Rio Doce,38,Mantena
+3161056,41564,São Félix de Minas,8,Vale do Rio Doce,38,Mantena
+3162575,40746,São João do Manteninha,8,Vale do Rio Doce,38,Mantena
+3103009,40592,Antônio Dias,8,Vale do Rio Doce,39,Ipatinga
+3100500,40096,Açucena,8,Vale do Rio Doce,39,Ipatinga
+3106309,41254,Belo Oriente,8,Vale do Rio Doce,39,Ipatinga
+3119401,43877,Coronel Fabriciano,8,Vale do Rio Doce,39,Ipatinga
+3131307,46256,Ipatinga,8,Vale do Rio Doce,39,Ipatinga
+3135001,46990,Jaguaraçu,8,Vale do Rio Doce,39,Ipatinga
+3136108,47210,Joanésia,8,Vale do Rio Doce,39,Ipatinga
+3140308,48054,Marliéria,8,Vale do Rio Doce,39,Ipatinga
+3141702,48330,Mesquita,8,Vale do Rio Doce,39,Ipatinga
+3144359,40487,Naque,8,Vale do Rio Doce,39,Ipatinga
+3149952,40568,Periquito,8,Vale do Rio Doce,39,Ipatinga
+3158953,40681,Santana do Paraíso,8,Vale do Rio Doce,39,Ipatinga
+3168705,53732,Timóteo,8,Vale do Rio Doce,39,Ipatinga
+3107802,41556,Bom Jesus do Galho,8,Vale do Rio Doce,40,Caratinga
+3109253,41769,Bugre,8,Vale do Rio Doce,40,Caratinga
+3113404,42676,Caratinga,8,Vale do Rio Doce,40,Caratinga
+3120003,43990,Córrego Novo,8,Vale do Rio Doce,40,Caratinga
+3122504,44490,Dom Cavati,8,Vale do Rio Doce,40,Caratinga
+3123858,40185,Entre Folhas,8,Vale do Rio Doce,40,Caratinga
+3129301,45853,Iapu,8,Vale do Rio Doce,40,Caratinga
+3130556,42226,Imbé de Minas,8,Vale do Rio Doce,40,Caratinga
+3130903,46175,Inhapim,8,Vale do Rio Doce,40,Caratinga
+3131158,40266,Ipaba,8,Vale do Rio Doce,40,Caratinga
+3150158,41343,Piedade de Caratinga,8,Vale do Rio Doce,40,Caratinga
+3150539,41360,Pingo d'Água,8,Vale do Rio Doce,40,Caratinga
+3157252,40649,Santa Bárbara do Leste,8,Vale do Rio Doce,40,Caratinga
+3159357,40665,Santa Rita de Minas,8,Vale do Rio Doce,40,Caratinga
+3160959,41548,São Domingos das Dores,8,Vale do Rio Doce,40,Caratinga
+3162609,52515,São João do Oriente,8,Vale do Rio Doce,40,Caratinga
+3164472,42366,São Sebastião do Anta,8,Vale do Rio Doce,40,Caratinga
+3168408,53678,Tarumirim,8,Vale do Rio Doce,40,Caratinga
+3170057,40860,Ubaporanga,8,Vale do Rio Doce,40,Caratinga
+3170578,40908,Vargem Alegre,8,Vale do Rio Doce,40,Caratinga
+3101102,40215,Aimorés,8,Vale do Rio Doce,41,Aimorés
+3102209,40436,Alvarenga,8,Vale do Rio Doce,41,Aimorés
+3117405,43478,Conceição de Ipanema,8,Vale do Rio Doce,41,Aimorés
+3118403,43672,Conselheiro Pena,8,Vale do Rio Doce,41,Aimorés
+3120839,41980,Cuparaque,8,Vale do Rio Doce,41,Aimorés
+3127370,42145,Goiabeira,8,Vale do Rio Doce,41,Aimorés
+3131208,46230,Ipanema,8,Vale do Rio Doce,41,Aimorés
+3134103,46817,Itueta,8,Vale do Rio Doce,41,Aimorés
+3144003,48798,Mutum,8,Vale do Rio Doce,41,Aimorés
+3151909,50377,Pocrane,8,Vale do Rio Doce,41,Aimorés
+3154309,50857,Resplendor,8,Vale do Rio Doce,41,Aimorés
+3159506,51896,Santa Rita do Itueto,8,Vale do Rio Doce,41,Aimorés
+3168051,42420,Taparuba,8,Vale do Rio Doce,41,Aimorés
+3105103,41017,Bambuí,9,Oeste de Minas,42,Piuí
+3119807,43958,Córrego Danta,9,Oeste de Minas,42,Piuí
+3123403,44679,Doresópolis,9,Oeste de Minas,42,Piuí
+3130309,46051,Iguatama,9,Oeste de Minas,42,Piuí
+3141306,48259,Medeiros,9,Oeste de Minas,42,Piuí
+3151503,50296,Piumhi,9,Oeste de Minas,42,Piuí
+3164308,52850,São Roque de Minas,9,Oeste de Minas,42,Piuí
+3168200,53635,Tapiraí,9,Oeste de Minas,42,Piuí
+3170602,54119,Vargem Bonita,9,Oeste de Minas,42,Piuí
+3114204,42838,Carmo do Cajuru,9,Oeste de Minas,43,Divinópolis
+3116605,43311,Cláudio,9,Oeste de Minas,43,Divinópolis
+3117603,43516,Conceição do Pará,9,Oeste de Minas,43,Divinópolis
+3122306,44458,Divinópolis,9,Oeste de Minas,43,Divinópolis
+3130200,46035,Igaratinga,9,Oeste de Minas,43,Divinópolis
+3133808,46752,Itaúna,9,Oeste de Minas,43,Divinópolis
+3145208,49034,Nova Serrana,9,Oeste de Minas,43,Divinópolis
+3149705,49930,Perdigão,9,Oeste de Minas,43,Divinópolis
+3160405,52078,Santo Antônio do Monte,9,Oeste de Minas,43,Divinópolis
+3161809,52353,São Gonçalo do Pará,9,Oeste de Minas,43,Divinópolis
+3164605,52914,São Sebastião do Oeste,9,Oeste de Minas,43,Divinópolis
+3104205,40835,Arcos,9,Oeste de Minas,44,Formiga
+3110400,42072,Camacho,9,Oeste de Minas,44,Formiga
+3119955,41947,Córrego Fundo,9,Oeste de Minas,44,Formiga
+3126109,45217,Formiga,9,Oeste de Minas,44,Formiga
+3133501,46698,Itapecerica,9,Oeste de Minas,44,Formiga
+3146503,49298,Pains,9,Oeste de Minas,44,Formiga
+3148905,49778,Pedra do Indaiá,9,Oeste de Minas,44,Formiga
+3150505,50091,Pimenta,9,Oeste de Minas,44,Formiga
+3100807,40150,Aguanil,9,Oeste de Minas,45,Campo Belo
+3111200,42234,Campo Belo,9,Oeste de Minas,45,Campo Belo
+3111903,42374,Cana Verde,9,Oeste de Minas,45,Campo Belo
+3112000,42390,Candeias,9,Oeste de Minas,45,Campo Belo
+3120201,44032,Cristais,9,Oeste de Minas,45,Campo Belo
+3149903,49972,Perdões,9,Oeste de Minas,45,Campo Belo
+3158805,51756,Santana do Jacaré,9,Oeste de Minas,45,Campo Belo
+3108008,41599,Bom Sucesso,9,Oeste de Minas,46,Oliveira
+3114006,42790,Carmo da Mata,9,Oeste de Minas,46,Oliveira
+3114501,42897,Carmópolis de Minas,9,Oeste de Minas,46,Oliveira
+3130002,45993,Ibituruna,9,Oeste de Minas,46,Oliveira
+3145604,49115,Oliveira,9,Oeste de Minas,46,Oliveira
+3147709,49530,Passa Tempo,9,Oeste de Minas,46,Oliveira
+3150604,50113,Piracema,9,Oeste de Minas,46,Oliveira
+3159902,51977,Santo Antônio do Amparo,9,Oeste de Minas,46,Oliveira
+3161205,52230,São Francisco de Paula,9,Oeste de Minas,46,Oliveira
+3101904,40371,Alpinópolis,10,Sul / Sudoeste de Minas,47,Passos
+3107604,41513,Bom Jesus da Penha,10,Sul / Sudoeste de Minas,47,Passos
+3112406,42471,Capetinga,10,Sul / Sudoeste de Minas,47,Passos
+3112802,42552,Capitólio,10,Sul / Sudoeste de Minas,47,Passos
+3116407,43273,Claraval,10,Sul / Sudoeste de Minas,47,Passos
+3115102,43010,Cássia,10,Sul / Sudoeste de Minas,47,Passos
+3121209,44237,Delfinópolis,10,Sul / Sudoeste de Minas,47,Passos
+3126307,45250,Fortaleza de Minas,10,Sul / Sudoeste de Minas,47,Passos
+3129707,45934,Ibiraci,10,Sul / Sudoeste de Minas,47,Passos
+3133758,54453,Itaú de Minas,10,Sul / Sudoeste de Minas,47,Passos
+3147907,49573,Passos,10,Sul / Sudoeste de Minas,47,Passos
+3152907,50571,Pratápolis,10,Sul / Sudoeste de Minas,47,Passos
+3162948,41645,São José da Barra,10,Sul / Sudoeste de Minas,47,Passos
+3162203,52434,São João Batista do Glória,10,Sul / Sudoeste de Minas,47,Passos
+3104106,40819,Arceburgo,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3109501,41890,Cabo Verde,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3128303,45659,Guaranésia,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3128709,45730,Guaxupé,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3132909,46574,Itamogi,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3134806,46957,Jacuí,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3136900,47376,Juruaia,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3143005,48593,Monte Belo,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3143203,48631,Monte Santo de Minas,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3144102,48810,Muzambinho,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3145109,49018,Nova Resende,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3163904,52779,São Pedro da União,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3164704,52930,São Sebastião do Paraíso,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3165107,53015,São Tomás de Aquino,10,Sul / Sudoeste de Minas,48,São Sebastião do Paraíso
+3101607,40312,Alfenas,10,Sul / Sudoeste de Minas,49,Alfenas
+3102001,40398,Alterosa,10,Sul / Sudoeste de Minas,49,Alfenas
+3104304,40851,Areado,10,Sul / Sudoeste de Minas,49,Alfenas
+3114402,42870,Carmo do Rio Claro,10,Sul / Sudoeste de Minas,49,Alfenas
+3114709,42935,Carvalhópolis,10,Sul / Sudoeste de Minas,49,Alfenas
+3117108,43419,Conceição da Aparecida,10,Sul / Sudoeste de Minas,49,Alfenas
+3122405,44474,Divisa Nova,10,Sul / Sudoeste de Minas,49,Alfenas
+3125200,45039,Fama,10,Sul / Sudoeste de Minas,49,Alfenas
+3139003,47791,Machado,10,Sul / Sudoeste de Minas,49,Alfenas
+3147204,49433,Paraguaçu,10,Sul / Sudoeste de Minas,49,Alfenas
+3151701,50334,Poço Fundo,10,Sul / Sudoeste de Minas,49,Alfenas
+3166907,53376,Serrania,10,Sul / Sudoeste de Minas,49,Alfenas
+3107109,41416,Boa Esperança,10,Sul / Sudoeste de Minas,50,Varginha
+3110905,42170,Campanha,10,Sul / Sudoeste de Minas,50,Varginha
+3111309,42250,Campo do Meio,10,Sul / Sudoeste de Minas,50,Varginha
+3111606,42315,Campos Gerais,10,Sul / Sudoeste de Minas,50,Varginha
+3113909,42773,Carmo da Cachoeira,10,Sul / Sudoeste de Minas,50,Varginha
+3118700,43737,Coqueiral,10,Sul / Sudoeste de Minas,50,Varginha
+3123601,44717,Elói Mendes,10,Sul / Sudoeste de Minas,50,Varginha
+3128105,45616,Guapé,10,Sul / Sudoeste de Minas,50,Varginha
+3130507,46094,Ilicínea,10,Sul / Sudoeste de Minas,50,Varginha
+3142601,48518,Monsenhor Paulo,10,Sul / Sudoeste de Minas,50,Varginha
+3158300,51659,Santana da Vargem,10,Sul / Sudoeste de Minas,50,Varginha
+3160801,52159,São Bento Abade,10,Sul / Sudoeste de Minas,50,Varginha
+3165206,53031,São Thomé das Letras,10,Sul / Sudoeste de Minas,50,Varginha
+3169307,53856,Três Corações,10,Sul / Sudoeste de Minas,50,Varginha
+3169406,53872,Três Pontas,10,Sul / Sudoeste de Minas,50,Varginha
+3170701,54135,Varginha,10,Sul / Sudoeste de Minas,50,Varginha
+3101409,40274,Albertina,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3102605,40517,Andradas,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3105301,41050,Bandeira do Sul,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3108404,41670,Botelhos,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3110301,42056,Caldas,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3111002,42196,Campestre,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3129905,45977,Ibitiúra de Minas,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3130606,46116,Inconfidentes,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3134905,46973,Jacutinga,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3143401,48674,Monte Sião,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3146008,49190,Ouro Fino,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3151800,50350,Poços de Caldas,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3159209,51837,Santa Rita de Caldas,10,Sul / Sudoeste de Minas,51,Poços de Caldas
+3107901,41572,Bom Repouso,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3108305,41653,Borda da Mata,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3109105,41815,Bueno Brandão,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3110509,42099,Camanducaia,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3110608,42110,Cambuí,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3117900,43575,Congonhal,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3119906,43974,Córrego do Bom Jesus,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3124401,44873,Espírito Santo do Dourado,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3124500,44890,Estiva,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3125101,45012,Extrema,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3127404,45470,Gonçalves,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3131505,46299,Ipuiúna,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3133600,46710,Itapeva,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3143807,48755,Munhoz,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3152501,50490,Pouso Alegre,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3165404,53074,Sapucaí-Mirim,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3165578,40843,Senador Amaral,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3165800,53155,Senador José Bento,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3169059,42587,Tocos do Moji,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3169109,53813,Toledo,10,Sul / Sudoeste de Minas,52,Pouso Alegre
+3109709,41939,Cachoeira de Minas,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3113602,42714,Careaçu,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3117207,43435,Conceição das Pedras,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3117801,43559,Conceição dos Ouros,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3119005,43796,Cordislândia,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3129202,45837,Heliodora,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3144409,48879,Natércia,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3149101,49816,Pedralva,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3159605,51918,Santa Rita do Sapucaí,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3167400,53473,Silvianópolis,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3162005,52396,São Gonçalo do Sapucaí,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3163201,52639,São José do Alegre,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3162302,52450,São João da Mata,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3164407,52876,São Sebastião da Bela Vista,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3169802,53953,Turvolândia,10,Sul / Sudoeste de Minas,53,Santa Rita do Sapucaí
+3101300,40258,Alagoa,10,Sul / Sudoeste de Minas,54,São Lourenço
+3104908,40975,Baependi,10,Sul / Sudoeste de Minas,54,São Lourenço
+3110707,42137,Cambuquira,10,Sul / Sudoeste de Minas,54,São Lourenço
+3114105,42811,Carmo de Minas,10,Sul / Sudoeste de Minas,54,São Lourenço
+3115508,43095,Caxambu,10,Sul / Sudoeste de Minas,54,São Lourenço
+3117702,43532,Conceição do Rio Verde,10,Sul / Sudoeste de Minas,54,São Lourenço
+3133006,46590,Itamonte,10,Sul / Sudoeste de Minas,54,São Lourenço
+3133105,46612,Itanhandu,10,Sul / Sudoeste de Minas,54,São Lourenço
+3135902,47171,Jesuânia,10,Sul / Sudoeste de Minas,54,São Lourenço
+3137809,47554,Lambari,10,Sul / Sudoeste de Minas,54,São Lourenço
+3145505,49093,Olímpio Noronha,10,Sul / Sudoeste de Minas,54,São Lourenço
+3147600,49514,Passa Quatro,10,Sul / Sudoeste de Minas,54,São Lourenço
+3152600,50512,Pouso Alto,10,Sul / Sudoeste de Minas,54,São Lourenço
+3167806,53554,Soledade de Minas,10,Sul / Sudoeste de Minas,54,São Lourenço
+3163706,52736,São Lourenço,10,Sul / Sudoeste de Minas,54,São Lourenço
+3164902,52973,São Sebastião do Rio Verde,10,Sul / Sudoeste de Minas,54,São Lourenço
+3101201,40231,Aiuruoca,10,Sul / Sudoeste de Minas,55,Andrelândia
+3102803,40550,Andrelândia,10,Sul / Sudoeste de Minas,55,Andrelândia
+3103603,40711,Arantina,10,Sul / Sudoeste de Minas,55,Andrelândia
+3107208,41432,Bocaina de Minas,10,Sul / Sudoeste de Minas,55,Andrelândia
+3107505,41491,Bom Jardim de Minas,10,Sul / Sudoeste de Minas,55,Andrelândia
+3114808,42951,Carvalhos,10,Sul / Sudoeste de Minas,55,Andrelândia
+3120805,44156,Cruzília,10,Sul / Sudoeste de Minas,55,Andrelândia
+3138500,47694,Liberdade,10,Sul / Sudoeste de Minas,55,Andrelândia
+3141900,48372,Minduri,10,Sul / Sudoeste de Minas,55,Andrelândia
+3147808,49557,Passa Vinte,10,Sul / Sudoeste de Minas,55,Andrelândia
+3166402,53279,Seritinga,10,Sul / Sudoeste de Minas,55,Andrelândia
+3167004,53392,Serranos,10,Sul / Sudoeste de Minas,55,Andrelândia
+3165305,53058,São Vicente de Minas,10,Sul / Sudoeste de Minas,55,Andrelândia
+3108909,41777,Brazópolis,10,Sul / Sudoeste de Minas,56,Itajubá
+3118502,43699,Consolação,10,Sul / Sudoeste de Minas,56,Itajubá
+3120508,44091,Cristina,10,Sul / Sudoeste de Minas,56,Itajubá
+3121100,44210,Delfim Moreira,10,Sul / Sudoeste de Minas,56,Itajubá
+3122801,44555,Dom Viçoso,10,Sul / Sudoeste de Minas,56,Itajubá
+3132404,46477,Itajubá,10,Sul / Sudoeste de Minas,56,Itajubá
+3139904,47970,Maria da Fé,10,Sul / Sudoeste de Minas,56,Itajubá
+3140407,48070,Marmelópolis,10,Sul / Sudoeste de Minas,56,Itajubá
+3147303,49450,Paraisópolis,10,Sul / Sudoeste de Minas,56,Itajubá
+3151008,50199,Piranguinho,10,Sul / Sudoeste de Minas,56,Itajubá
+3150901,50172,Piranguçu,10,Sul / Sudoeste de Minas,56,Itajubá
+3171709,54356,Virgínia,10,Sul / Sudoeste de Minas,56,Itajubá
+3172202,54216,Wenceslau Braz,10,Sul / Sudoeste de Minas,56,Itajubá
+3114600,42919,Carrancas,11,Campo das Vertentes,57,Lavras
+3130408,46078,Ijaci,11,Campo das Vertentes,57,Lavras
+3130804,46159,Ingaí,11,Campo das Vertentes,57,Lavras
+3134301,46850,Itumirim,11,Campo das Vertentes,57,Lavras
+3134509,46892,Itutinga,11,Campo das Vertentes,57,Lavras
+3138203,47635,Lavras,11,Campo das Vertentes,57,Lavras
+3138708,47732,Luminárias,11,Campo das Vertentes,57,Lavras
+3144607,48917,Nepomuceno,11,Campo das Vertentes,57,Lavras
+3154705,50938,Ribeirão Vermelho,11,Campo das Vertentes,57,Lavras
+3115201,43036,Conceição da Barra de Minas,11,Campo das Vertentes,58,São João Del Rei
+3119708,43931,Coronel Xavier Chaves,11,Campo das Vertentes,58,São João Del Rei
+3123007,44598,Dores de Campos,11,Campo das Vertentes,58,São João Del Rei
+3137403,47473,Lagoa Dourada,11,Campo das Vertentes,58,São João Del Rei
+3139102,47813,Madre de Deus de Minas,11,Campo das Vertentes,58,São João Del Rei
+3144508,48895,Nazareno,11,Campo das Vertentes,58,São João Del Rei
+3150307,50059,Piedade do Rio Grande,11,Campo das Vertentes,58,São João Del Rei
+3152709,50539,Prados,11,Campo das Vertentes,58,São João Del Rei
+3154200,50830,Resende Costa,11,Campo das Vertentes,58,São João Del Rei
+3156106,51217,Ritápolis,11,Campo das Vertentes,58,São João Del Rei
+3157336,41467,Santa Cruz de Minas,11,Campo das Vertentes,58,São João Del Rei
+3158706,51730,Santana do Garambéu,11,Campo das Vertentes,58,São João Del Rei
+3162500,52493,São João del Rei,11,Campo das Vertentes,58,São João Del Rei
+3165008,52990,São Tiago,11,Campo das Vertentes,58,São João Del Rei
+3168804,53759,Tiradentes,11,Campo das Vertentes,58,São João Del Rei
+3101631,40002,Alfredo Vasconcelos,11,Campo das Vertentes,59,Barbacena
+3102902,40576,Antônio Carlos,11,Campo das Vertentes,59,Barbacena
+3105608,41114,Barbacena,11,Campo das Vertentes,59,Barbacena
+3105905,41173,Barroso,11,Campo das Vertentes,59,Barbacena
+3112208,42439,Capela Nova,11,Campo das Vertentes,59,Barbacena
+3113107,42617,Caranaíba,11,Campo das Vertentes,59,Barbacena
+3113206,42633,Carandaí,11,Campo das Vertentes,59,Barbacena
+3121506,44296,Desterro do Melo,11,Campo das Vertentes,59,Barbacena
+3129400,45870,Ibertioga,11,Campo das Vertentes,59,Barbacena
+3154408,50873,Ressaquinha,11,Campo das Vertentes,59,Barbacena
+3157302,51454,Santa Bárbara do Tugúrio,11,Campo das Vertentes,59,Barbacena
+3166204,53236,Senhora dos Remédios,11,Campo das Vertentes,59,Barbacena
+3100401,40070,Acaiaca,12,Zona da Mata,60,Ponte Nova
+3105707,41130,Barra Longa,12,Zona da Mata,60,Ponte Nova
+3122702,44539,Dom Silvério,12,Zona da Mata,60,Ponte Nova
+3128204,45632,Guaraciaba,12,Zona da Mata,60,Ponte Nova
+3135506,47090,Jequeri,12,Zona da Mata,60,Ponte Nova
+3145851,41220,Oratórios,12,Zona da Mata,60,Ponte Nova
+3150208,50032,Piedade de Ponte Nova,12,Zona da Mata,60,Ponte Nova
+3152105,50415,Ponte Nova,12,Zona da Mata,60,Ponte Nova
+3154002,50792,Raul Soares,12,Zona da Mata,60,Ponte Nova
+3154903,50970,Rio Casca,12,Zona da Mata,60,Ponte Nova
+3155009,50997,Rio Doce,12,Zona da Mata,60,Ponte Nova
+3157401,51470,Santa Cruz do Escalvado,12,Zona da Mata,60,Ponte Nova
+3160108,52019,Santo Antônio do Grama,12,Zona da Mata,60,Ponte Nova
+3165560,40827,Sem-Peixe,12,Zona da Mata,60,Ponte Nova
+3166303,53252,Sericita,12,Zona da Mata,60,Ponte Nova
+3164001,52795,São Pedro dos Ferros,12,Zona da Mata,60,Ponte Nova
+3170503,54097,Urucânia,12,Zona da Mata,60,Ponte Nova
+3171154,42560,Vermelho Novo,12,Zona da Mata,60,Ponte Nova
+3100302,40053,Abre Campo,12,Zona da Mata,61,Manhuaçu
+3102050,41661,Alto Caparaó,12,Zona da Mata,61,Manhuaçu
+3153509,50695,Alto Jequitibá,12,Zona da Mata,61,Manhuaçu
+3112109,42412,Caparaó,12,Zona da Mata,61,Manhuaçu
+3112901,42579,Caputira,12,Zona da Mata,61,Manhuaçu
+3116001,43192,Chalé,12,Zona da Mata,61,Manhuaçu
+3123528,40169,Durandé,12,Zona da Mata,61,Manhuaçu
+3137700,47538,Lajinha,12,Zona da Mata,61,Manhuaçu
+3138674,40983,Luisburgo,12,Zona da Mata,61,Manhuaçu
+3139409,47872,Manhuaçu,12,Zona da Mata,61,Manhuaçu
+3139508,47899,Manhumirim,12,Zona da Mata,61,Manhuaçu
+3140530,41041,Martins Soares,12,Zona da Mata,61,Manhuaçu
+3140902,48178,Matipó,12,Zona da Mata,61,Manhuaçu
+3148756,41327,Pedra Bonita,12,Zona da Mata,61,Manhuaçu
+3154150,41424,Reduto,12,Zona da Mata,61,Manhuaçu
+3157906,51578,Santa Margarida,12,Zona da Mata,61,Manhuaçu
+3158904,51772,Santana do Manhuaçu,12,Zona da Mata,61,Manhuaçu
+3167608,53511,Simonésia,12,Zona da Mata,61,Manhuaçu
+3163607,52710,São José do Mantimento,12,Zona da Mata,61,Manhuaçu
+3162559,40720,São João do Manhuaçu,12,Zona da Mata,61,Manhuaçu
+3102100,40410,Alto Rio Doce,12,Zona da Mata,62,Viçosa
+3102506,40495,Amparo do Serra,12,Zona da Mata,62,Viçosa
+3103702,40738,Araponga,12,Zona da Mata,62,Viçosa
+3108701,41734,Brás Pires,12,Zona da Mata,62,Viçosa
+3110202,42030,Cajuri,12,Zona da Mata,62,Viçosa
+3111705,42331,Canaã,12,Zona da Mata,62,Viçosa
+3116308,43257,Cipotânea,12,Zona da Mata,62,Viçosa
+3116704,43338,Coimbra,12,Zona da Mata,62,Viçosa
+3124005,44792,Ervália,12,Zona da Mata,62,Viçosa
+3137908,47570,Lamim,12,Zona da Mata,62,Viçosa
+3148301,49654,Paula Cândido,12,Zona da Mata,62,Viçosa
+3148806,49751,Pedra do Anta,12,Zona da Mata,62,Viçosa
+3150802,50156,Piranga,12,Zona da Mata,62,Viçosa
+3152303,50458,Porto Firme,12,Zona da Mata,62,Viçosa
+3153103,50610,Presidente Bernardes,12,Zona da Mata,62,Viçosa
+3155207,51039,Rio Espera,12,Zona da Mata,62,Viçosa
+3166006,53198,Senhora de Oliveira,12,Zona da Mata,62,Viçosa
+3163805,52752,São Miguel do Anta,12,Zona da Mata,62,Viçosa
+3168507,53694,Teixeiras,12,Zona da Mata,62,Viçosa
+3171303,54275,Viçosa,12,Zona da Mata,62,Viçosa
+3103108,40614,Antônio Prado de Minas,12,Zona da Mata,63,Muriaé
+3105509,41092,Barão de Monte Alto,12,Zona da Mata,63,Muriaé
+3110103,42013,Caiana,12,Zona da Mata,63,Muriaé
+3113305,42650,Carangola,12,Zona da Mata,63,Muriaé
+3122009,44393,Divino,12,Zona da Mata,63,Muriaé
+3124203,44830,Espera Feliz,12,Zona da Mata,63,Muriaé
+3124906,44970,Eugenópolis,12,Zona da Mata,63,Muriaé
+3125309,45055,Faria Lemos,12,Zona da Mata,63,Muriaé
+3125952,40207,Fervedouro,12,Zona da Mata,63,Muriaé
+3142106,48410,Miradouro,12,Zona da Mata,63,Muriaé
+3142205,48437,Miraí,12,Zona da Mata,63,Muriaé
+3143906,48771,Muriaé,12,Zona da Mata,63,Muriaé
+3145877,41246,Orizânia,12,Zona da Mata,63,Muriaé
+3148202,49638,Patrocínio do Muriaé,12,Zona da Mata,63,Muriaé
+3149002,49794,Pedra Dourada,12,Zona da Mata,63,Muriaé
+3156452,40622,Rosário da Limeira,12,Zona da Mata,63,Muriaé
+3161403,52272,São Francisco do Glória,12,Zona da Mata,63,Muriaé
+3164431,42340,São Sebastião da Vargem Alegre,12,Zona da Mata,63,Muriaé
+3169208,53830,Tombos,12,Zona da Mata,63,Muriaé
+3171402,54291,Vieiras,12,Zona da Mata,63,Muriaé
+3104601,40916,Astolfo Dutra,12,Zona da Mata,64,Ubá
+3121902,44377,Divinésia,12,Zona da Mata,64,Ubá
+3123304,44652,Dores do Turvo,12,Zona da Mata,64,Ubá
+3128402,45675,Guarani,12,Zona da Mata,64,Ubá
+3128808,45756,Guidoval,12,Zona da Mata,64,Ubá
+3129004,45799,Guiricema,12,Zona da Mata,64,Ubá
+3141603,48313,Mercês,12,Zona da Mata,64,Ubá
+3151305,50253,Piraúba,12,Zona da Mata,64,Ubá
+3155801,51152,Rio Pomba,12,Zona da Mata,64,Ubá
+3156304,51250,Rodeiro,12,Zona da Mata,64,Ubá
+3165701,53139,Senador Firmino,12,Zona da Mata,64,Ubá
+3167301,53457,Silveirânia,12,Zona da Mata,64,Ubá
+3161502,52299,São Geraldo,12,Zona da Mata,64,Ubá
+3167905,53570,Tabuleiro,12,Zona da Mata,64,Ubá
+3169000,53791,Tocantins,12,Zona da Mata,64,Ubá
+3169901,53970,Ubá,12,Zona da Mata,64,Ubá
+3172004,54410,Visconde do Rio Branco,12,Zona da Mata,64,Ubá
+3103306,40657,Aracitaba,12,Zona da Mata,65,Juiz de Fora
+3106101,41211,Belmiro Braga,12,Zona da Mata,65,Juiz de Fora
+3106804,41351,Bias Fortes,12,Zona da Mata,65,Juiz de Fora
+3106903,41378,Bicas,12,Zona da Mata,65,Juiz de Fora
+3116209,43230,Chiador,12,Zona da Mata,65,Juiz de Fora
+3115904,43176,Chácara,12,Zona da Mata,65,Juiz de Fora
+3119609,43915,Coronel Pacheco,12,Zona da Mata,65,Juiz de Fora
+3121308,44253,Descoberto,12,Zona da Mata,65,Juiz de Fora
+3125002,44997,Ewbank da Câmara,12,Zona da Mata,65,Juiz de Fora
+3127388,42161,Goianá,12,Zona da Mata,65,Juiz de Fora
+3128501,45691,Guarará,12,Zona da Mata,65,Juiz de Fora
+3136702,47333,Juiz de Fora,12,Zona da Mata,65,Juiz de Fora
+3138609,47716,Lima Duarte,12,Zona da Mata,65,Juiz de Fora
+3139805,47953,Mar de Espanha,12,Zona da Mata,65,Juiz de Fora
+3140209,48038,Maripá de Minas,12,Zona da Mata,65,Juiz de Fora
+3140803,48151,Matias Barbosa,12,Zona da Mata,65,Juiz de Fora
+3145406,49077,Olaria,12,Zona da Mata,65,Juiz de Fora
+3145703,49131,Oliveira Fortes,12,Zona da Mata,65,Juiz de Fora
+3146602,49310,Paiva,12,Zona da Mata,65,Juiz de Fora
+3149408,49875,Pedro Teixeira,12,Zona da Mata,65,Juiz de Fora
+3149507,49891,Pequeri,12,Zona da Mata,65,Juiz de Fora
+3150109,50016,Piau,12,Zona da Mata,65,Juiz de Fora
+3155405,51071,Rio Novo,12,Zona da Mata,65,Juiz de Fora
+3155900,51179,Rio Preto,12,Zona da Mata,65,Juiz de Fora
+3156205,51233,Rochedo de Minas,12,Zona da Mata,65,Juiz de Fora
+3157278,41440,Santa Bárbara do Monte Verde,12,Zona da Mata,65,Juiz de Fora
+3159407,51870,Santa Rita de Ibitipoca,12,Zona da Mata,65,Juiz de Fora
+3159308,51853,Santa Rita de Jacutinga,12,Zona da Mata,65,Juiz de Fora
+3158607,51713,Santana do Deserto,12,Zona da Mata,65,Juiz de Fora
+3160702,52132,Santos Dumont,12,Zona da Mata,65,Juiz de Fora
+3165602,53112,Senador Cortes,12,Zona da Mata,65,Juiz de Fora
+3167509,53490,Simão Pereira,12,Zona da Mata,65,Juiz de Fora
+3162906,52574,São João Nepomuceno,12,Zona da Mata,65,Juiz de Fora
+3101508,40290,Além Paraíba,12,Zona da Mata,66,Cataguases
+3104403,40878,Argirita,12,Zona da Mata,66,Cataguases
+3115300,43052,Cataguases,12,Zona da Mata,66,Cataguases
+3122900,44571,Dona Eusébia,12,Zona da Mata,66,Cataguases
+3124609,44911,Estrela Dalva,12,Zona da Mata,66,Cataguases
+3132602,46515,Itamarati de Minas,12,Zona da Mata,66,Cataguases
+3138005,47597,Laranjal,12,Zona da Mata,66,Cataguases
+3138401,47678,Leopoldina,12,Zona da Mata,66,Cataguases
+3146701,49336,Palma,12,Zona da Mata,66,Cataguases
+3151107,50210,Pirapetinga,12,Zona da Mata,66,Cataguases
+3154101,50814,Recreio,12,Zona da Mata,66,Cataguases
+3158409,51675,Santana de Cataguases,12,Zona da Mata,66,Cataguases
+3160009,51993,Santo Antônio do Aventureiro,12,Zona da Mata,66,Cataguases
+3172103,54437,Volta Grande,12,Zona da Mata,66,Cataguases

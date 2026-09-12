@@ -1,0 +1,1178 @@
+[
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "AC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_AC_051020221321.zip",
+    "arquivo": "bweb_1t_AC_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "AC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_AC_311020221535.zip",
+    "arquivo": "bweb_2t_AC_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "AL",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_AL_051020221321.zip",
+    "arquivo": "bweb_1t_AL_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "AL",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_AL_311020221535.zip",
+    "arquivo": "bweb_2t_AL_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "AM",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_AM_051020221321.zip",
+    "arquivo": "bweb_1t_AM_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "AM",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_AM_311020221535.zip",
+    "arquivo": "bweb_2t_AM_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "AP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_AP_051020221321.zip",
+    "arquivo": "bweb_1t_AP_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "AP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_AP_311020221535.zip",
+    "arquivo": "bweb_2t_AP_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "BA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_BA_051020221321.zip",
+    "arquivo": "bweb_1t_BA_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "BA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_BA_311020221535.zip",
+    "arquivo": "bweb_2t_BA_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "CE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_CE_051020221321.zip",
+    "arquivo": "bweb_1t_CE_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "CE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_CE_311020221535.zip",
+    "arquivo": "bweb_2t_CE_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "DF",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_DF_051020221321.zip",
+    "arquivo": "bweb_1t_DF_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "DF",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_DF_311020221535.zip",
+    "arquivo": "bweb_2t_DF_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "ES",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_ES_051020221321.zip",
+    "arquivo": "bweb_1t_ES_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "ES",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_ES_311020221535.zip",
+    "arquivo": "bweb_2t_ES_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "GO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_GO_051020221321.zip",
+    "arquivo": "bweb_1t_GO_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "GO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_GO_311020221535.zip",
+    "arquivo": "bweb_2t_GO_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "MA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_MA_051020221321.zip",
+    "arquivo": "bweb_1t_MA_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "MA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_MA_311020221535.zip",
+    "arquivo": "bweb_2t_MA_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "MG",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_MG_051020221321.zip",
+    "arquivo": "bweb_1t_MG_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "MG",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_MG_311020221535.zip",
+    "arquivo": "bweb_2t_MG_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "MS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_MS_051020221321.zip",
+    "arquivo": "bweb_1t_MS_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "MS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_MS_311020221535.zip",
+    "arquivo": "bweb_2t_MS_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "MT",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_MT_051020221321.zip",
+    "arquivo": "bweb_1t_MT_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "MT",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_MT_311020221535.zip",
+    "arquivo": "bweb_2t_MT_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "PA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_PA_051020221321.zip",
+    "arquivo": "bweb_1t_PA_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "PA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_PA_311020221535.zip",
+    "arquivo": "bweb_2t_PA_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "PB",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_PB_051020221321.zip",
+    "arquivo": "bweb_1t_PB_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "PB",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_PB_311020221535.zip",
+    "arquivo": "bweb_2t_PB_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "PE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_PE_051020221321.zip",
+    "arquivo": "bweb_1t_PE_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "PE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_PE_311020221535.zip",
+    "arquivo": "bweb_2t_PE_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "PI",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_PI_051020221321.zip",
+    "arquivo": "bweb_1t_PI_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "PI",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_PI_311020221535.zip",
+    "arquivo": "bweb_2t_PI_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "PR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_PR_051020221321.zip",
+    "arquivo": "bweb_1t_PR_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "PR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_PR_311020221535.zip",
+    "arquivo": "bweb_2t_PR_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "RJ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_RJ_051020221321.zip",
+    "arquivo": "bweb_1t_RJ_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "RJ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_RJ_311020221535.zip",
+    "arquivo": "bweb_2t_RJ_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "RN",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_RN_051020221321.zip",
+    "arquivo": "bweb_1t_RN_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "RN",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_RN_311020221535.zip",
+    "arquivo": "bweb_2t_RN_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "RO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_RO_051020221321.zip",
+    "arquivo": "bweb_1t_RO_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "RO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_RO_311020221535.zip",
+    "arquivo": "bweb_2t_RO_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "RR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_RR_051020221321.zip",
+    "arquivo": "bweb_1t_RR_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "RR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_RR_311020221535.zip",
+    "arquivo": "bweb_2t_RR_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "RS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_RS_051020221321.zip",
+    "arquivo": "bweb_1t_RS_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "RS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_RS_311020221535.zip",
+    "arquivo": "bweb_2t_RS_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "SC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_SC_051020221321.zip",
+    "arquivo": "bweb_1t_SC_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "SC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_SC_311020221535.zip",
+    "arquivo": "bweb_2t_SC_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "SE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_SE_051020221321.zip",
+    "arquivo": "bweb_1t_SE_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "SE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_SE_311020221535.zip",
+    "arquivo": "bweb_2t_SE_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "SP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_SP_051020221321.zip",
+    "arquivo": "bweb_1t_SP_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "SP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_SP_311020221535.zip",
+    "arquivo": "bweb_2t_SP_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "TO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_TO_051020221321.zip",
+    "arquivo": "bweb_1t_TO_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "TO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_TO_311020221535.zip",
+    "arquivo": "bweb_2t_TO_311020221535.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 1,
+    "uf": "ZZ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_1t_ZZ_051020221321.zip",
+    "arquivo": "bweb_1t_ZZ_051020221321.zip"
+  },
+  {
+    "ano": 2022,
+    "turno": 2,
+    "uf": "ZZ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2022/buweb/bweb_2t_ZZ_311020221535.zip",
+    "arquivo": "bweb_2t_ZZ_311020221535.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "AC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_AC_101020181938.zip",
+    "arquivo": "BWEB_1t_AC_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "AC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_AC_301020181744.zip",
+    "arquivo": "BWEB_2t_AC_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "AL",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_AL_101020181938.zip",
+    "arquivo": "BWEB_1t_AL_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "AL",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_AL_301020181744.zip",
+    "arquivo": "BWEB_2t_AL_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "AM",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_AM_101020181938.zip",
+    "arquivo": "BWEB_1t_AM_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "AM",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_AM_301020181744.zip",
+    "arquivo": "BWEB_2t_AM_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "AP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_AP_101020181938.zip",
+    "arquivo": "BWEB_1t_AP_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "AP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_AP_301020181744.zip",
+    "arquivo": "BWEB_2t_AP_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "BA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_BA_101020181938.zip",
+    "arquivo": "BWEB_1t_BA_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "BA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_BA_301020181744.zip",
+    "arquivo": "BWEB_2t_BA_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "CE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_CE_101020181938.zip",
+    "arquivo": "BWEB_1t_CE_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "CE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_CE_301020181744.zip",
+    "arquivo": "BWEB_2t_CE_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "DF",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_DF_101020181938.zip",
+    "arquivo": "BWEB_1t_DF_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "DF",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_DF_301020181744.zip",
+    "arquivo": "BWEB_2t_DF_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "ES",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_ES_101020181938.zip",
+    "arquivo": "BWEB_1t_ES_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "ES",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_ES_301020181744.zip",
+    "arquivo": "BWEB_2t_ES_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "GO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_GO_101020181938.zip",
+    "arquivo": "BWEB_1t_GO_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "GO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_GO_301020181744.zip",
+    "arquivo": "BWEB_2t_GO_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "MA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_MA_101020181938.zip",
+    "arquivo": "BWEB_1t_MA_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "MA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_MA_301020181744.zip",
+    "arquivo": "BWEB_2t_MA_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "MG",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_MG_101020181938.zip",
+    "arquivo": "BWEB_1t_MG_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "MG",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_MG_301020181744.zip",
+    "arquivo": "BWEB_2t_MG_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "MS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_MS_101020181938.zip",
+    "arquivo": "BWEB_1t_MS_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "MS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_MS_301020181744.zip",
+    "arquivo": "BWEB_2t_MS_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "MT",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_MT_101020181938.zip",
+    "arquivo": "BWEB_1t_MT_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "MT",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_MT_301020181744.zip",
+    "arquivo": "BWEB_2t_MT_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "PA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_PA_101020181938.zip",
+    "arquivo": "BWEB_1t_PA_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "PA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_PA_301020181744.zip",
+    "arquivo": "BWEB_2t_PA_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "PB",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_PB_101020181938.zip",
+    "arquivo": "BWEB_1t_PB_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "PB",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_PB_301020181744.zip",
+    "arquivo": "BWEB_2t_PB_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "PE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_PE_101020181938.zip",
+    "arquivo": "BWEB_1t_PE_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "PE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_PE_301020181744.zip",
+    "arquivo": "BWEB_2t_PE_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "PI",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_PI_101020181938.zip",
+    "arquivo": "BWEB_1t_PI_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "PI",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_PI_301020181744.zip",
+    "arquivo": "BWEB_2t_PI_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "PR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_PR_101020181938.zip",
+    "arquivo": "BWEB_1t_PR_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "PR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_PR_301020181744.zip",
+    "arquivo": "BWEB_2t_PR_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "RJ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_RJ_101020181938.zip",
+    "arquivo": "BWEB_1t_RJ_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "RJ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_RJ_301020181744.zip",
+    "arquivo": "BWEB_2t_RJ_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "RN",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_RN_101020181938.zip",
+    "arquivo": "BWEB_1t_RN_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "RN",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_RN_301020181744.zip",
+    "arquivo": "BWEB_2t_RN_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "RO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_RO_101020181938.zip",
+    "arquivo": "BWEB_1t_RO_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "RO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_RO_301020181744.zip",
+    "arquivo": "BWEB_2t_RO_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "RR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_RR_101020181938.zip",
+    "arquivo": "BWEB_1t_RR_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "RR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_RR_301020181744.zip",
+    "arquivo": "BWEB_2t_RR_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "RS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_RS_101020181938.zip",
+    "arquivo": "BWEB_1t_RS_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "RS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_RS_301020181744.zip",
+    "arquivo": "BWEB_2t_RS_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "SC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_SC_101020181938.zip",
+    "arquivo": "BWEB_1t_SC_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "SC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_SC_301020181744.zip",
+    "arquivo": "BWEB_2t_SC_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "SE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_SE_101020181938.zip",
+    "arquivo": "BWEB_1t_SE_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "SE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_SE_301020181744.zip",
+    "arquivo": "BWEB_2t_SE_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "SP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_SP_101020181938.zip",
+    "arquivo": "BWEB_1t_SP_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "SP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_SP_301020181744.zip",
+    "arquivo": "BWEB_2t_SP_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "TO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_TO_101020181938.zip",
+    "arquivo": "BWEB_1t_TO_101020181938.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "TO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_TO_301020181744.zip",
+    "arquivo": "BWEB_2t_TO_301020181744.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 1,
+    "uf": "ZZ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_1t_ZZ_111020181508.zip",
+    "arquivo": "BWEB_1t_ZZ_111020181508.zip"
+  },
+  {
+    "ano": 2018,
+    "turno": 2,
+    "uf": "ZZ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2018/buweb/BWEB_2t_ZZ_301020181744.zip",
+    "arquivo": "BWEB_2t_ZZ_301020181744.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "AC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_AC_14102014131600.zip",
+    "arquivo": "bweb_1t_AC_14102014131600.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "AC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_AC_28102014114450.zip",
+    "arquivo": "bweb_2t_AC_28102014114450.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "AL",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_AL_14102014131724.zip",
+    "arquivo": "bweb_1t_AL_14102014131724.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "AL",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_AL_28102014114941.zip",
+    "arquivo": "bweb_2t_AL_28102014114941.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "AP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_AP_14102014132239.zip",
+    "arquivo": "bweb_1t_AP_14102014132239.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "AP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_AP_28102014115835.zip",
+    "arquivo": "bweb_2t_AP_28102014115835.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "AM",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_AM_14102014131956.zip",
+    "arquivo": "bweb_1t_AM_14102014131956.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "AM",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_AM_28102014115349.zip",
+    "arquivo": "bweb_2t_AM_28102014115349.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "BA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_BA_14102014132437.zip",
+    "arquivo": "bweb_1t_BA_14102014132437.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "BA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_BA_28102014120236.zip",
+    "arquivo": "bweb_2t_BA_28102014120236.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "CE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_CE_14102014132811.zip",
+    "arquivo": "bweb_1t_CE_14102014132811.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "CE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_CE_28102014120643.zip",
+    "arquivo": "bweb_2t_CE_28102014120643.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "DF",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_DF_14102014133057.zip",
+    "arquivo": "bweb_1t_DF_14102014133057.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "DF",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_DF_28102014121036.zip",
+    "arquivo": "bweb_2t_DF_28102014121036.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "ES",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_ES_14102014133258.zip",
+    "arquivo": "bweb_1t_ES_14102014133258.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "ES",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_ES_28102014121431.zip",
+    "arquivo": "bweb_2t_ES_28102014121431.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "GO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_GO_14102014133534.zip",
+    "arquivo": "bweb_1t_GO_14102014133534.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "GO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_GO_28102014121839.zip",
+    "arquivo": "bweb_2t_GO_28102014121839.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "MA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_MA_14102014133746.zip",
+    "arquivo": "bweb_1t_MA_14102014133746.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "MA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_MA_28102014122307.zip",
+    "arquivo": "bweb_2t_MA_28102014122307.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "MT",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_MT_14102014134508.zip",
+    "arquivo": "bweb_1t_MT_14102014134508.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "MT",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_MT_28102014123633.zip",
+    "arquivo": "bweb_2t_MT_28102014123633.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "MS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_MS_14102014134342.zip",
+    "arquivo": "bweb_1t_MS_14102014134342.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "MS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_MS_28102014123155.zip",
+    "arquivo": "bweb_2t_MS_28102014123155.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "MG",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_MG_14102014133941.zip",
+    "arquivo": "bweb_1t_MG_14102014133941.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "MG",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_MG_28102014122730.zip",
+    "arquivo": "bweb_2t_MG_28102014122730.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "PA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_PA_14102014134622.zip",
+    "arquivo": "bweb_1t_PA_14102014134622.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "PA",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_PA_28102014124021.zip",
+    "arquivo": "bweb_2t_PA_28102014124021.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "PB",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_PB_14102014134816.zip",
+    "arquivo": "bweb_1t_PB_14102014134816.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "PB",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_PB_28102014124426.zip",
+    "arquivo": "bweb_2t_PB_28102014124426.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "PR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_PR_14102014135330.zip",
+    "arquivo": "bweb_1t_PR_14102014135330.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "PR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_PR_28102014125604.zip",
+    "arquivo": "bweb_2t_PR_28102014125604.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "PE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_PE_14102014134940.zip",
+    "arquivo": "bweb_1t_PE_14102014134940.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "PE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_PE_28102014124827.zip",
+    "arquivo": "bweb_2t_PE_28102014124827.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "PI",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_PI_14102014135200.zip",
+    "arquivo": "bweb_1t_PI_14102014135200.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "PI",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_PI_28102014125213.zip",
+    "arquivo": "bweb_2t_PI_28102014125213.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "RJ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_RJ_14102014135555.zip",
+    "arquivo": "bweb_1t_RJ_14102014135555.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "RJ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_RJ_28102014130047.zip",
+    "arquivo": "bweb_2t_RJ_28102014130047.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "RN",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_RN_14102014140015.zip",
+    "arquivo": "bweb_1t_RN_14102014140015.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "RN",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_RN_28102014130526.zip",
+    "arquivo": "bweb_2t_RN_28102014130526.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "RS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_RS_14102014140344.zip",
+    "arquivo": "bweb_1t_RS_14102014140344.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "RS",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_RS_28102014131811.zip",
+    "arquivo": "bweb_2t_RS_28102014131811.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "RO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_RO_14102014140131.zip",
+    "arquivo": "bweb_1t_RO_14102014140131.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "RO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_RO_28102014130948.zip",
+    "arquivo": "bweb_2t_RO_28102014130948.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "RR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_RR_14102014140241.zip",
+    "arquivo": "bweb_1t_RR_14102014140241.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "RR",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_RR_28102014131402.zip",
+    "arquivo": "bweb_2t_RR_28102014131402.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "SC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_SC_14102014140606.zip",
+    "arquivo": "bweb_1t_SC_14102014140606.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "SC",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_SC_28102014132154.zip",
+    "arquivo": "bweb_2t_SC_28102014132154.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "SP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_SP_14102014140937.zip",
+    "arquivo": "bweb_1t_SP_14102014140937.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "SP",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_SP_28102014133018.zip",
+    "arquivo": "bweb_2t_SP_28102014133018.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "SE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_SE_14102014140814.zip",
+    "arquivo": "bweb_1t_SE_14102014140814.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "SE",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_SE_28102014132556.zip",
+    "arquivo": "bweb_2t_SE_28102014132556.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "TO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_TO_14102014141909.zip",
+    "arquivo": "bweb_1t_TO_14102014141909.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "TO",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_TO_28102014133436.zip",
+    "arquivo": "bweb_2t_TO_28102014133436.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 1,
+    "uf": "ZZ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_1t_ZZ_14102014142031.zip",
+    "arquivo": "bweb_1t_ZZ_14102014142031.zip"
+  },
+  {
+    "ano": 2014,
+    "turno": 2,
+    "uf": "ZZ",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2014/buweb/bweb_2t_ZZ_28102014133904.zip",
+    "arquivo": "bweb_2t_ZZ_28102014133904.zip"
+  }
+]
