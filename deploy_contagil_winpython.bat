@@ -59,6 +59,7 @@ copy /Y "%REPO%\scripts\relatorio_similaridade_interior_nordeste.py" "%WINPY%\se
 copy /Y "%REPO%\scripts\relatorio_similaridade_interior_regioes.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\discriminativo_modelo_urna_ate_50mil.py" "%WINPY%\sec_scripts\" >nul
 copy /Y "%REPO%\scripts\lula_2022_mesorregioes_mg.py" "%WINPY%\sec_scripts\" >nul
+copy /Y "%REPO%\scripts\comparativo_bolsonaro_secoes_2018_2022.py" "%WINPY%\sec_scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.py" "%WINPY%\" >nul
@@ -102,6 +103,8 @@ copy /Y "%REPO%\discriminativo_modelo_urna_ate_50mil.py" "%WINPY%\" >nul
 copy /Y "%REPO%\discriminativo_modelo_urna_ate_50mil.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\lula_2022_mesorregioes_mg.py" "%WINPY%\" >nul
 copy /Y "%REPO%\lula_2022_mesorregioes_mg.bat" "%WINPY%\" >nul
+copy /Y "%REPO%\comparativo_bolsonaro_secoes_2018_2022.py" "%WINPY%\" >nul
+copy /Y "%REPO%\comparativo_bolsonaro_secoes_2018_2022.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\requirements.txt" "%WINPY%\requirements_sec.txt" >nul
 
 echo OK. Arquivos copiados.

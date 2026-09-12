@@ -104,6 +104,19 @@ Catálogo: `data/tse_catalog/mesorregioes_mg.csv`.
 python lula_2022_mesorregioes_mg.py
 ```
 
+## Bolsonaro × Haddad (2018) vs Bolsonaro × Lula (2022), por seção
+
+`comparativo_bolsonaro_secoes_2018_2022.csv.gz` — uma linha por seção
+(UF + município + zona + seção), 2º turno.
+
+`comparativo_bolsonaro_secoes_2018_2022.xlsx` — resumo Brasil / UF /
+município, cobertura e as 500 seções de maior ganho e maior perda de
+margem de Bolsonaro.
+
+```bat
+python comparativo_bolsonaro_secoes_2018_2022.py
+```
+
 ## Totais oficiais usados na conferência
 
 - 2022 1º: Lula 57.259.504 · Bolsonaro 51.072.345 · Tebet 4.915.423 · Ciro 3.599.287
