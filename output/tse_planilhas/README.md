@@ -89,6 +89,21 @@ turno de 2014, 2018 e 2022): `urnas_100pct_votos_validos.xlsx`.
 python scripts/urnas_100pct_votos_validos.py
 ```
 
+## Minas Gerais — Lula 2022 2T por mesorregião
+
+`lula_2022_mesorregioes_mg.xlsx` lista os municípios mineiros em que Lula
+venceu o 2º turno de 2022, divididos nas 12 mesorregiões do documento do
+governo de Minas (meso e microrregiões do IBGE):
+
+https://www.mg.gov.br/sites/default/files/paginas/arquivos/2016/ligminas_10_2_04_listamesomicro.pdf
+
+Abas: `Leia-me`, `Resumo`, `Municipios` e uma aba por mesorregião.
+Catálogo: `data/tse_catalog/mesorregioes_mg.csv`.
+
+```bat
+python lula_2022_mesorregioes_mg.py
+```
+
 ## Totais oficiais usados na conferência
 
 - 2022 1º: Lula 57.259.504 · Bolsonaro 51.072.345 · Tebet 4.915.423 · Ciro 3.599.287
