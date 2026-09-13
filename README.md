@@ -115,6 +115,9 @@ python3 scripts/portarias_lei_rouanet.py --inicio 2026-01-01 --fim 2026-09-13 --
 
 # Cruza PRONACs homologados com o SALIC (captado × teto) e estima a renúncia
 python3 scripts/renuncia_lei_rouanet_salic.py
+
+# Recibos de captação 2003–2026 (proponente + incentivador + data_recibo)
+python3 scripts/captacoes_lei_rouanet_salic.py
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
@@ -150,6 +153,7 @@ streamlit run app.py
 | `output/portarias_lei_rouanet.csv` | Portarias SEFIC/MinC no DOU (Lei Rouanet / captação) |
 | `output/projetos_lei_rouanet_captacao.csv` | Projetos dos anexos (PRONAC, valor, prazo) |
 | `output/portarias_lei_rouanet.md` | Relatório das homologações que liberam a captação |
+| `output/captacoes_lei_rouanet_2003_2026.csv` | Recibos SALIC 2003–2026 (beneficiário, valor, data) |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
 `data_fluxo`, `saldo_fiscal`, `saldo_contrato`, `amortizacao`,

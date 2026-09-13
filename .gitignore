@@ -47,6 +47,10 @@ output/*_stats.json
 !output/renuncia_lei_rouanet_por_uf.csv
 !output/renuncia_lei_rouanet_por_mes.csv
 !output/renuncia_lei_rouanet_por_artigo.csv
+!output/captacoes_lei_rouanet_2003_2026.csv
+!output/captacoes_lei_rouanet_2003_2026.md
+!output/captacoes_lei_rouanet_por_ano.csv
+!output/captacoes_lei_rouanet_por_beneficiario.csv
 output/.cache/
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep

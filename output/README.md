@@ -65,3 +65,13 @@ python3 scripts/renuncia_lei_rouanet_salic.py
 
 - `projetos_lei_rouanet_salic.csv` / `renuncia_lei_rouanet.md` / `.xlsx`
 - `renuncia_lei_rouanet_por_uf.csv` / `_por_mes.csv` / `_por_artigo.csv`
+
+Recibos de captação no SALIC (2003–2026), um por linha, com CNPJ/CPF do
+proponente (beneficiário) e do incentivador:
+
+```bash
+python3 scripts/captacoes_lei_rouanet_salic.py
+```
+
+- `captacoes_lei_rouanet_2003_2026.csv` / `.xlsx` / `.md`
+- `captacoes_lei_rouanet_por_ano.csv` / `_por_beneficiario.csv`
