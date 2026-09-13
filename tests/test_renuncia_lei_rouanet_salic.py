@@ -109,6 +109,14 @@ def test_cruzar_renuncia_art18_e_art26():
     assert a26["renuncia_art26_doacao_pj"] == 160  # 40%
 
 
+def test_teto_cai_no_aprovado_salic_se_dou_zerado():
+    dou = pd.DataFrame([{"pronac": "1", "teto_dou": 0, "artigo": "artigo_18", "nome_projeto": "Z", "uf": "SP"}])
+    salic = {"1": {"valor_captado": 50, "valor_aprovado": 200}}
+    out = cruzar(dou, salic).iloc[0]
+    assert out["teto_dou"] == 200
+    assert out["taxa_captacao"] == 0.25
+
+
 def test_processar_offline(tmp_path: Path):
     entrada = tmp_path / "dou.csv"
     pd.DataFrame(

@@ -271,6 +271,8 @@ def cruzar(dou: pd.DataFrame, salic: dict[str, dict[str, Any]]) -> pd.DataFrame:
             aprov_salic_f = float(aprov_salic) if aprov_salic is not None else None
         except (TypeError, ValueError):
             aprov_salic_f = None
+        if (not teto_f) and aprov_salic_f:
+            teto_f = aprov_salic_f
         base = teto_f if teto_f and teto_f > 0 else aprov_salic_f
         taxa = (captado_f / base) if captado_f is not None and base and base > 0 else None
         aliq = aliquota_base(artigo)
