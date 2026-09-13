@@ -5,8 +5,11 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
+import pandas as pd
+
 from scripts.portarias_lei_rouanet import (
     classificar_tipo,
+    corrigir_frames,
     eh_portaria_sefic,
     extrair_params_leitura,
     html_para_texto,
@@ -15,6 +18,7 @@ from scripts.portarias_lei_rouanet import (
     parse_data_portaria,
     portarias_para_frame,
     processar,
+    valor_referencia_projeto,
     _num,
 )
 
@@ -30,6 +34,9 @@ def test_numero_e_data_portaria():
     assert numero_portaria(t) == 502
     assert parse_data_portaria(t) == date(2026, 8, 7)
     assert parse_data_portaria("PORTARIA SEFIC/MINC Nº 189, DE 1º DE ABRIL DE 2026") == date(2026, 4, 1)
+    assert numero_portaria("PORTARIA SEFIC/MINC N.º 143, DE 17 DE MARÇO DE 2026") == 143
+    assert numero_portaria("PORTARIA SEFIC/MINC N° 25, DE 15 DE JANEIRO DE 2026") == 25
+    assert numero_portaria("", "portaria-sefic/minc-n.-165-de-24-de-marco-de-2026-695073580") == 165
 
 
 def test_num_ptbr():
@@ -65,6 +72,12 @@ def test_classificar_tipos():
     )
     assert (
         classificar_tipo("Art. 1.º - Homologar a alteração dos projetos culturais relacionados nos anexos.")
+        == "alteracao_projeto"
+    )
+    assert (
+        classificar_tipo(
+            "Art. 1.º - Homologar a(s) alteração(ões) do(s) resumo(s) do(s) projeto(s) abaixo relacionado(s):"
+        )
         == "alteracao_projeto"
     )
 
@@ -150,6 +163,62 @@ def test_processar_offline(tmp_path: Path):
     md = (tmp_path / "portarias_lei_rouanet.md").read_text(encoding="utf-8")
     assert "Homologações que liberam a captação" in md
     assert "502" in md
+
+
+def test_valor_referencia_por_tipo():
+    assert valor_referencia_projeto({"valor_reduzido": 10, "valor_total_atual": 100}, "reducao_valor") == 10
+    assert valor_referencia_projeto({"valor_complementado": 5, "valor_total_atual": 50}, "complementacao_valor") == 5
+    assert valor_referencia_projeto({"valor_aprovado": 20, "valor_total_atual": 1}, "homologacao_captacao") == 20
+
+
+def test_corrigir_frames_numero_e_dedup():
+    port = pd.DataFrame(
+        [
+            {
+                "titulo": "PORTARIA SEFIC/MINC N.º 143, DE 17 DE MARÇO DE 2026",
+                "numero": None,
+                "tipo": "homologacao_captacao",
+                "texto_art1": "Homologar os projetos culturais relacionados nos anexos.",
+                "data_portaria": "2026-03-17",
+                "data_publicacao": "2026-03-18",
+                "qtd_projetos": 1,
+                "url": "https://www.in.gov.br/web/dou/-/a",
+                "url_title": "portaria-sefic/minc-n.-143-de-17-de-marco-de-2026-1",
+            },
+            {
+                "titulo": "PORTARIA SEFIC/MINC Nº 18, DE 14 DE JANEIRO DE 2026",
+                "numero": 18,
+                "tipo": "homologacao_captacao",
+                "texto_art1": "Homologar os projetos culturais.",
+                "data_portaria": "2026-01-14",
+                "data_publicacao": "2026-01-15",
+                "qtd_projetos": 21,
+                "url": "https://www.in.gov.br/web/dou/-/b1",
+                "url_title": "portaria-sefic/minc-n-18-de-14-de-janeiro-de-2026-1",
+            },
+            {
+                "titulo": "PORTARIA SEFIC/MINC Nº 18, DE 14 DE JANEIRO DE 2026",
+                "numero": 18,
+                "tipo": "homologacao_captacao",
+                "texto_art1": "Homologar os projetos culturais.",
+                "data_portaria": "2026-01-14",
+                "data_publicacao": "2026-01-15",
+                "qtd_projetos": 21,
+                "url": "https://www.in.gov.br/web/dou/-/b2",
+                "url_title": "portaria-sefic/minc-n-18-de-14-de-janeiro-de-2026-2",
+            },
+        ]
+    )
+    proj = pd.DataFrame(
+        [
+            {"url": "https://www.in.gov.br/web/dou/-/b1", "tipo_portaria": "homologacao_captacao", "valor_aprovado": 10},
+            {"url": "https://www.in.gov.br/web/dou/-/b2", "tipo_portaria": "homologacao_captacao", "valor_aprovado": 10},
+        ]
+    )
+    p2, j2 = corrigir_frames(port, proj)
+    assert int(p2.loc[p2.titulo.str.contains("143"), "numero"].iloc[0]) == 143
+    assert len(p2[p2.numero == 18]) == 1
+    assert len(j2) == 1
 
 
 def test_portarias_para_frame_projeta_tipo():

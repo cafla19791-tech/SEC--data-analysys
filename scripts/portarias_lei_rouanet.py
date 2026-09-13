@@ -47,9 +47,10 @@ ORGAOS_SEFIC = (
     "secretaria de economia criativa e fomento cultural",
 )
 RE_TITULO_SEFIC = re.compile(
-    r"PORTARIA\s+SEFIC(?:/MINC)?\s+N[ºO°]?\s*(\d+)",
+    r"PORTARIA\s+SEFIC(?:/MINC)?\s+N[.\s]*[ºO°ª]?\s*(\d+)",
     re.I,
 )
+RE_NUMERO_URL = re.compile(r"minc-n\.?-(\d+)-de-", re.I)
 RE_ARTIGO_URL = re.compile(r"portaria-sefic", re.I)
 
 TIPOS_LIBERACAO = frozenset(
@@ -182,9 +183,15 @@ def parse_data_portaria(titulo: str) -> date | None:
     return date(int(m.group(3)), mes, dia)
 
 
-def numero_portaria(titulo: str) -> int | None:
+def numero_portaria(titulo: str, url_title: str | None = None) -> int | None:
     m = RE_TITULO_SEFIC.search(titulo or "")
-    return int(m.group(1)) if m else None
+    if m:
+        return int(m.group(1))
+    if url_title:
+        m = RE_NUMERO_URL.search(url_title)
+        if m:
+            return int(m.group(1))
+    return None
 
 
 def classificar_tipo(texto: str) -> str:
@@ -198,7 +205,7 @@ def classificar_tipo(texto: str) -> str:
         return "complementacao_valor"
     if "reducao de valor" in art1 or "valor reduzido" in art1:
         return "reducao_valor"
-    if "alteracao dos projetos" in art1 or "alteracao do projeto" in art1:
+    if "alteracao" in art1:
         return "alteracao_projeto"
     if "homologar os projetos culturais" in art1 and (
         "doacoes" in art1 or "patrocinios" in art1 or "admissibilidade" in art1
@@ -369,7 +376,7 @@ def metadados_html(html: str, fallback: dict[str, Any] | None = None) -> dict[st
         titulo = m_tit.group(1).strip()
     return {
         "titulo": titulo,
-        "numero": numero_portaria(titulo),
+        "numero": numero_portaria(titulo, fb.get("urlTitle")),
         "data_portaria": parse_data_portaria(titulo),
         "data_publicacao": parse_data_br(pub.group(1) if pub else fb.get("pubDate")),
         "edicao": int(pub.group(2)) if pub else _safe_int(fb.get("editionNumber")),
@@ -483,23 +490,33 @@ def coletar_indices(
     return uniq
 
 
+def valor_referencia_projeto(p: dict[str, Any], tipo: str) -> float | None:
+    if tipo == "complementacao_valor":
+        ordem = ("valor_complementado", "valor_aprovado", "valor_total_atual")
+    elif tipo == "reducao_valor":
+        ordem = ("valor_reduzido", "valor_aprovado", "valor_total_atual")
+    else:
+        ordem = ("valor_aprovado", "valor_complementado", "valor_total_atual", "valor_reduzido")
+    for chave in ordem:
+        v = p.get(chave)
+        if v is not None and not (isinstance(v, float) and pd.isna(v)):
+            return float(v)
+    return None
+
+
 def parse_artigo(html: str, item: dict[str, Any] | None = None) -> dict[str, Any]:
     texto = html_para_texto(html)
     meta = metadados_html(html, item or {})
     tipo = classificar_tipo(texto)
     projetos = parse_projetos(texto)
     valor_total = 0.0
+    tem_valor = False
     for p in projetos:
-        v = p.get("valor_aprovado")
-        if v is None:
-            v = p.get("valor_complementado")
-        if v is None:
-            v = p.get("valor_total_atual")
+        v = valor_referencia_projeto(p, tipo)
+        p["valor_referencia"] = v
         if v is not None:
-            valor_total += float(v)
-            p["valor_referencia"] = float(v)
-        else:
-            p["valor_referencia"] = None
+            valor_total += v
+            tem_valor = True
     url = url_artigo(meta.get("url_title") or "") if meta.get("url_title") else None
     return {
         "titulo": meta.get("titulo"),
@@ -516,7 +533,7 @@ def parse_artigo(html: str, item: dict[str, Any] | None = None) -> dict[str, Any
         "url": url,
         "url_title": meta.get("url_title"),
         "qtd_projetos": len(projetos),
-        "valor_total_anexo": round(valor_total, 2) if projetos else None,
+        "valor_total_anexo": round(valor_total, 2) if tem_valor else None,
         "lei_8313": "8.313" in texto or "8.313" in _norm(texto),
         "texto_art1": _art1(texto),
         "projetos": projetos,
@@ -567,10 +584,65 @@ def coletar_artigos(itens: list[dict[str, Any]], *, workers: int = 4) -> list[di
 
 
 def _fmt_brl(valor: float | None) -> str:
-    if valor is None:
+    if valor is None or (isinstance(valor, float) and pd.isna(valor)):
         return "—"
     s = f"{valor:,.2f}"
     return "R$ " + s.replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def _fmt_int(v: Any) -> str:
+    if v is None or (isinstance(v, float) and pd.isna(v)):
+        return ""
+    try:
+        return str(int(v))
+    except (TypeError, ValueError):
+        return str(v)
+
+
+def _int_cols(df: pd.DataFrame, cols: Iterable[str]) -> pd.DataFrame:
+    out = df.copy()
+    for c in cols:
+        if c in out.columns:
+            out[c] = pd.to_numeric(out[c], errors="coerce").astype("Int64")
+    return out
+
+
+def corrigir_frames(portarias: pd.DataFrame, projetos: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Reclassifica tipo, preenche número (N.º) e remove republicações da extra."""
+    p = portarias.copy()
+    if not p.empty:
+        p["numero"] = [
+            numero_portaria(str(r.get("titulo") or ""), str(r.get("url_title") or r.get("url") or ""))
+            for r in p.to_dict("records")
+        ]
+        novos_tipos = []
+        for r in p.to_dict("records"):
+            art1 = r.get("texto_art1") or ""
+            novos_tipos.append(classificar_tipo("Art. 1º " + art1) if art1 else r.get("tipo"))
+        p["tipo"] = novos_tipos
+        p["libera_captacao"] = p["tipo"].isin(list(TIPOS_LIBERACAO))
+        p["libera_captacao_inicial"] = p["tipo"].eq("homologacao_captacao")
+        p = p.sort_values(["data_publicacao", "numero", "url"], na_position="last")
+        p = p.drop_duplicates(subset=["numero", "data_portaria", "tipo", "qtd_projetos"], keep="first")
+        p = _int_cols(p, ["numero", "edicao", "secao", "pagina", "qtd_projetos"])
+
+    j = projetos.copy()
+    if not j.empty:
+        if not p.empty and "url" in j.columns and "url" in p.columns:
+            j = j[j["url"].isin(set(p["url"].dropna()))]
+        refs = []
+        for r in j.to_dict("records"):
+            refs.append(valor_referencia_projeto(r, str(r.get("tipo_portaria") or "")))
+        j["valor_referencia"] = refs
+        if not p.empty and "url" in j.columns:
+            mapa = dict(zip(p["url"], p["numero"]))
+            j["numero_portaria"] = j["url"].map(mapa).fillna(j.get("numero_portaria"))
+        j = _int_cols(j, ["numero_portaria"])
+        if not p.empty:
+            soma = j.groupby("url", dropna=False)["valor_referencia"].sum()
+            p = p.copy()
+            p["valor_total_anexo"] = p["url"].map(soma)
+    return p.reset_index(drop=True), j.reset_index(drop=True)
 
 
 def escrever_markdown(
@@ -583,7 +655,6 @@ def escrever_markdown(
     gerado_em: str,
 ) -> None:
     lib = portarias[portarias["libera_captacao_inicial"] == True]  # noqa: E712
-    cap = portarias[portarias["libera_captacao"] == True]  # noqa: E712
     valor_lib = float(projetos.loc[projetos["tipo_portaria"] == "homologacao_captacao", "valor_referencia"].fillna(0).sum()) if not projetos.empty else 0.0
     linhas = [
         "# Portarias SEFIC/MinC — captação Lei Rouanet (DOU)",
@@ -616,7 +687,7 @@ def escrever_markdown(
     else:
         grp = (
             portarias.groupby("tipo", dropna=False)
-            .agg(qtd=("numero", "count"), projetos=("qtd_projetos", "sum"), valor=("valor_total_anexo", "sum"))
+            .agg(qtd=("titulo", "count"), projetos=("qtd_projetos", "sum"), valor=("valor_total_anexo", "sum"))
             .reset_index()
             .sort_values("qtd", ascending=False)
         )
@@ -626,6 +697,9 @@ def escrever_markdown(
             )
     linhas.extend(
         [
+            "",
+            "Valor de referência: nas homologações, o valor aprovado para captação; "
+            "nas complementações, o valor acrescido; nas reduções, o valor cortado.",
             "",
             "## Homologações que liberam a captação (fase de doações e patrocínios)",
             "",
@@ -637,23 +711,14 @@ def escrever_markdown(
             "|---:|-----------------:|---------------:|---------:|---------------:|-------:|-----|",
         ]
     )
-    cols = [
-        "numero",
-        "data_portaria",
-        "data_publicacao",
-        "qtd_projetos",
-        "valor_total_anexo",
-        "edicao",
-        "url",
-    ]
     if not lib.empty:
         for row in lib.sort_values(["data_publicacao", "numero"]).itertuples(index=False):
             url = getattr(row, "url", "") or ""
-            num = getattr(row, "numero", "")
+            num = _fmt_int(getattr(row, "numero", None))
             linhas.append(
                 f"| {num} | {row.data_portaria or ''} | {row.data_publicacao or ''} | "
                 f"{int(row.qtd_projetos or 0)} | {_fmt_brl(row.valor_total_anexo)} | "
-                f"{row.edicao or ''} | [{num}]({url}) |"
+                f"{_fmt_int(row.edicao)} | [{num}]({url}) |"
             )
     else:
         linhas.append("| — |  |  | 0 | — |  |  |")
@@ -680,7 +745,7 @@ def escrever_markdown(
             prop = (row.proponente or "")[:50]
             linhas.append(
                 f"| {row.pronac} | {nome} | {prop} | {row.uf or ''} | "
-                f"{_fmt_brl(row.valor_referencia)} | {row.numero_portaria} |"
+                f"{_fmt_brl(row.valor_referencia)} | {_fmt_int(row.numero_portaria)} |"
             )
     linhas.extend(
         [
@@ -754,6 +819,7 @@ def processar(
 
     print("[3/3] Gravando saídas…", flush=True)
     portarias, projetos = portarias_para_frame(registros)
+    portarias, projetos = corrigir_frames(portarias, projetos)
     stem = "portarias_lei_rouanet"
     csv_p = saida_dir / f"{stem}.csv"
     csv_j = saida_dir / "projetos_lei_rouanet_captacao.csv"
