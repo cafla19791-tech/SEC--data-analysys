@@ -56,3 +56,12 @@ python3 scripts/portarias_lei_rouanet.py
 
 - `portarias_lei_rouanet.csv` / `.xlsx` / `.md`
 - `projetos_lei_rouanet_captacao.csv`
+
+Cruzamento SALIC (valor captado × teto homologado) e renúncia estimada:
+
+```bash
+python3 scripts/renuncia_lei_rouanet_salic.py
+```
+
+- `projetos_lei_rouanet_salic.csv` / `renuncia_lei_rouanet.md` / `.xlsx`
+- `renuncia_lei_rouanet_por_uf.csv` / `_por_mes.csv` / `_por_artigo.csv`

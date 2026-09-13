@@ -112,6 +112,9 @@ python resumo_fluxos_polars.py \
 # Portarias SEFIC/MinC no DOU que liberam captação da Lei Rouanet (arts. 18 e 26)
 python3 scripts/portarias_lei_rouanet.py
 python3 scripts/portarias_lei_rouanet.py --inicio 2026-01-01 --fim 2026-09-13 --somente-liberacao
+
+# Cruza PRONACs homologados com o SALIC (captado × teto) e estima a renúncia
+python3 scripts/renuncia_lei_rouanet_salic.py
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
