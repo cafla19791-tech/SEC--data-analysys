@@ -1,0 +1,36 @@
+{
+  "PRONAC": "261004",
+  "nome": "São João de Campina Grande 2026",
+  "cgccpf": "00584628000181",
+  "proponente": "ARTE PRODUCOES DE EVENTOS ARTISTICOS E LOCACOES LTDA",
+  "UF": "PB",
+  "valor_captado": 500000,
+  "_embedded": {
+    "captacoes": [
+      {
+        "PRONAC": "261004 ",
+        "valor": 240000,
+        "data_recibo": "2026-03-30 00:00:00",
+        "nome_projeto": "São João de Campina Grande 2026",
+        "cgccpf": "06057223000171",
+        "nome_doador": "SENDAS DISTRIBUIDORA S/A"
+      },
+      {
+        "PRONAC": "261004",
+        "valor": 10000,
+        "data_recibo": "2002-12-31 00:00:00",
+        "nome_projeto": "São João de Campina Grande 2026",
+        "cgccpf": "12345678901",
+        "nome_doador": "FORA DO PERIODO"
+      },
+      {
+        "PRONAC": "261004",
+        "valor": 250000,
+        "data_recibo": "2003-01-01",
+        "nome_projeto": "São João de Campina Grande 2026",
+        "cgccpf": "00000000000191",
+        "nome_doador": "BANCO DO BRASIL SA"
+      }
+    ]
+  }
+}

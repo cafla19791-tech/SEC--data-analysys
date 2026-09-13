@@ -46,3 +46,32 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+Portarias do DOU que autorizam captação via incentivos da Lei Rouanet
+(Seção 1 da Imprensa Nacional, Portarias SEFIC/MinC):
+
+```bash
+python3 scripts/portarias_lei_rouanet.py
+```
+
+- `portarias_lei_rouanet.csv` / `.xlsx` / `.md`
+- `projetos_lei_rouanet_captacao.csv`
+
+Cruzamento SALIC (valor captado × teto homologado) e renúncia estimada:
+
+```bash
+python3 scripts/renuncia_lei_rouanet_salic.py
+```
+
+- `projetos_lei_rouanet_salic.csv` / `renuncia_lei_rouanet.md` / `.xlsx`
+- `renuncia_lei_rouanet_por_uf.csv` / `_por_mes.csv` / `_por_artigo.csv`
+
+Recibos de captação no SALIC (2003–2026), um por linha, com CNPJ/CPF do
+proponente (beneficiário) e do incentivador:
+
+```bash
+python3 scripts/captacoes_lei_rouanet_salic.py
+```
+
+- `captacoes_lei_rouanet_2003_2026.csv` / `.xlsx` / `.md`
+- `captacoes_lei_rouanet_por_ano.csv` / `_por_beneficiario.csv`

@@ -108,6 +108,16 @@ python resumo_fluxos_polars.py \
   --original "operacoes_indiretas_automaticas_2009-01-01_ate_2010-12-31.xlsx" \
   --selic "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\selic_mensal.xlsx" \
   --tjlp "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython\tjlp_mensal.xlsx"
+
+# Portarias SEFIC/MinC no DOU que liberam captação da Lei Rouanet (arts. 18 e 26)
+python3 scripts/portarias_lei_rouanet.py
+python3 scripts/portarias_lei_rouanet.py --inicio 2026-01-01 --fim 2026-09-13 --somente-liberacao
+
+# Cruza PRONACs homologados com o SALIC (captado × teto) e estima a renúncia
+python3 scripts/renuncia_lei_rouanet_salic.py
+
+# Recibos de captação 2003–2026 (proponente + incentivador + data_recibo)
+python3 scripts/captacoes_lei_rouanet_salic.py
 ```
 
 Auto-descoberta do STP (nessa ordem): `--arquivo-selic`, env
@@ -140,6 +150,10 @@ streamlit run app.py
 | `RELATORIO_EXECUTIVO.md` | Relatório markdown (totais + top agentes) |
 | `grafico_interativo.html` | Impacto fiscal por ano (Plotly) |
 | `output/fluxos_diarios_detalhados.xlsx` | Com `--fluxo-diario`: uma linha por dia entre parcelas |
+| `output/portarias_lei_rouanet.csv` | Portarias SEFIC/MinC no DOU (Lei Rouanet / captação) |
+| `output/projetos_lei_rouanet_captacao.csv` | Projetos dos anexos (PRONAC, valor, prazo) |
+| `output/portarias_lei_rouanet.md` | Relatório das homologações que liberam a captação |
+| `output/captacoes_lei_rouanet_2003_2026.csv` | Recibos SALIC 2003–2026 (beneficiário, valor, data) |
 
 Colunas do CSV detalhado: `contrato`, `Instituição Financeira`, `mes`,
 `data_fluxo`, `saldo_fiscal`, `saldo_contrato`, `amortizacao`,
