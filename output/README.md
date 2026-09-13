@@ -46,3 +46,13 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+Portarias do DOU que autorizam captação via incentivos da Lei Rouanet
+(Seção 1 da Imprensa Nacional, Portarias SEFIC/MinC):
+
+```bash
+python3 scripts/portarias_lei_rouanet.py
+```
+
+- `portarias_lei_rouanet.csv` / `.xlsx` / `.md`
+- `projetos_lei_rouanet_captacao.csv`
