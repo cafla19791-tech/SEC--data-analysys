@@ -1,0 +1,266 @@
+{
+  "company": "Petrobras (Petróleo Brasileiro S.A.)",
+  "cik": "0001119639",
+  "period": "2002-2026 (2026 YTD 1H)",
+  "units": "US$ millions / billions",
+  "notes": [
+    "Dívida bruta = conceito Petrobras (dívida financeira + arrendamentos a partir de IFRS 16/2019).",
+    "Juros pagos = caixa de juros da dívida financeira no 20-F (não inclui accrual puro nem juros de arrendamento, salvo quando a linha histórica não segregava).",
+    "2002–2010: supplemental 'Cash paid for Interest, net of amount capitalized' (US$ mi).",
+    "2011–2018: 'Repayment of interest' no DFC.",
+    "2019–2025: 'Repayment of interest - finance debt' / InterestPaidClassifiedAsFinancingActivities.",
+    "2026 interest paid is YTD Jan–Jun only (US$ 1,070 mi)."
+  ],
+  "rows": [
+    {
+      "year": 2002,
+      "gross_debt_usd_mi": 8700.0,
+      "gross_debt_usd_bi": 8.7,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 200.0,
+      "interest_paid_source": "20-F supplemental: Cash paid for Interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012303007204/y87469e20vf.htm"
+    },
+    {
+      "year": 2003,
+      "gross_debt_usd_mi": 14450.0,
+      "gross_debt_usd_bi": 14.45,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 622.0,
+      "interest_paid_source": "20-F supplemental: Cash paid for Interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312504112315/d20f.htm"
+    },
+    {
+      "year": 2004,
+      "gross_debt_usd_mi": 19280.0,
+      "gross_debt_usd_bi": 19.28,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 995.0,
+      "interest_paid_source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312505135283/d20f.htm"
+    },
+    {
+      "year": 2005,
+      "gross_debt_usd_mi": 18420.0,
+      "gross_debt_usd_bi": 18.42,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 1083.0,
+      "interest_paid_source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012306008263/y22597e20vf.htm"
+    },
+    {
+      "year": 2006,
+      "gross_debt_usd_mi": 20360.0,
+      "gross_debt_usd_bi": 20.36,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 877.0,
+      "interest_paid_source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012307009192/y36368e20vf.htm"
+    },
+    {
+      "year": 2007,
+      "gross_debt_usd_mi": 21160.0,
+      "gross_debt_usd_bi": 21.16,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 1684.0,
+      "interest_paid_source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000136231008002879/c73239e20vf.htm"
+    },
+    {
+      "year": 2008,
+      "gross_debt_usd_mi": 26800.0,
+      "gross_debt_usd_bi": 26.8,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 1515.0,
+      "interest_paid_source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012309009383/y76586e20vf.htm"
+    },
+    {
+      "year": 2009,
+      "gross_debt_usd_mi": 57960.0,
+      "gross_debt_usd_bi": 57.96,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 3059.0,
+      "interest_paid_source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281410001665/pbraform20f2009.htm"
+    },
+    {
+      "year": 2010,
+      "gross_debt_usd_mi": 68980.0,
+      "gross_debt_usd_bi": 68.98,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 3700.0,
+      "interest_paid_source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281411001552/pbraform20f2010.htm"
+    },
+    {
+      "year": 2011,
+      "gross_debt_usd_mi": 82510.0,
+      "gross_debt_usd_bi": 82.51,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 4574.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281412000786/pbraform20f_2011.htm"
+    },
+    {
+      "year": 2012,
+      "gross_debt_usd_mi": 94860.0,
+      "gross_debt_usd_bi": 94.86,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 4772.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281413000928/pbraform20f_2012.htm"
+    },
+    {
+      "year": 2013,
+      "gross_debt_usd_mi": 112300.0,
+      "gross_debt_usd_bi": 112.3,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 5066.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281414001060/pbraform20f_2013.htm"
+    },
+    {
+      "year": 2014,
+      "gross_debt_usd_mi": 130520.0,
+      "gross_debt_usd_bi": 130.52,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 5995.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281415001242/pbraform20f_2014.htm"
+    },
+    {
+      "year": 2015,
+      "gross_debt_usd_mi": 122940.0,
+      "gross_debt_usd_bi": 122.94,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 6305.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281416004364/pbraform20f_2015.htm"
+    },
+    {
+      "year": 2016,
+      "gross_debt_usd_mi": 116910.0,
+      "gross_debt_usd_bi": 116.91,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": null,
+      "interest_paid_usd_mi": 7308.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312517140235/d375139d20f.htm"
+    },
+    {
+      "year": 2017,
+      "gross_debt_usd_mi": 108980.0,
+      "gross_debt_usd_bi": 108.98,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": 109046.0,
+      "interest_paid_usd_mi": 6981.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312518120259/d521855d20f.htm"
+    },
+    {
+      "year": 2018,
+      "gross_debt_usd_mi": 84340.0,
+      "gross_debt_usd_bi": 84.34,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": 84175.0,
+      "interest_paid_usd_mi": 5791.0,
+      "interest_paid_source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312519093231/d692671d20f.htm"
+    },
+    {
+      "year": 2019,
+      "gross_debt_usd_mi": 87121.0,
+      "gross_debt_usd_bi": 87.12,
+      "gross_debt_source": "Petrobras official / 20-F endividamento",
+      "finance_debt_usd_mi": 63260.0,
+      "interest_paid_usd_mi": 4501.0,
+      "interest_paid_source": "20-F CF: Repayment of finance debt - interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312520080953/d883642d20f.htm"
+    },
+    {
+      "year": 2020,
+      "gross_debt_usd_mi": 75570.0,
+      "gross_debt_usd_bi": 75.57,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": 53888.0,
+      "interest_paid_usd_mi": 3157.0,
+      "interest_paid_source": "20-F CF: interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281421001152/pbraform20f_2020.htm"
+    },
+    {
+      "year": 2021,
+      "gross_debt_usd_mi": 58850.0,
+      "gross_debt_usd_bi": 58.85,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": 35700.0,
+      "interest_paid_usd_mi": 2229.0,
+      "interest_paid_source": "20-F CF: interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281422001285/pbraform20f_2021.htm"
+    },
+    {
+      "year": 2022,
+      "gross_debt_usd_mi": 53170.0,
+      "gross_debt_usd_bi": 53.17,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": 29954.0,
+      "interest_paid_usd_mi": 1850.0,
+      "interest_paid_source": "20-F CF: interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281423001253/pbrform20f_2022.htm"
+    },
+    {
+      "year": 2023,
+      "gross_debt_usd_mi": 62390.0,
+      "gross_debt_usd_bi": 62.39,
+      "gross_debt_source": "Historical total debt series (Petrobras gross-debt concept)",
+      "finance_debt_usd_mi": 28801.0,
+      "interest_paid_usd_mi": 1978.0,
+      "interest_paid_source": "20-F CF: Repayment of interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281424001340/pbrform20f_2023.htm"
+    },
+    {
+      "year": 2024,
+      "gross_debt_usd_mi": 60311.0,
+      "gross_debt_usd_bi": 60.31,
+      "gross_debt_source": "Petrobras official / 20-F endividamento",
+      "finance_debt_usd_mi": 23162.0,
+      "interest_paid_usd_mi": 1918.0,
+      "interest_paid_source": "20-F CF: Repayment of interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281425001352/pbrform20f_2024.htm"
+    },
+    {
+      "year": 2025,
+      "gross_debt_usd_mi": 69793.0,
+      "gross_debt_usd_bi": 69.79,
+      "gross_debt_source": "Petrobras official / 20-F endividamento",
+      "finance_debt_usd_mi": 26441.0,
+      "interest_paid_usd_mi": 1836.0,
+      "interest_paid_source": "20-F CF: Repayment of interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm"
+    },
+    {
+      "year": 2026,
+      "gross_debt_usd_mi": 70806.0,
+      "gross_debt_usd_bi": 70.806,
+      "gross_debt_source": "Gross debt 06/30/2026",
+      "finance_debt_usd_mi": 25834.0,
+      "interest_paid_usd_mi": 1070.0,
+      "interest_paid_source": "6-K FS USD 2Q26: Repayment of interest - finance debt Jan–Jun/2026 (YTD)",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281426004133/pbrfs2q26usd_6k.htm"
+    }
+  ]
+}
