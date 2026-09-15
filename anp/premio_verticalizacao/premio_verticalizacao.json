@@ -1,0 +1,3717 @@
+{
+  "title": "Prêmio da verticalização — (lifting+opex) vs (Brent+opex)",
+  "formula": {
+    "custo_integrado": "lifting + opex_refino",
+    "custo_mercado": "Brent + opex_refino",
+    "premio_verticalizacao": "custo_mercado - custo_integrado = Brent - lifting"
+  },
+  "notes": [
+    "Brent: EIA Europe Brent Spot Price FOB (RBRTE).",
+    "Ponderação: produção anual de derivados ANP (Brasil).",
+    "Lifting US$6 ≈ Performance Report Petrobras 2024 (Brasil, ex-leases/participações).",
+    "Lifting US$7,3 ≈ média CE 2016–2022 citada no plano estratégico.",
+    "Lifting+gov US$21 ≈ proxy caixa ampliado (CE ~6 + participações ~15 do CTPP); exclui DD&A.",
+    "Opex de refino US$3/5/8: faixa ilustrativa de custo caixa de planta (sem feedstock).",
+    "US$25 flat: hipótese do modelo ANP de custo doméstico de derivados.",
+    "Prêmio = economia de caixa da verticalização frente a comprar Brent; não é lucro contábil do segmento.",
+    "Custo econômico/oportunidade do óleo próprio continua próximo do Brent (exportação alternativa).",
+    "2026: Brent média dos meses disponíveis (YTD); produção ANP também parcial."
+  ],
+  "assumptions": {
+    "lifting_scenarios_usd_bbl": {
+      "lifting_apenas_6": 6.0,
+      "lifting_media_7_3": 7.3,
+      "lifting_mais_gov_21": 21.0
+    },
+    "opex_refino_scenarios_usd_bbl": {
+      "baixo_3": 3.0,
+      "base_5": 5.0,
+      "alto_8": 8.0
+    },
+    "flat_domestic_hypothesis_usd_bbl": 25.0
+  },
+  "periods": {
+    "2011_2025": {
+      "start": 2011,
+      "end": 2025,
+      "brent_ponderado_producao": 78.222943661316,
+      "producao_total_barris": 10916499495.09245,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "custo_integrado_ponderado": 9.0,
+          "custo_mercado_ponderado": 81.222943661316,
+          "premio_verticalizacao_ponderado": 72.222943661316,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 788421728012.8464
+        },
+        "lifting_apenas_6|base_5": {
+          "custo_integrado_ponderado": 11.0,
+          "custo_mercado_ponderado": 83.222943661316,
+          "premio_verticalizacao_ponderado": 72.222943661316,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 788421728012.8464
+        },
+        "lifting_apenas_6|alto_8": {
+          "custo_integrado_ponderado": 14.0,
+          "custo_mercado_ponderado": 86.222943661316,
+          "premio_verticalizacao_ponderado": 72.222943661316,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 788421728012.8464
+        },
+        "lifting_media_7_3|baixo_3": {
+          "custo_integrado_ponderado": 10.3,
+          "custo_mercado_ponderado": 81.222943661316,
+          "premio_verticalizacao_ponderado": 70.922943661316,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 774230278669.2263
+        },
+        "lifting_media_7_3|base_5": {
+          "custo_integrado_ponderado": 12.3,
+          "custo_mercado_ponderado": 83.222943661316,
+          "premio_verticalizacao_ponderado": 70.922943661316,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 774230278669.2263
+        },
+        "lifting_media_7_3|alto_8": {
+          "custo_integrado_ponderado": 15.3,
+          "custo_mercado_ponderado": 86.222943661316,
+          "premio_verticalizacao_ponderado": 70.922943661316,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 774230278669.2263
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "custo_integrado_ponderado": 24.0,
+          "custo_mercado_ponderado": 81.222943661316,
+          "premio_verticalizacao_ponderado": 57.222943661315995,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 624674235586.4597
+        },
+        "lifting_mais_gov_21|base_5": {
+          "custo_integrado_ponderado": 26.0,
+          "custo_mercado_ponderado": 83.222943661316,
+          "premio_verticalizacao_ponderado": 57.222943661315995,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 624674235586.4597
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "custo_integrado_ponderado": 29.0,
+          "custo_mercado_ponderado": 86.222943661316,
+          "premio_verticalizacao_ponderado": 57.222943661315995,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 624674235586.4597
+        }
+      }
+    },
+    "2015_2025": {
+      "start": 2015,
+      "end": 2025,
+      "brent_ponderado_producao": 67.09258124621361,
+      "producao_total_barris": 7902696745.584348,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "custo_integrado_ponderado": 9.0,
+          "custo_mercado_ponderado": 70.09258124621361,
+          "premio_verticalizacao_ponderado": 61.09258124621361,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 482796142993.7997
+        },
+        "lifting_apenas_6|base_5": {
+          "custo_integrado_ponderado": 11.0,
+          "custo_mercado_ponderado": 72.09258124621361,
+          "premio_verticalizacao_ponderado": 61.09258124621361,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 482796142993.7997
+        },
+        "lifting_apenas_6|alto_8": {
+          "custo_integrado_ponderado": 14.0,
+          "custo_mercado_ponderado": 75.09258124621361,
+          "premio_verticalizacao_ponderado": 61.09258124621361,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 482796142993.7997
+        },
+        "lifting_media_7_3|baixo_3": {
+          "custo_integrado_ponderado": 10.3,
+          "custo_mercado_ponderado": 70.09258124621361,
+          "premio_verticalizacao_ponderado": 59.792581246213615,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 472522637224.54004
+        },
+        "lifting_media_7_3|base_5": {
+          "custo_integrado_ponderado": 12.3,
+          "custo_mercado_ponderado": 72.09258124621361,
+          "premio_verticalizacao_ponderado": 59.792581246213615,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 472522637224.54004
+        },
+        "lifting_media_7_3|alto_8": {
+          "custo_integrado_ponderado": 15.3,
+          "custo_mercado_ponderado": 75.09258124621361,
+          "premio_verticalizacao_ponderado": 59.792581246213615,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 472522637224.54004
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "custo_integrado_ponderado": 24.0,
+          "custo_mercado_ponderado": 70.09258124621361,
+          "premio_verticalizacao_ponderado": 46.09258124621362,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 364255691810.0345
+        },
+        "lifting_mais_gov_21|base_5": {
+          "custo_integrado_ponderado": 26.0,
+          "custo_mercado_ponderado": 72.09258124621361,
+          "premio_verticalizacao_ponderado": 46.09258124621362,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 364255691810.0345
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "custo_integrado_ponderado": 29.0,
+          "custo_mercado_ponderado": 75.09258124621361,
+          "premio_verticalizacao_ponderado": 46.09258124621362,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 364255691810.0345
+        }
+      }
+    },
+    "2011_2026_YTD": {
+      "start": 2011,
+      "end": 2026,
+      "brent_ponderado_producao": 78.65716043072413,
+      "producao_total_barris": 11313353206.69416,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "custo_integrado_ponderado": 9.0,
+          "custo_mercado_ponderado": 81.65716043072413,
+          "premio_verticalizacao_ponderado": 72.65716043072413,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 821996118948.225
+        },
+        "lifting_apenas_6|base_5": {
+          "custo_integrado_ponderado": 11.0,
+          "custo_mercado_ponderado": 83.65716043072413,
+          "premio_verticalizacao_ponderado": 72.65716043072413,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 821996118948.225
+        },
+        "lifting_apenas_6|alto_8": {
+          "custo_integrado_ponderado": 14.000000000000002,
+          "custo_mercado_ponderado": 86.65716043072413,
+          "premio_verticalizacao_ponderado": 72.65716043072413,
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 821996118948.225
+        },
+        "lifting_media_7_3|baixo_3": {
+          "custo_integrado_ponderado": 10.300000000000002,
+          "custo_mercado_ponderado": 81.65716043072413,
+          "premio_verticalizacao_ponderado": 71.35716043072414,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 807288759779.5226
+        },
+        "lifting_media_7_3|base_5": {
+          "custo_integrado_ponderado": 12.300000000000002,
+          "custo_mercado_ponderado": 83.65716043072413,
+          "premio_verticalizacao_ponderado": 71.35716043072414,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 807288759779.5226
+        },
+        "lifting_media_7_3|alto_8": {
+          "custo_integrado_ponderado": 15.300000000000002,
+          "custo_mercado_ponderado": 86.65716043072413,
+          "premio_verticalizacao_ponderado": 71.35716043072414,
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 807288759779.5226
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "custo_integrado_ponderado": 24.000000000000004,
+          "custo_mercado_ponderado": 81.65716043072413,
+          "premio_verticalizacao_ponderado": 57.65716043072414,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "economia_caixa_implicita_usd": 652295820847.8126
+        },
+        "lifting_mais_gov_21|base_5": {
+          "custo_integrado_ponderado": 26.000000000000004,
+          "custo_mercado_ponderado": 83.65716043072413,
+          "premio_verticalizacao_ponderado": 57.65716043072414,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "economia_caixa_implicita_usd": 652295820847.8126
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "custo_integrado_ponderado": 29.000000000000004,
+          "custo_mercado_ponderado": 86.65716043072413,
+          "premio_verticalizacao_ponderado": 57.65716043072414,
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "economia_caixa_implicita_usd": 652295820847.8126
+        }
+      }
+    }
+  },
+  "annual": [
+    {
+      "ano": 2011,
+      "brent_usd_bbl": 111.26,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 701260863.4821947,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 114.26,
+          "premio_verticalizacao_usd_bbl": 105.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 89.26
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 116.26,
+          "premio_verticalizacao_usd_bbl": 105.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 91.26
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 119.26,
+          "premio_verticalizacao_usd_bbl": 105.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 94.26
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 114.26,
+          "premio_verticalizacao_usd_bbl": 103.96000000000001,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 89.26
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 116.26,
+          "premio_verticalizacao_usd_bbl": 103.96000000000001,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 91.26
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 119.26,
+          "premio_verticalizacao_usd_bbl": 103.96000000000001,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 94.26
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 114.26,
+          "premio_verticalizacao_usd_bbl": 90.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 89.26
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 116.26,
+          "premio_verticalizacao_usd_bbl": 90.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 91.26
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 119.26,
+          "premio_verticalizacao_usd_bbl": 90.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 94.26
+        }
+      }
+    },
+    {
+      "ano": 2012,
+      "brent_usd_bbl": 111.63,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 737754075.8564818,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 114.63,
+          "premio_verticalizacao_usd_bbl": 105.63,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 89.63
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 116.63,
+          "premio_verticalizacao_usd_bbl": 105.63,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 91.63
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 119.63,
+          "premio_verticalizacao_usd_bbl": 105.63,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 94.63
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 114.63,
+          "premio_verticalizacao_usd_bbl": 104.33,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 89.63
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 116.63,
+          "premio_verticalizacao_usd_bbl": 104.33,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 91.63
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 119.63,
+          "premio_verticalizacao_usd_bbl": 104.33,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 94.63
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 114.63,
+          "premio_verticalizacao_usd_bbl": 90.63,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 89.63
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 116.63,
+          "premio_verticalizacao_usd_bbl": 90.63,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 91.63
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 119.63,
+          "premio_verticalizacao_usd_bbl": 90.63,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 94.63
+        }
+      }
+    },
+    {
+      "ano": 2013,
+      "brent_usd_bbl": 108.56,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 779341062.0166104,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 111.56,
+          "premio_verticalizacao_usd_bbl": 102.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 86.56
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 113.56,
+          "premio_verticalizacao_usd_bbl": 102.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 88.56
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 116.56,
+          "premio_verticalizacao_usd_bbl": 102.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 91.56
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 111.56,
+          "premio_verticalizacao_usd_bbl": 101.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 86.56
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 113.56,
+          "premio_verticalizacao_usd_bbl": 101.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 88.56
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 116.56,
+          "premio_verticalizacao_usd_bbl": 101.26,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 91.56
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 111.56,
+          "premio_verticalizacao_usd_bbl": 87.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 86.56
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 113.56,
+          "premio_verticalizacao_usd_bbl": 87.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 88.56
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 116.56,
+          "premio_verticalizacao_usd_bbl": 87.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 91.56
+        }
+      }
+    },
+    {
+      "ano": 2014,
+      "brent_usd_bbl": 98.97,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 795446748.1528149,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 101.97,
+          "premio_verticalizacao_usd_bbl": 92.97,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 76.97
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 103.97,
+          "premio_verticalizacao_usd_bbl": 92.97,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 78.97
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 106.97,
+          "premio_verticalizacao_usd_bbl": 92.97,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 81.97
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 101.97,
+          "premio_verticalizacao_usd_bbl": 91.67,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 76.97
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 103.97,
+          "premio_verticalizacao_usd_bbl": 91.67,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 78.97
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 106.97,
+          "premio_verticalizacao_usd_bbl": 91.67,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 81.97
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 101.97,
+          "premio_verticalizacao_usd_bbl": 77.97,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 76.97
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 103.97,
+          "premio_verticalizacao_usd_bbl": 77.97,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 78.97
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 106.97,
+          "premio_verticalizacao_usd_bbl": 77.97,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 81.97
+        }
+      }
+    },
+    {
+      "ano": 2015,
+      "brent_usd_bbl": 52.32,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 745032613.8732951,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 55.32,
+          "premio_verticalizacao_usd_bbl": 46.32,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 30.32
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 57.32,
+          "premio_verticalizacao_usd_bbl": 46.32,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 32.32
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 60.32,
+          "premio_verticalizacao_usd_bbl": 46.32,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 35.32
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 55.32,
+          "premio_verticalizacao_usd_bbl": 45.019999999999996,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 30.32
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 57.32,
+          "premio_verticalizacao_usd_bbl": 45.019999999999996,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 32.32
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 60.32,
+          "premio_verticalizacao_usd_bbl": 45.019999999999996,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 35.32
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 55.32,
+          "premio_verticalizacao_usd_bbl": 31.32,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 30.32
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 57.32,
+          "premio_verticalizacao_usd_bbl": 31.32,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 32.32
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 60.32,
+          "premio_verticalizacao_usd_bbl": 31.32,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 35.32
+        }
+      }
+    },
+    {
+      "ano": 2016,
+      "brent_usd_bbl": 43.64,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 697379474.8311114,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 46.64,
+          "premio_verticalizacao_usd_bbl": 37.64,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 21.64
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 48.64,
+          "premio_verticalizacao_usd_bbl": 37.64,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 23.64
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 51.64,
+          "premio_verticalizacao_usd_bbl": 37.64,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 26.64
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 46.64,
+          "premio_verticalizacao_usd_bbl": 36.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 21.64
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 48.64,
+          "premio_verticalizacao_usd_bbl": 36.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 23.64
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 51.64,
+          "premio_verticalizacao_usd_bbl": 36.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 26.64
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 46.64,
+          "premio_verticalizacao_usd_bbl": 22.64,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 21.64
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 48.64,
+          "premio_verticalizacao_usd_bbl": 22.64,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 23.64
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 51.64,
+          "premio_verticalizacao_usd_bbl": 22.64,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 26.64
+        }
+      }
+    },
+    {
+      "ano": 2017,
+      "brent_usd_bbl": 54.13,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 666817834.4759414,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 57.13,
+          "premio_verticalizacao_usd_bbl": 48.13,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 32.13
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 59.13,
+          "premio_verticalizacao_usd_bbl": 48.13,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 34.13
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 62.13,
+          "premio_verticalizacao_usd_bbl": 48.13,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 37.13
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 57.13,
+          "premio_verticalizacao_usd_bbl": 46.83,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 32.13
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 59.13,
+          "premio_verticalizacao_usd_bbl": 46.83,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 34.13
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 62.13,
+          "premio_verticalizacao_usd_bbl": 46.83,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 37.13
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 57.13,
+          "premio_verticalizacao_usd_bbl": 33.13,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 32.13
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 59.13,
+          "premio_verticalizacao_usd_bbl": 33.13,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 34.13
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 62.13,
+          "premio_verticalizacao_usd_bbl": 33.13,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 37.13
+        }
+      }
+    },
+    {
+      "ano": 2018,
+      "brent_usd_bbl": 71.34,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 656671171.3922223,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 74.34,
+          "premio_verticalizacao_usd_bbl": 65.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 49.34
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 76.34,
+          "premio_verticalizacao_usd_bbl": 65.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 51.34
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 79.34,
+          "premio_verticalizacao_usd_bbl": 65.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 54.34
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 74.34,
+          "premio_verticalizacao_usd_bbl": 64.04,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 49.34
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 76.34,
+          "premio_verticalizacao_usd_bbl": 64.04,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 51.34
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 79.34,
+          "premio_verticalizacao_usd_bbl": 64.04,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 54.34
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 74.34,
+          "premio_verticalizacao_usd_bbl": 50.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 49.34
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 76.34,
+          "premio_verticalizacao_usd_bbl": 50.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 51.34
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 79.34,
+          "premio_verticalizacao_usd_bbl": 50.34,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 54.34
+        }
+      }
+    },
+    {
+      "ano": 2019,
+      "brent_usd_bbl": 64.3,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 657201195.4822159,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 67.3,
+          "premio_verticalizacao_usd_bbl": 58.3,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 42.3
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 69.3,
+          "premio_verticalizacao_usd_bbl": 58.3,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 44.3
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 72.3,
+          "premio_verticalizacao_usd_bbl": 58.3,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 47.3
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 67.3,
+          "premio_verticalizacao_usd_bbl": 57.0,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 42.3
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 69.3,
+          "premio_verticalizacao_usd_bbl": 57.0,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 44.3
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 72.3,
+          "premio_verticalizacao_usd_bbl": 57.0,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 47.3
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 67.3,
+          "premio_verticalizacao_usd_bbl": 43.3,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 42.3
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 69.3,
+          "premio_verticalizacao_usd_bbl": 43.3,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 44.3
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 72.3,
+          "premio_verticalizacao_usd_bbl": 43.3,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 47.3
+        }
+      }
+    },
+    {
+      "ano": 2020,
+      "brent_usd_bbl": 41.96,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 682339124.667677,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 44.96,
+          "premio_verticalizacao_usd_bbl": 35.96,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 19.96
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 46.96,
+          "premio_verticalizacao_usd_bbl": 35.96,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 21.96
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 49.96,
+          "premio_verticalizacao_usd_bbl": 35.96,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 24.96
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 44.96,
+          "premio_verticalizacao_usd_bbl": 34.66,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 19.96
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 46.96,
+          "premio_verticalizacao_usd_bbl": 34.66,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 21.96
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 49.96,
+          "premio_verticalizacao_usd_bbl": 34.66,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 24.96
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 44.96,
+          "premio_verticalizacao_usd_bbl": 20.96,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 19.96
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 46.96,
+          "premio_verticalizacao_usd_bbl": 20.96,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 21.96
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 49.96,
+          "premio_verticalizacao_usd_bbl": 20.96,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 24.96
+        }
+      }
+    },
+    {
+      "ano": 2021,
+      "brent_usd_bbl": 70.86,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 697950694.2726591,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 73.86,
+          "premio_verticalizacao_usd_bbl": 64.86,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 48.86
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 75.86,
+          "premio_verticalizacao_usd_bbl": 64.86,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 50.86
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 78.86,
+          "premio_verticalizacao_usd_bbl": 64.86,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 53.86
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 73.86,
+          "premio_verticalizacao_usd_bbl": 63.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 48.86
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 75.86,
+          "premio_verticalizacao_usd_bbl": 63.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 50.86
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 78.86,
+          "premio_verticalizacao_usd_bbl": 63.56,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 53.86
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 73.86,
+          "premio_verticalizacao_usd_bbl": 49.86,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 48.86
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 75.86,
+          "premio_verticalizacao_usd_bbl": 49.86,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 50.86
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 78.86,
+          "premio_verticalizacao_usd_bbl": 49.86,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 53.86
+        }
+      }
+    },
+    {
+      "ano": 2022,
+      "brent_usd_bbl": 100.93,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 747981946.5762792,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 103.93,
+          "premio_verticalizacao_usd_bbl": 94.93,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 78.93
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 105.93,
+          "premio_verticalizacao_usd_bbl": 94.93,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 80.93
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 108.93,
+          "premio_verticalizacao_usd_bbl": 94.93,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 83.93
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 103.93,
+          "premio_verticalizacao_usd_bbl": 93.63000000000001,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 78.93
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 105.93,
+          "premio_verticalizacao_usd_bbl": 93.63000000000001,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 80.93
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 108.93,
+          "premio_verticalizacao_usd_bbl": 93.63000000000001,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 83.93
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 103.93,
+          "premio_verticalizacao_usd_bbl": 79.93,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 78.93
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 105.93,
+          "premio_verticalizacao_usd_bbl": 79.93,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 80.93
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 108.93,
+          "premio_verticalizacao_usd_bbl": 79.93,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 83.93
+        }
+      }
+    },
+    {
+      "ano": 2023,
+      "brent_usd_bbl": 82.49,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 781375149.527653,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 85.49,
+          "premio_verticalizacao_usd_bbl": 76.49,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 60.489999999999995
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 87.49,
+          "premio_verticalizacao_usd_bbl": 76.49,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 62.489999999999995
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 90.49,
+          "premio_verticalizacao_usd_bbl": 76.49,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 65.49
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 85.49,
+          "premio_verticalizacao_usd_bbl": 75.19,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 60.489999999999995
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 87.49,
+          "premio_verticalizacao_usd_bbl": 75.19,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 62.489999999999995
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 90.49,
+          "premio_verticalizacao_usd_bbl": 75.19,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 65.49
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 85.49,
+          "premio_verticalizacao_usd_bbl": 61.489999999999995,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 60.489999999999995
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 87.49,
+          "premio_verticalizacao_usd_bbl": 61.489999999999995,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 62.489999999999995
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 90.49,
+          "premio_verticalizacao_usd_bbl": 61.489999999999995,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 65.49
+        }
+      }
+    },
+    {
+      "ano": 2024,
+      "brent_usd_bbl": 80.52,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 792214977.3431879,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 83.52,
+          "premio_verticalizacao_usd_bbl": 74.52,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 58.519999999999996
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 85.52,
+          "premio_verticalizacao_usd_bbl": 74.52,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 60.519999999999996
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 88.52,
+          "premio_verticalizacao_usd_bbl": 74.52,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 63.519999999999996
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 83.52,
+          "premio_verticalizacao_usd_bbl": 73.22,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 58.519999999999996
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 85.52,
+          "premio_verticalizacao_usd_bbl": 73.22,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 60.519999999999996
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 88.52,
+          "premio_verticalizacao_usd_bbl": 73.22,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 63.519999999999996
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 83.52,
+          "premio_verticalizacao_usd_bbl": 59.519999999999996,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 58.519999999999996
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 85.52,
+          "premio_verticalizacao_usd_bbl": 59.519999999999996,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 60.519999999999996
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 88.52,
+          "premio_verticalizacao_usd_bbl": 59.519999999999996,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 63.519999999999996
+        }
+      }
+    },
+    {
+      "ano": 2025,
+      "brent_usd_bbl": 69.14,
+      "brent_meses_disponiveis": 12,
+      "producao_derivados_barris": 777732563.1421053,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 72.14,
+          "premio_verticalizacao_usd_bbl": 63.14,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 47.14
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 74.14,
+          "premio_verticalizacao_usd_bbl": 63.14,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 49.14
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 77.14,
+          "premio_verticalizacao_usd_bbl": 63.14,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 52.14
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 72.14,
+          "premio_verticalizacao_usd_bbl": 61.84,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 47.14
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 74.14,
+          "premio_verticalizacao_usd_bbl": 61.84,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 49.14
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 77.14,
+          "premio_verticalizacao_usd_bbl": 61.84,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 52.14
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 72.14,
+          "premio_verticalizacao_usd_bbl": 48.14,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 47.14
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 74.14,
+          "premio_verticalizacao_usd_bbl": 48.14,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 49.14
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 77.14,
+          "premio_verticalizacao_usd_bbl": 48.14,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 52.14
+        }
+      }
+    },
+    {
+      "ano": 2026,
+      "brent_usd_bbl": 90.60142857142857,
+      "brent_meses_disponiveis": 7,
+      "producao_derivados_barris": 396853711.6017119,
+      "cenarios": {
+        "lifting_apenas_6|baixo_3": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 9.0,
+          "custo_mercado_brent_mais_opex": 93.60142857142857,
+          "premio_verticalizacao_usd_bbl": 84.60142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 16.0,
+          "mercado_menos_flat25": 68.60142857142857
+        },
+        "lifting_apenas_6|base_5": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 11.0,
+          "custo_mercado_brent_mais_opex": 95.60142857142857,
+          "premio_verticalizacao_usd_bbl": 84.60142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.0,
+          "mercado_menos_flat25": 70.60142857142857
+        },
+        "lifting_apenas_6|alto_8": {
+          "lifting_usd_bbl": 6.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 14.0,
+          "custo_mercado_brent_mais_opex": 98.60142857142857,
+          "premio_verticalizacao_usd_bbl": 84.60142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 11.0,
+          "mercado_menos_flat25": 73.60142857142857
+        },
+        "lifting_media_7_3|baixo_3": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 10.3,
+          "custo_mercado_brent_mais_opex": 93.60142857142857,
+          "premio_verticalizacao_usd_bbl": 83.30142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 14.7,
+          "mercado_menos_flat25": 68.60142857142857
+        },
+        "lifting_media_7_3|base_5": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 12.3,
+          "custo_mercado_brent_mais_opex": 95.60142857142857,
+          "premio_verticalizacao_usd_bbl": 83.30142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 12.7,
+          "mercado_menos_flat25": 70.60142857142857
+        },
+        "lifting_media_7_3|alto_8": {
+          "lifting_usd_bbl": 7.3,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 15.3,
+          "custo_mercado_brent_mais_opex": 98.60142857142857,
+          "premio_verticalizacao_usd_bbl": 83.30142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 9.7,
+          "mercado_menos_flat25": 73.60142857142857
+        },
+        "lifting_mais_gov_21|baixo_3": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 3.0,
+          "custo_integrado_lifting_mais_opex": 24.0,
+          "custo_mercado_brent_mais_opex": 93.60142857142857,
+          "premio_verticalizacao_usd_bbl": 69.60142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": 1.0,
+          "mercado_menos_flat25": 68.60142857142857
+        },
+        "lifting_mais_gov_21|base_5": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 5.0,
+          "custo_integrado_lifting_mais_opex": 26.0,
+          "custo_mercado_brent_mais_opex": 95.60142857142857,
+          "premio_verticalizacao_usd_bbl": 69.60142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -1.0,
+          "mercado_menos_flat25": 70.60142857142857
+        },
+        "lifting_mais_gov_21|alto_8": {
+          "lifting_usd_bbl": 21.0,
+          "opex_refino_usd_bbl": 8.0,
+          "custo_integrado_lifting_mais_opex": 29.0,
+          "custo_mercado_brent_mais_opex": 98.60142857142857,
+          "premio_verticalizacao_usd_bbl": 69.60142857142857,
+          "hipotese_flat_25": 25.0,
+          "flat25_menos_integrado": -4.0,
+          "mercado_menos_flat25": 73.60142857142857
+        }
+      }
+    }
+  ],
+  "monthly_base_lifting6_opex5": [
+    {
+      "ano": 2011,
+      "mes": 1,
+      "brent_usd_bbl": 96.52,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 101.52,
+      "premio_verticalizacao_usd_bbl": 90.52
+    },
+    {
+      "ano": 2011,
+      "mes": 2,
+      "brent_usd_bbl": 103.72,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 108.72,
+      "premio_verticalizacao_usd_bbl": 97.72
+    },
+    {
+      "ano": 2011,
+      "mes": 3,
+      "brent_usd_bbl": 114.64,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 119.64,
+      "premio_verticalizacao_usd_bbl": 108.64
+    },
+    {
+      "ano": 2011,
+      "mes": 4,
+      "brent_usd_bbl": 123.26,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 128.26,
+      "premio_verticalizacao_usd_bbl": 117.26
+    },
+    {
+      "ano": 2011,
+      "mes": 5,
+      "brent_usd_bbl": 114.99,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 119.99,
+      "premio_verticalizacao_usd_bbl": 108.99
+    },
+    {
+      "ano": 2011,
+      "mes": 6,
+      "brent_usd_bbl": 113.83,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 118.83,
+      "premio_verticalizacao_usd_bbl": 107.83
+    },
+    {
+      "ano": 2011,
+      "mes": 7,
+      "brent_usd_bbl": 116.97,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 121.97,
+      "premio_verticalizacao_usd_bbl": 110.97
+    },
+    {
+      "ano": 2011,
+      "mes": 8,
+      "brent_usd_bbl": 110.22,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 115.22,
+      "premio_verticalizacao_usd_bbl": 104.22
+    },
+    {
+      "ano": 2011,
+      "mes": 9,
+      "brent_usd_bbl": 112.83,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 117.83,
+      "premio_verticalizacao_usd_bbl": 106.83
+    },
+    {
+      "ano": 2011,
+      "mes": 10,
+      "brent_usd_bbl": 109.55,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 114.55,
+      "premio_verticalizacao_usd_bbl": 103.55
+    },
+    {
+      "ano": 2011,
+      "mes": 11,
+      "brent_usd_bbl": 110.77,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 115.77,
+      "premio_verticalizacao_usd_bbl": 104.77
+    },
+    {
+      "ano": 2011,
+      "mes": 12,
+      "brent_usd_bbl": 107.87,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 112.87,
+      "premio_verticalizacao_usd_bbl": 101.87
+    },
+    {
+      "ano": 2012,
+      "mes": 1,
+      "brent_usd_bbl": 110.69,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 115.69,
+      "premio_verticalizacao_usd_bbl": 104.69
+    },
+    {
+      "ano": 2012,
+      "mes": 2,
+      "brent_usd_bbl": 119.33,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 124.33,
+      "premio_verticalizacao_usd_bbl": 113.33
+    },
+    {
+      "ano": 2012,
+      "mes": 3,
+      "brent_usd_bbl": 125.45,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 130.45,
+      "premio_verticalizacao_usd_bbl": 119.45
+    },
+    {
+      "ano": 2012,
+      "mes": 4,
+      "brent_usd_bbl": 119.75,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 124.75,
+      "premio_verticalizacao_usd_bbl": 113.75
+    },
+    {
+      "ano": 2012,
+      "mes": 5,
+      "brent_usd_bbl": 110.34,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 115.34,
+      "premio_verticalizacao_usd_bbl": 104.34
+    },
+    {
+      "ano": 2012,
+      "mes": 6,
+      "brent_usd_bbl": 95.16,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 100.16,
+      "premio_verticalizacao_usd_bbl": 89.16
+    },
+    {
+      "ano": 2012,
+      "mes": 7,
+      "brent_usd_bbl": 102.62,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 107.62,
+      "premio_verticalizacao_usd_bbl": 96.62
+    },
+    {
+      "ano": 2012,
+      "mes": 8,
+      "brent_usd_bbl": 113.36,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 118.36,
+      "premio_verticalizacao_usd_bbl": 107.36
+    },
+    {
+      "ano": 2012,
+      "mes": 9,
+      "brent_usd_bbl": 112.86,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 117.86,
+      "premio_verticalizacao_usd_bbl": 106.86
+    },
+    {
+      "ano": 2012,
+      "mes": 10,
+      "brent_usd_bbl": 111.71,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 116.71,
+      "premio_verticalizacao_usd_bbl": 105.71
+    },
+    {
+      "ano": 2012,
+      "mes": 11,
+      "brent_usd_bbl": 109.06,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 114.06,
+      "premio_verticalizacao_usd_bbl": 103.06
+    },
+    {
+      "ano": 2012,
+      "mes": 12,
+      "brent_usd_bbl": 109.49,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 114.49,
+      "premio_verticalizacao_usd_bbl": 103.49
+    },
+    {
+      "ano": 2013,
+      "mes": 1,
+      "brent_usd_bbl": 112.96,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 117.96,
+      "premio_verticalizacao_usd_bbl": 106.96
+    },
+    {
+      "ano": 2013,
+      "mes": 2,
+      "brent_usd_bbl": 116.05,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 121.05,
+      "premio_verticalizacao_usd_bbl": 110.05
+    },
+    {
+      "ano": 2013,
+      "mes": 3,
+      "brent_usd_bbl": 108.47,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 113.47,
+      "premio_verticalizacao_usd_bbl": 102.47
+    },
+    {
+      "ano": 2013,
+      "mes": 4,
+      "brent_usd_bbl": 102.25,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 107.25,
+      "premio_verticalizacao_usd_bbl": 96.25
+    },
+    {
+      "ano": 2013,
+      "mes": 5,
+      "brent_usd_bbl": 102.56,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 107.56,
+      "premio_verticalizacao_usd_bbl": 96.56
+    },
+    {
+      "ano": 2013,
+      "mes": 6,
+      "brent_usd_bbl": 102.92,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 107.92,
+      "premio_verticalizacao_usd_bbl": 96.92
+    },
+    {
+      "ano": 2013,
+      "mes": 7,
+      "brent_usd_bbl": 107.93,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 112.93,
+      "premio_verticalizacao_usd_bbl": 101.93
+    },
+    {
+      "ano": 2013,
+      "mes": 8,
+      "brent_usd_bbl": 111.28,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 116.28,
+      "premio_verticalizacao_usd_bbl": 105.28
+    },
+    {
+      "ano": 2013,
+      "mes": 9,
+      "brent_usd_bbl": 111.6,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 116.6,
+      "premio_verticalizacao_usd_bbl": 105.6
+    },
+    {
+      "ano": 2013,
+      "mes": 10,
+      "brent_usd_bbl": 109.08,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 114.08,
+      "premio_verticalizacao_usd_bbl": 103.08
+    },
+    {
+      "ano": 2013,
+      "mes": 11,
+      "brent_usd_bbl": 107.79,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 112.79,
+      "premio_verticalizacao_usd_bbl": 101.79
+    },
+    {
+      "ano": 2013,
+      "mes": 12,
+      "brent_usd_bbl": 110.76,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 115.76,
+      "premio_verticalizacao_usd_bbl": 104.76
+    },
+    {
+      "ano": 2014,
+      "mes": 1,
+      "brent_usd_bbl": 108.12,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 113.12,
+      "premio_verticalizacao_usd_bbl": 102.12
+    },
+    {
+      "ano": 2014,
+      "mes": 2,
+      "brent_usd_bbl": 108.9,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 113.9,
+      "premio_verticalizacao_usd_bbl": 102.9
+    },
+    {
+      "ano": 2014,
+      "mes": 3,
+      "brent_usd_bbl": 107.48,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 112.48,
+      "premio_verticalizacao_usd_bbl": 101.48
+    },
+    {
+      "ano": 2014,
+      "mes": 4,
+      "brent_usd_bbl": 107.76,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 112.76,
+      "premio_verticalizacao_usd_bbl": 101.76
+    },
+    {
+      "ano": 2014,
+      "mes": 5,
+      "brent_usd_bbl": 109.54,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 114.54,
+      "premio_verticalizacao_usd_bbl": 103.54
+    },
+    {
+      "ano": 2014,
+      "mes": 6,
+      "brent_usd_bbl": 111.8,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 116.8,
+      "premio_verticalizacao_usd_bbl": 105.8
+    },
+    {
+      "ano": 2014,
+      "mes": 7,
+      "brent_usd_bbl": 106.77,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 111.77,
+      "premio_verticalizacao_usd_bbl": 100.77
+    },
+    {
+      "ano": 2014,
+      "mes": 8,
+      "brent_usd_bbl": 101.61,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 106.61,
+      "premio_verticalizacao_usd_bbl": 95.61
+    },
+    {
+      "ano": 2014,
+      "mes": 9,
+      "brent_usd_bbl": 97.09,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 102.09,
+      "premio_verticalizacao_usd_bbl": 91.09
+    },
+    {
+      "ano": 2014,
+      "mes": 10,
+      "brent_usd_bbl": 87.43,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 92.43,
+      "premio_verticalizacao_usd_bbl": 81.43
+    },
+    {
+      "ano": 2014,
+      "mes": 11,
+      "brent_usd_bbl": 79.44,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 84.44,
+      "premio_verticalizacao_usd_bbl": 73.44
+    },
+    {
+      "ano": 2014,
+      "mes": 12,
+      "brent_usd_bbl": 62.34,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 67.34,
+      "premio_verticalizacao_usd_bbl": 56.34
+    },
+    {
+      "ano": 2015,
+      "mes": 1,
+      "brent_usd_bbl": 47.76,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 52.76,
+      "premio_verticalizacao_usd_bbl": 41.76
+    },
+    {
+      "ano": 2015,
+      "mes": 2,
+      "brent_usd_bbl": 58.1,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 63.1,
+      "premio_verticalizacao_usd_bbl": 52.1
+    },
+    {
+      "ano": 2015,
+      "mes": 3,
+      "brent_usd_bbl": 55.89,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 60.89,
+      "premio_verticalizacao_usd_bbl": 49.89
+    },
+    {
+      "ano": 2015,
+      "mes": 4,
+      "brent_usd_bbl": 59.52,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 64.52000000000001,
+      "premio_verticalizacao_usd_bbl": 53.52
+    },
+    {
+      "ano": 2015,
+      "mes": 5,
+      "brent_usd_bbl": 64.08,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 69.08,
+      "premio_verticalizacao_usd_bbl": 58.08
+    },
+    {
+      "ano": 2015,
+      "mes": 6,
+      "brent_usd_bbl": 61.48,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 66.47999999999999,
+      "premio_verticalizacao_usd_bbl": 55.48
+    },
+    {
+      "ano": 2015,
+      "mes": 7,
+      "brent_usd_bbl": 56.56,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 61.56,
+      "premio_verticalizacao_usd_bbl": 50.56
+    },
+    {
+      "ano": 2015,
+      "mes": 8,
+      "brent_usd_bbl": 46.52,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 51.52,
+      "premio_verticalizacao_usd_bbl": 40.52
+    },
+    {
+      "ano": 2015,
+      "mes": 9,
+      "brent_usd_bbl": 47.62,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 52.62,
+      "premio_verticalizacao_usd_bbl": 41.62
+    },
+    {
+      "ano": 2015,
+      "mes": 10,
+      "brent_usd_bbl": 48.43,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 53.43,
+      "premio_verticalizacao_usd_bbl": 42.43
+    },
+    {
+      "ano": 2015,
+      "mes": 11,
+      "brent_usd_bbl": 44.27,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 49.27,
+      "premio_verticalizacao_usd_bbl": 38.27
+    },
+    {
+      "ano": 2015,
+      "mes": 12,
+      "brent_usd_bbl": 38.01,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 43.01,
+      "premio_verticalizacao_usd_bbl": 32.01
+    },
+    {
+      "ano": 2016,
+      "mes": 1,
+      "brent_usd_bbl": 30.7,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 35.7,
+      "premio_verticalizacao_usd_bbl": 24.7
+    },
+    {
+      "ano": 2016,
+      "mes": 2,
+      "brent_usd_bbl": 32.18,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 37.18,
+      "premio_verticalizacao_usd_bbl": 26.18
+    },
+    {
+      "ano": 2016,
+      "mes": 3,
+      "brent_usd_bbl": 38.21,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 43.21,
+      "premio_verticalizacao_usd_bbl": 32.21
+    },
+    {
+      "ano": 2016,
+      "mes": 4,
+      "brent_usd_bbl": 41.58,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 46.58,
+      "premio_verticalizacao_usd_bbl": 35.58
+    },
+    {
+      "ano": 2016,
+      "mes": 5,
+      "brent_usd_bbl": 46.74,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 51.74,
+      "premio_verticalizacao_usd_bbl": 40.74
+    },
+    {
+      "ano": 2016,
+      "mes": 6,
+      "brent_usd_bbl": 48.25,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 53.25,
+      "premio_verticalizacao_usd_bbl": 42.25
+    },
+    {
+      "ano": 2016,
+      "mes": 7,
+      "brent_usd_bbl": 44.95,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 49.95,
+      "premio_verticalizacao_usd_bbl": 38.95
+    },
+    {
+      "ano": 2016,
+      "mes": 8,
+      "brent_usd_bbl": 45.84,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 50.84,
+      "premio_verticalizacao_usd_bbl": 39.84
+    },
+    {
+      "ano": 2016,
+      "mes": 9,
+      "brent_usd_bbl": 46.57,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 51.57,
+      "premio_verticalizacao_usd_bbl": 40.57
+    },
+    {
+      "ano": 2016,
+      "mes": 10,
+      "brent_usd_bbl": 49.52,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 54.52,
+      "premio_verticalizacao_usd_bbl": 43.52
+    },
+    {
+      "ano": 2016,
+      "mes": 11,
+      "brent_usd_bbl": 44.73,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 49.73,
+      "premio_verticalizacao_usd_bbl": 38.73
+    },
+    {
+      "ano": 2016,
+      "mes": 12,
+      "brent_usd_bbl": 53.31,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 58.31,
+      "premio_verticalizacao_usd_bbl": 47.31
+    },
+    {
+      "ano": 2017,
+      "mes": 1,
+      "brent_usd_bbl": 54.58,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 59.58,
+      "premio_verticalizacao_usd_bbl": 48.58
+    },
+    {
+      "ano": 2017,
+      "mes": 2,
+      "brent_usd_bbl": 54.87,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 59.87,
+      "premio_verticalizacao_usd_bbl": 48.87
+    },
+    {
+      "ano": 2017,
+      "mes": 3,
+      "brent_usd_bbl": 51.59,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 56.59,
+      "premio_verticalizacao_usd_bbl": 45.59
+    },
+    {
+      "ano": 2017,
+      "mes": 4,
+      "brent_usd_bbl": 52.31,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 57.31,
+      "premio_verticalizacao_usd_bbl": 46.31
+    },
+    {
+      "ano": 2017,
+      "mes": 5,
+      "brent_usd_bbl": 50.33,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 55.33,
+      "premio_verticalizacao_usd_bbl": 44.33
+    },
+    {
+      "ano": 2017,
+      "mes": 6,
+      "brent_usd_bbl": 46.37,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 51.37,
+      "premio_verticalizacao_usd_bbl": 40.37
+    },
+    {
+      "ano": 2017,
+      "mes": 7,
+      "brent_usd_bbl": 48.48,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 53.48,
+      "premio_verticalizacao_usd_bbl": 42.48
+    },
+    {
+      "ano": 2017,
+      "mes": 8,
+      "brent_usd_bbl": 51.7,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 56.7,
+      "premio_verticalizacao_usd_bbl": 45.7
+    },
+    {
+      "ano": 2017,
+      "mes": 9,
+      "brent_usd_bbl": 56.15,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 61.15,
+      "premio_verticalizacao_usd_bbl": 50.15
+    },
+    {
+      "ano": 2017,
+      "mes": 10,
+      "brent_usd_bbl": 57.51,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 62.51,
+      "premio_verticalizacao_usd_bbl": 51.51
+    },
+    {
+      "ano": 2017,
+      "mes": 11,
+      "brent_usd_bbl": 62.71,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 67.71000000000001,
+      "premio_verticalizacao_usd_bbl": 56.71
+    },
+    {
+      "ano": 2017,
+      "mes": 12,
+      "brent_usd_bbl": 64.37,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 69.37,
+      "premio_verticalizacao_usd_bbl": 58.370000000000005
+    },
+    {
+      "ano": 2018,
+      "mes": 1,
+      "brent_usd_bbl": 69.08,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 74.08,
+      "premio_verticalizacao_usd_bbl": 63.08
+    },
+    {
+      "ano": 2018,
+      "mes": 2,
+      "brent_usd_bbl": 65.32,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 70.32,
+      "premio_verticalizacao_usd_bbl": 59.31999999999999
+    },
+    {
+      "ano": 2018,
+      "mes": 3,
+      "brent_usd_bbl": 66.02,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 71.02,
+      "premio_verticalizacao_usd_bbl": 60.019999999999996
+    },
+    {
+      "ano": 2018,
+      "mes": 4,
+      "brent_usd_bbl": 72.11,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 77.11,
+      "premio_verticalizacao_usd_bbl": 66.11
+    },
+    {
+      "ano": 2018,
+      "mes": 5,
+      "brent_usd_bbl": 76.98,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 81.98,
+      "premio_verticalizacao_usd_bbl": 70.98
+    },
+    {
+      "ano": 2018,
+      "mes": 6,
+      "brent_usd_bbl": 74.41,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 79.41,
+      "premio_verticalizacao_usd_bbl": 68.41
+    },
+    {
+      "ano": 2018,
+      "mes": 7,
+      "brent_usd_bbl": 74.25,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 79.25,
+      "premio_verticalizacao_usd_bbl": 68.25
+    },
+    {
+      "ano": 2018,
+      "mes": 8,
+      "brent_usd_bbl": 72.53,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 77.53,
+      "premio_verticalizacao_usd_bbl": 66.53
+    },
+    {
+      "ano": 2018,
+      "mes": 9,
+      "brent_usd_bbl": 78.89,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 83.89,
+      "premio_verticalizacao_usd_bbl": 72.89
+    },
+    {
+      "ano": 2018,
+      "mes": 10,
+      "brent_usd_bbl": 81.03,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 86.03,
+      "premio_verticalizacao_usd_bbl": 75.03
+    },
+    {
+      "ano": 2018,
+      "mes": 11,
+      "brent_usd_bbl": 64.75,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 69.75,
+      "premio_verticalizacao_usd_bbl": 58.75
+    },
+    {
+      "ano": 2018,
+      "mes": 12,
+      "brent_usd_bbl": 57.36,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 62.36,
+      "premio_verticalizacao_usd_bbl": 51.36
+    },
+    {
+      "ano": 2019,
+      "mes": 1,
+      "brent_usd_bbl": 59.41,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 64.41,
+      "premio_verticalizacao_usd_bbl": 53.41
+    },
+    {
+      "ano": 2019,
+      "mes": 2,
+      "brent_usd_bbl": 63.96,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 68.96000000000001,
+      "premio_verticalizacao_usd_bbl": 57.96
+    },
+    {
+      "ano": 2019,
+      "mes": 3,
+      "brent_usd_bbl": 66.14,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 71.14,
+      "premio_verticalizacao_usd_bbl": 60.14
+    },
+    {
+      "ano": 2019,
+      "mes": 4,
+      "brent_usd_bbl": 71.23,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 76.23,
+      "premio_verticalizacao_usd_bbl": 65.23
+    },
+    {
+      "ano": 2019,
+      "mes": 5,
+      "brent_usd_bbl": 71.32,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 76.32,
+      "premio_verticalizacao_usd_bbl": 65.32
+    },
+    {
+      "ano": 2019,
+      "mes": 6,
+      "brent_usd_bbl": 64.22,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 69.22,
+      "premio_verticalizacao_usd_bbl": 58.22
+    },
+    {
+      "ano": 2019,
+      "mes": 7,
+      "brent_usd_bbl": 63.92,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 68.92,
+      "premio_verticalizacao_usd_bbl": 57.92
+    },
+    {
+      "ano": 2019,
+      "mes": 8,
+      "brent_usd_bbl": 59.04,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 64.03999999999999,
+      "premio_verticalizacao_usd_bbl": 53.04
+    },
+    {
+      "ano": 2019,
+      "mes": 9,
+      "brent_usd_bbl": 62.83,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 67.83,
+      "premio_verticalizacao_usd_bbl": 56.83
+    },
+    {
+      "ano": 2019,
+      "mes": 10,
+      "brent_usd_bbl": 59.71,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 64.71000000000001,
+      "premio_verticalizacao_usd_bbl": 53.71
+    },
+    {
+      "ano": 2019,
+      "mes": 11,
+      "brent_usd_bbl": 63.21,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 68.21000000000001,
+      "premio_verticalizacao_usd_bbl": 57.21
+    },
+    {
+      "ano": 2019,
+      "mes": 12,
+      "brent_usd_bbl": 67.31,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 72.31,
+      "premio_verticalizacao_usd_bbl": 61.31
+    },
+    {
+      "ano": 2020,
+      "mes": 1,
+      "brent_usd_bbl": 63.65,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 68.65,
+      "premio_verticalizacao_usd_bbl": 57.65
+    },
+    {
+      "ano": 2020,
+      "mes": 2,
+      "brent_usd_bbl": 55.66,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 60.66,
+      "premio_verticalizacao_usd_bbl": 49.66
+    },
+    {
+      "ano": 2020,
+      "mes": 3,
+      "brent_usd_bbl": 32.01,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 37.01,
+      "premio_verticalizacao_usd_bbl": 26.009999999999998
+    },
+    {
+      "ano": 2020,
+      "mes": 4,
+      "brent_usd_bbl": 18.38,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 23.38,
+      "premio_verticalizacao_usd_bbl": 12.379999999999999
+    },
+    {
+      "ano": 2020,
+      "mes": 5,
+      "brent_usd_bbl": 29.38,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 34.379999999999995,
+      "premio_verticalizacao_usd_bbl": 23.38
+    },
+    {
+      "ano": 2020,
+      "mes": 6,
+      "brent_usd_bbl": 40.27,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 45.27,
+      "premio_verticalizacao_usd_bbl": 34.27
+    },
+    {
+      "ano": 2020,
+      "mes": 7,
+      "brent_usd_bbl": 43.24,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 48.24,
+      "premio_verticalizacao_usd_bbl": 37.24
+    },
+    {
+      "ano": 2020,
+      "mes": 8,
+      "brent_usd_bbl": 44.74,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 49.74,
+      "premio_verticalizacao_usd_bbl": 38.74
+    },
+    {
+      "ano": 2020,
+      "mes": 9,
+      "brent_usd_bbl": 40.91,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 45.91,
+      "premio_verticalizacao_usd_bbl": 34.91
+    },
+    {
+      "ano": 2020,
+      "mes": 10,
+      "brent_usd_bbl": 40.19,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 45.19,
+      "premio_verticalizacao_usd_bbl": 34.19
+    },
+    {
+      "ano": 2020,
+      "mes": 11,
+      "brent_usd_bbl": 42.69,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 47.69,
+      "premio_verticalizacao_usd_bbl": 36.69
+    },
+    {
+      "ano": 2020,
+      "mes": 12,
+      "brent_usd_bbl": 49.99,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 54.99,
+      "premio_verticalizacao_usd_bbl": 43.99
+    },
+    {
+      "ano": 2021,
+      "mes": 1,
+      "brent_usd_bbl": 54.77,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 59.77,
+      "premio_verticalizacao_usd_bbl": 48.77
+    },
+    {
+      "ano": 2021,
+      "mes": 2,
+      "brent_usd_bbl": 62.28,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 67.28,
+      "premio_verticalizacao_usd_bbl": 56.28
+    },
+    {
+      "ano": 2021,
+      "mes": 3,
+      "brent_usd_bbl": 65.41,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 70.41,
+      "premio_verticalizacao_usd_bbl": 59.41
+    },
+    {
+      "ano": 2021,
+      "mes": 4,
+      "brent_usd_bbl": 64.81,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 69.81,
+      "premio_verticalizacao_usd_bbl": 58.81
+    },
+    {
+      "ano": 2021,
+      "mes": 5,
+      "brent_usd_bbl": 68.53,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 73.53,
+      "premio_verticalizacao_usd_bbl": 62.53
+    },
+    {
+      "ano": 2021,
+      "mes": 6,
+      "brent_usd_bbl": 73.16,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 78.16,
+      "premio_verticalizacao_usd_bbl": 67.16
+    },
+    {
+      "ano": 2021,
+      "mes": 7,
+      "brent_usd_bbl": 75.17,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 80.17,
+      "premio_verticalizacao_usd_bbl": 69.17
+    },
+    {
+      "ano": 2021,
+      "mes": 8,
+      "brent_usd_bbl": 70.75,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 75.75,
+      "premio_verticalizacao_usd_bbl": 64.75
+    },
+    {
+      "ano": 2021,
+      "mes": 9,
+      "brent_usd_bbl": 74.49,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 79.49,
+      "premio_verticalizacao_usd_bbl": 68.49
+    },
+    {
+      "ano": 2021,
+      "mes": 10,
+      "brent_usd_bbl": 83.54,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 88.54,
+      "premio_verticalizacao_usd_bbl": 77.54
+    },
+    {
+      "ano": 2021,
+      "mes": 11,
+      "brent_usd_bbl": 81.05,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 86.05,
+      "premio_verticalizacao_usd_bbl": 75.05
+    },
+    {
+      "ano": 2021,
+      "mes": 12,
+      "brent_usd_bbl": 74.17,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 79.17,
+      "premio_verticalizacao_usd_bbl": 68.17
+    },
+    {
+      "ano": 2022,
+      "mes": 1,
+      "brent_usd_bbl": 86.51,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 91.51,
+      "premio_verticalizacao_usd_bbl": 80.51
+    },
+    {
+      "ano": 2022,
+      "mes": 2,
+      "brent_usd_bbl": 97.13,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 102.13,
+      "premio_verticalizacao_usd_bbl": 91.13
+    },
+    {
+      "ano": 2022,
+      "mes": 3,
+      "brent_usd_bbl": 117.25,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 122.25,
+      "premio_verticalizacao_usd_bbl": 111.25
+    },
+    {
+      "ano": 2022,
+      "mes": 4,
+      "brent_usd_bbl": 104.58,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 109.58,
+      "premio_verticalizacao_usd_bbl": 98.58
+    },
+    {
+      "ano": 2022,
+      "mes": 5,
+      "brent_usd_bbl": 113.34,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 118.34,
+      "premio_verticalizacao_usd_bbl": 107.34
+    },
+    {
+      "ano": 2022,
+      "mes": 6,
+      "brent_usd_bbl": 122.71,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 127.71,
+      "premio_verticalizacao_usd_bbl": 116.71
+    },
+    {
+      "ano": 2022,
+      "mes": 7,
+      "brent_usd_bbl": 111.93,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 116.93,
+      "premio_verticalizacao_usd_bbl": 105.93
+    },
+    {
+      "ano": 2022,
+      "mes": 8,
+      "brent_usd_bbl": 100.45,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 105.45,
+      "premio_verticalizacao_usd_bbl": 94.45
+    },
+    {
+      "ano": 2022,
+      "mes": 9,
+      "brent_usd_bbl": 89.76,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 94.76,
+      "premio_verticalizacao_usd_bbl": 83.76
+    },
+    {
+      "ano": 2022,
+      "mes": 10,
+      "brent_usd_bbl": 93.33,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 98.33,
+      "premio_verticalizacao_usd_bbl": 87.33
+    },
+    {
+      "ano": 2022,
+      "mes": 11,
+      "brent_usd_bbl": 91.42,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 96.42,
+      "premio_verticalizacao_usd_bbl": 85.42
+    },
+    {
+      "ano": 2022,
+      "mes": 12,
+      "brent_usd_bbl": 80.92,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 85.92,
+      "premio_verticalizacao_usd_bbl": 74.92
+    },
+    {
+      "ano": 2023,
+      "mes": 1,
+      "brent_usd_bbl": 82.5,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 87.5,
+      "premio_verticalizacao_usd_bbl": 76.5
+    },
+    {
+      "ano": 2023,
+      "mes": 2,
+      "brent_usd_bbl": 82.59,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 87.59,
+      "premio_verticalizacao_usd_bbl": 76.59
+    },
+    {
+      "ano": 2023,
+      "mes": 3,
+      "brent_usd_bbl": 78.43,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 83.43,
+      "premio_verticalizacao_usd_bbl": 72.43
+    },
+    {
+      "ano": 2023,
+      "mes": 4,
+      "brent_usd_bbl": 84.64,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 89.64,
+      "premio_verticalizacao_usd_bbl": 78.64
+    },
+    {
+      "ano": 2023,
+      "mes": 5,
+      "brent_usd_bbl": 75.47,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 80.47,
+      "premio_verticalizacao_usd_bbl": 69.47
+    },
+    {
+      "ano": 2023,
+      "mes": 6,
+      "brent_usd_bbl": 74.84,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 79.84,
+      "premio_verticalizacao_usd_bbl": 68.84
+    },
+    {
+      "ano": 2023,
+      "mes": 7,
+      "brent_usd_bbl": 80.11,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 85.11,
+      "premio_verticalizacao_usd_bbl": 74.11
+    },
+    {
+      "ano": 2023,
+      "mes": 8,
+      "brent_usd_bbl": 86.15,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 91.15,
+      "premio_verticalizacao_usd_bbl": 80.15
+    },
+    {
+      "ano": 2023,
+      "mes": 9,
+      "brent_usd_bbl": 93.72,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 98.72,
+      "premio_verticalizacao_usd_bbl": 87.72
+    },
+    {
+      "ano": 2023,
+      "mes": 10,
+      "brent_usd_bbl": 90.6,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 95.6,
+      "premio_verticalizacao_usd_bbl": 84.6
+    },
+    {
+      "ano": 2023,
+      "mes": 11,
+      "brent_usd_bbl": 82.94,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 87.94,
+      "premio_verticalizacao_usd_bbl": 76.94
+    },
+    {
+      "ano": 2023,
+      "mes": 12,
+      "brent_usd_bbl": 77.63,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 82.63,
+      "premio_verticalizacao_usd_bbl": 71.63
+    },
+    {
+      "ano": 2024,
+      "mes": 1,
+      "brent_usd_bbl": 80.12,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 85.12,
+      "premio_verticalizacao_usd_bbl": 74.12
+    },
+    {
+      "ano": 2024,
+      "mes": 2,
+      "brent_usd_bbl": 83.48,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 88.48,
+      "premio_verticalizacao_usd_bbl": 77.48
+    },
+    {
+      "ano": 2024,
+      "mes": 3,
+      "brent_usd_bbl": 85.41,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 90.41,
+      "premio_verticalizacao_usd_bbl": 79.41
+    },
+    {
+      "ano": 2024,
+      "mes": 4,
+      "brent_usd_bbl": 89.94,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 94.94,
+      "premio_verticalizacao_usd_bbl": 83.94
+    },
+    {
+      "ano": 2024,
+      "mes": 5,
+      "brent_usd_bbl": 81.75,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 86.75,
+      "premio_verticalizacao_usd_bbl": 75.75
+    },
+    {
+      "ano": 2024,
+      "mes": 6,
+      "brent_usd_bbl": 82.25,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 87.25,
+      "premio_verticalizacao_usd_bbl": 76.25
+    },
+    {
+      "ano": 2024,
+      "mes": 7,
+      "brent_usd_bbl": 85.15,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 90.15,
+      "premio_verticalizacao_usd_bbl": 79.15
+    },
+    {
+      "ano": 2024,
+      "mes": 8,
+      "brent_usd_bbl": 80.36,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 85.36,
+      "premio_verticalizacao_usd_bbl": 74.36
+    },
+    {
+      "ano": 2024,
+      "mes": 9,
+      "brent_usd_bbl": 74.02,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 79.02,
+      "premio_verticalizacao_usd_bbl": 68.02
+    },
+    {
+      "ano": 2024,
+      "mes": 10,
+      "brent_usd_bbl": 75.63,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 80.63,
+      "premio_verticalizacao_usd_bbl": 69.63
+    },
+    {
+      "ano": 2024,
+      "mes": 11,
+      "brent_usd_bbl": 74.35,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 79.35,
+      "premio_verticalizacao_usd_bbl": 68.35
+    },
+    {
+      "ano": 2024,
+      "mes": 12,
+      "brent_usd_bbl": 73.86,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 78.86,
+      "premio_verticalizacao_usd_bbl": 67.86
+    },
+    {
+      "ano": 2025,
+      "mes": 1,
+      "brent_usd_bbl": 79.27,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 84.27,
+      "premio_verticalizacao_usd_bbl": 73.27
+    },
+    {
+      "ano": 2025,
+      "mes": 2,
+      "brent_usd_bbl": 75.44,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 80.44,
+      "premio_verticalizacao_usd_bbl": 69.44
+    },
+    {
+      "ano": 2025,
+      "mes": 3,
+      "brent_usd_bbl": 72.73,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 77.73,
+      "premio_verticalizacao_usd_bbl": 66.73
+    },
+    {
+      "ano": 2025,
+      "mes": 4,
+      "brent_usd_bbl": 68.13,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 73.13,
+      "premio_verticalizacao_usd_bbl": 62.129999999999995
+    },
+    {
+      "ano": 2025,
+      "mes": 5,
+      "brent_usd_bbl": 64.45,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 69.45,
+      "premio_verticalizacao_usd_bbl": 58.45
+    },
+    {
+      "ano": 2025,
+      "mes": 6,
+      "brent_usd_bbl": 71.44,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 76.44,
+      "premio_verticalizacao_usd_bbl": 65.44
+    },
+    {
+      "ano": 2025,
+      "mes": 7,
+      "brent_usd_bbl": 71.04,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 76.04,
+      "premio_verticalizacao_usd_bbl": 65.04
+    },
+    {
+      "ano": 2025,
+      "mes": 8,
+      "brent_usd_bbl": 67.87,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 72.87,
+      "premio_verticalizacao_usd_bbl": 61.870000000000005
+    },
+    {
+      "ano": 2025,
+      "mes": 9,
+      "brent_usd_bbl": 67.99,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 72.99,
+      "premio_verticalizacao_usd_bbl": 61.989999999999995
+    },
+    {
+      "ano": 2025,
+      "mes": 10,
+      "brent_usd_bbl": 64.54,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 69.54,
+      "premio_verticalizacao_usd_bbl": 58.540000000000006
+    },
+    {
+      "ano": 2025,
+      "mes": 11,
+      "brent_usd_bbl": 63.8,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 68.8,
+      "premio_verticalizacao_usd_bbl": 57.8
+    },
+    {
+      "ano": 2025,
+      "mes": 12,
+      "brent_usd_bbl": 62.54,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 67.53999999999999,
+      "premio_verticalizacao_usd_bbl": 56.54
+    },
+    {
+      "ano": 2026,
+      "mes": 1,
+      "brent_usd_bbl": 66.6,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 71.6,
+      "premio_verticalizacao_usd_bbl": 60.599999999999994
+    },
+    {
+      "ano": 2026,
+      "mes": 2,
+      "brent_usd_bbl": 70.89,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 75.89,
+      "premio_verticalizacao_usd_bbl": 64.89
+    },
+    {
+      "ano": 2026,
+      "mes": 3,
+      "brent_usd_bbl": 103.13,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 108.13,
+      "premio_verticalizacao_usd_bbl": 97.13
+    },
+    {
+      "ano": 2026,
+      "mes": 4,
+      "brent_usd_bbl": 117.29,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 122.29,
+      "premio_verticalizacao_usd_bbl": 111.29
+    },
+    {
+      "ano": 2026,
+      "mes": 5,
+      "brent_usd_bbl": 107.14,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 112.14,
+      "premio_verticalizacao_usd_bbl": 101.14
+    },
+    {
+      "ano": 2026,
+      "mes": 6,
+      "brent_usd_bbl": 85.4,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 90.4,
+      "premio_verticalizacao_usd_bbl": 79.4
+    },
+    {
+      "ano": 2026,
+      "mes": 7,
+      "brent_usd_bbl": 83.76,
+      "lifting_usd_bbl": 6.0,
+      "opex_refino_usd_bbl": 5.0,
+      "custo_integrado_lifting_mais_opex": 11.0,
+      "custo_mercado_brent_mais_opex": 88.76,
+      "premio_verticalizacao_usd_bbl": 77.76
+    }
+  ]
+}
