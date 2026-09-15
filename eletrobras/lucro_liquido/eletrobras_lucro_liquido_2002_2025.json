@@ -1,0 +1,218 @@
+[
+  {
+    "ano":2002,
+    "lucro_liquido_atribuivel_r_milhoes":1100.3,
+    "lucro_liquido_atribuivel_r_bi":1.1,
+    "lucro_liquido_consolidado_r_milhoes":1100.3,
+    "lucro_liquido_consolidado_r_bi":1.1,
+    "norma_contabil":"BR GAAP",
+    "fonte":"Relatório Anual 2002 (R$ 1.100,3 mi)"
+  },
+  {
+    "ano":2003,
+    "lucro_liquido_atribuivel_r_milhoes":323.0,
+    "lucro_liquido_atribuivel_r_bi":0.323,
+    "lucro_liquido_consolidado_r_milhoes":323.0,
+    "lucro_liquido_consolidado_r_bi":0.323,
+    "norma_contabil":"BR GAAP",
+    "fonte":"Relatório Anual \/ Folha (R$ 323 mi)"
+  },
+  {
+    "ano":2004,
+    "lucro_liquido_atribuivel_r_milhoes":1293.0,
+    "lucro_liquido_atribuivel_r_bi":1.293,
+    "lucro_liquido_consolidado_r_milhoes":1293.0,
+    "lucro_liquido_consolidado_r_bi":1.293,
+    "norma_contabil":"BR GAAP",
+    "fonte":"Série histórica divulgada \/ RA (R$ 1.293 mi)"
+  },
+  {
+    "ano":2005,
+    "lucro_liquido_atribuivel_r_milhoes":974.5,
+    "lucro_liquido_atribuivel_r_bi":0.975,
+    "lucro_liquido_consolidado_r_milhoes":974.5,
+    "lucro_liquido_consolidado_r_bi":0.975,
+    "norma_contabil":"BR GAAP",
+    "fonte":"Relatório Anual 2006 (comparativo 2005)"
+  },
+  {
+    "ano":2006,
+    "lucro_liquido_atribuivel_r_milhoes":1161.3,
+    "lucro_liquido_atribuivel_r_bi":1.161,
+    "lucro_liquido_consolidado_r_milhoes":1161.3,
+    "lucro_liquido_consolidado_r_bi":1.161,
+    "norma_contabil":"BR GAAP",
+    "fonte":"Relatório Anual 2006 (R$ 1.161,3 mi)"
+  },
+  {
+    "ano":2007,
+    "lucro_liquido_atribuivel_r_milhoes":1547.0,
+    "lucro_liquido_atribuivel_r_bi":1.547,
+    "lucro_liquido_consolidado_r_milhoes":1547.0,
+    "lucro_liquido_consolidado_r_bi":1.547,
+    "norma_contabil":"BR GAAP",
+    "fonte":"Release\/RA — R$ 1.547 mi"
+  },
+  {
+    "ano":2008,
+    "lucro_liquido_atribuivel_r_milhoes":6136.0,
+    "lucro_liquido_atribuivel_r_bi":6.136,
+    "lucro_liquido_consolidado_r_milhoes":6136.0,
+    "lucro_liquido_consolidado_r_bi":6.136,
+    "norma_contabil":"BR GAAP",
+    "fonte":"Release\/RA — R$ 6.136 mi"
+  },
+  {
+    "ano":2009,
+    "lucro_liquido_atribuivel_r_milhoes":911.467,
+    "lucro_liquido_atribuivel_r_bi":0.911,
+    "lucro_liquido_consolidado_r_milhoes":1250.139,
+    "lucro_liquido_consolidado_r_bi":1.25,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2010,
+    "lucro_liquido_atribuivel_r_milhoes":2247.913,
+    "lucro_liquido_atribuivel_r_bi":2.248,
+    "lucro_liquido_consolidado_r_milhoes":2552.985,
+    "lucro_liquido_consolidado_r_bi":2.553,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2011,
+    "lucro_liquido_atribuivel_r_milhoes":3732.565,
+    "lucro_liquido_atribuivel_r_bi":3.733,
+    "lucro_liquido_consolidado_r_milhoes":3762.019,
+    "lucro_liquido_consolidado_r_bi":3.762,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2012,
+    "lucro_liquido_atribuivel_r_milhoes":-6878.916,
+    "lucro_liquido_atribuivel_r_bi":-6.879,
+    "lucro_liquido_consolidado_r_milhoes":-6925.652,
+    "lucro_liquido_consolidado_r_bi":-6.926,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2013,
+    "lucro_liquido_atribuivel_r_milhoes":-6186.948,
+    "lucro_liquido_atribuivel_r_bi":-6.187,
+    "lucro_liquido_consolidado_r_milhoes":-6191.66,
+    "lucro_liquido_consolidado_r_bi":-6.192,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2014,
+    "lucro_liquido_atribuivel_r_milhoes":-3031.055,
+    "lucro_liquido_atribuivel_r_bi":-3.031,
+    "lucro_liquido_consolidado_r_milhoes":-2962.502,
+    "lucro_liquido_consolidado_r_bi":-2.963,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2015,
+    "lucro_liquido_atribuivel_r_milhoes":-14441.607,
+    "lucro_liquido_atribuivel_r_bi":-14.442,
+    "lucro_liquido_consolidado_r_milhoes":-14953.658,
+    "lucro_liquido_consolidado_r_bi":-14.954,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2016,
+    "lucro_liquido_atribuivel_r_milhoes":3425.899,
+    "lucro_liquido_atribuivel_r_bi":3.426,
+    "lucro_liquido_consolidado_r_milhoes":3513.276,
+    "lucro_liquido_consolidado_r_bi":3.513,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2017,
+    "lucro_liquido_atribuivel_r_milhoes":-1763.805,
+    "lucro_liquido_atribuivel_r_bi":-1.764,
+    "lucro_liquido_consolidado_r_milhoes":-1725.691,
+    "lucro_liquido_consolidado_r_bi":-1.726,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2018,
+    "lucro_liquido_atribuivel_r_milhoes":13262.378,
+    "lucro_liquido_atribuivel_r_bi":13.262,
+    "lucro_liquido_consolidado_r_milhoes":13347.577,
+    "lucro_liquido_consolidado_r_bi":13.348,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2019,
+    "lucro_liquido_atribuivel_r_milhoes":11195.037,
+    "lucro_liquido_atribuivel_r_bi":11.195,
+    "lucro_liquido_consolidado_r_milhoes":11133.42,
+    "lucro_liquido_consolidado_r_bi":11.133,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2020,
+    "lucro_liquido_atribuivel_r_milhoes":6338.688,
+    "lucro_liquido_atribuivel_r_bi":6.339,
+    "lucro_liquido_consolidado_r_milhoes":6387.313,
+    "lucro_liquido_consolidado_r_bi":6.387,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2021,
+    "lucro_liquido_atribuivel_r_milhoes":5646.141,
+    "lucro_liquido_atribuivel_r_bi":5.646,
+    "lucro_liquido_consolidado_r_milhoes":5713.633,
+    "lucro_liquido_consolidado_r_bi":5.714,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2022,
+    "lucro_liquido_atribuivel_r_milhoes":3635.377,
+    "lucro_liquido_atribuivel_r_bi":3.635,
+    "lucro_liquido_consolidado_r_milhoes":3638.382,
+    "lucro_liquido_consolidado_r_bi":3.638,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2023,
+    "lucro_liquido_atribuivel_r_milhoes":4549.774,
+    "lucro_liquido_atribuivel_r_bi":4.55,
+    "lucro_liquido_consolidado_r_milhoes":4394.861,
+    "lucro_liquido_consolidado_r_bi":4.395,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2024,
+    "lucro_liquido_atribuivel_r_milhoes":10378.122,
+    "lucro_liquido_atribuivel_r_bi":10.378,
+    "lucro_liquido_consolidado_r_milhoes":10380.752,
+    "lucro_liquido_consolidado_r_bi":10.381,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 3.11.01 \/ 3.11"
+  },
+  {
+    "ano":2025,
+    "lucro_liquido_atribuivel_r_milhoes":6558.475,
+    "lucro_liquido_atribuivel_r_bi":6.558,
+    "lucro_liquido_consolidado_r_milhoes":6559.659,
+    "lucro_liquido_consolidado_r_bi":6.56,
+    "norma_contabil":"IFRS (CVM DFP)",
+    "fonte":"CVM DFP 2025 — 3.11.01 \/ 3.11"
+  }
+]
