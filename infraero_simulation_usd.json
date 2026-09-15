@@ -1,0 +1,204 @@
+{
+  "entity": "INFRAERO",
+  "note": "Bank interest ~0 except 2021 Santander proxy R$9.034 mi accrual",
+  "years": [
+    {
+      "year": 2002,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 60.259145,
+      "sim_ni_usd_mi": 60.259145,
+      "interest_estimated": false
+    },
+    {
+      "year": 2003,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 61.31177,
+      "sim_ni_usd_mi": 61.31177,
+      "interest_estimated": false
+    },
+    {
+      "year": 2004,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 1.521233,
+      "sim_ni_usd_mi": 1.521233,
+      "interest_estimated": false
+    },
+    {
+      "year": 2005,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -188.130572,
+      "sim_ni_usd_mi": -188.130572,
+      "interest_estimated": false
+    },
+    {
+      "year": 2006,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -62.166466,
+      "sim_ni_usd_mi": -62.166466,
+      "interest_estimated": false
+    },
+    {
+      "year": 2007,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -39.160959,
+      "sim_ni_usd_mi": -39.160959,
+      "interest_estimated": false
+    },
+    {
+      "year": 2008,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 83.968603,
+      "sim_ni_usd_mi": 83.968603,
+      "interest_estimated": false
+    },
+    {
+      "year": 2009,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 10.470151,
+      "sim_ni_usd_mi": 10.470151,
+      "interest_estimated": false
+    },
+    {
+      "year": 2010,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 17.327096,
+      "sim_ni_usd_mi": 17.327096,
+      "interest_estimated": false
+    },
+    {
+      "year": 2011,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 88.078171,
+      "sim_ni_usd_mi": 88.078171,
+      "interest_estimated": false
+    },
+    {
+      "year": 2012,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 55.124792,
+      "sim_ni_usd_mi": 55.124792,
+      "interest_estimated": false
+    },
+    {
+      "year": 2013,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -1282.501043,
+      "sim_ni_usd_mi": -1282.501043,
+      "interest_estimated": false
+    },
+    {
+      "year": 2014,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -885.284462,
+      "sim_ni_usd_mi": -885.284462,
+      "interest_estimated": false
+    },
+    {
+      "year": 2015,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -915.40732,
+      "sim_ni_usd_mi": -915.40732,
+      "interest_estimated": false
+    },
+    {
+      "year": 2016,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -215.36644,
+      "sim_ni_usd_mi": -215.36644,
+      "interest_estimated": false
+    },
+    {
+      "year": 2017,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -573.483152,
+      "sim_ni_usd_mi": -573.483152,
+      "interest_estimated": false
+    },
+    {
+      "year": 2018,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -188.156631,
+      "sim_ni_usd_mi": -188.156631,
+      "interest_estimated": false
+    },
+    {
+      "year": 2019,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -37.914281,
+      "sim_ni_usd_mi": -37.914281,
+      "interest_estimated": false
+    },
+    {
+      "year": 2020,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -426.582145,
+      "sim_ni_usd_mi": -426.582145,
+      "interest_estimated": false
+    },
+    {
+      "year": 2021,
+      "interest_usd_mi": 1.674506,
+      "up_ll_usd_mi": 0.884139,
+      "net_income_usd_mi": -40.072474,
+      "sim_ni_usd_mi": -39.188335,
+      "interest_estimated": true
+    },
+    {
+      "year": 2022,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 3.003814,
+      "sim_ni_usd_mi": 3.003814,
+      "interest_estimated": false
+    },
+    {
+      "year": 2023,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 98.113768,
+      "sim_ni_usd_mi": 98.113768,
+      "interest_estimated": false
+    },
+    {
+      "year": 2024,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": -42.450614,
+      "sim_ni_usd_mi": -42.450614,
+      "interest_estimated": false
+    },
+    {
+      "year": 2025,
+      "interest_usd_mi": 0.0,
+      "up_ll_usd_mi": 0.0,
+      "net_income_usd_mi": 56.587353,
+      "sim_ni_usd_mi": 56.587353,
+      "interest_estimated": false
+    }
+  ],
+  "totals_usd_mi": {
+    "interest": 1.675,
+    "up_ll": 0.884,
+    "ni_actual": -4360.911,
+    "ni_sim": -4360.027
+  }
+}

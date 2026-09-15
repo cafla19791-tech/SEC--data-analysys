@@ -1,0 +1,38 @@
+{
+  "completed_full_sim": [
+    "Petrobras",
+    "Eletrobras",
+    "Correios",
+    "Eletronuclear",
+    "Infraero"
+  ],
+  "excluded_financial": [
+    "BB",
+    "Caixa",
+    "BNDES",
+    "BNB",
+    "BASA",
+    "Finep"
+  ],
+  "material_interest_remaining": [],
+  "optional_small": [
+    "Telebras (~R$2.5-5.5 mi/yr Finep, largely repaid 2025)"
+  ],
+  "skip_near_zero_bank_interest": [
+    "Casa da Moeda",
+    "Hemobrás",
+    "Emgepron",
+    "Serpro",
+    "Dataprev",
+    "INB",
+    "Nuclep",
+    "Codeba/Docas",
+    "Imbel",
+    "Valec/Infra S.A.",
+    "Ceitec",
+    "EBC",
+    "Embrapa",
+    "Conab"
+  ],
+  "method": "Same -80% cash finance-debt interest counterfactual; USD via BCB 3698; ↑LL=0.528×juros"
+}
