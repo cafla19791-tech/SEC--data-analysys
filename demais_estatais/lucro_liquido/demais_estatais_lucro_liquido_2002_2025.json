@@ -1,0 +1,716 @@
+{
+  "titulo": "Lucro líquido das demais estatais federais (ex Petrobras, Eletrobras/ENBPar e instituições financeiras federais), 2002–2025",
+  "unidade": "R$ milhões correntes",
+  "definicao": {
+    "inclui": "Demais SPE + Dependentes do Tesouro (Correios, Infraero, Serpro, Dataprev, portos, Embrapa, Conab, Emgea, etc.; PPSA e ABGF incluídas)",
+    "exclui": [
+      "Grupo Petrobras",
+      "Grupo Eletrobras/ENBPar",
+      "BB",
+      "CEF",
+      "BNDES",
+      "Basa",
+      "BNB",
+      "Finep",
+      "IRB (quando aplicável)",
+      "INB a partir de 2015"
+    ]
+  },
+  "serie_anual": [
+    {
+      "ano": 2002,
+      "lucro_liquido_r_milhoes": null,
+      "lucro_liquido_r_bi": null,
+      "status": "gap",
+      "fonte": "Perfil DEST consolidado Demais SPE + Dependentes não localizado"
+    },
+    {
+      "ano": 2003,
+      "lucro_liquido_r_milhoes": null,
+      "lucro_liquido_r_bi": null,
+      "status": "gap",
+      "fonte": "Perfil DEST consolidado Demais SPE + Dependentes não localizado"
+    },
+    {
+      "ano": 2004,
+      "lucro_liquido_r_milhoes": -519.0,
+      "lucro_liquido_r_bi": -0.519,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (−592) + Dependentes (+73)"
+    },
+    {
+      "ano": 2005,
+      "lucro_liquido_r_milhoes": -2688.0,
+      "lucro_liquido_r_bi": -2.688,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (−2.234) + Dependentes (−454)"
+    },
+    {
+      "ano": 2006,
+      "lucro_liquido_r_milhoes": -142.0,
+      "lucro_liquido_r_bi": -0.142,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (+204) + Dependentes (−346)"
+    },
+    {
+      "ano": 2007,
+      "lucro_liquido_r_milhoes": 525.0,
+      "lucro_liquido_r_bi": 0.525,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (+810) + Dependentes (−285)"
+    },
+    {
+      "ano": 2008,
+      "lucro_liquido_r_milhoes": -102.0,
+      "lucro_liquido_r_bi": -0.102,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (+1.464) + Dependentes (−1.566)"
+    },
+    {
+      "ano": 2009,
+      "lucro_liquido_r_milhoes": -597.0,
+      "lucro_liquido_r_bi": -0.597,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (−353) + Dependentes (−244)"
+    },
+    {
+      "ano": 2010,
+      "lucro_liquido_r_milhoes": 1249.0,
+      "lucro_liquido_r_bi": 1.249,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (+2.154) + Dependentes (−905)"
+    },
+    {
+      "ano": 2011,
+      "lucro_liquido_r_milhoes": 1690.0,
+      "lucro_liquido_r_bi": 1.69,
+      "status": "ok",
+      "fonte": "DEST Perfil: Demais SPE (+2.812) + Dependentes (−1.122)"
+    },
+    {
+      "ano": 2012,
+      "lucro_liquido_r_milhoes": 714.8,
+      "lucro_liquido_r_bi": 0.715,
+      "status": "estimado",
+      "fonte": "Tesouro BPSU 2017 “Demais” (ex Big5) − Basa − BNB − Finep (Finep 2012 estimado)"
+    },
+    {
+      "ano": 2013,
+      "lucro_liquido_r_milhoes": -3557.5,
+      "lucro_liquido_r_bi": -3.558,
+      "status": "estimado",
+      "fonte": "Tesouro BPSU 2017 “Demais” (ex Big5) − Basa − BNB − Finep"
+    },
+    {
+      "ano": 2014,
+      "lucro_liquido_r_milhoes": -4620.2,
+      "lucro_liquido_r_bi": -4.62,
+      "status": "estimado",
+      "fonte": "Tesouro BPSU 2017 “Demais” (ex Big5) − Basa − BNB − Finep"
+    },
+    {
+      "ano": 2015,
+      "lucro_liquido_r_milhoes": -10485.8,
+      "lucro_liquido_r_bi": -10.486,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — RAEEF 2019"
+    },
+    {
+      "ano": 2016,
+      "lucro_liquido_r_milhoes": -5642.9,
+      "lucro_liquido_r_bi": -5.643,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — RAEEF 2019/2021"
+    },
+    {
+      "ano": 2017,
+      "lucro_liquido_r_milhoes": -4266.9,
+      "lucro_liquido_r_bi": -4.267,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — RAEEF 2019/2021"
+    },
+    {
+      "ano": 2018,
+      "lucro_liquido_r_milhoes": 151.2,
+      "lucro_liquido_r_bi": 0.151,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — RAEEF 2019/2021"
+    },
+    {
+      "ano": 2019,
+      "lucro_liquido_r_milhoes": -147.6,
+      "lucro_liquido_r_bi": -0.148,
+      "status": "parcial",
+      "fonte": "Soma empresa a empresa — RAEEF; Valec N.D. em 2019"
+    },
+    {
+      "ano": 2020,
+      "lucro_liquido_r_milhoes": -377.9,
+      "lucro_liquido_r_bi": -0.378,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — Relatório Agregado 2025 Anexo I"
+    },
+    {
+      "ano": 2021,
+      "lucro_liquido_r_milhoes": 903.9,
+      "lucro_liquido_r_bi": 0.904,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — Relatório Agregado 2025 Anexo I"
+    },
+    {
+      "ano": 2022,
+      "lucro_liquido_r_milhoes": 321.0,
+      "lucro_liquido_r_bi": 0.321,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — Relatório Agregado 2025 Anexo I"
+    },
+    {
+      "ano": 2023,
+      "lucro_liquido_r_milhoes": 495.5,
+      "lucro_liquido_r_bi": 0.495,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — Relatório Agregado 2025 Anexo I"
+    },
+    {
+      "ano": 2024,
+      "lucro_liquido_r_milhoes": -751.1,
+      "lucro_liquido_r_bi": -0.751,
+      "status": "ok",
+      "fonte": "Soma empresa a empresa — Relatório Agregado 2025 Anexo I"
+    },
+    {
+      "ano": 2025,
+      "lucro_liquido_r_milhoes": null,
+      "lucro_liquido_r_bi": null,
+      "status": "gap",
+      "fonte": "Relatório Agregado 2026 (ano-base 2025) ainda não publicado"
+    }
+  ],
+  "empresas_r_milhoes_2020_2024": {
+    "anos": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "empresas": {
+      "ABGF": [
+        5.5,
+        10.9,
+        25.3,
+        26.1,
+        25.8
+      ],
+      "Amazul": [
+        -0.7,
+        -2.7,
+        -6.0,
+        -5.5,
+        -1.7
+      ],
+      "APS (Porto de Santos)": [
+        202.5,
+        329.1,
+        547.3,
+        650.7,
+        844.6
+      ],
+      "CBTU": [
+        -405.5,
+        -903.2,
+        8.3,
+        -220.2,
+        -1119.9
+      ],
+      "CDC": [
+        0.0,
+        -4.7,
+        53.9,
+        36.6,
+        14.4
+      ],
+      "CDP": [
+        55.9,
+        71.1,
+        83.6,
+        117.4,
+        121.6
+      ],
+      "CDRJ (PortosRio)": [
+        -14.3,
+        -165.7,
+        -353.5,
+        -442.9,
+        239.0
+      ],
+      "Ceagesp": [
+        -2.7,
+        27.4,
+        14.9,
+        15.2,
+        12.7
+      ],
+      "Ceitec": [
+        -4.2,
+        1.8,
+        -15.8,
+        -47.0,
+        2.2
+      ],
+      "Grupo Hospitalar Conceição": [
+        41.7,
+        -27.2,
+        -114.5,
+        -64.2,
+        -9.4
+      ],
+      "CMB": [
+        -245.1,
+        30.2,
+        23.4,
+        202.5,
+        51.2
+      ],
+      "Codeba": [
+        4.1,
+        45.5,
+        41.3,
+        88.6,
+        22.8
+      ],
+      "CPRM": [
+        -27.2,
+        12.3,
+        4.3,
+        -5.6,
+        -16.5
+      ],
+      "Codevasf": [
+        -356.7,
+        -358.3,
+        -1312.9,
+        -1262.8,
+        45.6
+      ],
+      "Conab": [
+        -30.0,
+        -27.3,
+        65.6,
+        -30.3,
+        14.1
+      ],
+      "Correios (ECT)": [
+        1530.4,
+        2276.5,
+        -767.6,
+        -633.5,
+        -2591.2
+      ],
+      "Ebserh": [
+        -13.7,
+        -218.1,
+        -170.4,
+        -168.0,
+        -131.9
+      ],
+      "Embrapa": [
+        -59.7,
+        -40.0,
+        -71.9,
+        -316.5,
+        -375.5
+      ],
+      "Dataprev": [
+        265.1,
+        355.5,
+        524.3,
+        598.6,
+        508.2
+      ],
+      "EBC": [
+        2.7,
+        6.7,
+        -8.8,
+        34.9,
+        -16.6
+      ],
+      "Emgea": [
+        388.6,
+        590.0,
+        358.2,
+        249.5,
+        569.7
+      ],
+      "Emgepron": [
+        220.3,
+        164.6,
+        656.2,
+        614.1,
+        329.9
+      ],
+      "EPE": [
+        -1.2,
+        -3.5,
+        -2.5,
+        -2.8,
+        6.7
+      ],
+      "HCPA": [
+        -37.3,
+        -268.8,
+        -158.0,
+        -96.0,
+        20.2
+      ],
+      "Hemobrás": [
+        -6.3,
+        234.0,
+        190.2,
+        326.6,
+        242.1
+      ],
+      "Imbel": [
+        -26.7,
+        17.5,
+        10.4,
+        44.7,
+        9.1
+      ],
+      "Infra S.A.": [
+        92.4,
+        -1230.0,
+        13.4,
+        -69.9,
+        -41.4
+      ],
+      "Infraero": [
+        -2199.4,
+        -216.2,
+        15.5,
+        490.1,
+        -228.8
+      ],
+      "NAV Brasil": [
+        0.0,
+        93.6,
+        324.8,
+        159.7,
+        107.9
+      ],
+      "Nuclep": [
+        -2.7,
+        0.1,
+        0.1,
+        -107.2,
+        0.0
+      ],
+      "PPSA": [
+        55.9,
+        -6.5,
+        16.4,
+        34.0,
+        28.8
+      ],
+      "Serpro": [
+        434.0,
+        345.7,
+        559.7,
+        450.8,
+        685.2
+      ],
+      "Telebras": [
+        -137.6,
+        -163.0,
+        -168.5,
+        -127.4,
+        -66.6
+      ],
+      "Trensurb": [
+        -106.0,
+        -73.4,
+        -65.7,
+        -44.8,
+        -53.4
+      ]
+    }
+  },
+  "empresas_r_milhoes_2015_2019": {
+    "anos": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "empresas": {
+      "ABGF – Agência Brasileira Gestora de Fundos": [
+        -6.368,
+        39.192,
+        45.556,
+        10.519,
+        10.658
+      ],
+      "Amazul – Amazônia Azul Tecnologias de Defesa S.A.": [
+        -11.817,
+        -0.807,
+        -1.271,
+        -1.528,
+        -1.168
+      ],
+      "CBTU – Companhia Brasileira de Trens Urbanos": [
+        -832.221,
+        -435.373,
+        -149.063,
+        -437.733,
+        -105.148
+      ],
+      "CDC – Companhia Docas do Ceará": [
+        -18.834,
+        -22.694,
+        -17.998,
+        -14.745,
+        -25.398
+      ],
+      "CDP – Companhia Docas do Pará": [
+        -20.226,
+        -9.609,
+        6.509,
+        -33.173,
+        29.897
+      ],
+      "CDRJ – Companhia Docas do Rio de Janeiro": [
+        -465.7,
+        -227.587,
+        -388.969,
+        -330.745,
+        947.892
+      ],
+      "Ceagesp – Companhia de Entrepostos e Armazéns": [
+        8.367,
+        -15.271,
+        -17.48,
+        -9.085,
+        -10.686
+      ],
+      "CeasaMinas – Centrais de Abastecimento de": [
+        -0.443,
+        1.404,
+        2.03,
+        3.211,
+        6.161
+      ],
+      "CEITEC - Centro Nacional de Tecnologia Eletrônica": [
+        -31.201,
+        -49.603,
+        -23.92,
+        -7.602,
+        -12.008
+      ],
+      "CMB - Casa da Moeda do Brasil": [
+        311.357,
+        60.176,
+        -117.596,
+        -93.359,
+        -86.816
+      ],
+      "Codeba – Companhia das Docas do Estado da Bahia": [
+        14.344,
+        16.38,
+        1.829,
+        -11.497,
+        12.923
+      ],
+      "Codern – Companhia Docas do Rio Grande do Norte": [
+        -114.698,
+        -132.667,
+        -208.351,
+        -146.233,
+        -119.359
+      ],
+      "Codesa – Companhia das Docas do Espírito Santo": [
+        11.138,
+        0.747,
+        -25.625,
+        -18.649,
+        -13.827
+      ],
+      "Codevasf – Companhia de Desenvolvimento dos": [
+        -1085.046,
+        -519.919,
+        -641.235,
+        -3.985,
+        -1642.359
+      ],
+      "Conab – Companhia Nacional de Abastecimento": [
+        -11.721,
+        7.684,
+        -20.376,
+        -6.097,
+        -16.625
+      ],
+      "CPRM - Companhia de Pesquisa de": [
+        -3.63,
+        -11.132,
+        -6.275,
+        9.962,
+        70.159
+      ],
+      "Dataprev - Empresa de Tecnologia e Informações da": [
+        210.091,
+        184.016,
+        136.72,
+        150.607,
+        147.795
+      ],
+      "EBC – Empresa Brasil de Comunicação S.A.": [
+        -36.2,
+        -18.674,
+        -5.361,
+        20.445,
+        17.711
+      ],
+      "Ebserh – Empresa Brasileira de Serviços": [
+        -7.908,
+        -64.517,
+        -14.899,
+        -227.457,
+        -117.91
+      ],
+      "ECT – Empresa Brasileira de Correios e Telégrafos": [
+        -2121.238,
+        -1489.505,
+        667.308,
+        161.049,
+        102.121
+      ],
+      "Embrapa - Empresa Brasileira de Pesquisa": [
+        -456.684,
+        -487.963,
+        -385.773,
+        -271.161,
+        -246.232
+      ],
+      "Emgea – Empresa Gestora de Ativos": [
+        243.893,
+        208.13,
+        190.216,
+        396.216,
+        307.244
+      ],
+      "Emgepron - Empresa Gerencial de Projetos Navais": [
+        4.153,
+        1.049,
+        0.762,
+        45.466,
+        130.634
+      ],
+      "EPE – Empresa de Pesquisa Energética": [
+        2.234,
+        2.861,
+        0.186,
+        4.065,
+        0.785
+      ],
+      "EPL – Empresa de Planejamento e Logística S.A.": [
+        -19.163,
+        -20.388,
+        -12.302,
+        1.736,
+        1.422
+      ],
+      "Hospital Nossa Senhora da Conceição S.A.": [
+        -302.633,
+        297.738,
+        -427.759,
+        2075.019,
+        -38.703
+      ],
+      "HCPA – Hospital de Clínicas de Porto Alegre": [
+        -1.953,
+        -3.765,
+        -124.141,
+        -10.02,
+        -16.912
+      ],
+      "Hemobrás - Empresa Brasileira de Hemoderivados": [
+        -414.529,
+        117.173,
+        171.914,
+        -21.03,
+        143.917
+      ],
+      "IMBEL - Indústria de Material Bélico do Brasil": [
+        50.708,
+        70.976,
+        83.197,
+        64.842,
+        38.761
+      ],
+      "Infraero - Empresa Brasileira de Infraestrutura": [
+        -3049.71,
+        -751.654,
+        -1830.563,
+        -687.609,
+        -149.575
+      ],
+      "Nuclep - Nuclebrás Equipamentos Pesados S.A.": [
+        -9.774,
+        -15.702,
+        -10.099,
+        -2.127,
+        -0.935
+      ],
+      "PPSA - Empresa Brasileira de Administração de": [
+        10.97,
+        5.664,
+        0.297,
+        30.954,
+        34.863
+      ],
+      "Serpro - Serviço Federal de Processamento de Dados": [
+        -355.792,
+        -162.311,
+        123.114,
+        459.702,
+        486.849
+      ],
+      "SPA – Santos Port Authority": [
+        -94.923,
+        -22.465,
+        44.432,
+        -468.725,
+        87.287
+      ],
+      "Telebras - Telecomunicações Brasileiras S.A.": [
+        -235.633,
+        -270.883,
+        -243.817,
+        -224.851,
+        -237.526
+      ],
+      "Trensurb - Empresa de Trens Urbanos de": [
+        -97.689,
+        -201.042,
+        -7.836,
+        -2.686,
+        116.537
+      ],
+      "Valec - Engenharia, Construções E Ferrovias S.A.": [
+        -1547.34,
+        -1722.561,
+        -1060.27,
+        -252.456,
+        null
+      ]
+    }
+  },
+  "observacoes": [
+    "2004–2011: consolidado DEST (Demais SPE + Dependentes).",
+    "2012–2014: estimado a partir do “Demais” do Boletim das Participações Societárias da União (Tesouro, 2017), descontando Basa, BNB e Finep.",
+    "2015–2019: soma das fichas do RAEEF (SEST).",
+    "2020–2024: soma do Anexo I do Relatório Agregado 2025.",
+    "2019: Valec N.D.; excluída da soma.",
+    "2025 e 2002–2003: sem consolidado oficial recuperado nesta rodada."
+  ]
+}
