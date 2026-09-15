@@ -1,0 +1,268 @@
+{
+  "title": "Saldo petróleo — exportações vs importações (US$ FOB)",
+  "definition": "Saldo = receita exportação − custo/dispêndio importação",
+  "notes": [
+    "Petrobras: receita de exportação e custo de importação estimados (volume RI × preços médios ANP).",
+    "Brasil: receita e dispêndio ANP (oficiais 2011–2024; 2025–26 via ie.xlsx).",
+    "2026 parcial (YTD) em ambas as séries.",
+    "Petróleo bruto apenas (não inclui derivados)."
+  ],
+  "petrobras": {
+    "annual": [
+      {
+        "ano": 2011,
+        "export_receita_usd": 15162336337.5,
+        "import_custo_usd": 15418249700.0,
+        "saldo_usd": -255913362.5,
+        "export_barris": 153573750.0,
+        "import_barris": 132130000.0,
+        "saldo_barris": 21443750.0
+      },
+      {
+        "ano": 2012,
+        "export_receita_usd": 13518329605.89945,
+        "import_custo_usd": 14956801476.5385,
+        "saldo_usd": -1438471870.6390495,
+        "export_barris": 133498500.0,
+        "import_barris": 126727500.0,
+        "saldo_barris": 6771000.0
+      },
+      {
+        "ano": 2013,
+        "export_receita_usd": 7018318180.551563,
+        "import_custo_usd": 16451651319.099,
+        "saldo_usd": -9433333138.547438,
+        "export_barris": 75281250.0,
+        "import_barris": 147733750.0,
+        "saldo_barris": -72452500.0
+      },
+      {
+        "ano": 2014,
+        "export_receita_usd": 7297205732.4917,
+        "import_custo_usd": 15745852529.698875,
+        "saldo_usd": -8448646797.207175,
+        "export_barris": 84497500.0,
+        "import_barris": 142988750.0,
+        "saldo_barris": -58491250.0
+      },
+      {
+        "ano": 2015,
+        "export_receita_usd": 5748638675.0,
+        "import_custo_usd": 6320340000.0,
+        "saldo_usd": -571701325.0,
+        "export_barris": 131217500.0,
+        "import_barris": 101287500.0,
+        "saldo_barris": 29930000.0
+      },
+      {
+        "ano": 2016,
+        "export_receita_usd": 4890995867.21508,
+        "import_custo_usd": 2213806932.50064,
+        "saldo_usd": 2677188934.7144403,
+        "export_barris": 141459000.0,
+        "import_barris": 49776000.0,
+        "saldo_barris": 91683000.0
+      },
+      {
+        "ano": 2017,
+        "export_receita_usd": 8541306970.9567995,
+        "import_custo_usd": 2529664107.417725,
+        "saldo_usd": 6011642863.539074,
+        "export_barris": 186880000.0,
+        "import_barris": 46446250.0,
+        "saldo_barris": 140433750.0
+      },
+      {
+        "ano": 2018,
+        "export_receita_usd": 9579016539.053062,
+        "import_custo_usd": 4170601450.1073995,
+        "saldo_usd": 5408415088.945663,
+        "export_barris": 156493750.0,
+        "import_barris": 56210000.0,
+        "saldo_barris": 100283750.0
+      },
+      {
+        "ano": 2019,
+        "export_receita_usd": 10952954093.8105,
+        "import_custo_usd": 4147327099.9771876,
+        "saldo_usd": 6805626993.833311,
+        "export_barris": 195275000.0,
+        "import_barris": 61593750.0,
+        "saldo_barris": 133681250.0
+      },
+      {
+        "ano": 2020,
+        "export_receita_usd": 10232253507.818205,
+        "import_custo_usd": 1893626836.0237348,
+        "saldo_usd": 8338626671.79447,
+        "export_barris": 261049500.0,
+        "import_barris": 35593500.0,
+        "saldo_barris": 225456000.0
+      },
+      {
+        "ano": 2021,
+        "export_receita_usd": 13290952487.288626,
+        "import_custo_usd": 3782517922.031025,
+        "saldo_usd": 9508434565.2576,
+        "export_barris": 209692500.0,
+        "import_barris": 56392500.0,
+        "saldo_barris": 153300000.0
+      },
+      {
+        "ano": 2022,
+        "export_receita_usd": 16214164002.704586,
+        "import_custo_usd": 5919163352.916,
+        "saldo_usd": 10295000649.788586,
+        "export_barris": 187153750.0,
+        "import_barris": 59860000.0,
+        "saldo_barris": 127293750.0
+      },
+      {
+        "ano": 2023,
+        "export_receita_usd": 15883796000.371937,
+        "import_custo_usd": 4868465847.102,
+        "saldo_usd": 11015330153.269936,
+        "export_barris": 216901250.0,
+        "import_barris": 56940000.0,
+        "saldo_barris": 159961250.0
+      },
+      {
+        "ano": 2024,
+        "export_receita_usd": 15537663424.598984,
+        "import_custo_usd": 4638969686.61798,
+        "saldo_usd": 10898693737.981003,
+        "export_barris": 220240500.0,
+        "import_barris": 55083000.0,
+        "saldo_barris": 165157500.0
+      },
+      {
+        "ano": 2025,
+        "export_receita_usd": 16881694627.540104,
+        "import_custo_usd": 3530717193.4846835,
+        "saldo_usd": 13350977434.05542,
+        "export_barris": 278677500.0,
+        "import_barris": 47997500.0,
+        "saldo_barris": 230680000.0
+      },
+      {
+        "ano": 2026,
+        "export_receita_usd": 6432290401.194414,
+        "import_custo_usd": 627838628.2073518,
+        "saldo_usd": 5804451772.987062,
+        "export_barris": 81030000.0,
+        "import_barris": 14326250.0,
+        "saldo_barris": 66703750.0
+      }
+    ],
+    "totals": {
+      "export_receita_usd": 177181916453.99503,
+      "import_custo_usd": 107215594081.72209,
+      "saldo_usd": 69966322372.27293
+    }
+  },
+  "brasil": {
+    "annual": [
+      {
+        "ano": 2011,
+        "export_receita_usd": 21785444945.0,
+        "import_custo_usd": 14151806000.0,
+        "saldo_usd": 7633638945.0
+      },
+      {
+        "ano": 2012,
+        "export_receita_usd": 20305876591.0,
+        "import_custo_usd": 13448477370.0,
+        "saldo_usd": 6857399221.0
+      },
+      {
+        "ano": 2013,
+        "export_receita_usd": 12956607442.0,
+        "import_custo_usd": 16463302900.0,
+        "saldo_usd": -3506695458.0
+      },
+      {
+        "ano": 2014,
+        "export_receita_usd": 16356739584.0,
+        "import_custo_usd": 15873935470.0,
+        "saldo_usd": 482804114.0
+      },
+      {
+        "ano": 2015,
+        "export_receita_usd": 11781308300.0,
+        "import_custo_usd": 7380844000.0,
+        "saldo_usd": 4400464300.0
+      },
+      {
+        "ano": 2016,
+        "export_receita_usd": 10073797268.0,
+        "import_custo_usd": 2898855786.0,
+        "saldo_usd": 7174941482.0
+      },
+      {
+        "ano": 2017,
+        "export_receita_usd": 16624996815.0,
+        "import_custo_usd": 2966954176.0,
+        "saldo_usd": 13658042639.0
+      },
+      {
+        "ano": 2018,
+        "export_receita_usd": 25096773303.0,
+        "import_custo_usd": 5042501227.0,
+        "saldo_usd": 20054272076.0
+      },
+      {
+        "ano": 2019,
+        "export_receita_usd": 24002331852.0,
+        "import_custo_usd": 4651641478.0,
+        "saldo_usd": 19350690374.0
+      },
+      {
+        "ano": 2020,
+        "export_receita_usd": 19613857907.0,
+        "import_custo_usd": 2613731569.0,
+        "saldo_usd": 17000126338.0
+      },
+      {
+        "ano": 2021,
+        "export_receita_usd": 30608981653.0,
+        "import_custo_usd": 3995255654.0,
+        "saldo_usd": 26613725999.0
+      },
+      {
+        "ano": 2022,
+        "export_receita_usd": 42553764089.0,
+        "import_custo_usd": 9914865806.0,
+        "saldo_usd": 32638898283.0
+      },
+      {
+        "ano": 2023,
+        "export_receita_usd": 42611078672.0,
+        "import_custo_usd": 9058456152.0,
+        "saldo_usd": 33552622520.0
+      },
+      {
+        "ano": 2024,
+        "export_receita_usd": 44963878520.0,
+        "import_custo_usd": 8690210062.0,
+        "saldo_usd": 36273668458.0
+      },
+      {
+        "ano": 2025,
+        "export_receita_usd": 44536157927.0,
+        "import_custo_usd": 6611866628.0,
+        "saldo_usd": 37924291299.0
+      },
+      {
+        "ano": 2026,
+        "export_receita_usd": 27903018706.0,
+        "import_custo_usd": 3313951312.0,
+        "saldo_usd": 24589067394.0
+      }
+    ],
+    "totals": {
+      "export_receita_usd": 411774613574.0,
+      "import_custo_usd": 127076655590.0,
+      "saldo_usd": 284697957984.0
+    }
+  }
+}
