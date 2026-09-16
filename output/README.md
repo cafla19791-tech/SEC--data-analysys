@@ -46,3 +46,15 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+## Eleições 2022 — presidente, 1º e 2º turnos por UF
+
+Votos válidos dos dois candidatos à Presidência mais votados (Lula e
+Jair Bolsonaro), em cada uma das 27 Unidades da Federação, a partir da
+totalização oficial do TSE:
+
+```bash
+PYTHONPATH=. python3 scripts/eleicoes_presidente_uf_turnos.py
+```
+
+- `eleicoes_2022_presidente_1t_2t_por_uf.xlsx` — aba **Por_UF** (26 estados + DF + total das 27); aba **Brasil_e_exterior** (total TSE, voto no exterior e soma das UFs); aba **Fonte**.
