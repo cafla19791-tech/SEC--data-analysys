@@ -58,3 +58,15 @@ PYTHONPATH=. python3 scripts/eleicoes_presidente_uf_turnos.py
 ```
 
 - `eleicoes_2022_presidente_1t_2t_por_uf.xlsx` — aba **Por_UF** (26 estados + DF + total das 27); aba **Brasil_e_exterior** (total TSE, voto no exterior e soma das UFs); aba **Fonte**.
+
+## Eleições 1994 e 1998 — presidente, 1º turno por UF
+
+Votos válidos dos dois candidatos à Presidência mais votados (FHC e Lula)
+no 1º turno de 1994 e de 1998, em cada uma das 27 Unidades da Federação.
+Ambos os pleitos se encerraram no primeiro turno.
+
+```bash
+PYTHONPATH=. python3 scripts/eleicoes_presidente_1994_1998_uf.py
+```
+
+- `eleicoes_1994_1998_presidente_1t_por_uf.xlsx` — aba **Por_UF** (26 estados + DF + total das 27); aba **Brasil_e_exterior**; aba **Fonte**.
