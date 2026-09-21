@@ -80,11 +80,17 @@ python3 scripts/agregar_impacto_fluxos.py \
 # Ex.: contrato 12/12/2022 com 180 parcelas → as 180 linhas na pasta/aba 2022.
 
 # Derivados de Petróleo ANP (2000–2026):
-# Produção nacional (aba 1), Importação volume (aba 2) e Dispêndio FOB USD (aba 3):
+# Produção nacional, Importação volume e Dispêndio FOB USD (Geral e por Derivado):
 python3 DERIVADOS.PY
 # No WinPython ContAgil:
 # cd /d "C:\Arquivos de Programas RFB\ContAgilAppBeta64\python_jep\winpython"
 # python DERIVADOS.PY
+# Saídas em output/:
+#   - DERIVADOS_ANP_2000_2026.xlsx (com abas por derivado e totais)
+#   - DERIVADOS_ANP_2000_2026_resumo_por_derivado.csv
+#   - DERIVADOS_ANP_2000_2026_por_produto_mensal.csv
+#   - DERIVADOS_ANP_2000_2026.json
+
 
 # Impacto fiscal de cada parcela continua capitalizado na data_fluxo.
 python3 scripts/discriminativos_indiretas_ano_contrato.py --pasta saida

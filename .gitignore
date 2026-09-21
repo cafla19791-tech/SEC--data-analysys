@@ -43,6 +43,8 @@ output/*_stats.json
 !output/DERIVADOS_ANP_2000_2026.json
 !output/DERIVADOS_ANP_2000_2026.xlsx
 !output/DERIVADOS_ANP_2000_2026_mensal.csv
+!output/DERIVADOS_ANP_2000_2026_por_produto_mensal.csv
+!output/DERIVADOS_ANP_2000_2026_resumo_por_derivado.csv
 !output/montantes_contratos_indiretas_2002_2026.xlsx
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep

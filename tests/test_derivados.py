@@ -1,7 +1,5 @@
-import subprocess
-from pathlib import Path
 import openpyxl
-import pandas as pd
+from pathlib import Path
 from derivados import run_pipeline
 
 def test_derivados_pipeline(tmp_path):
@@ -25,46 +23,48 @@ def test_derivados_pipeline(tmp_path):
     excel_path = out_dir / "DERIVADOS_ANP_2000_2026.xlsx"
     json_path = out_dir / "DERIVADOS_ANP_2000_2026.json"
     csv_path = out_dir / "DERIVADOS_ANP_2000_2026_mensal.csv"
+    csv_detail = out_dir / "DERIVADOS_ANP_2000_2026_por_produto_mensal.csv"
+    csv_resumo = out_dir / "DERIVADOS_ANP_2000_2026_resumo_por_derivado.csv"
     
     assert excel_path.exists()
     assert json_path.exists()
     assert csv_path.exists()
+    assert csv_detail.exists()
+    assert csv_resumo.exists()
     
     wb = openpyxl.load_workbook(excel_path, data_only=True)
     expected_sheets = [
-        "1_Producao_Brasil_barris",
-        "2_Importacao_Volume_barris",
-        "3_Dispendio_Importacao_USD",
-        "Resumo_Anual",
-        "Serie_Mensal_Completa",
+        "Resumo_Por_Derivado",
+        "Prod_Por_Derivado_Anual",
+        "ImpVol_Por_Derivado_Anual",
+        "DispUSD_Por_Derivado_Anual",
+        "PrecoImp_Por_Derivado",
+        "1_Producao_Total_Mensal",
+        "2_Importacao_Vol_Mensal",
+        "3_Dispendio_USD_Mensal",
+        "Serie_Total_Mensal",
+        "Detalhe_Mensal_Por_Produto",
     ]
     for s in expected_sheets:
-        assert s in wb.sheetnames
+        assert s in wb.sheetnames, f"Falta a aba {s}"
         
-    ws_prod = wb["1_Producao_Brasil_barris"]
-    # Checar se ano 2000 e 2026 estao presentes
-    cols = {ws_prod.cell(1, c).value: c for c in range(2, 35)}
-    assert 2000 in cols
-    assert 2026 in cols
+    # Verificar totais acumulados
+    totais = summary["totais_nacionais"]
+    assert 18_000_000_000 < totais["volume_produzido_brasil_barris"] < 19_000_000_000
+    assert 4_000_000_000 < totais["volume_importado_barris"] < 5_000_000_000
+    assert 300_000_000_000 < totais["dispendio_importacao_usd"] < 320_000_000_000
     
-    # 2000 Jan producao ~46.1M barris
-    val_jan_2000 = ws_prod.cell(2, cols[2000]).value
-    assert 46_000_000 < val_jan_2000 < 47_000_000
+    # Verificar discriminação por produto
+    assert summary["total_derivados_analisados"] == 15
+    resumo_prods = {r["Produto"]: r for r in summary["resumo_por_derivado"]}
+    assert "ÓLEO DIESEL" in resumo_prods
+    assert "GASOLINA A" in resumo_prods
+    assert "NAFTA" in resumo_prods
+    assert "GLP" in resumo_prods
     
-    # 2026 Jun producao ~65.36M barris
-    val_jun_2026 = ws_prod.cell(7, cols[2026]).value
-    assert 65_000_000 < val_jun_2026 < 66_000_000
-    
-    # Importação em 2000 Jan ~8.25M barris
-    ws_imp = wb["2_Importacao_Volume_barris"]
-    val_imp_jan_2000 = ws_imp.cell(2, cols[2000]).value
-    assert 8_200_000 < val_imp_jan_2000 < 8_300_000
-    
-    # Dispêndio em 2000 Jan US$ ~167.4M
-    ws_usd = wb["3_Dispendio_Importacao_USD"]
-    val_usd_jan_2000 = ws_usd.cell(2, cols[2000]).value
-    assert 167_000_000 < val_usd_jan_2000 < 168_000_000
-    
-    assert summary["totais_acumulados"]["volume_produzido_brasil_barris"] > 18_000_000_000
-    assert summary["totais_acumulados"]["volume_importado_barris"] > 4_000_000_000
-    assert summary["totais_acumulados"]["dispendio_importacao_usd"] > 300_000_000_000
+    # Óleo diesel deve ser o maior volume consumido
+    diesel = resumo_prods["ÓLEO DIESEL"]
+    assert diesel["Volume_Produzido_Brasil_barris"] > 7_000_000_000
+    assert diesel["Volume_Importado_barris"] > 1_500_000_000
+    assert diesel["Dispendio_Importacao_USD"] > 130_000_000_000
+    assert 88.0 < diesel["Preco_Medio_Importacao_USD_bbl"] < 92.0
