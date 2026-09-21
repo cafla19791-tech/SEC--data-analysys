@@ -56,3 +56,24 @@ w_{prod} = \frac{V_{prod}}{V_{imp}+V_{prod}}
 | `custo_medio_ponderado_diesel_gasolina_glp_qav_2010_2026.csv` | Custo mensal + componentes |
 | `custo_medio_ponderado_diesel_gasolina_glp_qav_resumo_anual.csv` | Resumo anual |
 | `custo_medio_ponderado_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, matriz e pivôs por produto |
+
+## 4) Receita líquida não obtida e lucro não auferido
+
+```bash
+python3 calcular_receita_lucro_nao_auferido_derivados.py
+```
+
+\[
+\text{receita líquida não obtida} = (custo_{médio} - 25) \times V_{produção\ Brasil}
+\]
+
+\[
+\text{lucro não auferido} = \text{receita líquida não obtida} + \text{dispêndio importação}
+\]
+
+| Arquivo | Conteúdo |
+|---------|----------|
+| `receita_lucro_nao_auferido_diesel_gasolina_glp_qav_2010_2026.csv` | Mensal por produto |
+| `receita_lucro_nao_auferido_diesel_gasolina_glp_qav_resumo_anual.csv` | Totais anuais por produto |
+| `receita_lucro_nao_auferido_totais_anuais.csv` | Soma dos 4 derivados por ano |
+| `receita_lucro_nao_auferido_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, matrizes e pivôs |
