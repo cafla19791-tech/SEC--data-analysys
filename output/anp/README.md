@@ -1,12 +1,12 @@
-# Volumes importados de derivados de petróleo (ANP) — barris
+# Volumes e dispêndios — diesel, gasolina, GLP e QAV (2010–2026)
 
-Fonte: planilha ANP compartilhada (Google Sheets), seção
-**Importação de derivados de petróleo por produto - 2000-2026 (b)**.
+Extração mensal a partir da planilha ANP (Google Sheets):
 
-Arquivo local: `data/anp/anp_importacoes_exportacoes_barris.xlsx`  
-Link: https://docs.google.com/spreadsheets/d/1PsjXu8XIGahgJVRIO1MJ1IS3RjEnCe85
+- **Volumes**: Importação de derivados por produto (barris)
+- **Dispêndios**: Dispêndio com importação por produto (US$ FOB)
 
-Unidade: **barris (b)**. Atualização da planilha: 28/08/2026.
+Produtos: `ÓLEO DIESEL`, `GASOLINA A`, `GLP`, `QUEROSENE DE AVIAÇÃO`  
+Período: **cada mês de 2010 a 2026**
 
 ## Como gerar
 
@@ -18,10 +18,9 @@ python3 extrair_volumes_importacao_derivados.py
 
 | Arquivo | Conteúdo |
 |---------|----------|
-| `volumes_importacao_derivados_barris_longo.csv` | Ano, mês, produto, volume (barris) |
-| `volumes_importacao_derivados_barris_resumo_anual.csv` | Totais anuais por produto |
-| `volumes_importacao_derivados_barris.xlsx` | Pivô total + uma aba por derivado |
+| `volumes_dispendios_diesel_gasolina_glp_qav_2010_2026.csv` | Ano, mês, produto, volume (b), dispêndio (US$ FOB) |
+| `volumes_dispendios_diesel_gasolina_glp_qav_resumo_anual.csv` | Totais anuais por produto |
+| `volumes_dispendios_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, resumo, matrizes e pivôs Vol/Disp por produto |
 
-Produtos: ASFALTO, COQUE, GASOLINA A, GASOLINA DE AVIAÇÃO, GLP, LUBRIFICANTE,
-NAFTA, OUTROS NÃO ENERGÉTICOS, PARAFINA, QUEROSENE DE AVIAÇÃO, QUEROSENE ILUMINANTE,
-SOLVENTE, ÓLEO COMBUSTÍVEL, ÓLEO DIESEL.
+Fonte: `data/anp/anp_importacoes_exportacoes_barris.xlsx`  
+Link: https://docs.google.com/spreadsheets/d/1PsjXu8XIGahgJVRIO1MJ1IS3RjEnCe85
