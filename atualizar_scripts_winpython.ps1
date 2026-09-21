@@ -37,6 +37,8 @@ $files = @(
     @{ Rel = "scripts/contagil_fluxos_seguro.py"; Out = (Join-Path $scriptsDir "contagil_fluxos_seguro.py") },
     @{ Rel = "scripts/gerar_fluxos.py"; Out = (Join-Path $scriptsDir "gerar_fluxos.py") },
     @{ Rel = "contagil_fluxos.py"; Out = (Join-Path $Root "contagil_fluxos.py") },
+    @{ Rel = "DERIVADOS.PY"; Out = (Join-Path $Root "DERIVADOS.PY") },
+    @{ Rel = "derivados.py"; Out = (Join-Path $Root "derivados.py") },
     @{ Rel = "contagil_fluxos_bndes.bat"; Out = (Join-Path $Root "contagil_fluxos_bndes.bat") }
 )
 

@@ -1,0 +1,286 @@
+{
+  "periodo": "2000 a 2026",
+  "meses_observados": 318,
+  "custo_producao_brasil_hipotese_usd_bbl": 25.0,
+  "totais_acumulados": {
+    "volume_produzido_brasil_barris": 18299770045.91132,
+    "volume_importado_barris": 4273748975.506142,
+    "volume_total_consumo_proxy_barris": 22573519021.41746,
+    "dispendio_importacao_usd": 306655235727.0,
+    "preco_medio_importacao_usd_bbl": 71.75321655167701,
+    "custo_medio_ponderado_usd_bbl": 33.85158894143921,
+    "lucro_bruto_adicional_se_tudo_produzido_brasil_usd": 199811511339.34647
+  },
+  "resumo_anual": [
+    {
+      "ano": 2000,
+      "volume_produzido_brasil_barris": 585336431.239389,
+      "volume_importado_barris": 114830090.5202153,
+      "dispendio_importacao_usd": 3227469792.0,
+      "volume_total_proxy_barris": 700166521.7596043,
+      "lucro_bruto_adicional_usd": 356717528.99461734,
+      "custo_medio_importado_usd_bbl": 28.106481301012465,
+      "custo_medio_ponderado_usd_bbl": 25.509475271822684
+    },
+    {
+      "ano": 2001,
+      "volume_produzido_brasil_barris": 612799940.4143959,
+      "volume_importado_barris": 114955243.83142546,
+      "dispendio_importacao_usd": 2838405695.0,
+      "volume_total_proxy_barris": 727755184.2458214,
+      "lucro_bruto_adicional_usd": -35475400.78563651,
+      "custo_medio_importado_usd_bbl": 24.691398151112978,
+      "custo_medio_ponderado_usd_bbl": 24.95125366118498
+    },
+    {
+      "ano": 2002,
+      "volume_produzido_brasil_barris": 597530388.6988374,
+      "volume_importado_barris": 105849591.61107534,
+      "dispendio_importacao_usd": 2394404888.0,
+      "volume_total_proxy_barris": 703379980.3099128,
+      "lucro_bruto_adicional_usd": -251834902.27688357,
+      "custo_medio_importado_usd_bbl": 22.620823109056442,
+      "custo_medio_ponderado_usd_bbl": 24.641964643113777
+    },
+    {
+      "ano": 2003,
+      "volume_produzido_brasil_barris": 597581570.5453677,
+      "volume_importado_barris": 82644350.89877538,
+      "dispendio_importacao_usd": 2225941583.0,
+      "volume_total_proxy_barris": 680225921.444143,
+      "lucro_bruto_adicional_usd": 159832810.53061554,
+      "custo_medio_importado_usd_bbl": 26.933983494242483,
+      "custo_medio_ponderado_usd_bbl": 25.234970184892816
+    },
+    {
+      "ano": 2004,
+      "volume_produzido_brasil_barris": 631872167.9287467,
+      "volume_importado_barris": 73870054.62121761,
+      "dispendio_importacao_usd": 2644845846.0,
+      "volume_total_proxy_barris": 705742222.5499643,
+      "lucro_bruto_adicional_usd": 798094480.4695597,
+      "custo_medio_importado_usd_bbl": 35.80403262948616,
+      "custo_medio_ponderado_usd_bbl": 26.13085834312975
+    },
+    {
+      "ano": 2005,
+      "volume_produzido_brasil_barris": 640238492.042823,
+      "volume_importado_barris": 68695015.2272247,
+      "dispendio_importacao_usd": 3335872117.0,
+      "volume_total_proxy_barris": 708933507.2700477,
+      "lucro_bruto_adicional_usd": 1618496736.3193827,
+      "custo_medio_importado_usd_bbl": 48.56061398291899,
+      "custo_medio_ponderado_usd_bbl": 27.283002171179447
+    },
+    {
+      "ano": 2006,
+      "volume_produzido_brasil_barris": 650619698.6209317,
+      "volume_importado_barris": 84920592.29179053,
+      "dispendio_importacao_usd": 4958524731.0,
+      "volume_total_proxy_barris": 735540290.9127222,
+      "lucro_bruto_adicional_usd": 2835509923.705237,
+      "custo_medio_importado_usd_bbl": 58.39013361991532,
+      "custo_medio_ponderado_usd_bbl": 28.855002858085026
+    },
+    {
+      "ano": 2007,
+      "volume_produzido_brasil_barris": 665053321.0634847,
+      "volume_importado_barris": 100382366.75731175,
+      "dispendio_importacao_usd": 6937803390.0,
+      "volume_total_proxy_barris": 765435687.8207964,
+      "lucro_bruto_adicional_usd": 4428244221.067206,
+      "custo_medio_importado_usd_bbl": 69.11376583472175,
+      "custo_medio_ponderado_usd_bbl": 30.785259678281353
+    },
+    {
+      "ano": 2008,
+      "volume_produzido_brasil_barris": 663188384.2267447,
+      "volume_importado_barris": 112674025.40906551,
+      "dispendio_importacao_usd": 11173747935.0,
+      "volume_total_proxy_barris": 775862409.6358101,
+      "lucro_bruto_adicional_usd": 8356897299.773362,
+      "custo_medio_importado_usd_bbl": 99.16880039062653,
+      "custo_medio_ponderado_usd_bbl": 35.77110734581933
+    },
+    {
+      "ano": 2009,
+      "volume_produzido_brasil_barris": 670125508.1236202,
+      "volume_importado_barris": 100238970.12088291,
+      "dispendio_importacao_usd": 5571473943.0,
+      "volume_total_proxy_barris": 770364478.2445031,
+      "lucro_bruto_adicional_usd": 3065499689.977927,
+      "custo_medio_importado_usd_bbl": 55.58191525991435,
+      "custo_medio_ponderado_usd_bbl": 28.97928484055177
+    },
+    {
+      "ano": 2010,
+      "volume_produzido_brasil_barris": 672070936.3128189,
+      "volume_importado_barris": 172185941.0175156,
+      "dispendio_importacao_usd": 12980137691.0,
+      "volume_total_proxy_barris": 844256877.3303344,
+      "lucro_bruto_adicional_usd": 8675489165.56211,
+      "custo_medio_importado_usd_bbl": 75.38442229542768,
+      "custo_medio_ponderado_usd_bbl": 35.275888060272955
+    },
+    {
+      "ano": 2011,
+      "volume_produzido_brasil_barris": 701260863.4821947,
+      "volume_importado_barris": 190674976.79235926,
+      "dispendio_importacao_usd": 19403247163.0,
+      "volume_total_proxy_barris": 891935840.274554,
+      "lucro_bruto_adicional_usd": 14636372743.19102,
+      "custo_medio_importado_usd_bbl": 101.76084712012157,
+      "custo_medio_ponderado_usd_bbl": 41.40966993622062
+    },
+    {
+      "ano": 2012,
+      "volume_produzido_brasil_barris": 737754075.8564819,
+      "volume_importado_barris": 170942070.90322194,
+      "dispendio_importacao_usd": 18151153823.0,
+      "volume_total_proxy_barris": 908696146.7597039,
+      "lucro_bruto_adicional_usd": 13877602050.419453,
+      "custo_medio_importado_usd_bbl": 106.18306966268234,
+      "custo_medio_ponderado_usd_bbl": 40.271993944186114
+    },
+    {
+      "ano": 2013,
+      "volume_produzido_brasil_barris": 779341062.0166105,
+      "volume_importado_barris": 192590080.58027703,
+      "dispendio_importacao_usd": 19600385382.0,
+      "volume_total_proxy_barris": 971931142.5968876,
+      "lucro_bruto_adicional_usd": 14785633367.493074,
+      "custo_medio_importado_usd_bbl": 101.77255922498044,
+      "custo_medio_ponderado_usd_bbl": 40.21263463992683
+    },
+    {
+      "ano": 2014,
+      "volume_produzido_brasil_barris": 795446748.152815,
+      "volume_importado_barris": 196734702.8106749,
+      "dispendio_importacao_usd": 19475677415.0,
+      "volume_total_proxy_barris": 992181450.9634899,
+      "lucro_bruto_adicional_usd": 14557309844.733128,
+      "custo_medio_importado_usd_bbl": 98.99462136958199,
+      "custo_medio_ponderado_usd_bbl": 39.672023782138616
+    },
+    {
+      "ano": 2015,
+      "volume_produzido_brasil_barris": 745032613.8732951,
+      "volume_importado_barris": 161801966.24758062,
+      "dispendio_importacao_usd": 9710277682.0,
+      "volume_total_proxy_barris": 906834580.1208757,
+      "lucro_bruto_adicional_usd": 5665228525.810485,
+      "custo_medio_importado_usd_bbl": 60.013347842398026,
+      "custo_medio_ponderado_usd_bbl": 31.247256831621204
+    },
+    {
+      "ano": 2016,
+      "volume_produzido_brasil_barris": 697379474.8311113,
+      "volume_importado_barris": 178164255.56820822,
+      "dispendio_importacao_usd": 8233438198.0,
+      "volume_total_proxy_barris": 875543730.3993194,
+      "lucro_bruto_adicional_usd": 3779331808.794795,
+      "custo_medio_importado_usd_bbl": 46.21262649874188,
+      "custo_medio_ponderado_usd_bbl": 29.31655401960461
+    },
+    {
+      "ano": 2017,
+      "volume_produzido_brasil_barris": 666817834.4759413,
+      "volume_importado_barris": 224719566.3905924,
+      "dispendio_importacao_usd": 12968300176.0,
+      "volume_total_proxy_barris": 891537400.8665338,
+      "lucro_bruto_adicional_usd": 7350311016.23519,
+      "custo_medio_importado_usd_bbl": 57.70881630066594,
+      "custo_medio_ponderado_usd_bbl": 33.24453467582069
+    },
+    {
+      "ano": 2018,
+      "volume_produzido_brasil_barris": 656671171.3922224,
+      "volume_importado_barris": 206033195.713669,
+      "dispendio_importacao_usd": 14697227155.0,
+      "volume_total_proxy_barris": 862704367.1058913,
+      "lucro_bruto_adicional_usd": 9546397262.158276,
+      "custo_medio_importado_usd_bbl": 71.33426778190254,
+      "custo_medio_ponderado_usd_bbl": 36.06566470062452
+    },
+    {
+      "ano": 2019,
+      "volume_produzido_brasil_barris": 657201195.482216,
+      "volume_importado_barris": 215038000.72210115,
+      "dispendio_importacao_usd": 14076443060.0,
+      "volume_total_proxy_barris": 872239196.2043171,
+      "lucro_bruto_adicional_usd": 8700493041.947472,
+      "custo_medio_importado_usd_bbl": 65.46025824612893,
+      "custo_medio_ponderado_usd_bbl": 34.97489344644107
+    },
+    {
+      "ano": 2020,
+      "volume_produzido_brasil_barris": 682339124.667677,
+      "volume_importado_barris": 177776713.79950127,
+      "dispendio_importacao_usd": 8319420449.0,
+      "volume_total_proxy_barris": 860115838.4671783,
+      "lucro_bruto_adicional_usd": 3875002604.012469,
+      "custo_medio_importado_usd_bbl": 46.797020100071954,
+      "custo_medio_ponderado_usd_bbl": 29.50521014810999
+    },
+    {
+      "ano": 2021,
+      "volume_produzido_brasil_barris": 697950694.2726593,
+      "volume_importado_barris": 226648211.22811693,
+      "dispendio_importacao_usd": 15401033209.0,
+      "volume_total_proxy_barris": 924598905.5007762,
+      "lucro_bruto_adicional_usd": 9734827928.297077,
+      "custo_medio_importado_usd_bbl": 67.95126740929433,
+      "custo_medio_ponderado_usd_bbl": 35.528703711826864
+    },
+    {
+      "ano": 2022,
+      "volume_produzido_brasil_barris": 747981946.5762792,
+      "volume_importado_barris": 238584250.59882343,
+      "dispendio_importacao_usd": 25875649639.0,
+      "volume_total_proxy_barris": 986566197.1751026,
+      "lucro_bruto_adicional_usd": 19911043374.029415,
+      "custo_medio_importado_usd_bbl": 108.45497795455744,
+      "custo_medio_ponderado_usd_bbl": 45.18216662099509
+    },
+    {
+      "ano": 2023,
+      "volume_produzido_brasil_barris": 781375149.5276533,
+      "volume_importado_barris": 215724131.7360112,
+      "dispendio_importacao_usd": 19007856158.0,
+      "volume_total_proxy_barris": 997099281.2636645,
+      "lucro_bruto_adicional_usd": 13614752864.59972,
+      "custo_medio_importado_usd_bbl": 88.11186771288317,
+      "custo_medio_ponderado_usd_bbl": 38.654360323422544
+    },
+    {
+      "ano": 2024,
+      "volume_produzido_brasil_barris": 792214977.3431879,
+      "volume_importado_barris": 216144310.64290592,
+      "dispendio_importacao_usd": 17003531576.0,
+      "volume_total_proxy_barris": 1008359287.9860939,
+      "lucro_bruto_adicional_usd": 11599923809.927353,
+      "custo_medio_importado_usd_bbl": 78.66749545904864,
+      "custo_medio_ponderado_usd_bbl": 36.50376056246265
+    },
+    {
+      "ano": 2025,
+      "volume_produzido_brasil_barris": 777732563.1421052,
+      "volume_importado_barris": 231173516.8580855,
+      "dispendio_importacao_usd": 17256022635.0,
+      "volume_total_proxy_barris": 1008906080.0001907,
+      "lucro_bruto_adicional_usd": 11476684713.547863,
+      "custo_medio_importado_usd_bbl": 74.64532646095985,
+      "custo_medio_ponderado_usd_bbl": 36.37537471629241
+    },
+    {
+      "ano": 2026,
+      "volume_produzido_brasil_barris": 396853711.60171205,
+      "volume_importado_barris": 99752782.60751326,
+      "dispendio_importacao_usd": 9186944396.0,
+      "volume_total_proxy_barris": 496606494.2092253,
+      "lucro_bruto_adicional_usd": 6693124830.812169,
+      "custo_medio_importado_usd_bbl": 92.09712406867786,
+      "custo_medio_ponderado_usd_bbl": 38.47772312456367
+    }
+  ]
+}

@@ -46,6 +46,8 @@ copy /Y "%REPO%\scripts\agregar_impacto_fluxos.py" "%WINPY%\scripts\" >nul
 
 copy /Y "%REPO%\contagil_fluxos.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.py" "%WINPY%\" >nul
+copy /Y "%REPO%\DERIVADOS.PY" "%WINPY%\" >nul
+copy /Y "%REPO%\derivados.py" "%WINPY%\" >nul
 copy /Y "%REPO%\contagil_fluxos_seguro.bat" "%WINPY%\" >nul
 copy /Y "%REPO%\baixar_contagil_fluxos_seguro.ps1" "%WINPY%\" >nul
 copy /Y "%REPO%\resumo_fluxos_polars.py" "%WINPY%\" >nul

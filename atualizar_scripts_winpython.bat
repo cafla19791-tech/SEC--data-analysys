@@ -53,6 +53,8 @@ curl.exe -fsSL -o "scripts\contagil_fluxos.py" "%BASE%/scripts/contagil_fluxos.p
 curl.exe -fsSL -o "scripts\contagil_fluxos_seguro.py" "%BASE%/scripts/contagil_fluxos_seguro.py" || goto :fail
 curl.exe -fsSL -o "scripts\gerar_fluxos.py" "%BASE%/scripts/gerar_fluxos.py" || goto :fail
 curl.exe -fsSL -o "contagil_fluxos.py" "%BASE%/contagil_fluxos.py" || goto :fail
+curl.exe -fsSL -o "DERIVADOS.PY" "%BASE%/DERIVADOS.PY" || goto :fail
+curl.exe -fsSL -o "derivados.py" "%BASE%/derivados.py" || goto :fail
 curl.exe -fsSL -o "contagil_fluxos_bndes.bat" "%BASE%/contagil_fluxos_bndes.bat" || goto :fail
 
 findstr /B /C:"#!/usr/bin/env python" "scripts\contagil_fluxos.py" >nul 2>&1

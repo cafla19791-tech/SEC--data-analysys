@@ -7,6 +7,8 @@ __pycache__/
 
 # Dados brutos / intermediários (grandes)
 data/raw/
+!data/raw/anp/producao-derivados-b.xlsx
+!data/raw/anp/importacoes-exportacoes-b.xlsx
 data/contagil_winpython/
 data/*.csv
 data/*.parquet
@@ -38,6 +40,9 @@ output/*_stats.json
 !output/desembolsos_1995_2001_ipca.xlsx
 !output/montantes_contratos_indiretas_2002_2026.csv
 !output/montantes_contratos_indiretas_2002_2026.md
+!output/DERIVADOS_ANP_2000_2026.json
+!output/DERIVADOS_ANP_2000_2026.xlsx
+!output/DERIVADOS_ANP_2000_2026_mensal.csv
 !output/montantes_contratos_indiretas_2002_2026.xlsx
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
