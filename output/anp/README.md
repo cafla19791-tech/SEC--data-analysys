@@ -32,3 +32,27 @@ python3 extrair_volumes_producao_derivados.py
 | `producao_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, matriz e pivôs por produto |
 
 Produtos em ambas: `ÓLEO DIESEL`, `GASOLINA A`, `GLP`, `QUEROSENE DE AVIAÇÃO`.
+
+## 3) Custo médio ponderado mensal (US$/barril)
+
+```bash
+python3 calcular_custo_medio_ponderado_derivados.py
+```
+
+Fórmula por mês e derivado:
+
+\[
+P_{imp} = \frac{\text{dispêndio importação}}{\text{volume importação}},\quad
+w_{imp} = \frac{V_{imp}}{V_{imp}+V_{prod}},\quad
+w_{prod} = \frac{V_{prod}}{V_{imp}+V_{prod}}
+\]
+
+\[
+\text{custo} = P_{imp}\cdot w_{imp} + 25\cdot w_{prod}
+\]
+
+| Arquivo | Conteúdo |
+|---------|----------|
+| `custo_medio_ponderado_diesel_gasolina_glp_qav_2010_2026.csv` | Custo mensal + componentes |
+| `custo_medio_ponderado_diesel_gasolina_glp_qav_resumo_anual.csv` | Resumo anual |
+| `custo_medio_ponderado_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, matriz e pivôs por produto |
