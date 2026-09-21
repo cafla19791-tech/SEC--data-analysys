@@ -1,26 +1,34 @@
-# Volumes e dispêndios — diesel, gasolina, GLP e QAV (2010–2026)
+# Extrações ANP — diesel, gasolina, GLP e QAV (2010–2026)
 
-Extração mensal a partir da planilha ANP (Google Sheets):
+## 1) Importação (volumes + dispêndios)
 
-- **Volumes**: Importação de derivados por produto (barris)
-- **Dispêndios**: Dispêndio com importação por produto (US$ FOB)
-
-Produtos: `ÓLEO DIESEL`, `GASOLINA A`, `GLP`, `QUEROSENE DE AVIAÇÃO`  
-Período: **cada mês de 2010 a 2026**
-
-## Como gerar
+Fonte: [planilha importações/exportações](https://docs.google.com/spreadsheets/d/1PsjXu8XIGahgJVRIO1MJ1IS3RjEnCe85)
 
 ```bash
 python3 extrair_volumes_importacao_derivados.py
 ```
 
-## Saídas
+| Arquivo | Conteúdo |
+|---------|----------|
+| `volumes_dispendios_diesel_gasolina_glp_qav_2010_2026.csv` | Volume (b) + dispêndio (US$ FOB) mensal |
+| `volumes_dispendios_diesel_gasolina_glp_qav_resumo_anual.csv` | Totais anuais |
+| `volumes_dispendios_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, matrizes e pivôs |
+
+## 2) Produção nacional nas refinarias (volumes)
+
+Fonte: [planilha produção nacional](https://docs.google.com/spreadsheets/d/1X_DHZxEJe4iP02gwGy6y24eHiMTy1bCd)
+
+Escopo: **Brasil — todas as refinárias** (visão `REFINARIA = (Tudo)`).  
+Unidade: **barris**.
+
+```bash
+python3 extrair_volumes_producao_derivados.py
+```
 
 | Arquivo | Conteúdo |
 |---------|----------|
-| `volumes_dispendios_diesel_gasolina_glp_qav_2010_2026.csv` | Ano, mês, produto, volume (b), dispêndio (US$ FOB) |
-| `volumes_dispendios_diesel_gasolina_glp_qav_resumo_anual.csv` | Totais anuais por produto |
-| `volumes_dispendios_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, resumo, matrizes e pivôs Vol/Disp por produto |
+| `producao_diesel_gasolina_glp_qav_2010_2026.csv` | Produção mensal (barris) |
+| `producao_diesel_gasolina_glp_qav_resumo_anual.csv` | Totais anuais |
+| `producao_diesel_gasolina_glp_qav_2010_2026.xlsx` | Longo, matriz e pivôs por produto |
 
-Fonte: `data/anp/anp_importacoes_exportacoes_barris.xlsx`  
-Link: https://docs.google.com/spreadsheets/d/1PsjXu8XIGahgJVRIO1MJ1IS3RjEnCe85
+Produtos em ambas: `ÓLEO DIESEL`, `GASOLINA A`, `GLP`, `QUEROSENE DE AVIAÇÃO`.

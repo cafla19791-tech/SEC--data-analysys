@@ -1,0 +1,817 @@
+﻿ano;mes;mes_nome;mes_ordem;produto;volume_barris;unidade;escopo
+2010;JAN;Janeiro;1;GASOLINA A;11579418,60281346;b;Brasil - refinarias
+2010;FEV;Fevereiro;2;GASOLINA A;10755317,1548919;b;Brasil - refinarias
+2010;MAR;Março;3;GASOLINA A;10881661,360877959;b;Brasil - refinarias
+2010;ABR;Abril;4;GASOLINA A;10933716,39452086;b;Brasil - refinarias
+2010;MAI;Maio;5;GASOLINA A;10408671,86934047;b;Brasil - refinarias
+2010;JUN;Junho;6;GASOLINA A;10688438,7373277;b;Brasil - refinarias
+2010;JUL;Julho;7;GASOLINA A;11470516,21607208;b;Brasil - refinarias
+2010;AGO;Agosto;8;GASOLINA A;11126552,39603004;b;Brasil - refinarias
+2010;SET;Setembro;9;GASOLINA A;10773010,28349513;b;Brasil - refinarias
+2010;OUT;Outubro;10;GASOLINA A;11732496,38195271;b;Brasil - refinarias
+2010;NOV;Novembro;11;GASOLINA A;11810662,25353013;b;Brasil - refinarias
+2010;DEZ;Dezembro;12;GASOLINA A;13109498,11836919;b;Brasil - refinarias
+2011;JAN;Janeiro;1;GASOLINA A;12619104,48983873;b;Brasil - refinarias
+2011;FEV;Fevereiro;2;GASOLINA A;11526189,26164356;b;Brasil - refinarias
+2011;MAR;Março;3;GASOLINA A;12890605,5033775;b;Brasil - refinarias
+2011;ABR;Abril;4;GASOLINA A;12139478,68266834;b;Brasil - refinarias
+2011;MAI;Maio;5;GASOLINA A;13846005,28210295;b;Brasil - refinarias
+2011;JUN;Junho;6;GASOLINA A;11532678,85487859;b;Brasil - refinarias
+2011;JUL;Julho;7;GASOLINA A;12681332,8320005;b;Brasil - refinarias
+2011;AGO;Agosto;8;GASOLINA A;13075191,8026703;b;Brasil - refinarias
+2011;SET;Setembro;9;GASOLINA A;12965902,90081461;b;Brasil - refinarias
+2011;OUT;Outubro;10;GASOLINA A;12411389,307503741;b;Brasil - refinarias
+2011;NOV;Novembro;11;GASOLINA A;12067879,30983282;b;Brasil - refinarias
+2011;DEZ;Dezembro;12;GASOLINA A;12872927,18727682;b;Brasil - refinarias
+2012;JAN;Janeiro;1;GASOLINA A;13774454,88172809;b;Brasil - refinarias
+2012;FEV;Fevereiro;2;GASOLINA A;12958198,84590554;b;Brasil - refinarias
+2012;MAR;Março;3;GASOLINA A;14012297,17211576;b;Brasil - refinarias
+2012;ABR;Abril;4;GASOLINA A;13911239,75089688;b;Brasil - refinarias
+2012;MAI;Maio;5;GASOLINA A;13907835,171091031;b;Brasil - refinarias
+2012;JUN;Junho;6;GASOLINA A;13450337,42497525;b;Brasil - refinarias
+2012;JUL;Julho;7;GASOLINA A;13775848,48348074;b;Brasil - refinarias
+2012;AGO;Agosto;8;GASOLINA A;14281047,73979887;b;Brasil - refinarias
+2012;SET;Setembro;9;GASOLINA A;13501662,362632591;b;Brasil - refinarias
+2012;OUT;Outubro;10;GASOLINA A;13832474,4226876;b;Brasil - refinarias
+2012;NOV;Novembro;11;GASOLINA A;13352332,76303987;b;Brasil - refinarias
+2012;DEZ;Dezembro;12;GASOLINA A;14229145,3787141;b;Brasil - refinarias
+2013;JAN;Janeiro;1;GASOLINA A;14498903,59282864;b;Brasil - refinarias
+2013;FEV;Fevereiro;2;GASOLINA A;12465741,86407401;b;Brasil - refinarias
+2013;MAR;Março;3;GASOLINA A;13951280,77570403;b;Brasil - refinarias
+2013;ABR;Abril;4;GASOLINA A;14711129,22936368;b;Brasil - refinarias
+2013;MAI;Maio;5;GASOLINA A;16020771,50354716;b;Brasil - refinarias
+2013;JUN;Junho;6;GASOLINA A;15013427,00186659;b;Brasil - refinarias
+2013;JUL;Julho;7;GASOLINA A;15971583,17660796;b;Brasil - refinarias
+2013;AGO;Agosto;8;GASOLINA A;16022532,40504457;b;Brasil - refinarias
+2013;SET;Setembro;9;GASOLINA A;15230117,95063531;b;Brasil - refinarias
+2013;OUT;Outubro;10;GASOLINA A;16030866,59198887;b;Brasil - refinarias
+2013;NOV;Novembro;11;GASOLINA A;15378204,35670191;b;Brasil - refinarias
+2013;DEZ;Dezembro;12;GASOLINA A;14678120,68387228;b;Brasil - refinarias
+2014;JAN;Janeiro;1;GASOLINA A;14627247,29796465;b;Brasil - refinarias
+2014;FEV;Fevereiro;2;GASOLINA A;13844538,68081544;b;Brasil - refinarias
+2014;MAR;Março;3;GASOLINA A;15129318,22293213;b;Brasil - refinarias
+2014;ABR;Abril;4;GASOLINA A;14534001,61949185;b;Brasil - refinarias
+2014;MAI;Maio;5;GASOLINA A;15281083,60176583;b;Brasil - refinarias
+2014;JUN;Junho;6;GASOLINA A;15465746,45433614;b;Brasil - refinarias
+2014;JUL;Julho;7;GASOLINA A;15631455,09026765;b;Brasil - refinarias
+2014;AGO;Agosto;8;GASOLINA A;16187719,081093231;b;Brasil - refinarias
+2014;SET;Setembro;9;GASOLINA A;15205475,30531023;b;Brasil - refinarias
+2014;OUT;Outubro;10;GASOLINA A;15432828,34373292;b;Brasil - refinarias
+2014;NOV;Novembro;11;GASOLINA A;15384090,96472167;b;Brasil - refinarias
+2014;DEZ;Dezembro;12;GASOLINA A;14875173,01548629;b;Brasil - refinarias
+2015;JAN;Janeiro;1;GASOLINA A;13744497,17712814;b;Brasil - refinarias
+2015;FEV;Fevereiro;2;GASOLINA A;12744680,590517402;b;Brasil - refinarias
+2015;MAR;Março;3;GASOLINA A;12323828,0196592;b;Brasil - refinarias
+2015;ABR;Abril;4;GASOLINA A;12687528,53386328;b;Brasil - refinarias
+2015;MAI;Maio;5;GASOLINA A;14327666,04408226;b;Brasil - refinarias
+2015;JUN;Junho;6;GASOLINA A;13606021,7642766;b;Brasil - refinarias
+2015;JUL;Julho;7;GASOLINA A;13926339,81098046;b;Brasil - refinarias
+2015;AGO;Agosto;8;GASOLINA A;12572656,22427888;b;Brasil - refinarias
+2015;SET;Setembro;9;GASOLINA A;13711411,6821012;b;Brasil - refinarias
+2015;OUT;Outubro;10;GASOLINA A;14245167,6633195;b;Brasil - refinarias
+2015;NOV;Novembro;11;GASOLINA A;13565699,26418214;b;Brasil - refinarias
+2015;DEZ;Dezembro;12;GASOLINA A;14369888,04792729;b;Brasil - refinarias
+2016;JAN;Janeiro;1;GASOLINA A;14131420,56300524;b;Brasil - refinarias
+2016;FEV;Fevereiro;2;GASOLINA A;13503642,56464546;b;Brasil - refinarias
+2016;MAR;Março;3;GASOLINA A;14420880,00304323;b;Brasil - refinarias
+2016;ABR;Abril;4;GASOLINA A;14475454,5899065;b;Brasil - refinarias
+2016;MAI;Maio;5;GASOLINA A;13914041,873831501;b;Brasil - refinarias
+2016;JUN;Junho;6;GASOLINA A;13108847,56332089;b;Brasil - refinarias
+2016;JUL;Julho;7;GASOLINA A;13965668,25063309;b;Brasil - refinarias
+2016;AGO;Agosto;8;GASOLINA A;13275345,49492968;b;Brasil - refinarias
+2016;SET;Setembro;9;GASOLINA A;13154423,30643754;b;Brasil - refinarias
+2016;OUT;Outubro;10;GASOLINA A;14696496,061876401;b;Brasil - refinarias
+2016;NOV;Novembro;11;GASOLINA A;13796358,38398608;b;Brasil - refinarias
+2016;DEZ;Dezembro;12;GASOLINA A;14326896,18391788;b;Brasil - refinarias
+2017;JAN;Janeiro;1;GASOLINA A;14089934,215337811;b;Brasil - refinarias
+2017;FEV;Fevereiro;2;GASOLINA A;12939965,69308514;b;Brasil - refinarias
+2017;MAR;Março;3;GASOLINA A;14945820,6708809;b;Brasil - refinarias
+2017;ABR;Abril;4;GASOLINA A;14363549,02645385;b;Brasil - refinarias
+2017;MAI;Maio;5;GASOLINA A;13181011,81141289;b;Brasil - refinarias
+2017;JUN;Junho;6;GASOLINA A;13545459,41666915;b;Brasil - refinarias
+2017;JUL;Julho;7;GASOLINA A;14977976,15460124;b;Brasil - refinarias
+2017;AGO;Agosto;8;GASOLINA A;14055756,91622164;b;Brasil - refinarias
+2017;SET;Setembro;9;GASOLINA A;13494198,44637951;b;Brasil - refinarias
+2017;OUT;Outubro;10;GASOLINA A;13874103,7188669;b;Brasil - refinarias
+2017;NOV;Novembro;11;GASOLINA A;12374446,40408981;b;Brasil - refinarias
+2017;DEZ;Dezembro;12;GASOLINA A;13753439,58869944;b;Brasil - refinarias
+2018;JAN;Janeiro;1;GASOLINA A;13196195,36243441;b;Brasil - refinarias
+2018;FEV;Fevereiro;2;GASOLINA A;11912423,573675921;b;Brasil - refinarias
+2018;MAR;Março;3;GASOLINA A;12164287,29092008;b;Brasil - refinarias
+2018;ABR;Abril;4;GASOLINA A;12640952,15116354;b;Brasil - refinarias
+2018;MAI;Maio;5;GASOLINA A;13283772,05402364;b;Brasil - refinarias
+2018;JUN;Junho;6;GASOLINA A;12946932,88417309;b;Brasil - refinarias
+2018;JUL;Julho;7;GASOLINA A;12661745,39502976;b;Brasil - refinarias
+2018;AGO;Agosto;8;GASOLINA A;12065498,88720965;b;Brasil - refinarias
+2018;SET;Setembro;9;GASOLINA A;12357099,69306214;b;Brasil - refinarias
+2018;OUT;Outubro;10;GASOLINA A;12864017,482717521;b;Brasil - refinarias
+2018;NOV;Novembro;11;GASOLINA A;11602772,57299631;b;Brasil - refinarias
+2018;DEZ;Dezembro;12;GASOLINA A;12073293,63488911;b;Brasil - refinarias
+2019;JAN;Janeiro;1;GASOLINA A;12322502,86361897;b;Brasil - refinarias
+2019;FEV;Fevereiro;2;GASOLINA A;11968110,19894719;b;Brasil - refinarias
+2019;MAR;Março;3;GASOLINA A;12600230,23555446;b;Brasil - refinarias
+2019;ABR;Abril;4;GASOLINA A;12137144,30145437;b;Brasil - refinarias
+2019;MAI;Maio;5;GASOLINA A;12199490,118397512;b;Brasil - refinarias
+2019;JUN;Junho;6;GASOLINA A;12513026,65549443;b;Brasil - refinarias
+2019;JUL;Julho;7;GASOLINA A;14028459,00873563;b;Brasil - refinarias
+2019;AGO;Agosto;8;GASOLINA A;13825334,28069408;b;Brasil - refinarias
+2019;SET;Setembro;9;GASOLINA A;12121714,057794841;b;Brasil - refinarias
+2019;OUT;Outubro;10;GASOLINA A;12273101,695799181;b;Brasil - refinarias
+2019;NOV;Novembro;11;GASOLINA A;11836160,8728083;b;Brasil - refinarias
+2019;DEZ;Dezembro;12;GASOLINA A;12840431,44999472;b;Brasil - refinarias
+2020;JAN;Janeiro;1;GASOLINA A;12340887,23605139;b;Brasil - refinarias
+2020;FEV;Fevereiro;2;GASOLINA A;11676961,05806099;b;Brasil - refinarias
+2020;MAR;Março;3;GASOLINA A;10934867,63731459;b;Brasil - refinarias
+2020;ABR;Abril;4;GASOLINA A;7525501,279764781;b;Brasil - refinarias
+2020;MAI;Maio;5;GASOLINA A;9981842,52603616;b;Brasil - refinarias
+2020;JUN;Junho;6;GASOLINA A;10746149,146705331;b;Brasil - refinarias
+2020;JUL;Julho;7;GASOLINA A;12114174,65753195;b;Brasil - refinarias
+2020;AGO;Agosto;8;GASOLINA A;12574064,04100213;b;Brasil - refinarias
+2020;SET;Setembro;9;GASOLINA A;12957592,87303052;b;Brasil - refinarias
+2020;OUT;Outubro;10;GASOLINA A;12314775,69365815;b;Brasil - refinarias
+2020;NOV;Novembro;11;GASOLINA A;12735880,63056298;b;Brasil - refinarias
+2020;DEZ;Dezembro;12;GASOLINA A;13601415,824470941;b;Brasil - refinarias
+2021;JAN;Janeiro;1;GASOLINA A;13492116,072693;b;Brasil - refinarias
+2021;FEV;Fevereiro;2;GASOLINA A;12276237,65039955;b;Brasil - refinarias
+2021;MAR;Março;3;GASOLINA A;11182838,3081083;b;Brasil - refinarias
+2021;ABR;Abril;4;GASOLINA A;11196927,9856931;b;Brasil - refinarias
+2021;MAI;Maio;5;GASOLINA A;13204626,29923613;b;Brasil - refinarias
+2021;JUN;Junho;6;GASOLINA A;13426123,04652326;b;Brasil - refinarias
+2021;JUL;Julho;7;GASOLINA A;13830017,67950989;b;Brasil - refinarias
+2021;AGO;Agosto;8;GASOLINA A;13999306,31804815;b;Brasil - refinarias
+2021;SET;Setembro;9;GASOLINA A;14613908,49160784;b;Brasil - refinarias
+2021;OUT;Outubro;10;GASOLINA A;14491178,10146897;b;Brasil - refinarias
+2021;NOV;Novembro;11;GASOLINA A;13996169,31304951;b;Brasil - refinarias
+2021;DEZ;Dezembro;12;GASOLINA A;14069742,0949031;b;Brasil - refinarias
+2022;JAN;Janeiro;1;GASOLINA A;14175853,83761311;b;Brasil - refinarias
+2022;FEV;Fevereiro;2;GASOLINA A;12043790,22439603;b;Brasil - refinarias
+2022;MAR;Março;3;GASOLINA A;14101035,729987811;b;Brasil - refinarias
+2022;ABR;Abril;4;GASOLINA A;13814249,295664761;b;Brasil - refinarias
+2022;MAI;Maio;5;GASOLINA A;13601413,72996421;b;Brasil - refinarias
+2022;JUN;Junho;6;GASOLINA A;13516094,63358847;b;Brasil - refinarias
+2022;JUL;Julho;7;GASOLINA A;13982252,24043073;b;Brasil - refinarias
+2022;AGO;Agosto;8;GASOLINA A;14642254,14935384;b;Brasil - refinarias
+2022;SET;Setembro;9;GASOLINA A;13591466,53382503;b;Brasil - refinarias
+2022;OUT;Outubro;10;GASOLINA A;14193804,25089439;b;Brasil - refinarias
+2022;NOV;Novembro;11;GASOLINA A;13224406,349058501;b;Brasil - refinarias
+2022;DEZ;Dezembro;12;GASOLINA A;14794328,684928661;b;Brasil - refinarias
+2023;JAN;Janeiro;1;GASOLINA A;14345969,68680333;b;Brasil - refinarias
+2023;FEV;Fevereiro;2;GASOLINA A;13422291,60247195;b;Brasil - refinarias
+2023;MAR;Março;3;GASOLINA A;14360567,02124304;b;Brasil - refinarias
+2023;ABR;Abril;4;GASOLINA A;13598471,95437816;b;Brasil - refinarias
+2023;MAI;Maio;5;GASOLINA A;14643810,00304525;b;Brasil - refinarias
+2023;JUN;Junho;6;GASOLINA A;15270506,63211059;b;Brasil - refinarias
+2023;JUL;Julho;7;GASOLINA A;15833835,36897722;b;Brasil - refinarias
+2023;AGO;Agosto;8;GASOLINA A;16223835,22672152;b;Brasil - refinarias
+2023;SET;Setembro;9;GASOLINA A;15690862,78600435;b;Brasil - refinarias
+2023;OUT;Outubro;10;GASOLINA A;15260392,94470071;b;Brasil - refinarias
+2023;NOV;Novembro;11;GASOLINA A;15011304,09035463;b;Brasil - refinarias
+2023;DEZ;Dezembro;12;GASOLINA A;15777015,25704585;b;Brasil - refinarias
+2024;JAN;Janeiro;1;GASOLINA A;16450954,56725366;b;Brasil - refinarias
+2024;FEV;Fevereiro;2;GASOLINA A;13968748,257373512;b;Brasil - refinarias
+2024;MAR;Março;3;GASOLINA A;14425939,05447148;b;Brasil - refinarias
+2024;ABR;Abril;4;GASOLINA A;14478552,00055119;b;Brasil - refinarias
+2024;MAI;Maio;5;GASOLINA A;15410894,260418711;b;Brasil - refinarias
+2024;JUN;Junho;6;GASOLINA A;16181888,05612444;b;Brasil - refinarias
+2024;JUL;Julho;7;GASOLINA A;16298132,41857243;b;Brasil - refinarias
+2024;AGO;Agosto;8;GASOLINA A;16037228,84173064;b;Brasil - refinarias
+2024;SET;Setembro;9;GASOLINA A;16268730,16709358;b;Brasil - refinarias
+2024;OUT;Outubro;10;GASOLINA A;16423495,68466032;b;Brasil - refinarias
+2024;NOV;Novembro;11;GASOLINA A;15690775,48344155;b;Brasil - refinarias
+2024;DEZ;Dezembro;12;GASOLINA A;17146697,975562222;b;Brasil - refinarias
+2025;JAN;Janeiro;1;GASOLINA A;16529597,18755965;b;Brasil - refinarias
+2025;FEV;Fevereiro;2;GASOLINA A;14407419,91657;b;Brasil - refinarias
+2025;MAR;Março;3;GASOLINA A;16258728,79682087;b;Brasil - refinarias
+2025;ABR;Abril;4;GASOLINA A;15222717,52372437;b;Brasil - refinarias
+2025;MAI;Maio;5;GASOLINA A;16484046,27661288;b;Brasil - refinarias
+2025;JUN;Junho;6;GASOLINA A;15719574,88179114;b;Brasil - refinarias
+2025;JUL;Julho;7;GASOLINA A;16327845,49359205;b;Brasil - refinarias
+2025;AGO;Agosto;8;GASOLINA A;16748310,165577741;b;Brasil - refinarias
+2025;SET;Setembro;9;GASOLINA A;15417586,33521726;b;Brasil - refinarias
+2025;OUT;Outubro;10;GASOLINA A;15503158,79771942;b;Brasil - refinarias
+2025;NOV;Novembro;11;GASOLINA A;14915368,44254932;b;Brasil - refinarias
+2025;DEZ;Dezembro;12;GASOLINA A;16040050,85304448;b;Brasil - refinarias
+2026;JAN;Janeiro;1;GASOLINA A;14155041,523042971;b;Brasil - refinarias
+2026;FEV;Fevereiro;2;GASOLINA A;13211039,19452802;b;Brasil - refinarias
+2026;MAR;Março;3;GASOLINA A;15686667,16824385;b;Brasil - refinarias
+2026;ABR;Abril;4;GASOLINA A;15276548,277657041;b;Brasil - refinarias
+2026;MAI;Maio;5;GASOLINA A;15196728,82761024;b;Brasil - refinarias
+2026;JUN;Junho;6;GASOLINA A;14330629,27421022;b;Brasil - refinarias
+2026;JUL;Julho;7;GASOLINA A;14156638,430324249;b;Brasil - refinarias
+2026;AGO;Agosto;8;GASOLINA A;0,0;b;Brasil - refinarias
+2026;SET;Setembro;9;GASOLINA A;0,0;b;Brasil - refinarias
+2026;OUT;Outubro;10;GASOLINA A;0,0;b;Brasil - refinarias
+2026;NOV;Novembro;11;GASOLINA A;0,0;b;Brasil - refinarias
+2026;DEZ;Dezembro;12;GASOLINA A;0,0;b;Brasil - refinarias
+2010;JAN;Janeiro;1;GLP;4232982,67871588;b;Brasil - refinarias
+2010;FEV;Fevereiro;2;GLP;3739705,9648164804;b;Brasil - refinarias
+2010;MAR;Março;3;GLP;3828526,9226118308;b;Brasil - refinarias
+2010;ABR;Abril;4;GLP;3845189,0034866724;b;Brasil - refinarias
+2010;MAI;Maio;5;GLP;4261934,578803542;b;Brasil - refinarias
+2010;JUN;Junho;6;GLP;4040692,7657374474;b;Brasil - refinarias
+2010;JUL;Julho;7;GLP;4266546,380614243;b;Brasil - refinarias
+2010;AGO;Agosto;8;GLP;3843296,3217018163;b;Brasil - refinarias
+2010;SET;Setembro;9;GLP;3717421,6518023675;b;Brasil - refinarias
+2010;OUT;Outubro;10;GLP;3915012,172984613;b;Brasil - refinarias
+2010;NOV;Novembro;11;GLP;4125394,285102343;b;Brasil - refinarias
+2010;DEZ;Dezembro;12;GLP;4323504,9490097165;b;Brasil - refinarias
+2011;JAN;Janeiro;1;GLP;4185155,160190329;b;Brasil - refinarias
+2011;FEV;Fevereiro;2;GLP;3776311,4833018435;b;Brasil - refinarias
+2011;MAR;Março;3;GLP;4084644,514341262;b;Brasil - refinarias
+2011;ABR;Abril;4;GLP;3581324,2211095854;b;Brasil - refinarias
+2011;MAI;Maio;5;GLP;4402652,8665756835;b;Brasil - refinarias
+2011;JUN;Junho;6;GLP;4696699,5563099515;b;Brasil - refinarias
+2011;JUL;Julho;7;GLP;4522810,517511104;b;Brasil - refinarias
+2011;AGO;Agosto;8;GLP;3762960,312933219;b;Brasil - refinarias
+2011;SET;Setembro;9;GLP;3976981,4607405146;b;Brasil - refinarias
+2011;OUT;Outubro;10;GLP;4306955,375627132;b;Brasil - refinarias
+2011;NOV;Novembro;11;GLP;4407051,47221718;b;Brasil - refinarias
+2011;DEZ;Dezembro;12;GLP;4358441,865279388;b;Brasil - refinarias
+2012;JAN;Janeiro;1;GLP;4394310,9992443165;b;Brasil - refinarias
+2012;FEV;Fevereiro;2;GLP;4076634,7520551784;b;Brasil - refinarias
+2012;MAR;Março;3;GLP;4399102,333178187;b;Brasil - refinarias
+2012;ABR;Abril;4;GLP;4093833,048542124;b;Brasil - refinarias
+2012;MAI;Maio;5;GLP;4892952,159914706;b;Brasil - refinarias
+2012;JUN;Junho;6;GLP;4393661,426265252;b;Brasil - refinarias
+2012;JUL;Julho;7;GLP;4614327,453067055;b;Brasil - refinarias
+2012;AGO;Agosto;8;GLP;4415566,507648004;b;Brasil - refinarias
+2012;SET;Setembro;9;GLP;4225209,426450677;b;Brasil - refinarias
+2012;OUT;Outubro;10;GLP;4164592,279922316;b;Brasil - refinarias
+2012;NOV;Novembro;11;GLP;4082404,551505061;b;Brasil - refinarias
+2012;DEZ;Dezembro;12;GLP;4581040,640087357;b;Brasil - refinarias
+2013;JAN;Janeiro;1;GLP;4361648,77274364;b;Brasil - refinarias
+2013;FEV;Fevereiro;2;GLP;3800115,4475917565;b;Brasil - refinarias
+2013;MAR;Março;3;GLP;4387670,361314945;b;Brasil - refinarias
+2013;ABR;Abril;4;GLP;4476853,358745222;b;Brasil - refinarias
+2013;MAI;Maio;5;GLP;4717971,986658922;b;Brasil - refinarias
+2013;JUN;Junho;6;GLP;4141807,3310274463;b;Brasil - refinarias
+2013;JUL;Julho;7;GLP;4264353,560962427;b;Brasil - refinarias
+2013;AGO;Agosto;8;GLP;4258080,963132146;b;Brasil - refinarias
+2013;SET;Setembro;9;GLP;3812812,15329394;b;Brasil - refinarias
+2013;OUT;Outubro;10;GLP;4011954,5468017915;b;Brasil - refinarias
+2013;NOV;Novembro;11;GLP;3932109,6723025274;b;Brasil - refinarias
+2013;DEZ;Dezembro;12;GLP;3814249,5827481113;b;Brasil - refinarias
+2014;JAN;Janeiro;1;GLP;3916228,6027872027;b;Brasil - refinarias
+2014;FEV;Fevereiro;2;GLP;3234860,7160761966;b;Brasil - refinarias
+2014;MAR;Março;3;GLP;4066627,45422017;b;Brasil - refinarias
+2014;ABR;Abril;4;GLP;3820608,3416798273;b;Brasil - refinarias
+2014;MAI;Maio;5;GLP;4217602,657030147;b;Brasil - refinarias
+2014;JUN;Junho;6;GLP;4274669,625994083;b;Brasil - refinarias
+2014;JUL;Julho;7;GLP;4170444,4288844564;b;Brasil - refinarias
+2014;AGO;Agosto;8;GLP;4175650,461282524;b;Brasil - refinarias
+2014;SET;Setembro;9;GLP;3930472,4838562654;b;Brasil - refinarias
+2014;OUT;Outubro;10;GLP;4051205,5321596526;b;Brasil - refinarias
+2014;NOV;Novembro;11;GLP;3875786,481725634;b;Brasil - refinarias
+2014;DEZ;Dezembro;12;GLP;3933697,4554799963;b;Brasil - refinarias
+2015;JAN;Janeiro;1;GLP;4004598,530995227;b;Brasil - refinarias
+2015;FEV;Fevereiro;2;GLP;3739183,0792971784;b;Brasil - refinarias
+2015;MAR;Março;3;GLP;4011227,4509340036;b;Brasil - refinarias
+2015;ABR;Abril;4;GLP;3666381,8519559596;b;Brasil - refinarias
+2015;MAI;Maio;5;GLP;3930963,793865391;b;Brasil - refinarias
+2015;JUN;Junho;6;GLP;3895414,4377111136;b;Brasil - refinarias
+2015;JUL;Julho;7;GLP;4151026,1621116437;b;Brasil - refinarias
+2015;AGO;Agosto;8;GLP;3890634,704463919;b;Brasil - refinarias
+2015;SET;Setembro;9;GLP;3926388,048322908;b;Brasil - refinarias
+2015;OUT;Outubro;10;GLP;3861765,505418586;b;Brasil - refinarias
+2015;NOV;Novembro;11;GLP;3681727,848111794;b;Brasil - refinarias
+2015;DEZ;Dezembro;12;GLP;3951389,777135185;b;Brasil - refinarias
+2016;JAN;Janeiro;1;GLP;3884945,803483544;b;Brasil - refinarias
+2016;FEV;Fevereiro;2;GLP;3541579,0834592637;b;Brasil - refinarias
+2016;MAR;Março;3;GLP;3978113,99976569;b;Brasil - refinarias
+2016;ABR;Abril;4;GLP;4100833,9286766835;b;Brasil - refinarias
+2016;MAI;Maio;5;GLP;3961473,3079804615;b;Brasil - refinarias
+2016;JUN;Junho;6;GLP;3640979,064320699;b;Brasil - refinarias
+2016;JUL;Julho;7;GLP;3605553,1815470965;b;Brasil - refinarias
+2016;AGO;Agosto;8;GLP;4007060,5012626937;b;Brasil - refinarias
+2016;SET;Setembro;9;GLP;4047796,8095270237;b;Brasil - refinarias
+2016;OUT;Outubro;10;GLP;3991107,920641114;b;Brasil - refinarias
+2016;NOV;Novembro;11;GLP;3683047,7602219298;b;Brasil - refinarias
+2016;DEZ;Dezembro;12;GLP;3660097,4387378427;b;Brasil - refinarias
+2017;JAN;Janeiro;1;GLP;3930503,8198577072;b;Brasil - refinarias
+2017;FEV;Fevereiro;2;GLP;3603432,715439732;b;Brasil - refinarias
+2017;MAR;Março;3;GLP;3671612,003485347;b;Brasil - refinarias
+2017;ABR;Abril;4;GLP;3645954,5713874223;b;Brasil - refinarias
+2017;MAI;Maio;5;GLP;3708209,2526787724;b;Brasil - refinarias
+2017;JUN;Junho;6;GLP;3897171,9302069354;b;Brasil - refinarias
+2017;JUL;Julho;7;GLP;4325205,884191204;b;Brasil - refinarias
+2017;AGO;Agosto;8;GLP;4157816,1910048206;b;Brasil - refinarias
+2017;SET;Setembro;9;GLP;3734125,5944588026;b;Brasil - refinarias
+2017;OUT;Outubro;10;GLP;4200702,894329639;b;Brasil - refinarias
+2017;NOV;Novembro;11;GLP;3748515,8551982534;b;Brasil - refinarias
+2017;DEZ;Dezembro;12;GLP;4205485,131954495;b;Brasil - refinarias
+2018;JAN;Janeiro;1;GLP;3745651,7579596173;b;Brasil - refinarias
+2018;FEV;Fevereiro;2;GLP;3644007,8352576117;b;Brasil - refinarias
+2018;MAR;Março;3;GLP;3904539,8404857963;b;Brasil - refinarias
+2018;ABR;Abril;4;GLP;3829691,8813503645;b;Brasil - refinarias
+2018;MAI;Maio;5;GLP;4032309,4068293665;b;Brasil - refinarias
+2018;JUN;Junho;6;GLP;4079477,906054226;b;Brasil - refinarias
+2018;JUL;Julho;7;GLP;4064817,8964940775;b;Brasil - refinarias
+2018;AGO;Agosto;8;GLP;4052753,374216115;b;Brasil - refinarias
+2018;SET;Setembro;9;GLP;3936111,6896813144;b;Brasil - refinarias
+2018;OUT;Outubro;10;GLP;4073507,550810254;b;Brasil - refinarias
+2018;NOV;Novembro;11;GLP;3799557,431736529;b;Brasil - refinarias
+2018;DEZ;Dezembro;12;GLP;3606277,7937693917;b;Brasil - refinarias
+2019;JAN;Janeiro;1;GLP;3755515,97118183;b;Brasil - refinarias
+2019;FEV;Fevereiro;2;GLP;3382318,2493191794;b;Brasil - refinarias
+2019;MAR;Março;3;GLP;3619503,0258030337;b;Brasil - refinarias
+2019;ABR;Abril;4;GLP;3722471,4702687142;b;Brasil - refinarias
+2019;MAI;Maio;5;GLP;3893040,392247971;b;Brasil - refinarias
+2019;JUN;Junho;6;GLP;3650106,4534006827;b;Brasil - refinarias
+2019;JUL;Julho;7;GLP;4464106,655969722;b;Brasil - refinarias
+2019;AGO;Agosto;8;GLP;4291936,314857244;b;Brasil - refinarias
+2019;SET;Setembro;9;GLP;3969994,061594699;b;Brasil - refinarias
+2019;OUT;Outubro;10;GLP;3520348,5649210815;b;Brasil - refinarias
+2019;NOV;Novembro;11;GLP;3638413,511488937;b;Brasil - refinarias
+2019;DEZ;Dezembro;12;GLP;3850708,650386499;b;Brasil - refinarias
+2020;JAN;Janeiro;1;GLP;3922483,080298333;b;Brasil - refinarias
+2020;FEV;Fevereiro;2;GLP;3728129,78582625;b;Brasil - refinarias
+2020;MAR;Março;3;GLP;3740732,2975441664;b;Brasil - refinarias
+2020;ABR;Abril;4;GLP;3553792,9570854167;b;Brasil - refinarias
+2020;MAI;Maio;5;GLP;3915130,839348333;b;Brasil - refinarias
+2020;JUN;Junho;6;GLP;3811827,034092083;b;Brasil - refinarias
+2020;JUL;Julho;7;GLP;4193046,7892679167;b;Brasil - refinarias
+2020;AGO;Agosto;8;GLP;4176352,0952591663;b;Brasil - refinarias
+2020;SET;Setembro;9;GLP;3838524,0756641664;b;Brasil - refinarias
+2020;OUT;Outubro;10;GLP;3718300,86382125;b;Brasil - refinarias
+2020;NOV;Novembro;11;GLP;3723450,7483099997;b;Brasil - refinarias
+2020;DEZ;Dezembro;12;GLP;3582869,8713324997;b;Brasil - refinarias
+2021;JAN;Janeiro;1;GLP;3578080,1126499996;b;Brasil - refinarias
+2021;FEV;Fevereiro;2;GLP;3478291,0942422496;b;Brasil - refinarias
+2021;MAR;Março;3;GLP;3635669,1914104163;b;Brasil - refinarias
+2021;ABR;Abril;4;GLP;3352352,5964066666;b;Brasil - refinarias
+2021;MAI;Maio;5;GLP;3270264,7760637496;b;Brasil - refinarias
+2021;JUN;Junho;6;GLP;3580447,4284941666;b;Brasil - refinarias
+2021;JUL;Julho;7;GLP;4333634,899526916;b;Brasil - refinarias
+2021;AGO;Agosto;8;GLP;3926704,753733493;b;Brasil - refinarias
+2021;SET;Setembro;9;GLP;4108892,88967497;b;Brasil - refinarias
+2021;OUT;Outubro;10;GLP;4065130,3635959835;b;Brasil - refinarias
+2021;NOV;Novembro;11;GLP;4005256,752371293;b;Brasil - refinarias
+2021;DEZ;Dezembro;12;GLP;4128993,4494366664;b;Brasil - refinarias
+2022;JAN;Janeiro;1;GLP;4193395,7151103164;b;Brasil - refinarias
+2022;FEV;Fevereiro;2;GLP;3328658,2426726497;b;Brasil - refinarias
+2022;MAR;Março;3;GLP;4073249,053445583;b;Brasil - refinarias
+2022;ABR;Abril;4;GLP;4062491,481103016;b;Brasil - refinarias
+2022;MAI;Maio;5;GLP;3864336,1485352535;b;Brasil - refinarias
+2022;JUN;Junho;6;GLP;3750946,6243587025;b;Brasil - refinarias
+2022;JUL;Julho;7;GLP;4277846,489542057;b;Brasil - refinarias
+2022;AGO;Agosto;8;GLP;4317560,782785066;b;Brasil - refinarias
+2022;SET;Setembro;9;GLP;4029664,7384676165;b;Brasil - refinarias
+2022;OUT;Outubro;10;GLP;3956022,2541246433;b;Brasil - refinarias
+2022;NOV;Novembro;11;GLP;3733066,85541406;b;Brasil - refinarias
+2022;DEZ;Dezembro;12;GLP;4766756,739218193;b;Brasil - refinarias
+2023;JAN;Janeiro;1;GLP;4042831,8118630797;b;Brasil - refinarias
+2023;FEV;Fevereiro;2;GLP;3666407,3210501;b;Brasil - refinarias
+2023;MAR;Março;3;GLP;4147650,3163104397;b;Brasil - refinarias
+2023;ABR;Abril;4;GLP;4084626,097598153;b;Brasil - refinarias
+2023;MAI;Maio;5;GLP;4475073,585805833;b;Brasil - refinarias
+2023;JUN;Junho;6;GLP;4431642,7692653965;b;Brasil - refinarias
+2023;JUL;Julho;7;GLP;4688465,303343333;b;Brasil - refinarias
+2023;AGO;Agosto;8;GLP;4604252,279262916;b;Brasil - refinarias
+2023;SET;Setembro;9;GLP;4370595,89918;b;Brasil - refinarias
+2023;OUT;Outubro;10;GLP;4313791,223536249;b;Brasil - refinarias
+2023;NOV;Novembro;11;GLP;4188254,7402741658;b;Brasil - refinarias
+2023;DEZ;Dezembro;12;GLP;4169227,8371324996;b;Brasil - refinarias
+2024;JAN;Janeiro;1;GLP;4104524,652363383;b;Brasil - refinarias
+2024;FEV;Fevereiro;2;GLP;3867682,6076708464;b;Brasil - refinarias
+2024;MAR;Março;3;GLP;4219466,452497916;b;Brasil - refinarias
+2024;ABR;Abril;4;GLP;3769110,5301249996;b;Brasil - refinarias
+2024;MAI;Maio;5;GLP;4208572,52500518;b;Brasil - refinarias
+2024;JUN;Junho;6;GLP;4112351,8633019165;b;Brasil - refinarias
+2024;JUL;Julho;7;GLP;4522043,5851799995;b;Brasil - refinarias
+2024;AGO;Agosto;8;GLP;4296418,118825;b;Brasil - refinarias
+2024;SET;Setembro;9;GLP;4027654,8793625;b;Brasil - refinarias
+2024;OUT;Outubro;10;GLP;4295027,62642625;b;Brasil - refinarias
+2024;NOV;Novembro;11;GLP;3978530,061364123;b;Brasil - refinarias
+2024;DEZ;Dezembro;12;GLP;4243036,683668333;b;Brasil - refinarias
+2025;JAN;Janeiro;1;GLP;4000184,8406516663;b;Brasil - refinarias
+2025;FEV;Fevereiro;2;GLP;3515476,175213333;b;Brasil - refinarias
+2025;MAR;Março;3;GLP;4021921,8770716665;b;Brasil - refinarias
+2025;ABR;Abril;4;GLP;3614176,078835833;b;Brasil - refinarias
+2025;MAI;Maio;5;GLP;3915322,1771916663;b;Brasil - refinarias
+2025;JUN;Junho;6;GLP;3922643,4818479167;b;Brasil - refinarias
+2025;JUL;Julho;7;GLP;3932862,35666744;b;Brasil - refinarias
+2025;AGO;Agosto;8;GLP;4060246,7490979163;b;Brasil - refinarias
+2025;SET;Setembro;9;GLP;3988891,6577154165;b;Brasil - refinarias
+2025;OUT;Outubro;10;GLP;3806766,5970825;b;Brasil - refinarias
+2025;NOV;Novembro;11;GLP;3930193,601132083;b;Brasil - refinarias
+2025;DEZ;Dezembro;12;GLP;4189952,4078504164;b;Brasil - refinarias
+2026;JAN;Janeiro;1;GLP;3904400,628590833;b;Brasil - refinarias
+2026;FEV;Fevereiro;2;GLP;3731235,4592758333;b;Brasil - refinarias
+2026;MAR;Março;3;GLP;4228432,052502083;b;Brasil - refinarias
+2026;ABR;Abril;4;GLP;4172014,576194583;b;Brasil - refinarias
+2026;MAI;Maio;5;GLP;4178045,0112941666;b;Brasil - refinarias
+2026;JUN;Junho;6;GLP;3745634,167532083;b;Brasil - refinarias
+2026;JUL;Julho;7;GLP;3874577,5058704163;b;Brasil - refinarias
+2026;AGO;Agosto;8;GLP;0,0;b;Brasil - refinarias
+2026;SET;Setembro;9;GLP;0,0;b;Brasil - refinarias
+2026;OUT;Outubro;10;GLP;0,0;b;Brasil - refinarias
+2026;NOV;Novembro;11;GLP;0,0;b;Brasil - refinarias
+2026;DEZ;Dezembro;12;GLP;0,0;b;Brasil - refinarias
+2010;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;2455982,1107;b;Brasil - refinarias
+2010;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2317342,11868;b;Brasil - refinarias
+2010;MAR;Março;3;QUEROSENE DE AVIAÇÃO;1801433,03305;b;Brasil - refinarias
+2010;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2395656,54299;b;Brasil - refinarias
+2010;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2408393,40824;b;Brasil - refinarias
+2010;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;2178997,74773;b;Brasil - refinarias
+2010;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;2459875,50309;b;Brasil - refinarias
+2010;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;2635675,69259;b;Brasil - refinarias
+2010;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2618617,72787;b;Brasil - refinarias
+2010;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2584181,01812;b;Brasil - refinarias
+2010;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;2596056,1794000003;b;Brasil - refinarias
+2010;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;2886934,73266;b;Brasil - refinarias
+2011;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;2783196,89633;b;Brasil - refinarias
+2011;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2658180,63277;b;Brasil - refinarias
+2011;MAR;Março;3;QUEROSENE DE AVIAÇÃO;2871524,69816;b;Brasil - refinarias
+2011;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2624247,10782;b;Brasil - refinarias
+2011;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2982237,93378;b;Brasil - refinarias
+2011;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;2600188,5845700004;b;Brasil - refinarias
+2011;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;2840591,4125800002;b;Brasil - refinarias
+2011;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;2977753,29925;b;Brasil - refinarias
+2011;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2696768,61712;b;Brasil - refinarias
+2011;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2724751,98181;b;Brasil - refinarias
+2011;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3168410,01997;b;Brasil - refinarias
+2011;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3006787,06221;b;Brasil - refinarias
+2012;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;2890312,36063;b;Brasil - refinarias
+2012;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2769063,69326;b;Brasil - refinarias
+2012;MAR;Março;3;QUEROSENE DE AVIAÇÃO;2979810,0671200003;b;Brasil - refinarias
+2012;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2867084,0923;b;Brasil - refinarias
+2012;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2818243,71765;b;Brasil - refinarias
+2012;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;2771195,93885;b;Brasil - refinarias
+2012;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;2730513,44777;b;Brasil - refinarias
+2012;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;2838207,57459;b;Brasil - refinarias
+2012;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2858366,4156400003;b;Brasil - refinarias
+2012;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2686057,07069;b;Brasil - refinarias
+2012;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;2817709,0838;b;Brasil - refinarias
+2012;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3081623,22159;b;Brasil - refinarias
+2013;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3042129,5046;b;Brasil - refinarias
+2013;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2543278,38369;b;Brasil - refinarias
+2013;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3248995,06569;b;Brasil - refinarias
+2013;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2886519,6052;b;Brasil - refinarias
+2013;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;3194833,5117800003;b;Brasil - refinarias
+2013;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;2997157,3631;b;Brasil - refinarias
+2013;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3118154,43807;b;Brasil - refinarias
+2013;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3062577,67691;b;Brasil - refinarias
+2013;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2451057,18947;b;Brasil - refinarias
+2013;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2156109,12914;b;Brasil - refinarias
+2013;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3116940,50474;b;Brasil - refinarias
+2013;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3118311,68332;b;Brasil - refinarias
+2014;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3228546,8933800003;b;Brasil - refinarias
+2014;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2787882,80478;b;Brasil - refinarias
+2014;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3409498,43727;b;Brasil - refinarias
+2014;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2919805,27972;b;Brasil - refinarias
+2014;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;3224099,9977100003;b;Brasil - refinarias
+2014;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3166126,81894;b;Brasil - refinarias
+2014;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3282978,90912;b;Brasil - refinarias
+2014;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3584084,69344;b;Brasil - refinarias
+2014;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;3028719,6296800002;b;Brasil - refinarias
+2014;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;3047752,59474;b;Brasil - refinarias
+2014;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3333876,05164;b;Brasil - refinarias
+2014;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3223099,91792;b;Brasil - refinarias
+2015;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3318258,45341;b;Brasil - refinarias
+2015;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2818067,6029700004;b;Brasil - refinarias
+2015;MAR;Março;3;QUEROSENE DE AVIAÇÃO;2851617,4495099997;b;Brasil - refinarias
+2015;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2820627,55564;b;Brasil - refinarias
+2015;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2981369,94;b;Brasil - refinarias
+2015;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3005749,2435600003;b;Brasil - refinarias
+2015;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3332599,22021;b;Brasil - refinarias
+2015;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3139489,47359;b;Brasil - refinarias
+2015;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2844396,74763;b;Brasil - refinarias
+2015;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2975488,96765;b;Brasil - refinarias
+2015;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;2647355,86976;b;Brasil - refinarias
+2015;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;2845547,78286;b;Brasil - refinarias
+2016;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3199393,6240300005;b;Brasil - refinarias
+2016;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2875078,44081;b;Brasil - refinarias
+2016;MAR;Março;3;QUEROSENE DE AVIAÇÃO;2925918,97504;b;Brasil - refinarias
+2016;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2697850,46444;b;Brasil - refinarias
+2016;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2435099,9415;b;Brasil - refinarias
+2016;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3216545,9359;b;Brasil - refinarias
+2016;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3447790,8005500003;b;Brasil - refinarias
+2016;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3251385,19349;b;Brasil - refinarias
+2016;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2737734,14965;b;Brasil - refinarias
+2016;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;3434726,86518;b;Brasil - refinarias
+2016;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3186059,22683;b;Brasil - refinarias
+2016;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3005875,03976;b;Brasil - refinarias
+2017;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3416593,34295;b;Brasil - refinarias
+2017;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;3085554,35284;b;Brasil - refinarias
+2017;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3182033,74843;b;Brasil - refinarias
+2017;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;3123544,80524;b;Brasil - refinarias
+2017;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2838534,64471;b;Brasil - refinarias
+2017;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3143823,1526800003;b;Brasil - refinarias
+2017;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3179083,82754;b;Brasil - refinarias
+2017;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3104222,5089200004;b;Brasil - refinarias
+2017;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;3094328,63779;b;Brasil - refinarias
+2017;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;3510758,08846;b;Brasil - refinarias
+2017;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3359947,31409;b;Brasil - refinarias
+2017;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3760897,5423500002;b;Brasil - refinarias
+2018;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;4286562,1232900005;b;Brasil - refinarias
+2018;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;3315792,8478900003;b;Brasil - refinarias
+2018;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3230962,18042;b;Brasil - refinarias
+2018;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;3581128,48274;b;Brasil - refinarias
+2018;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;3478308,95867;b;Brasil - refinarias
+2018;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3357827,64812;b;Brasil - refinarias
+2018;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3499643,99419;b;Brasil - refinarias
+2018;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;2832282,57357;b;Brasil - refinarias
+2018;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2850661,3983899998;b;Brasil - refinarias
+2018;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;3074987,47204;b;Brasil - refinarias
+2018;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3167586,05486;b;Brasil - refinarias
+2018;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3430179,33255;b;Brasil - refinarias
+2019;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3774590,4587200005;b;Brasil - refinarias
+2019;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;3248479,30127;b;Brasil - refinarias
+2019;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3107266,77696;b;Brasil - refinarias
+2019;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2943888,96221;b;Brasil - refinarias
+2019;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;3553208,01615;b;Brasil - refinarias
+2019;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3058432,69212;b;Brasil - refinarias
+2019;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3351053,52275;b;Brasil - refinarias
+2019;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3146206,99067;b;Brasil - refinarias
+2019;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2802336,78816;b;Brasil - refinarias
+2019;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2482940,23636;b;Brasil - refinarias
+2019;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;2807840,37191;b;Brasil - refinarias
+2019;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3881982,67466;b;Brasil - refinarias
+2020;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3669743,57793156;b;Brasil - refinarias
+2020;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;3234199,0864708703;b;Brasil - refinarias
+2020;MAR;Março;3;QUEROSENE DE AVIAÇÃO;2914231,42621268;b;Brasil - refinarias
+2020;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;479515,71033615;b;Brasil - refinarias
+2020;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;238040,8785588;b;Brasil - refinarias
+2020;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;802498,40359746;b;Brasil - refinarias
+2020;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;1217744,25669109;b;Brasil - refinarias
+2020;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;1338394,7694199;b;Brasil - refinarias
+2020;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;1041253,88633979;b;Brasil - refinarias
+2020;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;1505462,39427963;b;Brasil - refinarias
+2020;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;1864015,68020907;b;Brasil - refinarias
+2020;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;2256949,02985965;b;Brasil - refinarias
+2021;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;2496833,38254154;b;Brasil - refinarias
+2021;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2047847,48534332;b;Brasil - refinarias
+2021;MAR;Março;3;QUEROSENE DE AVIAÇÃO;1552027,44903156;b;Brasil - refinarias
+2021;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;1052708,2656206;b;Brasil - refinarias
+2021;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;1236476,24805278;b;Brasil - refinarias
+2021;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;1874352,15268915;b;Brasil - refinarias
+2021;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;2230191,25351758;b;Brasil - refinarias
+2021;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;2421312,23140349;b;Brasil - refinarias
+2021;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2408624,1121809897;b;Brasil - refinarias
+2021;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2892132,86436697;b;Brasil - refinarias
+2021;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;2772464,9080175;b;Brasil - refinarias
+2021;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;2885683,00386171;b;Brasil - refinarias
+2022;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;2964901,17952156;b;Brasil - refinarias
+2022;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2651060,08982444;b;Brasil - refinarias
+2022;MAR;Março;3;QUEROSENE DE AVIAÇÃO;2486672,11900882;b;Brasil - refinarias
+2022;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2759755,44746967;b;Brasil - refinarias
+2022;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2643853,79160934;b;Brasil - refinarias
+2022;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;2573471,21396737;b;Brasil - refinarias
+2022;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;2656784,89877176;b;Brasil - refinarias
+2022;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;2239774,95524705;b;Brasil - refinarias
+2022;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2264211,66590292;b;Brasil - refinarias
+2022;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2166862,49022688;b;Brasil - refinarias
+2022;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;2179296,28727184;b;Brasil - refinarias
+2022;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;2945872,04495585;b;Brasil - refinarias
+2023;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;2599415,18324259;b;Brasil - refinarias
+2023;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2775672,6419295897;b;Brasil - refinarias
+2023;MAR;Março;3;QUEROSENE DE AVIAÇÃO;2874685,72394303;b;Brasil - refinarias
+2023;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;3100879,95293056;b;Brasil - refinarias
+2023;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2689684,7374769296;b;Brasil - refinarias
+2023;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;2491527,3994625;b;Brasil - refinarias
+2023;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;2757418,55662151;b;Brasil - refinarias
+2023;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3017352,56554161;b;Brasil - refinarias
+2023;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2820651,06065997;b;Brasil - refinarias
+2023;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2821731,2537599397;b;Brasil - refinarias
+2023;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3073201,92706701;b;Brasil - refinarias
+2023;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3181692,2683552904;b;Brasil - refinarias
+2024;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3392432,62286712;b;Brasil - refinarias
+2024;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;3135362,84246558;b;Brasil - refinarias
+2024;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3203144,69059932;b;Brasil - refinarias
+2024;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;2645262,2058645403;b;Brasil - refinarias
+2024;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;2860831,84504532;b;Brasil - refinarias
+2024;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3092372,3118958897;b;Brasil - refinarias
+2024;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3288535,59773583;b;Brasil - refinarias
+2024;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;2686796,2365815802;b;Brasil - refinarias
+2024;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2862062,03124436;b;Brasil - refinarias
+2024;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;3246000,5185980503;b;Brasil - refinarias
+2024;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;3014218,6299702497;b;Brasil - refinarias
+2024;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3440474,4809783804;b;Brasil - refinarias
+2025;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3487427,75538313;b;Brasil - refinarias
+2025;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;3027898,3691883;b;Brasil - refinarias
+2025;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3143334,45960224;b;Brasil - refinarias
+2025;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;3103063,95736705;b;Brasil - refinarias
+2025;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;3204833,38507793;b;Brasil - refinarias
+2025;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3005918,67217197;b;Brasil - refinarias
+2025;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3095115,9333077;b;Brasil - refinarias
+2025;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;3390243,1840347904;b;Brasil - refinarias
+2025;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;2927860,18023087;b;Brasil - refinarias
+2025;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;2744659,87831043;b;Brasil - refinarias
+2025;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;2309608,97339968;b;Brasil - refinarias
+2025;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;3267177,648438;b;Brasil - refinarias
+2026;JAN;Janeiro;1;QUEROSENE DE AVIAÇÃO;3380122,28221284;b;Brasil - refinarias
+2026;FEV;Fevereiro;2;QUEROSENE DE AVIAÇÃO;2938515,19384859;b;Brasil - refinarias
+2026;MAR;Março;3;QUEROSENE DE AVIAÇÃO;3450242,5244593304;b;Brasil - refinarias
+2026;ABR;Abril;4;QUEROSENE DE AVIAÇÃO;3718953,944365;b;Brasil - refinarias
+2026;MAI;Maio;5;QUEROSENE DE AVIAÇÃO;3820269,9585424103;b;Brasil - refinarias
+2026;JUN;Junho;6;QUEROSENE DE AVIAÇÃO;3649502,13909664;b;Brasil - refinarias
+2026;JUL;Julho;7;QUEROSENE DE AVIAÇÃO;3239273,37810875;b;Brasil - refinarias
+2026;AGO;Agosto;8;QUEROSENE DE AVIAÇÃO;0,0;b;Brasil - refinarias
+2026;SET;Setembro;9;QUEROSENE DE AVIAÇÃO;0,0;b;Brasil - refinarias
+2026;OUT;Outubro;10;QUEROSENE DE AVIAÇÃO;0,0;b;Brasil - refinarias
+2026;NOV;Novembro;11;QUEROSENE DE AVIAÇÃO;0,0;b;Brasil - refinarias
+2026;DEZ;Dezembro;12;QUEROSENE DE AVIAÇÃO;0,0;b;Brasil - refinarias
+2010;JAN;Janeiro;1;ÓLEO DIESEL;21422173,65458698;b;Brasil - refinarias
+2010;FEV;Fevereiro;2;ÓLEO DIESEL;19590876,84895957;b;Brasil - refinarias
+2010;MAR;Março;3;ÓLEO DIESEL;20255714,03045075;b;Brasil - refinarias
+2010;ABR;Abril;4;ÓLEO DIESEL;20792693,149325833;b;Brasil - refinarias
+2010;MAI;Maio;5;ÓLEO DIESEL;21123727,87494465;b;Brasil - refinarias
+2010;JUN;Junho;6;ÓLEO DIESEL;22011551,35023735;b;Brasil - refinarias
+2010;JUL;Julho;7;ÓLEO DIESEL;24235764,271435943;b;Brasil - refinarias
+2010;AGO;Agosto;8;ÓLEO DIESEL;21698510,57596463;b;Brasil - refinarias
+2010;SET;Setembro;9;ÓLEO DIESEL;21724242,245282922;b;Brasil - refinarias
+2010;OUT;Outubro;10;ÓLEO DIESEL;21472144,71693163;b;Brasil - refinarias
+2010;NOV;Novembro;11;ÓLEO DIESEL;23018460,47126972;b;Brasil - refinarias
+2010;DEZ;Dezembro;12;ÓLEO DIESEL;23236335,53337923;b;Brasil - refinarias
+2011;JAN;Janeiro;1;ÓLEO DIESEL;21532390,54872026;b;Brasil - refinarias
+2011;FEV;Fevereiro;2;ÓLEO DIESEL;20585128,34376832;b;Brasil - refinarias
+2011;MAR;Março;3;ÓLEO DIESEL;24029292,29520669;b;Brasil - refinarias
+2011;ABR;Abril;4;ÓLEO DIESEL;21937299,92933381;b;Brasil - refinarias
+2011;MAI;Maio;5;ÓLEO DIESEL;23149287,74562309;b;Brasil - refinarias
+2011;JUN;Junho;6;ÓLEO DIESEL;22650272,95127727;b;Brasil - refinarias
+2011;JUL;Julho;7;ÓLEO DIESEL;23433735,376995742;b;Brasil - refinarias
+2011;AGO;Agosto;8;ÓLEO DIESEL;23159793,055473;b;Brasil - refinarias
+2011;SET;Setembro;9;ÓLEO DIESEL;22299989,65849127;b;Brasil - refinarias
+2011;OUT;Outubro;10;ÓLEO DIESEL;24856518,588201143;b;Brasil - refinarias
+2011;NOV;Novembro;11;ÓLEO DIESEL;21882014,21026213;b;Brasil - refinarias
+2011;DEZ;Dezembro;12;ÓLEO DIESEL;23388525,32973468;b;Brasil - refinarias
+2012;JAN;Janeiro;1;ÓLEO DIESEL;22580257,142607287;b;Brasil - refinarias
+2012;FEV;Fevereiro;2;ÓLEO DIESEL;22556778,82088636;b;Brasil - refinarias
+2012;MAR;Março;3;ÓLEO DIESEL;23684933,029563878;b;Brasil - refinarias
+2012;ABR;Abril;4;ÓLEO DIESEL;22894164,914535567;b;Brasil - refinarias
+2012;MAI;Maio;5;ÓLEO DIESEL;24224612,346612748;b;Brasil - refinarias
+2012;JUN;Junho;6;ÓLEO DIESEL;24330750,61171445;b;Brasil - refinarias
+2012;JUL;Julho;7;ÓLEO DIESEL;24303018,335026335;b;Brasil - refinarias
+2012;AGO;Agosto;8;ÓLEO DIESEL;24468876,08809833;b;Brasil - refinarias
+2012;SET;Setembro;9;ÓLEO DIESEL;24756164,622075405;b;Brasil - refinarias
+2012;OUT;Outubro;10;ÓLEO DIESEL;23441418,11163147;b;Brasil - refinarias
+2012;NOV;Novembro;11;ÓLEO DIESEL;24178412,61878519;b;Brasil - refinarias
+2012;DEZ;Dezembro;12;ÓLEO DIESEL;24792153,95782456;b;Brasil - refinarias
+2013;JAN;Janeiro;1;ÓLEO DIESEL;25926074,080484845;b;Brasil - refinarias
+2013;FEV;Fevereiro;2;ÓLEO DIESEL;23033613,378915336;b;Brasil - refinarias
+2013;MAR;Março;3;ÓLEO DIESEL;26818194,6014475;b;Brasil - refinarias
+2013;ABR;Abril;4;ÓLEO DIESEL;25876578,885505315;b;Brasil - refinarias
+2013;MAI;Maio;5;ÓLEO DIESEL;27150545,96150083;b;Brasil - refinarias
+2013;JUN;Junho;6;ÓLEO DIESEL;24964952,45285707;b;Brasil - refinarias
+2013;JUL;Julho;7;ÓLEO DIESEL;27132626,854500104;b;Brasil - refinarias
+2013;AGO;Agosto;8;ÓLEO DIESEL;27813237,713356737;b;Brasil - refinarias
+2013;SET;Setembro;9;ÓLEO DIESEL;24959674,62666013;b;Brasil - refinarias
+2013;OUT;Outubro;10;ÓLEO DIESEL;25485500,851382654;b;Brasil - refinarias
+2013;NOV;Novembro;11;ÓLEO DIESEL;26281970,859767243;b;Brasil - refinarias
+2013;DEZ;Dezembro;12;ÓLEO DIESEL;26149099,10576023;b;Brasil - refinarias
+2014;JAN;Janeiro;1;ÓLEO DIESEL;24646071,603481278;b;Brasil - refinarias
+2014;FEV;Fevereiro;2;ÓLEO DIESEL;22564779,15407706;b;Brasil - refinarias
+2014;MAR;Março;3;ÓLEO DIESEL;26848967,30806086;b;Brasil - refinarias
+2014;ABR;Abril;4;ÓLEO DIESEL;26350272,738512162;b;Brasil - refinarias
+2014;MAI;Maio;5;ÓLEO DIESEL;25170849,12154007;b;Brasil - refinarias
+2014;JUN;Junho;6;ÓLEO DIESEL;26612617,71897016;b;Brasil - refinarias
+2014;JUL;Julho;7;ÓLEO DIESEL;27912788,474579383;b;Brasil - refinarias
+2014;AGO;Agosto;8;ÓLEO DIESEL;26405291,190352406;b;Brasil - refinarias
+2014;SET;Setembro;9;ÓLEO DIESEL;25723372,98105104;b;Brasil - refinarias
+2014;OUT;Outubro;10;ÓLEO DIESEL;27021470,3531141;b;Brasil - refinarias
+2014;NOV;Novembro;11;ÓLEO DIESEL;26544349,704241853;b;Brasil - refinarias
+2014;DEZ;Dezembro;12;ÓLEO DIESEL;26645840,95354875;b;Brasil - refinarias
+2015;JAN;Janeiro;1;ÓLEO DIESEL;24279826,285329215;b;Brasil - refinarias
+2015;FEV;Fevereiro;2;ÓLEO DIESEL;22154127,61846087;b;Brasil - refinarias
+2015;MAR;Março;3;ÓLEO DIESEL;25589820,964406703;b;Brasil - refinarias
+2015;ABR;Abril;4;ÓLEO DIESEL;25027860,29712817;b;Brasil - refinarias
+2015;MAI;Maio;5;ÓLEO DIESEL;27849398,273120787;b;Brasil - refinarias
+2015;JUN;Junho;6;ÓLEO DIESEL;26760648,86216436;b;Brasil - refinarias
+2015;JUL;Julho;7;ÓLEO DIESEL;26855004,65800754;b;Brasil - refinarias
+2015;AGO;Agosto;8;ÓLEO DIESEL;27156284,37086152;b;Brasil - refinarias
+2015;SET;Setembro;9;ÓLEO DIESEL;28121648,034626164;b;Brasil - refinarias
+2015;OUT;Outubro;10;ÓLEO DIESEL;27746722,947871704;b;Brasil - refinarias
+2015;NOV;Novembro;11;ÓLEO DIESEL;24641709,57767244;b;Brasil - refinarias
+2015;DEZ;Dezembro;12;ÓLEO DIESEL;24895912,203157548;b;Brasil - refinarias
+2016;JAN;Janeiro;1;ÓLEO DIESEL;27298141,302349526;b;Brasil - refinarias
+2016;FEV;Fevereiro;2;ÓLEO DIESEL;23508197,682379097;b;Brasil - refinarias
+2016;MAR;Março;3;ÓLEO DIESEL;24637503,48811782;b;Brasil - refinarias
+2016;ABR;Abril;4;ÓLEO DIESEL;24681154,545512233;b;Brasil - refinarias
+2016;MAI;Maio;5;ÓLEO DIESEL;24506337,815146245;b;Brasil - refinarias
+2016;JUN;Junho;6;ÓLEO DIESEL;24685765,13340826;b;Brasil - refinarias
+2016;JUL;Julho;7;ÓLEO DIESEL;23306759,65579965;b;Brasil - refinarias
+2016;AGO;Agosto;8;ÓLEO DIESEL;24300836,94692835;b;Brasil - refinarias
+2016;SET;Setembro;9;ÓLEO DIESEL;22613306,97290879;b;Brasil - refinarias
+2016;OUT;Outubro;10;ÓLEO DIESEL;24977529,85226022;b;Brasil - refinarias
+2016;NOV;Novembro;11;ÓLEO DIESEL;21494504,947620217;b;Brasil - refinarias
+2016;DEZ;Dezembro;12;ÓLEO DIESEL;19357424,94444913;b;Brasil - refinarias
+2017;JAN;Janeiro;1;ÓLEO DIESEL;20848934,645626377;b;Brasil - refinarias
+2017;FEV;Fevereiro;2;ÓLEO DIESEL;19440967,97505746;b;Brasil - refinarias
+2017;MAR;Março;3;ÓLEO DIESEL;22081875,879116487;b;Brasil - refinarias
+2017;ABR;Abril;4;ÓLEO DIESEL;21820853,552294742;b;Brasil - refinarias
+2017;MAI;Maio;5;ÓLEO DIESEL;22035882,480545882;b;Brasil - refinarias
+2017;JUN;Junho;6;ÓLEO DIESEL;20878051,42841486;b;Brasil - refinarias
+2017;JUL;Julho;7;ÓLEO DIESEL;21383738,75338024;b;Brasil - refinarias
+2017;AGO;Agosto;8;ÓLEO DIESEL;21182423,76604031;b;Brasil - refinarias
+2017;SET;Setembro;9;ÓLEO DIESEL;21599432,4805983;b;Brasil - refinarias
+2017;OUT;Outubro;10;ÓLEO DIESEL;22146385,32839797;b;Brasil - refinarias
+2017;NOV;Novembro;11;ÓLEO DIESEL;21349972,00145425;b;Brasil - refinarias
+2017;DEZ;Dezembro;12;ÓLEO DIESEL;20760230,55906;b;Brasil - refinarias
+2018;JAN;Janeiro;1;ÓLEO DIESEL;18504242,19770048;b;Brasil - refinarias
+2018;FEV;Fevereiro;2;ÓLEO DIESEL;17470560,04536256;b;Brasil - refinarias
+2018;MAR;Março;3;ÓLEO DIESEL;20778739,829206258;b;Brasil - refinarias
+2018;ABR;Abril;4;ÓLEO DIESEL;21263871,122621927;b;Brasil - refinarias
+2018;MAI;Maio;5;ÓLEO DIESEL;24238109,71726146;b;Brasil - refinarias
+2018;JUN;Junho;6;ÓLEO DIESEL;23567637,370339192;b;Brasil - refinarias
+2018;JUL;Julho;7;ÓLEO DIESEL;24803985,942620438;b;Brasil - refinarias
+2018;AGO;Agosto;8;ÓLEO DIESEL;23053419,118186433;b;Brasil - refinarias
+2018;SET;Setembro;9;ÓLEO DIESEL;21800895,116162613;b;Brasil - refinarias
+2018;OUT;Outubro;10;ÓLEO DIESEL;24169660,19238084;b;Brasil - refinarias
+2018;NOV;Novembro;11;ÓLEO DIESEL;22587583,859377004;b;Brasil - refinarias
+2018;DEZ;Dezembro;12;ÓLEO DIESEL;21665307,41117221;b;Brasil - refinarias
+2019;JAN;Janeiro;1;ÓLEO DIESEL;20015397,817657556;b;Brasil - refinarias
+2019;FEV;Fevereiro;2;ÓLEO DIESEL;19389754,592319332;b;Brasil - refinarias
+2019;MAR;Março;3;ÓLEO DIESEL;22441193,01908637;b;Brasil - refinarias
+2019;ABR;Abril;4;ÓLEO DIESEL;22039071,852307368;b;Brasil - refinarias
+2019;MAI;Maio;5;ÓLEO DIESEL;22335130,851758495;b;Brasil - refinarias
+2019;JUN;Junho;6;ÓLEO DIESEL;21882985,649444137;b;Brasil - refinarias
+2019;JUL;Julho;7;ÓLEO DIESEL;22087095,363231394;b;Brasil - refinarias
+2019;AGO;Agosto;8;ÓLEO DIESEL;22699503,371747613;b;Brasil - refinarias
+2019;SET;Setembro;9;ÓLEO DIESEL;21217943,957883872;b;Brasil - refinarias
+2019;OUT;Outubro;10;ÓLEO DIESEL;20734543,143464237;b;Brasil - refinarias
+2019;NOV;Novembro;11;ÓLEO DIESEL;20944289,685221035;b;Brasil - refinarias
+2019;DEZ;Dezembro;12;ÓLEO DIESEL;22085909,447006304;b;Brasil - refinarias
+2020;JAN;Janeiro;1;ÓLEO DIESEL;21423773,823020928;b;Brasil - refinarias
+2020;FEV;Fevereiro;2;ÓLEO DIESEL;20147020,576003537;b;Brasil - refinarias
+2020;MAR;Março;3;ÓLEO DIESEL;20054583,986805417;b;Brasil - refinarias
+2020;ABR;Abril;4;ÓLEO DIESEL;16384735,919497509;b;Brasil - refinarias
+2020;MAI;Maio;5;ÓLEO DIESEL;21317830,494912162;b;Brasil - refinarias
+2020;JUN;Junho;6;ÓLEO DIESEL;22562759,798779212;b;Brasil - refinarias
+2020;JUL;Julho;7;ÓLEO DIESEL;24236903,539823174;b;Brasil - refinarias
+2020;AGO;Agosto;8;ÓLEO DIESEL;25256086,839037474;b;Brasil - refinarias
+2020;SET;Setembro;9;ÓLEO DIESEL;24295267,008129667;b;Brasil - refinarias
+2020;OUT;Outubro;10;ÓLEO DIESEL;25084423,34532081;b;Brasil - refinarias
+2020;NOV;Novembro;11;ÓLEO DIESEL;22433617,169639185;b;Brasil - refinarias
+2020;DEZ;Dezembro;12;ÓLEO DIESEL;22433363,30020945;b;Brasil - refinarias
+2021;JAN;Janeiro;1;ÓLEO DIESEL;22031152,26627092;b;Brasil - refinarias
+2021;FEV;Fevereiro;2;ÓLEO DIESEL;20632080,66212195;b;Brasil - refinarias
+2021;MAR;Março;3;ÓLEO DIESEL;22424183,69921864;b;Brasil - refinarias
+2021;ABR;Abril;4;ÓLEO DIESEL;21191576,10573313;b;Brasil - refinarias
+2021;MAI;Maio;5;ÓLEO DIESEL;22337549,63629487;b;Brasil - refinarias
+2021;JUN;Junho;6;ÓLEO DIESEL;22026310,068622038;b;Brasil - refinarias
+2021;JUL;Julho;7;ÓLEO DIESEL;24035215,27090787;b;Brasil - refinarias
+2021;AGO;Agosto;8;ÓLEO DIESEL;22739677,32956649;b;Brasil - refinarias
+2021;SET;Setembro;9;ÓLEO DIESEL;22031881,27411935;b;Brasil - refinarias
+2021;OUT;Outubro;10;ÓLEO DIESEL;24606246,93051777;b;Brasil - refinarias
+2021;NOV;Novembro;11;ÓLEO DIESEL;22711361,542128183;b;Brasil - refinarias
+2021;DEZ;Dezembro;12;ÓLEO DIESEL;22769887,488270413;b;Brasil - refinarias
+2022;JAN;Janeiro;1;ÓLEO DIESEL;23673447,48952059;b;Brasil - refinarias
+2022;FEV;Fevereiro;2;ÓLEO DIESEL;21837872,95895294;b;Brasil - refinarias
+2022;MAR;Março;3;ÓLEO DIESEL;24325650,19757876;b;Brasil - refinarias
+2022;ABR;Abril;4;ÓLEO DIESEL;23950599,809287023;b;Brasil - refinarias
+2022;MAI;Maio;5;ÓLEO DIESEL;24185111,173543938;b;Brasil - refinarias
+2022;JUN;Junho;6;ÓLEO DIESEL;24317531,66306012;b;Brasil - refinarias
+2022;JUL;Julho;7;ÓLEO DIESEL;26036759,10600286;b;Brasil - refinarias
+2022;AGO;Agosto;8;ÓLEO DIESEL;24607618,92677307;b;Brasil - refinarias
+2022;SET;Setembro;9;ÓLEO DIESEL;22400115,0871134;b;Brasil - refinarias
+2022;OUT;Outubro;10;ÓLEO DIESEL;23667641,09544776;b;Brasil - refinarias
+2022;NOV;Novembro;11;ÓLEO DIESEL;23806797,9463147;b;Brasil - refinarias
+2022;DEZ;Dezembro;12;ÓLEO DIESEL;23562327,271744538;b;Brasil - refinarias
+2023;JAN;Janeiro;1;ÓLEO DIESEL;23299351,284275282;b;Brasil - refinarias
+2023;FEV;Fevereiro;2;ÓLEO DIESEL;20656467,46942528;b;Brasil - refinarias
+2023;MAR;Março;3;ÓLEO DIESEL;23332529,63576725;b;Brasil - refinarias
+2023;ABR;Abril;4;ÓLEO DIESEL;23654232,85587836;b;Brasil - refinarias
+2023;MAI;Maio;5;ÓLEO DIESEL;25523164,13581901;b;Brasil - refinarias
+2023;JUN;Junho;6;ÓLEO DIESEL;25526533,297704753;b;Brasil - refinarias
+2023;JUL;Julho;7;ÓLEO DIESEL;26201490,613661062;b;Brasil - refinarias
+2023;AGO;Agosto;8;ÓLEO DIESEL;27023227,15592072;b;Brasil - refinarias
+2023;SET;Setembro;9;ÓLEO DIESEL;24960840,65525601;b;Brasil - refinarias
+2023;OUT;Outubro;10;ÓLEO DIESEL;27109447,74560452;b;Brasil - refinarias
+2023;NOV;Novembro;11;ÓLEO DIESEL;24451632,36839103;b;Brasil - refinarias
+2023;DEZ;Dezembro;12;ÓLEO DIESEL;26120263,69283056;b;Brasil - refinarias
+2024;JAN;Janeiro;1;ÓLEO DIESEL;25113149,17805264;b;Brasil - refinarias
+2024;FEV;Fevereiro;2;ÓLEO DIESEL;23750373,21812974;b;Brasil - refinarias
+2024;MAR;Março;3;ÓLEO DIESEL;24682060,652167972;b;Brasil - refinarias
+2024;ABR;Abril;4;ÓLEO DIESEL;24157065,747298673;b;Brasil - refinarias
+2024;MAI;Maio;5;ÓLEO DIESEL;24844375,7594898;b;Brasil - refinarias
+2024;JUN;Junho;6;ÓLEO DIESEL;25716771,79637823;b;Brasil - refinarias
+2024;JUL;Julho;7;ÓLEO DIESEL;25666176,75972234;b;Brasil - refinarias
+2024;AGO;Agosto;8;ÓLEO DIESEL;26294642,410429798;b;Brasil - refinarias
+2024;SET;Setembro;9;ÓLEO DIESEL;26409941,57796985;b;Brasil - refinarias
+2024;OUT;Outubro;10;ÓLEO DIESEL;28282126,62065217;b;Brasil - refinarias
+2024;NOV;Novembro;11;ÓLEO DIESEL;25903020,46100498;b;Brasil - refinarias
+2024;DEZ;Dezembro;12;ÓLEO DIESEL;26866838,76044721;b;Brasil - refinarias
+2025;JAN;Janeiro;1;ÓLEO DIESEL;24051465,2026066;b;Brasil - refinarias
+2025;FEV;Fevereiro;2;ÓLEO DIESEL;22394742,4572076;b;Brasil - refinarias
+2025;MAR;Março;3;ÓLEO DIESEL;25128441,693742603;b;Brasil - refinarias
+2025;ABR;Abril;4;ÓLEO DIESEL;24060030,70989327;b;Brasil - refinarias
+2025;MAI;Maio;5;ÓLEO DIESEL;23944400,710926842;b;Brasil - refinarias
+2025;JUN;Junho;6;ÓLEO DIESEL;24889048,07832672;b;Brasil - refinarias
+2025;JUL;Julho;7;ÓLEO DIESEL;26173777,943524033;b;Brasil - refinarias
+2025;AGO;Agosto;8;ÓLEO DIESEL;27291562,53324573;b;Brasil - refinarias
+2025;SET;Setembro;9;ÓLEO DIESEL;26779840,83201494;b;Brasil - refinarias
+2025;OUT;Outubro;10;ÓLEO DIESEL;25266439,43955331;b;Brasil - refinarias
+2025;NOV;Novembro;11;ÓLEO DIESEL;23442843,65714655;b;Brasil - refinarias
+2025;DEZ;Dezembro;12;ÓLEO DIESEL;24398177,93379066;b;Brasil - refinarias
+2026;JAN;Janeiro;1;ÓLEO DIESEL;23228847,67181948;b;Brasil - refinarias
+2026;FEV;Fevereiro;2;ÓLEO DIESEL;23627058,17206006;b;Brasil - refinarias
+2026;MAR;Março;3;ÓLEO DIESEL;27934133,38478907;b;Brasil - refinarias
+2026;ABR;Abril;4;ÓLEO DIESEL;26589485,10386268;b;Brasil - refinarias
+2026;MAI;Maio;5;ÓLEO DIESEL;27763675,86054003;b;Brasil - refinarias
+2026;JUN;Junho;6;ÓLEO DIESEL;25652122,707621377;b;Brasil - refinarias
+2026;JUL;Julho;7;ÓLEO DIESEL;28064905,62959475;b;Brasil - refinarias
+2026;AGO;Agosto;8;ÓLEO DIESEL;0,0;b;Brasil - refinarias
+2026;SET;Setembro;9;ÓLEO DIESEL;0,0;b;Brasil - refinarias
+2026;OUT;Outubro;10;ÓLEO DIESEL;0,0;b;Brasil - refinarias
+2026;NOV;Novembro;11;ÓLEO DIESEL;0,0;b;Brasil - refinarias
+2026;DEZ;Dezembro;12;ÓLEO DIESEL;0,0;b;Brasil - refinarias
