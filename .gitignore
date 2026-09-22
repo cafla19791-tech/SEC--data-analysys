@@ -39,6 +39,10 @@ output/*_stats.json
 !output/montantes_contratos_indiretas_2002_2026.csv
 !output/montantes_contratos_indiretas_2002_2026.md
 !output/montantes_contratos_indiretas_2002_2026.xlsx
+!output/discriminativo_lucros_ativos_bancos_2002_2026.csv
+!output/evolucao_lucros_ativos_bancos_2002_2026.csv
+!output/discriminativo_lucros_ativos_bancos_2002_2026.md
+!output/discriminativo_lucros_ativos_bancos_2002_2026.png
 output/indiretas_automaticas_ipca/*.xlsx
 !output/indiretas_automaticas_ipca/.gitkeep
 !output/indiretas_automaticas_ipca/README.md
