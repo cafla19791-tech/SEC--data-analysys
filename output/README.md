@@ -75,6 +75,12 @@ Transcrição das conversas de 1º/set/2026 sobre os 20-F da Petrobras:
 
 - `conversas_petrobras_20f_2026-09-01.pdf`
 
+Para tirar página em branco (se reaparecer):
+
+```bash
+python3 scripts/sanear_pdf_conversas_petrobras.py
+```
+
 Relatório formal da evolução da dívida bruta, dos juros pagos e do lucro líquido
 (tabelas iguais às dos discriminativos):
 
