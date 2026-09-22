@@ -212,6 +212,19 @@ python3 scripts/gerar_fluxos.py --download \
   --arquivo-selic "C:/Arquivos de Programas RFB/ContAgilAppBeta64/python_jep/winpython/STP-20260716182715078 (1).xlsx"
 ```
 
+## Discriminativo — lucro líquido e ativo dos bancos (2002–2026)
+
+Série anual do ativo total e do lucro líquido dos bancos (conglomerado financeiro
+ou instituição independente; sem cooperativas), a partir do IFData do Banco Central.
+O lucro do ano soma o 1º semestre (junho) e o 2º semestre (dezembro), porque o
+COSIF encerra o resultado em 30/06 e em 31/12. Em 2026 a série vai até junho.
+
+```bash
+python3 scripts/discriminativo_lucros_ativos_bancos.py
+```
+
+Saídas em `output/discriminativo_lucros_ativos_bancos_2002_2026.csv`, `.xlsx`, `.md` e `.png`.
+
 ## Testes
 
 ```bash

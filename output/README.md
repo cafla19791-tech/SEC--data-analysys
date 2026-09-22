@@ -46,3 +46,12 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+Discriminativo da evolução do ativo e do lucro líquido dos bancos (IFData, 2002–2026):
+
+```bash
+python3 scripts/discriminativo_lucros_ativos_bancos.py
+```
+
+- `discriminativo_lucros_ativos_bancos_2002_2026.csv` / `.xlsx` / `.md` / `.png`
+- `evolucao_lucros_ativos_bancos_2002_2026.csv` — totais anuais do sistema bancário
