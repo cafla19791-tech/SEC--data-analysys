@@ -37,6 +37,7 @@ output/*_stats.json
 !output/desembolsos_1995_2001_ipca.md
 !output/desembolsos_1995_2001_ipca.xlsx
 !output/montantes_contratos_indiretas_2002_2026.csv
+!output/discriminativo_fatores_dbgg_2007_2026.csv
 !output/montantes_contratos_indiretas_2002_2026.md
 !output/montantes_contratos_indiretas_2002_2026.xlsx
 output/indiretas_automaticas_ipca/*.xlsx
