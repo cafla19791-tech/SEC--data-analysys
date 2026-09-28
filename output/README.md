@@ -46,3 +46,12 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+Lucro líquido contábil de Itaú, Unibanco, Itaú Unibanco e Bradesco (2002–2025
+e 1º semestre de 2026), em R$ de 31/08/2026 pelo IPCA (Bacen SGS 433):
+
+```bash
+python3 scripts/lucros_bancos_ipca.py
+```
+
+- `lucros_liquidos_itau_unibanco_bradesco_ipca_2002_2026.xlsx`
