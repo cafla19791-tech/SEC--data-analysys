@@ -71,6 +71,15 @@ python3 scripts/petrobras_lucro_liquido_20f.py
 
 - `petrobras_lucro_liquido_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
 
+Geração operacional de caixa (*Net cash provided by operating activities*) da Petrobras
+nos Forms 20-F 2002–2025 e no 6-K do 1S2026:
+
+```bash
+python3 scripts/petrobras_caixa_operacional_20f.py
+```
+
+- `petrobras_caixa_operacional_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
+
 Transcrição das conversas de 1º/set/2026 sobre os 20-F da Petrobras:
 
 - `conversas_petrobras_20f_2026-09-01.pdf`
