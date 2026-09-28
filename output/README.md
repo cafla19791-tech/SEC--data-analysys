@@ -70,3 +70,14 @@ PYTHONPATH=. python3 scripts/eleicoes_presidente_1994_1998_uf.py
 ```
 
 - `eleicoes_1994_1998_presidente_1t_por_uf.xlsx` — aba **Por_UF** (26 estados + DF + total das 27); aba **Brasil_e_exterior**; aba **Fonte**.
+
+## Eleições 2014 — presidente, 2º turno por UF
+
+Votos válidos dos dois candidatos à Presidência do 2º turno (Dilma Rousseff
+e Aécio Neves), em cada uma das 27 Unidades da Federação:
+
+```bash
+PYTHONPATH=. python3 scripts/eleicoes_presidente_2014_2t_uf.py
+```
+
+- `eleicoes_2014_presidente_2t_por_uf.xlsx` — aba **Por_UF** (26 estados + DF + total das 27); aba **Brasil_e_exterior**; aba **Fonte**.
