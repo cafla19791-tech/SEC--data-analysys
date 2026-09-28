@@ -1,0 +1,2148 @@
+{
+  "AC": {
+    "1t": {
+      "unidade": "Acre",
+      "eleitores": 506520,
+      "comparecimento": 418772,
+      "brancos": 4343,
+      "nulos": 15538,
+      "validos": 398891,
+      "candidatos": [
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 167499
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 116015
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 111610
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 1203
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 856
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 638
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 595
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 282
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 111
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 68
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 14
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Acre",
+      "eleitores": 506522,
+      "comparecimento": 394157,
+      "brancos": 3478,
+      "nulos": 8227,
+      "validos": 382452,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 243530
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 138922
+        }
+      ]
+    }
+  },
+  "AL": {
+    "1t": {
+      "unidade": "Alagoas",
+      "eleitores": 1995153,
+      "comparecimento": 1612496,
+      "brancos": 71609,
+      "nulos": 131934,
+      "validos": 1408953,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 703674
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 356632
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 311576
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 15223
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 8413
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 7065
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 3547
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1197
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 892
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 609
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 125
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Alagoas",
+      "eleitores": 1995181,
+      "comparecimento": 1603589,
+      "brancos": 24998,
+      "nulos": 63293,
+      "validos": 1515298,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 941286
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 574012
+        }
+      ]
+    }
+  },
+  "AP": {
+    "1t": {
+      "unidade": "Amapá",
+      "eleitores": 455368,
+      "comparecimento": 407846,
+      "brancos": 5042,
+      "nulos": 13466,
+      "validos": 389338,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 198939
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 99046
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 77702
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 5114
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 3999
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 1548
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 1250
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1122
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 435
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 162
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 21
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Amapá",
+      "eleitores": 455368,
+      "comparecimento": 389080,
+      "brancos": 3182,
+      "nulos": 15820,
+      "validos": 370078,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 227414
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 142664
+        }
+      ]
+    }
+  },
+  "AM": {
+    "1t": {
+      "unidade": "Amazonas",
+      "eleitores": 2225630,
+      "comparecimento": 1791817,
+      "brancos": 36064,
+      "nulos": 77898,
+      "validos": 1677855,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 915030
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 361234
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 325734
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 42685
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 15923
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 10258
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 4377
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1350
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 621
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 545
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 98
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Amazonas",
+      "eleitores": 2225691,
+      "comparecimento": 1722286,
+      "brancos": 27145,
+      "nulos": 106241,
+      "validos": 1588900,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1033090
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 555810
+        }
+      ]
+    }
+  },
+  "BA": {
+    "1t": {
+      "unidade": "Bahia",
+      "eleitores": 10179390,
+      "comparecimento": 7818832,
+      "brancos": 252749,
+      "nulos": 580188,
+      "validos": 6985895,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 4292325
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 1284185
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1276603
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 55775
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 37190
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 15705
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 15333
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 3507
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 2889
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 1828
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 555
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Bahia",
+      "eleitores": 10179643,
+      "comparecimento": 7654200,
+      "brancos": 109102,
+      "nulos": 333948,
+      "validos": 7211150,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 5059228
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 2151922
+        }
+      ]
+    }
+  },
+  "CE": {
+    "1t": {
+      "unidade": "Ceará",
+      "eleitores": 6268909,
+      "comparecimento": 5007565,
+      "brancos": 158501,
+      "nulos": 328832,
+      "validos": 4520232,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 3087115
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 676743
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 638115
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 52448
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 25742
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 15963
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 14081
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 4660
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 3192
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 1831
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 342
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Ceará",
+      "eleitores": 6269037,
+      "comparecimento": 4905479,
+      "brancos": 69307,
+      "nulos": 246851,
+      "validos": 4589321,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 3522225
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1067096
+        }
+      ]
+    }
+  },
+  "DF": {
+    "1t": {
+      "unidade": "Distrito Federal",
+      "eleitores": 1895697,
+      "comparecimento": 1674508,
+      "brancos": 38439,
+      "nulos": 61555,
+      "validos": 1574514,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 568371
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 563830
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 362511
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 31307
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 19377
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 15254
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 10044
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1493
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 1295
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 559
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 473
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Distrito Federal",
+      "eleitores": 1895994,
+      "comparecimento": 1656361,
+      "brancos": 29137,
+      "nulos": 103368,
+      "validos": 1523856,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 943275
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 580581
+        }
+      ]
+    }
+  },
+  "ES": {
+    "1t": {
+      "unidade": "Espírito Santo",
+      "eleitores": 2651621,
+      "comparecimento": 2150247,
+      "brancos": 81546,
+      "nulos": 95482,
+      "validos": 1973219,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 692952
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 653469
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 567421
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 18984
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 16134
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 11860
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 9018
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1313
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 1133
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 720
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 215
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Espírito Santo",
+      "eleitores": 2651724,
+      "comparecimento": 2075765,
+      "brancos": 36408,
+      "nulos": 63384,
+      "validos": 1975973,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1064067
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 911906
+        }
+      ]
+    }
+  },
+  "GO": {
+    "1t": {
+      "unidade": "Goiás",
+      "eleitores": 4329834,
+      "comparecimento": 3514438,
+      "brancos": 116419,
+      "nulos": 171467,
+      "validos": 3226552,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1340441
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1035673
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 771157
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 30383
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 19000
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 12391
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 12239
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 1948
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1765
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 1254
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 301
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Goiás",
+      "eleitores": 4329932,
+      "comparecimento": 3397505,
+      "brancos": 56025,
+      "nulos": 157735,
+      "validos": 3183745,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1818087
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1365658
+        }
+      ]
+    }
+  },
+  "MA": {
+    "1t": {
+      "unidade": "Maranhão",
+      "eleitores": 4495864,
+      "comparecimento": 3433672,
+      "brancos": 76761,
+      "nulos": 211982,
+      "validos": 3144929,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2187668
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 534824
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 365443
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 22386
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 13089
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 6960
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 6707
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 4339
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 2205
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 1150
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 158
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Maranhão",
+      "eleitores": 4495903,
+      "comparecimento": 3265307,
+      "brancos": 34449,
+      "nulos": 87579,
+      "validos": 3143279,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2475762
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 667517
+        }
+      ]
+    }
+  },
+  "MT": {
+    "1t": {
+      "unidade": "Mato Grosso",
+      "eleitores": 2188283,
+      "comparecimento": 1686876,
+      "brancos": 45578,
+      "nulos": 82511,
+      "validos": 1558787,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 693251
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 616265
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 219908
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 10082
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 9129
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 4461
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 4119
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 529
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 473
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 469
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 101
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Mato Grosso",
+      "eleitores": 2188346,
+      "comparecimento": 1631824,
+      "brancos": 14723,
+      "nulos": 34872,
+      "validos": 1582229,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 864999
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 717230
+        }
+      ]
+    }
+  },
+  "MS": {
+    "1t": {
+      "unidade": "Mato Grosso do Sul",
+      "eleitores": 1817511,
+      "comparecimento": 1444320,
+      "brancos": 40124,
+      "nulos": 52791,
+      "validos": 1351405,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 558331
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 506951
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 257805
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 10700
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 6973
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 4622
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 4083
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 976
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 477
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 390
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 97
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Mato Grosso do Sul",
+      "eleitores": 1817547,
+      "comparecimento": 1397180,
+      "brancos": 15633,
+      "nulos": 28479,
+      "validos": 1353068,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 762233
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 590835
+        }
+      ]
+    }
+  },
+  "MG": {
+    "1t": {
+      "unidade": "Minas Gerais",
+      "eleitores": 15236578,
+      "comparecimento": 12186182,
+      "brancos": 467144,
+      "nulos": 612155,
+      "validos": 11106883,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 4829513
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 4414452
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 1554511
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 139741
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 67468
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 54411
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 25929
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 8357
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 5544
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 5468
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 1489
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Minas Gerais",
+      "eleitores": 15237099,
+      "comparecimento": 12012050,
+      "brancos": 176025,
+      "nulos": 427782,
+      "validos": 11408243,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 5979422
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 5428821
+        }
+      ]
+    }
+  },
+  "PA": {
+    "1t": {
+      "unidade": "Pará",
+      "eleitores": 5185950,
+      "comparecimento": 4091843,
+      "brancos": 84927,
+      "nulos": 169242,
+      "validos": 3837674,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2040696
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1057860
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 627012
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 43064
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 40328
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 12254
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 11494
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 3012
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 915
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 832
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 207
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Pará",
+      "eleitores": 5186031,
+      "comparecimento": 3877989,
+      "brancos": 42600,
+      "nulos": 171090,
+      "validos": 3664299,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2103829
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1560470
+        }
+      ]
+    }
+  },
+  "PB": {
+    "1t": {
+      "unidade": "Paraíba",
+      "eleitores": 2834782,
+      "comparecimento": 2334522,
+      "brancos": 95337,
+      "nulos": 141373,
+      "validos": 2097812,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1166632
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 490516
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 393390
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 16827
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 12101
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 7784
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 7538
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1070
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 911
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 796
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 247
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Paraíba",
+      "eleitores": 2834880,
+      "comparecimento": 2324672,
+      "brancos": 43718,
+      "nulos": 132050,
+      "validos": 2148904,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1380988
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 767916
+        }
+      ]
+    }
+  },
+  "PR": {
+    "1t": {
+      "unidade": "Paraná",
+      "eleitores": 7861171,
+      "comparecimento": 6536251,
+      "brancos": 221614,
+      "nulos": 252325,
+      "validos": 6062312,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 3018548
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1972761
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 860685
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 79080
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 44663
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 40638
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 33593
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 4827
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 4549
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 2408
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 560
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Paraná",
+      "eleitores": 7861512,
+      "comparecimento": 6412571,
+      "brancos": 81325,
+      "nulos": 157481,
+      "validos": 6173765,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 3765025
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2408740
+        }
+      ]
+    }
+  },
+  "PE": {
+    "1t": {
+      "unidade": "Pernambuco",
+      "eleitores": 6353859,
+      "comparecimento": 5304380,
+      "brancos": 219837,
+      "nulos": 275579,
+      "validos": 4808964,
+      "candidatos": [
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 2310700
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2126491
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 284771
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 40420
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 15688
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 13337
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 11493
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 2758
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 1718
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 1266
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 322
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Pernambuco",
+      "eleitores": 6354087,
+      "comparecimento": 5225283,
+      "brancos": 102040,
+      "nulos": 225812,
+      "validos": 4897431,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 3438165
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1459266
+        }
+      ]
+    }
+  },
+  "PI": {
+    "1t": {
+      "unidade": "Piauí",
+      "eleitores": 2344476,
+      "comparecimento": 1901414,
+      "brancos": 37303,
+      "nulos": 114729,
+      "validos": 1749382,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1235203
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 246121
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 242069
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 10148
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 6281
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 4377
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 2338
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1456
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 752
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 486
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 151
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Piauí",
+      "eleitores": 2344505,
+      "comparecimento": 1846232,
+      "brancos": 15918,
+      "nulos": 61334,
+      "validos": 1768980,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1385096
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 383884
+        }
+      ]
+    }
+  },
+  "RJ": {
+    "1t": {
+      "unidade": "Rio de Janeiro",
+      "eleitores": 12134443,
+      "comparecimento": 9693862,
+      "brancos": 466867,
+      "nulos": 886867,
+      "validos": 8340128,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2970486
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 2590871
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 2246363
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 227173
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 136143
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 67930
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 65001
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 14427
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 11749
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 8536
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 1449
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Rio de Janeiro",
+      "eleitores": 12134961,
+      "comparecimento": 9421190,
+      "brancos": 261599,
+      "nulos": 990320,
+      "validos": 8169271,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 4488183
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 3681088
+        }
+      ]
+    }
+  },
+  "RN": {
+    "1t": {
+      "unidade": "Rio Grande do Norte",
+      "eleitores": 2326583,
+      "comparecimento": 1935105,
+      "brancos": 84976,
+      "nulos": 186059,
+      "validos": 1664070,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 999452
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 329866
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 286061
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 20198
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 13314
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 5333
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 5288
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 2827
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 929
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 641
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 161
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Rio Grande do Norte",
+      "eleitores": 2326659,
+      "comparecimento": 1915732,
+      "brancos": 34825,
+      "nulos": 163320,
+      "validos": 1717587,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1201576
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 516011
+        }
+      ]
+    }
+  },
+  "RS": {
+    "1t": {
+      "unidade": "Rio Grande do Sul",
+      "eleitores": 8385229,
+      "comparecimento": 6976843,
+      "brancos": 313623,
+      "nulos": 295836,
+      "validos": 6367384,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2751098
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 2637238
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 732148
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 143153
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 43631
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 33039
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 17940
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 4082
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 2298
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 2252
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 505
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Rio Grande do Sul",
+      "eleitores": 8385656,
+      "comparecimento": 6860298,
+      "brancos": 146565,
+      "nulos": 263918,
+      "validos": 6449815,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 3452455
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 2997360
+        }
+      ]
+    }
+  },
+  "RO": {
+    "1t": {
+      "unidade": "Rondônia",
+      "eleitores": 1126502,
+      "comparecimento": 885929,
+      "brancos": 20624,
+      "nulos": 37623,
+      "validos": 827682,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 371692
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 345167
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 86148
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 12511
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 4653
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 3815
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 2363
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 634
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 428
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 208
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 63
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Rondônia",
+      "eleitores": 1126542,
+      "comparecimento": 852217,
+      "brancos": 10003,
+      "nulos": 35810,
+      "validos": 806404,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 442349
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 364055
+        }
+      ]
+    }
+  },
+  "RR": {
+    "1t": {
+      "unidade": "Roraima",
+      "eleitores": 299411,
+      "comparecimento": 262194,
+      "brancos": 3749,
+      "nulos": 8855,
+      "validos": 249590,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 108903
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 82857
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 46936
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 5189
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 2809
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 1280
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 775
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 515
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 208
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 70
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 48
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Roraima",
+      "eleitores": 299419,
+      "comparecimento": 250228,
+      "brancos": 2269,
+      "nulos": 11153,
+      "validos": 236806,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 139477
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 97329
+        }
+      ]
+    }
+  },
+  "SC": {
+    "1t": {
+      "unidade": "Santa Catarina",
+      "eleitores": 4855732,
+      "comparecimento": 4058912,
+      "brancos": 150765,
+      "nulos": 200227,
+      "validos": 3707920,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 1961224
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1140432
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 475599
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 53332
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 30146
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 23643
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 15769
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 3970
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 2004
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 1412
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 389
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Santa Catarina",
+      "eleitores": 4855951,
+      "comparecimento": 3988845,
+      "brancos": 50922,
+      "nulos": 115036,
+      "validos": 3822887,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 2469079
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 1353808
+        }
+      ]
+    }
+  },
+  "SP": {
+    "1t": {
+      "unidade": "São Paulo",
+      "eleitores": 31979717,
+      "comparecimento": 25736781,
+      "brancos": 1252960,
+      "nulos": 1525311,
+      "validos": 22958510,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 10152688
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 5927503
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 5761174
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 554189
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 236704
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 142793
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 136206
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 19115
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 13508
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 10662
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 3968
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "São Paulo",
+      "eleitores": 31980841,
+      "comparecimento": 25422496,
+      "brancos": 500950,
+      "nulos": 1136874,
+      "validos": 23784672,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 15296289
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 8488383
+        }
+      ]
+    }
+  },
+  "SE": {
+    "1t": {
+      "unidade": "Sergipe",
+      "eleitores": 1453601,
+      "comparecimento": 1239891,
+      "brancos": 54099,
+      "nulos": 90576,
+      "validos": 1095216,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 601578
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 248424
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 203188
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 18771
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 12815
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 3727
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 3676
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 1700
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 764
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 431
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 142
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Sergipe",
+      "eleitores": 1453637,
+      "comparecimento": 1222404,
+      "brancos": 19088,
+      "nulos": 50841,
+      "validos": 1152475,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 772253
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 380222
+        }
+      ]
+    }
+  },
+  "TO": {
+    "1t": {
+      "unidade": "Tocantins",
+      "eleitores": 996379,
+      "comparecimento": 801084,
+      "brancos": 14279,
+      "nulos": 53545,
+      "validos": 733260,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 368348
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 202882
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 150568
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 4737
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 2873
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 1654
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 1425
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 261
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 247
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 221
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 44
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Tocantins",
+      "eleitores": 996390,
+      "comparecimento": 750004,
+      "brancos": 6854,
+      "nulos": 22640,
+      "validos": 720510,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 428662
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 291848
+        }
+      ]
+    }
+  },
+  "ZZ": {
+    "1t": {
+      "unidade": "Abroad",
+      "eleitores": 353504,
+      "comparecimento": 141501,
+      "brancos": 4833,
+      "nulos": 3929,
+      "validos": 132739,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 65713
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 34527
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 24353
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 3474
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 2067
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 906
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 648
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 436
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 281
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 261
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 73
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Abroad",
+      "eleitores": 353536,
+      "comparecimento": 141873,
+      "brancos": 3159,
+      "nulos": 3534,
+      "validos": 135180,
+      "candidatos": [
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 104121
+        },
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 31059
+        }
+      ]
+    }
+  },
+  "BR": {
+    "1t": {
+      "unidade": "Brazil Totals",
+      "eleitores": 142822046,
+      "comparecimento": 115122883,
+      "brancos": 4420489,
+      "nulos": 6678592,
+      "validos": 104023802,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 43267668
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 34897211
+        },
+        {
+          "nome": "Marina Silva (PSB - PHS / PRP / PPS / PPL / PSB / PSL)",
+          "votos": 22176619
+        },
+        {
+          "nome": "Luciana Genro (PSOL)",
+          "votos": 1612186
+        },
+        {
+          "nome": "Pastor Everaldo (PSC)",
+          "votos": 780513
+        },
+        {
+          "nome": "Eduardo Jorge (PV)",
+          "votos": 630099
+        },
+        {
+          "nome": "Levy Fidelix (PRTB)",
+          "votos": 446878
+        },
+        {
+          "nome": "Zé Maria (PSTU)",
+          "votos": 91209
+        },
+        {
+          "nome": "Eymael (PSDC)",
+          "votos": 61250
+        },
+        {
+          "nome": "Mauro Iasi (PCB)",
+          "votos": 47845
+        },
+        {
+          "nome": "Rui Costa Pimenta (PCO)",
+          "votos": 12324
+        }
+      ]
+    },
+    "2t": {
+      "unidade": "Brazil Totals",
+      "eleitores": 142822046,
+      "comparecimento": 112683879,
+      "brancos": 1921819,
+      "nulos": 5219787,
+      "validos": 105542273,
+      "candidatos": [
+        {
+          "nome": "Dilma (PT - PT / PMDB / PSD / PP / PR / PROS / PDT / PC do B / PRB)",
+          "votos": 54501118
+        },
+        {
+          "nome": "Aécio Neves (PSDB - PSDB / PMN / SD / DEM / PEN / PTN / PTB / PTC / PT do B)",
+          "votos": 51041155
+        }
+      ]
+    }
+  }
+}

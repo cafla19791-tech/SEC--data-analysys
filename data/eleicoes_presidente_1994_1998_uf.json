@@ -1,0 +1,2906 @@
+{
+  "1994": {
+    "AC": {
+      "unidade": "Acre",
+      "eleitores": 263162,
+      "comparecimento": 206393,
+      "brancos": 23843,
+      "nulos": 15665,
+      "validos": 166885,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 90132
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 39656
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 17708
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 12636
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 2238
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 2121
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 1640
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 754
+        }
+      ]
+    },
+    "AL": {
+      "unidade": "Alagoas",
+      "eleitores": 1156990,
+      "comparecimento": 979067,
+      "brancos": 130622,
+      "nulos": 159280,
+      "validos": 689165,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 525036
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 84929
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 31131
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 24675
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 6882
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 6615
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 6339
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 3558
+        }
+      ]
+    },
+    "AP": {
+      "unidade": "Amapá",
+      "eleitores": 197171,
+      "comparecimento": 142626,
+      "brancos": 6777,
+      "nulos": 6597,
+      "validos": 129252,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 76397
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 34623
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 11727
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 2955
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 1459
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 1013
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 722
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 356
+        }
+      ]
+    },
+    "AM": {
+      "unidade": "Amazonas",
+      "eleitores": 1106006,
+      "comparecimento": 799541,
+      "brancos": 47272,
+      "nulos": 58428,
+      "validos": 693841,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 419742
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 161390
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 59444
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 31066
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 9290
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 5970
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 3733
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 3206
+        }
+      ]
+    },
+    "BA": {
+      "unidade": "Bahia",
+      "eleitores": 7031624,
+      "comparecimento": 5156380,
+      "brancos": 717319,
+      "nulos": 715171,
+      "validos": 3723890,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 1951179
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 1310823
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 167417
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 164451
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 46223
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 35636
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 29714
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 18447
+        }
+      ]
+    },
+    "CE": {
+      "unidade": "Ceará",
+      "eleitores": 4006533,
+      "comparecimento": 3124785,
+      "brancos": 401514,
+      "nulos": 242858,
+      "validos": 2480413,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 1517698
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 669425
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 110705
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 74382
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 49825
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 26119
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 23215
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 9044
+        }
+      ]
+    },
+    "DF": {
+      "unidade": "Distrito Federal",
+      "eleitores": 1062247,
+      "comparecimento": 915178,
+      "brancos": 36597,
+      "nulos": 64143,
+      "validos": 814438,
+      "candidatos": [
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 364541
+        },
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 315106
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 79237
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 21162
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 17127
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 11113
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 3525
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 2627
+        }
+      ]
+    },
+    "ES": {
+      "unidade": "Espírito Santo",
+      "eleitores": 1710729,
+      "comparecimento": 1415810,
+      "brancos": 113816,
+      "nulos": 111172,
+      "validos": 1190822,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 714958
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 331798
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 79532
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 31403
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 13485
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 11388
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 4850
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 3408
+        }
+      ]
+    },
+    "GO": {
+      "unidade": "Goiás",
+      "eleitores": 2622097,
+      "comparecimento": 2121879,
+      "brancos": 199622,
+      "nulos": 186128,
+      "validos": 1736129,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 1171550
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 322907
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 107628
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 93314
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 15815
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 13463
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 6918
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 4534
+        }
+      ]
+    },
+    "MA": {
+      "unidade": "Maranhão",
+      "eleitores": 2615445,
+      "comparecimento": 1817179,
+      "brancos": 349663,
+      "nulos": 205801,
+      "validos": 1261715,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 785417
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 292057
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 72687
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 48771
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 21191
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 17503
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 17343
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 6746
+        }
+      ]
+    },
+    "MT": {
+      "unidade": "Mato Grosso",
+      "eleitores": 1279042,
+      "comparecimento": 936782,
+      "brancos": 69570,
+      "nulos": 95799,
+      "validos": 771413,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 495956
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 147307
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 40304
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 39214
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 25712
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 15704
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 5248
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 1968
+        }
+      ]
+    },
+    "MS": {
+      "unidade": "Mato Grosso do Sul",
+      "eleitores": 1161054,
+      "comparecimento": 947159,
+      "brancos": 64704,
+      "nulos": 76505,
+      "validos": 805950,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 512527
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 179296
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 49527
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 31206
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 14263
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 13471
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 3247
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 2413
+        }
+      ]
+    },
+    "MG": {
+      "unidade": "Minas Gerais",
+      "eleitores": 10559739,
+      "comparecimento": 8837261,
+      "brancos": 958568,
+      "nulos": 879846,
+      "validos": 6998847,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 4536780
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 1532740
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 478926
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 232528
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 79401
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 66834
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 44063
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 27575
+        }
+      ]
+    },
+    "PA": {
+      "unidade": "Pará",
+      "eleitores": 2783131,
+      "comparecimento": 1868313,
+      "brancos": 220796,
+      "nulos": 162565,
+      "validos": 1484952,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 809793
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 453794
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 115955
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 59021
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 15463
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 11093
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 10073
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 9760
+        }
+      ]
+    },
+    "PB": {
+      "unidade": "Paraíba",
+      "eleitores": 2091506,
+      "comparecimento": 1619649,
+      "brancos": 219564,
+      "nulos": 191677,
+      "validos": 1208408,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 761876
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 311142
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 56408
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 44088
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 15985
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 8285
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 6883
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 3741
+        }
+      ]
+    },
+    "PR": {
+      "unidade": "Paraná",
+      "eleitores": 5746397,
+      "comparecimento": 4743804,
+      "brancos": 459499,
+      "nulos": 335755,
+      "validos": 3948550,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 2382093
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 898231
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 256071
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 167981
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 109908
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 102058
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 18288
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 13920
+        }
+      ]
+    },
+    "PE": {
+      "unidade": "Pernambuco",
+      "eleitores": 4467948,
+      "comparecimento": 3523982,
+      "brancos": 475211,
+      "nulos": 481100,
+      "validos": 2567671,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 1381756
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 949865
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 99061
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 62823
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 29236
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 20027
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 15190
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 9713
+        }
+      ]
+    },
+    "PI": {
+      "unidade": "Piauí",
+      "eleitores": 1631161,
+      "comparecimento": 1268153,
+      "brancos": 147630,
+      "nulos": 195599,
+      "validos": 924924,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 476404
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 296077
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 82867
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 27083
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 20614
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 9257
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 9162
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 3460
+        }
+      ]
+    },
+    "RJ": {
+      "unidade": "Rio de Janeiro",
+      "eleitores": 9129373,
+      "comparecimento": 7743559,
+      "brancos": 474505,
+      "nulos": 692746,
+      "validos": 6576308,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 3102664
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 1689772
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 767702
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 702182
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 152738
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 91575
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 39422
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 30253
+        }
+      ]
+    },
+    "RN": {
+      "unidade": "Rio Grande do Norte",
+      "eleitores": 1491112,
+      "comparecimento": 1254124,
+      "brancos": 171304,
+      "nulos": 139187,
+      "validos": 943633,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 606681
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 227252
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 41383
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 37590
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 11670
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 8038
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 7695
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 3324
+        }
+      ]
+    },
+    "RS": {
+      "unidade": "Rio Grande do Sul",
+      "eleitores": 6296021,
+      "comparecimento": 5549281,
+      "brancos": 436171,
+      "nulos": 302650,
+      "validos": 4810460,
+      "candidatos": [
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 1610379
+        },
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 1422390
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 726445
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 450153
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 393752
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 179210
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 15870
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 12261
+        }
+      ]
+    },
+    "RO": {
+      "unidade": "Rondônia",
+      "eleitores": 692067,
+      "comparecimento": 480320,
+      "brancos": 41357,
+      "nulos": 29501,
+      "validos": 409462,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 259418
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 89838
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 25811
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 17085
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 8143
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 5365
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 2227
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 1575
+        }
+      ]
+    },
+    "RR": {
+      "unidade": "Roraima",
+      "eleitores": 119888,
+      "comparecimento": 93902,
+      "brancos": 4112,
+      "nulos": 5076,
+      "validos": 84714,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 60693
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 11575
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 7313
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 2242
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 1316
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 1089
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 273
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 213
+        }
+      ]
+    },
+    "SC": {
+      "unidade": "Santa Catarina",
+      "eleitores": 3157290,
+      "comparecimento": 2740431,
+      "brancos": 189151,
+      "nulos": 174867,
+      "validos": 2376413,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 789001
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 630999
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 517375
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 191772
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 162721
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 67654
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 9078
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 7813
+        }
+      ]
+    },
+    "SP": {
+      "unidade": "São Paulo",
+      "eleitores": 20774991,
+      "comparecimento": 18413248,
+      "brancos": 1087432,
+      "nulos": 1755493,
+      "validos": 15570323,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 8679287
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 4205530
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 1380690
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 895318
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 247152
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 67747
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 51052
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 43547
+        }
+      ]
+    },
+    "SE": {
+      "unidade": "Sergipe",
+      "eleitores": 942246,
+      "comparecimento": 778627,
+      "brancos": 94294,
+      "nulos": 112291,
+      "validos": 572042,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 270984
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 211320
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 35268
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 32999
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 9522
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 5490
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 3755
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 2704
+        }
+      ]
+    },
+    "TO": {
+      "unidade": "Tocantins",
+      "eleitores": 648073,
+      "comparecimento": 443200,
+      "brancos": 50943,
+      "nulos": 47244,
+      "validos": 345013,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 234699
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 54989
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 30950
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 12566
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 3847
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 3784
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 3039
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 1139
+        }
+      ]
+    },
+    "ZZ": {
+      "unidade": "Abroad",
+      "eleitores": 39760,
+      "comparecimento": 27831,
+      "brancos": 260,
+      "nulos": 873,
+      "validos": 26698,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 14744
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 9872
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 563
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 552
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 436
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 333
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 127
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 71
+        }
+      ]
+    },
+    "BR": {
+      "unidade": "Brazil Totals",
+      "eleitores": 94782803,
+      "comparecimento": 77948464,
+      "brancos": 7192116,
+      "nulos": 7444017,
+      "validos": 63312331,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PSDB)",
+          "votos": 34364961
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PT)",
+          "votos": 17122127
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 4671457
+        },
+        {
+          "nome": "Orestes Quércia (PMDB)",
+          "votos": 2772121
+        },
+        {
+          "nome": "Leonel de Moura Brizola (PDT)",
+          "votos": 2015836
+        },
+        {
+          "nome": "Esperidião Amin Helou Filho (PPR)",
+          "votos": 1739894
+        },
+        {
+          "nome": "Carlos Antônio Gomes (PRN)",
+          "votos": 387738
+        },
+        {
+          "nome": "Hernani Goulart Fortuna (PSC)",
+          "votos": 238197
+        }
+      ]
+    }
+  },
+  "1998": {
+    "AC": {
+      "unidade": "Acre",
+      "eleitores": 318955,
+      "comparecimento": 239598,
+      "brancos": 17538,
+      "nulos": 28979,
+      "validos": 193081,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 90363
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 59690
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 26909
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 10362
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 1461
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 972
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 808
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 655
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 603
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 508
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 467
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 283
+        }
+      ]
+    },
+    "AL": {
+      "unidade": "Alagoas",
+      "eleitores": 1383600,
+      "comparecimento": 993135,
+      "brancos": 62821,
+      "nulos": 209661,
+      "validos": 720653,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 394873
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 161584
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 146729
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 6664
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 4064
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 1385
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 1317
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 1173
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 1111
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 915
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 467
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 371
+        }
+      ]
+    },
+    "AP": {
+      "unidade": "Amapá",
+      "eleitores": 213289,
+      "comparecimento": 184348,
+      "brancos": 2397,
+      "nulos": 20633,
+      "validos": 161318,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 68277
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 62394
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 25349
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 3237
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 588
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 445
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 324
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 226
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 187
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 129
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 102
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 60
+        }
+      ]
+    },
+    "AM": {
+      "unidade": "Amazonas",
+      "eleitores": 1368084,
+      "comparecimento": 969648,
+      "brancos": 49378,
+      "nulos": 93460,
+      "validos": 826810,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 452076
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 211507
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 128811
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 16093
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 3308
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 2765
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 2726
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 2689
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 2506
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 2161
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 1209
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 959
+        }
+      ]
+    },
+    "BA": {
+      "unidade": "Bahia",
+      "eleitores": 7932228,
+      "comparecimento": 5406422,
+      "brancos": 767280,
+      "nulos": 755134,
+      "validos": 3884008,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 1977643
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 1372790
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 327920
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 90574
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 20292
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 19284
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 15688
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 15069
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 13987
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 11305
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 10669
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 8787
+        }
+      ]
+    },
+    "CE": {
+      "unidade": "Ceará",
+      "eleitores": 4301930,
+      "comparecimento": 3300859,
+      "brancos": 272975,
+      "nulos": 371781,
+      "validos": 2656103,
+      "candidatos": [
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 909402
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 872290
+        },
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 804969
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 12294
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 10852
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 9136
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 8398
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 6473
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 6160
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 6030
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 5986
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 4113
+        }
+      ]
+    },
+    "DF": {
+      "unidade": "Distrito Federal",
+      "eleitores": 1267925,
+      "comparecimento": 1071508,
+      "brancos": 18944,
+      "nulos": 85422,
+      "validos": 967142,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 391201
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 287579
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 265838
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 13092
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 2240
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 1739
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 1409
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 1368
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 908
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 826
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 487
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 455
+        }
+      ]
+    },
+    "ES": {
+      "unidade": "Espírito Santo",
+      "eleitores": 1916884,
+      "comparecimento": 1498765,
+      "brancos": 104090,
+      "nulos": 136664,
+      "validos": 1258011,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 814535
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 263636
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 134675
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 18836
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 6945
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 3470
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 3210
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 2969
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 2631
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 2505
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 2336
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 2263
+        }
+      ]
+    },
+    "GO": {
+      "unidade": "Goiás",
+      "eleitores": 2948932,
+      "comparecimento": 2341531,
+      "brancos": 235201,
+      "nulos": 214929,
+      "validos": 1891401,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 1247510
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 371175
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 195851
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 34222
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 8801
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 7456
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 6894
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 5468
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 5142
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 3569
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 2842
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 2471
+        }
+      ]
+    },
+    "MA": {
+      "unidade": "Maranhão",
+      "eleitores": 2987233,
+      "comparecimento": 2059544,
+      "brancos": 284601,
+      "nulos": 261234,
+      "validos": 1513709,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 736042
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 444912
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 246268
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 24910
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 11295
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 11015
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 9534
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 8961
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 7030
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 4883
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 4638
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 4221
+        }
+      ]
+    },
+    "MT": {
+      "unidade": "Mato Grosso",
+      "eleitores": 1516451,
+      "comparecimento": 1076694,
+      "brancos": 88684,
+      "nulos": 79957,
+      "validos": 908053,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 663773
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 149462
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 67668
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 12012
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 3520
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 2198
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 2024
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 1957
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 1924
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 1591
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 1114
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 810
+        }
+      ]
+    },
+    "MS": {
+      "unidade": "Mato Grosso do Sul",
+      "eleitores": 1256907,
+      "comparecimento": 997117,
+      "brancos": 57510,
+      "nulos": 89937,
+      "validos": 849670,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 520471
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 210120
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 89951
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 11981
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 3193
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 3025
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 2508
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 2312
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 2207
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 1665
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 1425
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 812
+        }
+      ]
+    },
+    "MG": {
+      "unidade": "Minas Gerais",
+      "eleitores": 11815183,
+      "comparecimento": 9465908,
+      "brancos": 893201,
+      "nulos": 983910,
+      "validos": 7588797,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 4225240
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 2129100
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 883377
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 156826
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 36302
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 29689
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 28466
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 25916
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 25673
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 19839
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 14230
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 14139
+        }
+      ]
+    },
+    "PA": {
+      "unidade": "Pará",
+      "eleitores": 3220778,
+      "comparecimento": 2147683,
+      "brancos": 150452,
+      "nulos": 200393,
+      "validos": 1796838,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 1020868
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 530722
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 165670
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 30538
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 10772
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 8952
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 6473
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 5723
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 5432
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 5387
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 3273
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 3028
+        }
+      ]
+    },
+    "PB": {
+      "unidade": "Paraíba",
+      "eleitores": 2223259,
+      "comparecimento": 1675605,
+      "brancos": 221533,
+      "nulos": 258592,
+      "validos": 1195480,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 541067
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 402293
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 191878
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 15889
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 10039
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 8411
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 7483
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 5363
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 4309
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 3663
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 2885
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 2200
+        }
+      ]
+    },
+    "PR": {
+      "unidade": "Paraná",
+      "eleitores": 6384210,
+      "comparecimento": 5035699,
+      "brancos": 362179,
+      "nulos": 466612,
+      "validos": 4206908,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 2492531
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 1168853
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 400966
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 61334
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 13350
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 12694
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 12273
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 11013
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 10113
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 9243
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 7275
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 7263
+        }
+      ]
+    },
+    "PE": {
+      "unidade": "Pernambuco",
+      "eleitores": 5119100,
+      "comparecimento": 3809687,
+      "brancos": 411066,
+      "nulos": 537269,
+      "validos": 2861352,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 1637394
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 890971
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 212168
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 32393
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 18635
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 13970
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 13002
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 11779
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 9435
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 8337
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 7035
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 6233
+        }
+      ]
+    },
+    "PI": {
+      "unidade": "Piauí",
+      "eleitores": 1781150,
+      "comparecimento": 1346593,
+      "brancos": 186072,
+      "nulos": 156887,
+      "validos": 1003634,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 482649
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 270465
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 185997
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 13034
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 12497
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 8451
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 7336
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 6346
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 4878
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 4251
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 3960
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 3770
+        }
+      ]
+    },
+    "RJ": {
+      "unidade": "Rio de Janeiro",
+      "eleitores": 9971830,
+      "comparecimento": 7953829,
+      "brancos": 263531,
+      "nulos": 952910,
+      "validos": 6737388,
+      "candidatos": [
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 2851274
+        },
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 2848277
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 708279
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 233921
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 18967
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 15185
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 14272
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 12596
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 11041
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 8581
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 8319
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 6676
+        }
+      ]
+    },
+    "RN": {
+      "unidade": "Rio Grande do Norte",
+      "eleitores": 1728975,
+      "comparecimento": 1399620,
+      "brancos": 205976,
+      "nulos": 156863,
+      "validos": 1036781,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 525842
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 267883
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 193496
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 14427
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 7962
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 5804
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 4945
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 4553
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 3849
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 3146
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 2699
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 2175
+        }
+      ]
+    },
+    "RS": {
+      "unidade": "Rio Grande do Sul",
+      "eleitores": 6846077,
+      "comparecimento": 5822958,
+      "brancos": 407055,
+      "nulos": 398997,
+      "validos": 5016906,
+      "candidatos": [
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 2460551
+        },
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 2036805
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 277866
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 161750
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 15796
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 12880
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 11886
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 10862
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 9650
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 9454
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 4889
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 4517
+        }
+      ]
+    },
+    "RO": {
+      "unidade": "Rondônia",
+      "eleitores": 836179,
+      "comparecimento": 585404,
+      "brancos": 46365,
+      "nulos": 51510,
+      "validos": 487529,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 323743
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 103927
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 39398
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 7218
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 4409
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 1793
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 1597
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 1469
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 1232
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 1069
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 1067
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 607
+        }
+      ]
+    },
+    "RR": {
+      "unidade": "Roraima",
+      "eleitores": 170620,
+      "comparecimento": 133723,
+      "brancos": 2147,
+      "nulos": 15680,
+      "validos": 115896,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 71768
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 20601
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 20138
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 2353
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 442
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 171
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 121
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 119
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 75
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 42
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 40
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 26
+        }
+      ]
+    },
+    "SC": {
+      "unidade": "Santa Catarina",
+      "eleitores": 3516811,
+      "comparecimento": 2943703,
+      "brancos": 190390,
+      "nulos": 213721,
+      "validos": 2539592,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 1255253
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 929698
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 252659
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 55133
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 8931
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 8797
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 7159
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 5770
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 5253
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 4892
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 3085
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 2962
+        }
+      ]
+    },
+    "SP": {
+      "unidade": "São Paulo",
+      "eleitores": 23321034,
+      "comparecimento": 19470537,
+      "brancos": 1229016,
+      "nulos": 1982703,
+      "validos": 16258818,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 9736728
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 4688677
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 1208718
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 389592
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 41457
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 40949
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 35102
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 29141
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 28388
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 25335
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 17647
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 17084
+        }
+      ]
+    },
+    "SE": {
+      "unidade": "Sergipe",
+      "eleitores": 1081138,
+      "comparecimento": 846933,
+      "brancos": 111518,
+      "nulos": 107926,
+      "validos": 627489,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 297243
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 221565
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 71233
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 11503
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 6818
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 4296
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 3279
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 2721
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 2238
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 2205
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 2198
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 2190
+        }
+      ]
+    },
+    "TO": {
+      "unidade": "Tocantins",
+      "eleitores": 624344,
+      "comparecimento": 498878,
+      "brancos": 46295,
+      "nulos": 54563,
+      "validos": 398020,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 265393
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 66607
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 47566
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 7131
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 2434
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 1938
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 1677
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 1624
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 1195
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 854
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 814
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 787
+        }
+      ]
+    },
+    "ZZ": {
+      "unidade": "Abroad",
+      "eleitores": 47490,
+      "comparecimento": 21844,
+      "brancos": 164,
+      "nulos": 764,
+      "validos": 20916,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 13848
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 4885
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 1407
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 307
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 118
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 86
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 85
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 61
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 45
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 34
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 23
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 17
+        }
+      ]
+    },
+    "BR": {
+      "unidade": "Brazil Totals",
+      "eleitores": 106100596,
+      "comparecimento": 83297773,
+      "brancos": 6688379,
+      "nulos": 8887091,
+      "validos": 67722303,
+      "candidatos": [
+        {
+          "nome": "Fernando Henrique Cardoso (PPB / PTB / PFL / PSD / PSDB)",
+          "votos": 35936382
+        },
+        {
+          "nome": "Luiz Inácio Lula da Silva (PDT / PT / PCB / PSB / PC do B)",
+          "votos": 21475211
+        },
+        {
+          "nome": "Ciro Ferreira Gomes (PL / PPS / PAN)",
+          "votos": 7426187
+        },
+        {
+          "nome": "Enéas Ferreira Carneiro (PRONA)",
+          "votos": 1447089
+        },
+        {
+          "nome": "Ivan Moacyr da Frota (PMN)",
+          "votos": 251336
+        },
+        {
+          "nome": "Alfredo Hélio Syrkis (PV)",
+          "votos": 212983
+        },
+        {
+          "nome": "José Maria de Almeida (PSTU)",
+          "votos": 202659
+        },
+        {
+          "nome": "João de Deus Barbosa de Jesus (PT do B)",
+          "votos": 198915
+        },
+        {
+          "nome": "José Maria Eymael (PSDC)",
+          "votos": 171831
+        },
+        {
+          "nome": "Thereza Tinajero Ruiz (PTN)",
+          "votos": 166138
+        },
+        {
+          "nome": "Sérgio Bueno (PSC)",
+          "votos": 124569
+        },
+        {
+          "nome": "Vasco Azevedo Neto (PSN)",
+          "votos": 109003
+        }
+      ]
+    }
+  }
+}
