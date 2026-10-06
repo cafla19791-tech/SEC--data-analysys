@@ -46,3 +46,69 @@ python3 scripts/montantes_contratos_indiretas.py
 ```
 
 - `montantes_contratos_indiretas_2002_2026.csv` / `.xlsx` / `.md`
+
+Dívida bruta da Petrobras nos Forms 20-F (2002–2025), com página e link do EDGAR:
+
+```bash
+python3 scripts/petrobras_divida_bruta_20f.py
+```
+
+- `petrobras_divida_bruta_20f_2002_2025.csv` / `.xlsx` / `.md` / `.png`
+
+Juros pagos pela Petrobras (caixa) nos Forms 20-F 2002–2025 e no 6-K do 1S2026:
+
+```bash
+python3 scripts/petrobras_juros_pagos_20f.py
+```
+
+- `petrobras_juros_pagos_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
+
+Lucro líquido atribuível aos acionistas da Petrobras nos Forms 20-F 2002–2025 e no 6-K do 1S2026:
+
+```bash
+python3 scripts/petrobras_lucro_liquido_20f.py
+```
+
+- `petrobras_lucro_liquido_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
+
+Geração operacional de caixa (*Net cash provided by operating activities*) da Petrobras
+nos Forms 20-F 2002–2025 e no 6-K do 1S2026:
+
+```bash
+python3 scripts/petrobras_caixa_operacional_20f.py
+```
+
+- `petrobras_caixa_operacional_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
+
+Transcrição das conversas sobre os 20-F da Petrobras (sequência: links, dívida
+bruta, geração operacional de caixa, juros pagos, lucro líquido):
+
+```bash
+python3 scripts/gerar_pdf_conversas_petrobras.py
+```
+
+- `conversas_petrobras_20f_2026-09-01.pdf`
+
+Para tirar página em branco (se reaparecer):
+
+```bash
+python3 scripts/sanear_pdf_conversas_petrobras.py
+```
+
+Relatório formal da evolução da dívida bruta, da geração operacional de caixa,
+dos juros pagos e do lucro líquido (tabelas iguais às dos discriminativos):
+
+```bash
+python3 scripts/gerar_relatorio_petrobras_20f.py
+```
+
+- `relatorio_petrobras_20f_divida_juros_lucro.md` / `.pdf`
+
+Relatório do Acórdão TCU 1.839/2018-Plenário (Rnest, Comperj, Premium), com as
+tabelas do processo e o cruzamento com dívida, juros e lucro dos 20-F:
+
+```bash
+python3 scripts/gerar_relatorio_acordao_1839_2018.py
+```
+
+- `relatorio_acordao_1839_2018_petrobras.md` / `.pdf`
