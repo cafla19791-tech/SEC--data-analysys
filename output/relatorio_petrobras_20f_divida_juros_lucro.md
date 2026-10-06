@@ -1,20 +1,21 @@
-# Relatório — Evolução da dívida bruta, dos juros pagos e do lucro líquido da Petrobras
+# Relatório — Evolução da dívida bruta, da geração operacional de caixa, dos juros pagos e do lucro líquido da Petrobras
 
-**Data:** 2026-09-02 01:43 UTC
+**Data:** 2026-10-06 16:12 UTC
 
 Fonte: Forms 20-F originais de Petróleo Brasileiro S.A. — Petrobras (CIK 0001119639) na [SEC/EDGAR](https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001119639&type=20-F&dateb=&owner=exclude&count=100). Valores em US$ milhões. O exercício de 2026, ainda sem 20-F, usa o 6-K das demonstrações de 30/06/2026.
 
 ## 1. Apresentação
 
-O presente relatório apresenta as informações acerca da **evolução da dívida bruta**, em seguida dos **juros pagos** e, adiante, do **lucro líquido** da Petróleo Brasileiro S.A. — Petrobras, companhia de economia mista controlada pela União, no período **2002 a 2026**.
+O presente relatório apresenta as informações acerca da **evolução da dívida bruta**, em seguida da **geração operacional de caixa**, depois dos **juros pagos** e, adiante, do **lucro líquido** da Petróleo Brasileiro S.A. — Petrobras, companhia de economia mista controlada pela União, no período **2002 a 2026**.
 
 As cifras não são a Dívida Bruta do Governo Geral (DBGG) do Tesouro Nacional. São os números **da própria companhia**, extraídos do Form 20-F de cada exercício (e, em 2026, do 6-K interino), com a **página** do formulário em que o valor aparece. As tabelas abaixo são as mesmas dos discriminativos já publicados (colunas, páginas, links e totais).
 
 A ordem da exposição é esta:
 
 1. dívida bruta consolidada em 31 de dezembro (estoque);
-2. juros pagos em caixa no exercício (fluxo);
-3. lucro (prejuízo) líquido atribuível aos acionistas da Petrobras (fluxo).
+2. geração operacional de caixa do exercício (fluxo);
+3. juros pagos em caixa no exercício (fluxo);
+4. lucro (prejuízo) líquido atribuível aos acionistas da Petrobras (fluxo).
 
 ## 2. Fonte e método
 
@@ -54,7 +55,43 @@ A definição muda ao longo do tempo: US GAAP até 2008 (ST+LT+project finance+c
 | 2025 | 2026-04-09 | 69.793 | 9.482 | +15.7% | 180 / F-22 | Gross Debt (finance debt + lease liabilities) | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm) |
 | **Total 2002→2025** | posição em 31/12 | **69.793** | **55.113** | **+375.4%** | — | estoque (não se soma): 14.680 em 2002 | — |
 
-## 4. Juros pagos
+## 4. Geração operacional de caixa
+
+Logo após a dívida bruta, a **geração operacional de caixa** — linha *Net cash provided by operating activities* do fluxo de caixa consolidado. Não é EBITDA nem lucro líquido. Até 2010 a série é US GAAP; a partir de 2011, IFRS. O 20-F de 2005 reapresenta 2004 como 8.155; a tabela usa 8.833 do próprio 20-F de 2004. O 20-F de 2011 reapresenta 2010 como 30.110; a tabela usa 28.495 do 20-F de 2010. Em 2026 não há 20-F: o 6-K de 07/08/2026 registra US$ 20.649 milhões no 1º semestre (contra US$ 16.029 milhões no 1S2025).
+
+**Total 2002–2025:** US$ 643.420 milhões. **Total com 1S2026:** US$ 664.069 milhões. Pico em 2022 (US$ 49.717 milhões, F-6); mínimo em 2002 (US$ 6.287 milhões, F-7).
+
+| Ano | Período | Protocolo | Caixa operacional (US$ mi) | Δ US$ mi | Δ % | Página | Norma | Documento |
+|----:|---------|-----------|---------------------------:|---------:|----:|--------|-------|-----------|
+| 2002 | ano | 2003-06-19 | 6.287 | — | — | F-7 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000095012303007204/y87469e20vf.htm) |
+| 2003 | ano | 2004-06-30 | 8.569 | 2.282 | +36.3% | F-6 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000119312504112315/d20f.htm) |
+| 2004 | ano | 2005-06-30 | 8.833 | 264 | +3.1% | F-9 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000119312505135283/d20f.htm) |
+| 2005 | ano | 2006-06-28 | 15.115 | 6.282 | +71.1% | F-7 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000095012306008263/y22597e20vf.htm) |
+| 2006 | ano | 2007-06-26 | 21.077 | 5.962 | +39.4% | F-7 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000095012307009192/y36368e20vf.htm) |
+| 2007 | ano | 2008-05-19 | 22.664 | 1.587 | +7.5% | F-12 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000136231008002879/c73239e20vf.htm) |
+| 2008 | ano | 2009-05-22 | 28.220 | 5.556 | +24.5% | F-8 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000095012309009383/y76586e20vf.htm) |
+| 2009 | ano | 2010-05-20 | 24.920 | -3.300 | -11.7% | F-9 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281410001665/pbraform20f2009.htm) |
+| 2010 | ano | 2011-05-26 | 28.495 | 3.575 | +14.3% | F-9 | US GAAP | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281411001552/pbraform20f2010.htm) |
+| 2011 | ano | 2012-04-02 | 33.698 | 5.203 | +18.3% | F-10 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281412000786/pbraform20f_2011.htm) |
+| 2012 | ano | 2013-04-29 | 27.888 | -5.810 | -17.2% | F-10 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281413000928/pbraform20f_2012.htm) |
+| 2013 | ano | 2014-04-30 | 26.289 | -1.599 | -5.7% | F-9 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281414001060/pbraform20f_2013.htm) |
+| 2014 | ano | 2015-05-15 | 26.632 | 343 | +1.3% | F-7 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281415001242/pbraform20f_2014.htm) |
+| 2015 | ano | 2016-04-28 | 25.913 | -719 | -2.7% | F-7 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281416004364/pbraform20f_2015.htm) |
+| 2016 | ano | 2017-04-27 | 26.114 | 201 | +0.8% | F-8 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000119312517140235/d375139d20f.htm) |
+| 2017 | ano | 2018-04-18 | 27.112 | 998 | +3.8% | F-11 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000119312518120259/d521855d20f.htm) |
+| 2018 | ano | 2019-04-01 | 26.353 | -759 | -2.8% | F-11 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000119312519093231/d692671d20f.htm) |
+| 2019 | ano | 2020-03-23 | 25.600 | -753 | -2.9% | F-13 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000119312520080953/d883642d20f.htm) |
+| 2020 | ano | 2021-03-25 | 28.890 | 3.290 | +12.8% | F-12 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281421001152/pbraform20f_2020.htm) |
+| 2021 | ano | 2022-03-30 | 37.791 | 8.901 | +30.8% | F-12 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281422001285/pbraform20f_2021.htm) |
+| 2022 | ano | 2023-03-29 | 49.717 | 11.926 | +31.6% | F-6 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281423001253/pbrform20f_2022.htm) |
+| 2023 | ano | 2024-04-12 | 43.212 | -6.505 | -13.1% | F-6 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281424001340/pbrform20f_2023.htm) |
+| 2024 | ano | 2025-04-03 | 37.984 | -5.228 | -12.1% | F-6 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281425001352/pbrform20f_2024.htm) |
+| 2025 | ano | 2026-04-09 | 36.047 | -1.937 | -5.1% | F-6 | IFRS | [20-F](https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm) |
+| 2026 | 1S (jan–jun) | 2026-08-07 | 20.649 | — | — | 6 | IFRS | [6-K](https://www.sec.gov/Archives/edgar/data/1119639/000129281426004133/pbrfs2q26usd_6k.htm) |
+| **Total 2002–2025** | 24 anos | — | **643.420** | — | — | — | soma US GAAP+IFRS | — |
+| **Total + 1S2026** | 24 anos + 1S | — | **664.069** | — | — | — | inclui 6-K incompleto | — |
+
+## 5. Juros pagos
 
 Passa-se agora aos **juros pagos em caixa** — não à despesa financeira pelo regime de competência. De 2004 a 2010 o 20-F informa o valor *net of amount capitalized*; de 2011 em diante, *Repayment of interest* na seção de financiamento. Em 2026 não há 20-F: o 6-K de 07/08/2026 registra US$ 1.070 milhões no 1º semestre (contra US$ 856 milhões no 1S2025).
 
@@ -90,7 +127,7 @@ Passa-se agora aos **juros pagos em caixa** — não à despesa financeira pelo 
 | **Total 2002–2025** | 24 anos | — | **77.996** | — | — | — | soma dos anos completos | — |
 | **Total + 1S2026** | 24 anos + 1S | — | **79.066** | — | — | — | inclui 6-K incompleto | — |
 
-## 5. Lucro líquido
+## 6. Lucro líquido
 
 Por fim, o **lucro (prejuízo) líquido atribuível aos acionistas da Petrobras**, na DRE de cada 20-F. Até 2010 a série é US GAAP; a partir de 2011, IFRS. O 20-F de 2011 reapresenta 2010 como 20.055; a tabela usa o número US GAAP do próprio 20-F de 2010 (19.184). Em 2019 o lucro de 10.151 inclui descontinuadas (BR Distribuidora) de 2.491.
 
@@ -126,18 +163,20 @@ Por fim, o **lucro (prejuízo) líquido atribuível aos acionistas da Petrobras*
 | **Total 2002–2025** | 24 anos | — | **253.447** | — | — | — | soma US GAAP+IFRS | — |
 | **Total + 1S2026** | 24 anos + 1S | — | **270.074** | — | — | — | inclui 6-K incompleto | — |
 
-## 6. Síntese dos totais
+## 7. Síntese dos totais
 
 | Série | Recorte | Total (US$ mi) |
 |---|---|---:|
+| Dívida bruta | posição 31/12/2002 | 14.680 |
+| Dívida bruta | posição 31/12/2025 | **69.793** |
+| Dívida bruta | variação 2002→2025 | **55.113 (+375,4%)** |
+| Caixa operacional | soma 2002–2025 (24 anos) | **643.420** |
+| Caixa operacional | 24 anos + 1S2026 | **664.069** |
 | Juros pagos (caixa) | soma 2002–2025 (24 anos) | **77.996** |
 | Juros pagos (caixa) | 24 anos + 1S2026 | **79.066** |
 | Lucro líquido (acionistas) | soma 2002–2025 (24 anos) | **253.447** |
 | Lucro líquido (acionistas) | 24 anos + 1S2026 | **270.074** |
-| Dívida bruta | posição 31/12/2002 | 14.680 |
-| Dívida bruta | posição 31/12/2025 | **69.793** |
-| Dívida bruta | variação 2002→2025 | **55.113 (+375,4%)** |
 
-## 7. Fonte
+## 8. Fonte
 
 SEC EDGAR, CIK 0001119639, Form 20-F anual (2002–2025) e Form 6-K de 07/08/2026 (demonstrações em US$ do 2º trimestre de 2026).

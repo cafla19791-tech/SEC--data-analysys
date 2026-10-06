@@ -80,7 +80,12 @@ python3 scripts/petrobras_caixa_operacional_20f.py
 
 - `petrobras_caixa_operacional_20f_2002_2026.csv` / `.xlsx` / `.md` / `.png`
 
-Transcrição das conversas de 1º/set/2026 sobre os 20-F da Petrobras:
+Transcrição das conversas sobre os 20-F da Petrobras (sequência: links, dívida
+bruta, geração operacional de caixa, juros pagos, lucro líquido):
+
+```bash
+python3 scripts/gerar_pdf_conversas_petrobras.py
+```
 
 - `conversas_petrobras_20f_2026-09-01.pdf`
 
@@ -90,8 +95,8 @@ Para tirar página em branco (se reaparecer):
 python3 scripts/sanear_pdf_conversas_petrobras.py
 ```
 
-Relatório formal da evolução da dívida bruta, dos juros pagos e do lucro líquido
-(tabelas iguais às dos discriminativos):
+Relatório formal da evolução da dívida bruta, da geração operacional de caixa,
+dos juros pagos e do lucro líquido (tabelas iguais às dos discriminativos):
 
 ```bash
 python3 scripts/gerar_relatorio_petrobras_20f.py

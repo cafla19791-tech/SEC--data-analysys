@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Relatório formal — dívida bruta, juros pagos e lucro líquido da Petrobras (20-F).
+"""Relatório formal — dívida bruta, caixa operacional, juros e lucro da Petrobras (20-F).
 
 Uso::
 
@@ -41,6 +41,12 @@ from petrobras_divida_bruta_20f import (  # noqa: E402
     _fmt_mi as fmt_div,
     escrever_markdown as md_divida,
     montar_dataframe as df_divida,
+)
+from petrobras_caixa_operacional_20f import (  # noqa: E402
+    STEM as STEM_CAIXA,
+    _fmt_mi as fmt_cx,
+    escrever_markdown as md_caixa,
+    montar_dataframe as df_caixa,
 )
 from petrobras_juros_pagos_20f import (  # noqa: E402
     STEM as STEM_JUROS,
@@ -194,7 +200,7 @@ def header_footer(canvas, doc):
     canvas.setFont("Times-Roman", 8)
     canvas.drawString(
         16 * mm, 10 * mm,
-        "Relatório — Petrobras · dívida bruta, juros pagos e lucro líquido · Forms 20-F",
+        "Relatório — Petrobras · dívida bruta, caixa operacional, juros e lucro · Forms 20-F",
     )
     canvas.drawRightString(w - 16 * mm, 10 * mm, f"Página {doc.page}")
     canvas.setStrokeColor(LINE)
@@ -231,6 +237,10 @@ def tabela_divida(div) -> list[list[str]]:
     return parse_md_table(extrair_tabela_evolucao(md_divida(div, "relatorio")))
 
 
+def tabela_caixa(cx) -> list[list[str]]:
+    return parse_md_table(extrair_tabela_evolucao(md_caixa(cx, "relatorio")))
+
+
 def tabela_juros(jur) -> list[list[str]]:
     return parse_md_table(extrair_tabela_evolucao(md_juros(jur, "relatorio")))
 
@@ -239,15 +249,26 @@ def tabela_lucro(luc) -> list[list[str]]:
     return parse_md_table(extrair_tabela_evolucao(md_lucro(luc, "relatorio")))
 
 
-def escrever_markdown(div, jur, luc, gerado: str) -> str:
+def totais_series(div, cx, jur, luc) -> dict:
     ini, fim = div.iloc[0], div.iloc[-1]
-    var = int(fim.divida_bruta_usd_milhoes - ini.divida_bruta_usd_milhoes)
-    j_anos = int(jur[jur["periodo"] == "ano"]["juros_pagos_usd_milhoes"].sum())
-    j_1s = j_anos + int(jur[jur["periodo"] != "ano"]["juros_pagos_usd_milhoes"].sum())
-    l_anos = int(luc[luc["periodo"] == "ano"]["lucro_liquido_usd_milhoes"].sum())
-    l_1s = l_anos + int(luc[luc["periodo"] != "ano"]["lucro_liquido_usd_milhoes"].sum())
+    return {
+        "ini": ini,
+        "fim": fim,
+        "var": int(fim.divida_bruta_usd_milhoes - ini.divida_bruta_usd_milhoes),
+        "c_anos": int(cx[cx["periodo"] == "ano"]["caixa_operacional_usd_milhoes"].sum()),
+        "c_1s": int(cx["caixa_operacional_usd_milhoes"].sum()),
+        "j_anos": int(jur[jur["periodo"] == "ano"]["juros_pagos_usd_milhoes"].sum()),
+        "j_1s": int(jur["juros_pagos_usd_milhoes"].sum()),
+        "l_anos": int(luc[luc["periodo"] == "ano"]["lucro_liquido_usd_milhoes"].sum()),
+        "l_1s": int(luc["lucro_liquido_usd_milhoes"].sum()),
+    }
+
+
+def escrever_markdown(div, cx, jur, luc, gerado: str) -> str:
+    t = totais_series(div, cx, jur, luc)
     return "\n".join([
-        "# Relatório — Evolução da dívida bruta, dos juros pagos e do lucro líquido da Petrobras",
+        "# Relatório — Evolução da dívida bruta, da geração operacional de caixa, "
+        "dos juros pagos e do lucro líquido da Petrobras",
         "",
         f"**Data:** {gerado}",
         "",
@@ -258,9 +279,10 @@ def escrever_markdown(div, jur, luc, gerado: str) -> str:
         "## 1. Apresentação",
         "",
         "O presente relatório apresenta as informações acerca da **evolução da "
-        "dívida bruta**, em seguida dos **juros pagos** e, adiante, do **lucro "
-        "líquido** da Petróleo Brasileiro S.A. — Petrobras, companhia de economia "
-        "mista controlada pela União, no período **2002 a 2026**.",
+        "dívida bruta**, em seguida da **geração operacional de caixa**, depois "
+        "dos **juros pagos** e, adiante, do **lucro líquido** da Petróleo "
+        "Brasileiro S.A. — Petrobras, companhia de economia mista controlada "
+        "pela União, no período **2002 a 2026**.",
         "",
         "As cifras não são a Dívida Bruta do Governo Geral (DBGG) do Tesouro "
         "Nacional. São os números **da própria companhia**, extraídos do Form "
@@ -271,8 +293,9 @@ def escrever_markdown(div, jur, luc, gerado: str) -> str:
         "A ordem da exposição é esta:",
         "",
         "1. dívida bruta consolidada em 31 de dezembro (estoque);",
-        "2. juros pagos em caixa no exercício (fluxo);",
-        "3. lucro (prejuízo) líquido atribuível aos acionistas da Petrobras (fluxo).",
+        "2. geração operacional de caixa do exercício (fluxo);",
+        "3. juros pagos em caixa no exercício (fluxo);",
+        "4. lucro (prejuízo) líquido atribuível aos acionistas da Petrobras (fluxo).",
         "",
         "## 2. Fonte e método",
         "",
@@ -284,8 +307,8 @@ def escrever_markdown(div, jur, luc, gerado: str) -> str:
         "",
         "A dívida bruta é **posição em 31 de dezembro**. Não se soma ano a ano. "
         "O total da série é a variação entre 2002 (US$ 14.680 milhões) e 2025 "
-        f"(US$ {fmt_div(fim.divida_bruta_usd_milhoes)} milhões), igual a "
-        f"**US$ {fmt_div(var)} milhões (+375,4%)**. O pico foi 2014 "
+        f"(US$ {fmt_div(t['fim'].divida_bruta_usd_milhoes)} milhões), igual a "
+        f"**US$ {fmt_div(t['var'])} milhões (+375,4%)**. O pico foi 2014 "
         "(US$ 132.158 milhões); o mínimo recente, 2022 (US$ 53.799 milhões).",
         "",
         "A definição muda ao longo do tempo: US GAAP até 2008 (ST+LT+project "
@@ -295,7 +318,25 @@ def escrever_markdown(div, jur, luc, gerado: str) -> str:
         "",
         extrair_tabela_evolucao(md_divida(div, gerado)),
         "",
-        "## 4. Juros pagos",
+        "## 4. Geração operacional de caixa",
+        "",
+        "Logo após a dívida bruta, a **geração operacional de caixa** — linha "
+        "*Net cash provided by operating activities* do fluxo de caixa consolidado. "
+        "Não é EBITDA nem lucro líquido. Até 2010 a série é US GAAP; a partir de "
+        "2011, IFRS. O 20-F de 2005 reapresenta 2004 como 8.155; a tabela usa "
+        "8.833 do próprio 20-F de 2004. O 20-F de 2011 reapresenta 2010 como "
+        "30.110; a tabela usa 28.495 do 20-F de 2010. Em 2026 não há 20-F: o "
+        "6-K de 07/08/2026 registra US$ 20.649 milhões no 1º semestre (contra "
+        "US$ 16.029 milhões no 1S2025).",
+        "",
+        f"**Total 2002–2025:** US$ {fmt_cx(t['c_anos'])} milhões. "
+        f"**Total com 1S2026:** US$ {fmt_cx(t['c_1s'])} milhões. "
+        "Pico em 2022 (US$ 49.717 milhões, F-6); mínimo em 2002 "
+        "(US$ 6.287 milhões, F-7).",
+        "",
+        extrair_tabela_evolucao(md_caixa(cx, gerado)),
+        "",
+        "## 5. Juros pagos",
         "",
         "Passa-se agora aos **juros pagos em caixa** — não à despesa financeira "
         "pelo regime de competência. De 2004 a 2010 o 20-F informa o valor "
@@ -303,13 +344,13 @@ def escrever_markdown(div, jur, luc, gerado: str) -> str:
         "na seção de financiamento. Em 2026 não há 20-F: o 6-K de 07/08/2026 "
         "registra US$ 1.070 milhões no 1º semestre (contra US$ 856 milhões no 1S2025).",
         "",
-        f"**Total 2002–2025:** US$ {fmt_juro(j_anos)} milhões. "
-        f"**Total com 1S2026:** US$ {fmt_juro(j_1s)} milhões. "
+        f"**Total 2002–2025:** US$ {fmt_juro(t['j_anos'])} milhões. "
+        f"**Total com 1S2026:** US$ {fmt_juro(t['j_1s'])} milhões. "
         "Pico em 2016 (US$ 7.308 milhões, F-8).",
         "",
         extrair_tabela_evolucao(md_juros(jur, gerado)),
         "",
-        "## 5. Lucro líquido",
+        "## 6. Lucro líquido",
         "",
         "Por fim, o **lucro (prejuízo) líquido atribuível aos acionistas da "
         "Petrobras**, na DRE de cada 20-F. Até 2010 a série é US GAAP; a partir "
@@ -317,26 +358,28 @@ def escrever_markdown(div, jur, luc, gerado: str) -> str:
         "usa o número US GAAP do próprio 20-F de 2010 (19.184). Em 2019 o lucro "
         "de 10.151 inclui descontinuadas (BR Distribuidora) de 2.491.",
         "",
-        f"**Total 2002–2025:** US$ {fmt_lucro(l_anos)} milhões. "
-        f"**Total com 1S2026:** US$ {fmt_lucro(l_1s)} milhões. "
+        f"**Total 2002–2025:** US$ {fmt_lucro(t['l_anos'])} milhões. "
+        f"**Total com 1S2026:** US$ {fmt_lucro(t['l_1s'])} milhões. "
         "Pico em 2022 (US$ 36.623 milhões, F-4); prejuízo máximo em 2015 "
         "(US$ −8.450 milhões, F-5).",
         "",
         extrair_tabela_evolucao(md_lucro(luc, gerado)),
         "",
-        "## 6. Síntese dos totais",
+        "## 7. Síntese dos totais",
         "",
         "| Série | Recorte | Total (US$ mi) |",
         "|---|---|---:|",
-        f"| Juros pagos (caixa) | soma 2002–2025 (24 anos) | **{fmt_juro(j_anos)}** |",
-        f"| Juros pagos (caixa) | 24 anos + 1S2026 | **{fmt_juro(j_1s)}** |",
-        f"| Lucro líquido (acionistas) | soma 2002–2025 (24 anos) | **{fmt_lucro(l_anos)}** |",
-        f"| Lucro líquido (acionistas) | 24 anos + 1S2026 | **{fmt_lucro(l_1s)}** |",
-        f"| Dívida bruta | posição 31/12/2002 | {fmt_div(ini.divida_bruta_usd_milhoes)} |",
-        f"| Dívida bruta | posição 31/12/2025 | **{fmt_div(fim.divida_bruta_usd_milhoes)}** |",
-        f"| Dívida bruta | variação 2002→2025 | **{fmt_div(var)} (+375,4%)** |",
+        f"| Dívida bruta | posição 31/12/2002 | {fmt_div(t['ini'].divida_bruta_usd_milhoes)} |",
+        f"| Dívida bruta | posição 31/12/2025 | **{fmt_div(t['fim'].divida_bruta_usd_milhoes)}** |",
+        f"| Dívida bruta | variação 2002→2025 | **{fmt_div(t['var'])} (+375,4%)** |",
+        f"| Caixa operacional | soma 2002–2025 (24 anos) | **{fmt_cx(t['c_anos'])}** |",
+        f"| Caixa operacional | 24 anos + 1S2026 | **{fmt_cx(t['c_1s'])}** |",
+        f"| Juros pagos (caixa) | soma 2002–2025 (24 anos) | **{fmt_juro(t['j_anos'])}** |",
+        f"| Juros pagos (caixa) | 24 anos + 1S2026 | **{fmt_juro(t['j_1s'])}** |",
+        f"| Lucro líquido (acionistas) | soma 2002–2025 (24 anos) | **{fmt_lucro(t['l_anos'])}** |",
+        f"| Lucro líquido (acionistas) | 24 anos + 1S2026 | **{fmt_lucro(t['l_1s'])}** |",
         "",
-        "## 7. Fonte",
+        "## 8. Fonte",
         "",
         "SEC EDGAR, CIK 0001119639, Form 20-F anual (2002–2025) e Form 6-K de "
         "07/08/2026 (demonstrações em US$ do 2º trimestre de 2026).",
@@ -352,19 +395,15 @@ def _img(path: Path, s) -> list:
     return [Spacer(1, 4), img, Spacer(1, 6)]
 
 
-def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
-    ini, fim = div.iloc[0], div.iloc[-1]
-    var = int(fim.divida_bruta_usd_milhoes - ini.divida_bruta_usd_milhoes)
-    j_anos = int(jur[jur["periodo"] == "ano"]["juros_pagos_usd_milhoes"].sum())
-    j_1s = j_anos + int(jur[jur["periodo"] != "ano"]["juros_pagos_usd_milhoes"].sum())
-    l_anos = int(luc[luc["periodo"] == "ano"]["lucro_liquido_usd_milhoes"].sum())
-    l_1s = l_anos + int(luc[luc["periodo"] != "ano"]["lucro_liquido_usd_milhoes"].sum())
+def story_pdf(div, cx, jur, luc, gerado: str, saida: Path, s) -> list:
+    t = totais_series(div, cx, jur, luc)
     story = [
         Spacer(1, 2.4 * cm),
         Paragraph("SEC · EDGAR · CIK 0001119639", s["kicker"]),
         Paragraph("Relatório", s["title"]),
         Paragraph(
-            "Evolução da dívida bruta, dos juros pagos<br/>e do lucro líquido da Petrobras",
+            "Evolução da dívida bruta, da geração operacional de caixa,<br/>"
+            "dos juros pagos e do lucro líquido da Petrobras",
             s["title"],
         ),
         Paragraph(
@@ -376,8 +415,9 @@ def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
         Paragraph("1. Apresentação", s["h1"]),
         Paragraph(
             "O presente relatório apresenta as informações acerca da <b>evolução "
-            "da dívida bruta</b>, em seguida dos <b>juros pagos</b> e, adiante, "
-            "do <b>lucro líquido</b> da Petróleo Brasileiro S.A. — Petrobras, "
+            "da dívida bruta</b>, em seguida da <b>geração operacional de "
+            "caixa</b>, depois dos <b>juros pagos</b> e, adiante, do "
+            "<b>lucro líquido</b> da Petróleo Brasileiro S.A. — Petrobras, "
             "companhia de economia mista controlada pela União, no período "
             "<b>2002 a 2026</b>.",
             s["body"],
@@ -393,8 +433,9 @@ def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
         ),
         Paragraph(
             "A ordem da exposição é esta: (i) dívida bruta consolidada em 31 de "
-            "dezembro (estoque); (ii) juros pagos em caixa no exercício (fluxo); "
-            "(iii) lucro (prejuízo) líquido atribuível aos acionistas da Petrobras "
+            "dezembro (estoque); (ii) geração operacional de caixa do exercício "
+            "(fluxo); (iii) juros pagos em caixa no exercício (fluxo); "
+            "(iv) lucro (prejuízo) líquido atribuível aos acionistas da Petrobras "
             "(fluxo).",
             s["body"],
         ),
@@ -411,8 +452,8 @@ def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
         Paragraph(
             f"A dívida bruta é <b>posição em 31 de dezembro</b>. Não se soma ano "
             f"a ano. O total da série é a variação entre 2002 (US$ 14.680 milhões) "
-            f"e 2025 (US$ {fmt_div(fim.divida_bruta_usd_milhoes)} milhões), igual a "
-            f"<b>US$ {fmt_div(var)} milhões (+375,4%)</b>. O pico foi 2014 "
+            f"e 2025 (US$ {fmt_div(t['fim'].divida_bruta_usd_milhoes)} milhões), igual a "
+            f"<b>US$ {fmt_div(t['var'])} milhões (+375,4%)</b>. O pico foi 2014 "
             f"(US$ 132.158 milhões); o mínimo recente, 2022 (US$ 53.799 milhões).",
             s["body"],
         ),
@@ -427,7 +468,29 @@ def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
     story.extend(_img(saida / f"{STEM_DIVIDA}.png", s))
     story.append(make_table(tabela_divida(div), s))
     story.append(PageBreak())
-    story.append(Paragraph("4. Juros pagos", s["h1"]))
+    story.append(Paragraph("4. Geração operacional de caixa", s["h1"]))
+    story.append(Paragraph(
+        "Logo após a dívida bruta, a <b>geração operacional de caixa</b> — "
+        "linha <i>Net cash provided by operating activities</i> do fluxo de "
+        "caixa consolidado. Não é EBITDA nem lucro líquido. Até 2010 a série "
+        "é US GAAP; a partir de 2011, IFRS. O 20-F de 2005 reapresenta 2004 "
+        "como 8.155; a tabela usa 8.833 do próprio 20-F de 2004. O 20-F de "
+        "2011 reapresenta 2010 como 30.110; a tabela usa 28.495 do 20-F de "
+        "2010. Em 2026 não há 20-F: o 6-K de 07/08/2026 registra US$ 20.649 "
+        "milhões no 1º semestre (contra US$ 16.029 milhões no 1S2025).",
+        s["body"],
+    ))
+    story.append(Paragraph(
+        f"<b>Total 2002–2025:</b> US$ {fmt_cx(t['c_anos'])} milhões. "
+        f"<b>Total com 1S2026:</b> US$ {fmt_cx(t['c_1s'])} milhões. "
+        "Pico em 2022 (US$ 49.717 milhões, F-6); mínimo em 2002 "
+        "(US$ 6.287 milhões, F-7).",
+        s["body"],
+    ))
+    story.extend(_img(saida / f"{STEM_CAIXA}.png", s))
+    story.append(make_table(tabela_caixa(cx), s))
+    story.append(PageBreak())
+    story.append(Paragraph("5. Juros pagos", s["h1"]))
     story.append(Paragraph(
         "Passa-se agora aos <b>juros pagos em caixa</b> — não à despesa "
         "financeira pelo regime de competência. De 2004 a 2010 o 20-F informa "
@@ -438,15 +501,15 @@ def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
         s["body"],
     ))
     story.append(Paragraph(
-        f"<b>Total 2002–2025:</b> US$ {fmt_juro(j_anos)} milhões. "
-        f"<b>Total com 1S2026:</b> US$ {fmt_juro(j_1s)} milhões. "
+        f"<b>Total 2002–2025:</b> US$ {fmt_juro(t['j_anos'])} milhões. "
+        f"<b>Total com 1S2026:</b> US$ {fmt_juro(t['j_1s'])} milhões. "
         "Pico em 2016 (US$ 7.308 milhões, F-8).",
         s["body"],
     ))
     story.extend(_img(saida / f"{STEM_JUROS}.png", s))
     story.append(make_table(tabela_juros(jur), s))
     story.append(PageBreak())
-    story.append(Paragraph("5. Lucro líquido", s["h1"]))
+    story.append(Paragraph("6. Lucro líquido", s["h1"]))
     story.append(Paragraph(
         "Por fim, o <b>lucro (prejuízo) líquido atribuível aos acionistas da "
         "Petrobras</b>, na DRE de cada 20-F. Até 2010 a série é US GAAP; a "
@@ -456,8 +519,8 @@ def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
         s["body"],
     ))
     story.append(Paragraph(
-        f"<b>Total 2002–2025:</b> US$ {fmt_lucro(l_anos)} milhões. "
-        f"<b>Total com 1S2026:</b> US$ {fmt_lucro(l_1s)} milhões. "
+        f"<b>Total 2002–2025:</b> US$ {fmt_lucro(t['l_anos'])} milhões. "
+        f"<b>Total com 1S2026:</b> US$ {fmt_lucro(t['l_1s'])} milhões. "
         "Pico em 2022 (US$ 36.623 milhões, F-4); prejuízo máximo em 2015 "
         "(US$ −8.450 milhões, F-5).",
         s["body"],
@@ -465,18 +528,20 @@ def story_pdf(div, jur, luc, gerado: str, saida: Path, s) -> list:
     story.extend(_img(saida / f"{STEM_LUCRO}.png", s))
     story.append(make_table(tabela_lucro(luc), s))
     story.append(Spacer(1, 8))
-    story.append(Paragraph("6. Síntese dos totais", s["h1"]))
+    story.append(Paragraph("7. Síntese dos totais", s["h1"]))
     story.append(make_table([
         ["Série", "Recorte", "Total (US$ mi)"],
-        ["Juros pagos (caixa)", "soma 2002–2025 (24 anos)", f"**{fmt_juro(j_anos)}**"],
-        ["Juros pagos (caixa)", "24 anos + 1S2026", f"**{fmt_juro(j_1s)}**"],
-        ["Lucro líquido (acionistas)", "soma 2002–2025 (24 anos)", f"**{fmt_lucro(l_anos)}**"],
-        ["Lucro líquido (acionistas)", "24 anos + 1S2026", f"**{fmt_lucro(l_1s)}**"],
-        ["Dívida bruta", "posição 31/12/2002", fmt_div(ini.divida_bruta_usd_milhoes)],
-        ["Dívida bruta", "posição 31/12/2025", f"**{fmt_div(fim.divida_bruta_usd_milhoes)}**"],
-        ["Dívida bruta", "variação 2002→2025", f"**{fmt_div(var)} (+375,4%)**"],
+        ["Dívida bruta", "posição 31/12/2002", fmt_div(t["ini"].divida_bruta_usd_milhoes)],
+        ["Dívida bruta", "posição 31/12/2025", f"**{fmt_div(t['fim'].divida_bruta_usd_milhoes)}**"],
+        ["Dívida bruta", "variação 2002→2025", f"**{fmt_div(t['var'])} (+375,4%)**"],
+        ["Caixa operacional", "soma 2002–2025 (24 anos)", f"**{fmt_cx(t['c_anos'])}**"],
+        ["Caixa operacional", "24 anos + 1S2026", f"**{fmt_cx(t['c_1s'])}**"],
+        ["Juros pagos (caixa)", "soma 2002–2025 (24 anos)", f"**{fmt_juro(t['j_anos'])}**"],
+        ["Juros pagos (caixa)", "24 anos + 1S2026", f"**{fmt_juro(t['j_1s'])}**"],
+        ["Lucro líquido (acionistas)", "soma 2002–2025 (24 anos)", f"**{fmt_lucro(t['l_anos'])}**"],
+        ["Lucro líquido (acionistas)", "24 anos + 1S2026", f"**{fmt_lucro(t['l_1s'])}**"],
     ], s))
-    story.append(Paragraph("7. Fonte", s["h1"]))
+    story.append(Paragraph("8. Fonte", s["h1"]))
     story.append(Paragraph(
         "SEC EDGAR, CIK 0001119639, Form 20-F anual (2002–2025) e Form 6-K de "
         "07/08/2026 (demonstrações em US$ do 2º trimestre de 2026).",
@@ -492,10 +557,10 @@ def main() -> int:
     saida = args.saida_dir
     saida.mkdir(parents=True, exist_ok=True)
     gerado = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    div, jur, luc = df_divida(), df_juros(), df_lucro()
+    div, cx, jur, luc = df_divida(), df_caixa(), df_juros(), df_lucro()
     md_path = saida / f"{STEM}.md"
     pdf_path = saida / f"{STEM}.pdf"
-    md_path.write_text(escrever_markdown(div, jur, luc, gerado), encoding="utf-8")
+    md_path.write_text(escrever_markdown(div, cx, jur, luc, gerado), encoding="utf-8")
     doc = SimpleDocTemplate(
         str(pdf_path),
         pagesize=PAGE,
@@ -503,11 +568,11 @@ def main() -> int:
         rightMargin=16 * mm,
         topMargin=16 * mm,
         bottomMargin=16 * mm,
-        title="Relatório Petrobras — dívida bruta, juros pagos e lucro líquido (20-F)",
+        title="Relatório Petrobras — dívida bruta, caixa operacional, juros e lucro (20-F)",
         author="SEC--data-analysys",
     )
     doc.build(
-        story_pdf(div, jur, luc, gerado, saida, styles()),
+        story_pdf(div, cx, jur, luc, gerado, saida, styles()),
         onFirstPage=header_footer,
         onLaterPages=header_footer,
     )
