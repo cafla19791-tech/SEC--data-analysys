@@ -1,0 +1,1445 @@
+titulo,vencimento,tipo_resgate,quantidade,financeiro_R$,fonte,financeiro_R$_bi
+LFT,01/03/2022,Compra/troca em leilão,3143650.0,33854316422.25,Leilão compra/troca 2019-2022,33.85431642225
+LFT,01/03/2027,Compra/troca em leilão,417750.0,4416396177.139999,Leilão compra/troca 2019-2022,4.416396177139999
+LFT,01/09/2023,Compra/troca em leilão,753000.0,8095383388.679999,Leilão compra/troca 2019-2022,8.09538338868
+LTN,01/04/2022,Compra/troca em leilão,17648000.0,16793641617.57,Leilão compra/troca 2019-2022,16.79364161757
+LTN,01/07/2023,Compra/troca em leilão,1210000.0,952656430.75,Leilão compra/troca 2019-2022,0.95265643075
+LTN,01/07/2024,Compra/troca em leilão,500000.0,393384238.5,Leilão compra/troca 2019-2022,0.3933842385
+NTN-B,15/05/2025,Compra/troca em leilão,1148500.0,4322880413.429999,Leilão compra/troca 2019-2022,4.322880413429999
+NTN-B,15/05/2035,Compra/troca em leilão,287500.0,1172340126.8,Leilão compra/troca 2019-2022,1.1723401268
+NTN-B,15/05/2045,Compra/troca em leilão,358450.0,1458608584.5,Leilão compra/troca 2019-2022,1.4586085845
+NTN-B,15/05/2055,Compra/troca em leilão,66500.0,282504991.01,Leilão compra/troca 2019-2022,0.28250499101
+NTN-B,15/08/2022,Compra/troca em leilão,285000.0,1004158211.4399999,Leilão compra/troca 2019-2022,1.0041582114399998
+NTN-B,15/08/2024,Compra/troca em leilão,2066250.0,7607492808.2300005,Leilão compra/troca 2019-2022,7.607492808230001
+NTN-B,15/08/2026,Compra/troca em leilão,902150.0,3350215985.26,Leilão compra/troca 2019-2022,3.35021598526
+NTN-B,15/08/2028,Compra/troca em leilão,1215000.0,4674049535.95,Leilão compra/troca 2019-2022,4.67404953595
+NTN-B,15/08/2030,Compra/troca em leilão,256250.0,981292975.3000001,Leilão compra/troca 2019-2022,0.9812929753
+NTN-B,15/08/2050,Compra/troca em leilão,616850.0,2536187171.63,Leilão compra/troca 2019-2022,2.53618717163
+NTN-F,01/01/2023,Compra/troca em leilão,600000.0,655865548.2,Leilão compra/troca 2019-2022,0.6558655482000001
+NTN-F,01/01/2025,Compra/troca em leilão,5464850.0,5958616862.24,Leilão compra/troca 2019-2022,5.9586168622399995
+NTN-F,01/01/2027,Compra/troca em leilão,3883500.0,4219344324.9300003,Leilão compra/troca 2019-2022,4.219344324930001
+NTN-F,01/01/2029,Compra/troca em leilão,793400.0,895253489.36,Leilão compra/troca 2019-2022,0.89525348936
+NTN-F,01/01/2031,Compra/troca em leilão,178550.0,185803978.45,Leilão compra/troca 2019-2022,0.18580397845
+Tesouro IGPM+ com Juros Semestrais,01/01/2031,Recompra TD,277.33,1987425.2,Tesouro Direto,0.0019874251999999998
+Tesouro IGPM+ com Juros Semestrais,01/01/2031,Recompra TD,71.92,559270.12,Tesouro Direto,0.00055927012
+Tesouro IGPM+ com Juros Semestrais,01/01/2031,Recompra TD,276.46000000000004,2594740.66,Tesouro Direto,0.0025947406600000003
+Tesouro IGPM+ com Juros Semestrais,01/01/2031,Recompra TD,76.36,688034.5599999999,Tesouro Direto,0.00068803456
+Tesouro IGPM+ com Juros Semestrais,01/04/2021,Recompra TD,565.21,2388943.78,Tesouro Direto,0.0023889437799999996
+Tesouro IGPM+ com Juros Semestrais,01/04/2021,Recompra TD,545.13,2537035.31,Tesouro Direto,0.00253703531
+Tesouro IGPM+ com Juros Semestrais,01/04/2021,Recompra TD,26.950000000000003,145345.46,Tesouro Direto,0.00014534546
+Tesouro IPCA+,15/05/2019,Recompra TD,356171.24,1134939868.15,Tesouro Direto,1.13493986815
+Tesouro IPCA+,15/05/2035,Recompra TD,1540899.55,2678931694.58,Tesouro Direto,2.67893169458
+Tesouro IPCA+,15/05/2035,Recompra TD,1151511.32,2156273659.05,Tesouro Direto,2.15627365905
+Tesouro IPCA+,15/05/2035,Recompra TD,896129.42,1759126764.5,Tesouro Direto,1.7591267645
+Tesouro IPCA+,15/05/2035,Recompra TD,758323.45,1425392555.15,Tesouro Direto,1.4253925551500002
+Tesouro IPCA+,15/05/2045,Recompra TD,725499.46,854812766.2,Tesouro Direto,0.8548127662
+Tesouro IPCA+,15/05/2045,Recompra TD,623361.12,800369521.84,Tesouro Direto,0.80036952184
+Tesouro IPCA+,15/05/2045,Recompra TD,382920.0,498185528.2,Tesouro Direto,0.4981855282
+Tesouro IPCA+,15/05/2045,Recompra TD,319091.51,336831210.02,Tesouro Direto,0.33683121002
+Tesouro IPCA+,15/08/2024,Recompra TD,797871.49,2188392401.26,Tesouro Direto,2.1883924012600002
+Tesouro IPCA+,15/08/2024,Recompra TD,748089.63,2254693554.04,Tesouro Direto,2.25469355404
+Tesouro IPCA+,15/08/2024,Recompra TD,513362.4,1645034951.28,Tesouro Direto,1.64503495128
+Tesouro IPCA+,15/08/2024,Recompra TD,471532.44,1636175439.88,Tesouro Direto,1.6361754398800001
+Tesouro IPCA+,15/08/2026,Recompra TD,100046.48,282282144.94,Tesouro Direto,0.28228214494
+Tesouro IPCA+,15/08/2026,Recompra TD,344361.84,1007471070.38,Tesouro Direto,1.00747107038
+Tesouro IPCA+,15/08/2026,Recompra TD,654048.2,2047905048.71,Tesouro Direto,2.04790504871
+Tesouro IPCA+ com Juros Semestrais,15/05/2035,Recompra TD,102565.9,419602396.54,Tesouro Direto,0.41960239654000003
+Tesouro IPCA+ com Juros Semestrais,15/05/2035,Recompra TD,80746.05,339799352.76,Tesouro Direto,0.33979935276
+Tesouro IPCA+ com Juros Semestrais,15/05/2035,Recompra TD,52148.65,221296196.8,Tesouro Direto,0.2212961968
+Tesouro IPCA+ com Juros Semestrais,15/05/2035,Recompra TD,36141.58,145148889.66,Tesouro Direto,0.14514888966
+Tesouro IPCA+ com Juros Semestrais,15/05/2045,Recompra TD,3320.35,14183425.52,Tesouro Direto,0.01418342552
+Tesouro IPCA+ com Juros Semestrais,15/05/2045,Recompra TD,3181.18,13960358.95,Tesouro Direto,0.01396035895
+Tesouro IPCA+ com Juros Semestrais,15/05/2045,Recompra TD,4577.52,19777350.07,Tesouro Direto,0.01977735007
+Tesouro IPCA+ com Juros Semestrais,15/05/2045,Recompra TD,1677.96,6746240.26,Tesouro Direto,0.0067462402599999995
+Tesouro IPCA+ com Juros Semestrais,15/05/2055,Recompra TD,33779.23,150850396.09,Tesouro Direto,0.15085039609
+Tesouro IPCA+ com Juros Semestrais,15/05/2055,Recompra TD,59586.86,262954367.45,Tesouro Direto,0.26295436745
+Tesouro IPCA+ com Juros Semestrais,15/05/2055,Recompra TD,64161.14,256688726.96,Tesouro Direto,0.25668872696
+Tesouro IPCA+ com Juros Semestrais,15/08/2020,Recompra TD,89439.39,303905177.74,Tesouro Direto,0.30390517774000003
+Tesouro IPCA+ com Juros Semestrais,15/08/2020,Recompra TD,64533.88,218967730.59,Tesouro Direto,0.21896773059
+Tesouro IPCA+ com Juros Semestrais,15/08/2024,Recompra TD,2444.35,9004164.05,Tesouro Direto,0.009004164050000001
+Tesouro IPCA+ com Juros Semestrais,15/08/2024,Recompra TD,3653.19,14118527.7,Tesouro Direto,0.0141185277
+Tesouro IPCA+ com Juros Semestrais,15/08/2024,Recompra TD,2307.41,8959393.62,Tesouro Direto,0.008959393619999999
+Tesouro IPCA+ com Juros Semestrais,15/08/2024,Recompra TD,3069.74,12169589.47,Tesouro Direto,0.01216958947
+Tesouro IPCA+ com Juros Semestrais,15/08/2026,Recompra TD,104543.95,394934775.93,Tesouro Direto,0.39493477593
+Tesouro IPCA+ com Juros Semestrais,15/08/2026,Recompra TD,101063.02,398283905.12,Tesouro Direto,0.39828390512
+Tesouro IPCA+ com Juros Semestrais,15/08/2026,Recompra TD,65806.99,260157237.2,Tesouro Direto,0.2601572372
+Tesouro IPCA+ com Juros Semestrais,15/08/2026,Recompra TD,60135.18,241606633.43,Tesouro Direto,0.24160663343
+Tesouro IPCA+ com Juros Semestrais,15/08/2030,Recompra TD,16265.37,66962828.7,Tesouro Direto,0.0669628287
+Tesouro IPCA+ com Juros Semestrais,15/08/2030,Recompra TD,53398.38,216505359.11,Tesouro Direto,0.21650535911000002
+Tesouro IPCA+ com Juros Semestrais,15/08/2030,Recompra TD,86923.63,350516887.43,Tesouro Direto,0.35051688743000003
+Tesouro IPCA+ com Juros Semestrais,15/08/2032,Recompra TD,20422.920000000002,82259679.02,Tesouro Direto,0.08225967901999999
+Tesouro IPCA+ com Juros Semestrais,15/08/2040,Recompra TD,10663.42,45541055.95,Tesouro Direto,0.045541055950000006
+Tesouro IPCA+ com Juros Semestrais,15/08/2040,Recompra TD,24738.83,105508112.06,Tesouro Direto,0.10550811206
+Tesouro IPCA+ com Juros Semestrais,15/08/2040,Recompra TD,31728.55,127824936.87,Tesouro Direto,0.12782493687000002
+Tesouro IPCA+ com Juros Semestrais,15/08/2050,Recompra TD,109404.87,476593620.7,Tesouro Direto,0.4765936207
+Tesouro IPCA+ com Juros Semestrais,15/08/2050,Recompra TD,125499.62,544968203.12,Tesouro Direto,0.54496820312
+Tesouro IPCA+ com Juros Semestrais,15/08/2050,Recompra TD,48171.42,211831521.36,Tesouro Direto,0.21183152136000002
+Tesouro IPCA+ com Juros Semestrais,15/08/2050,Recompra TD,28215.93,112756150.58,Tesouro Direto,0.11275615057999999
+Tesouro Prefixado,01/01/2020,Recompra TD,125441.53,122146977.58,Tesouro Direto,0.12214697758
+Tesouro Prefixado,01/01/2021,Recompra TD,365516.38,332792638.23,Tesouro Direto,0.33279263823
+Tesouro Prefixado,01/01/2021,Recompra TD,321006.69,314885162.51,Tesouro Direto,0.31488516251
+Tesouro Prefixado,01/01/2022,Recompra TD,205864.23,178604431.28,Tesouro Direto,0.17860443128
+Tesouro Prefixado,01/01/2022,Recompra TD,282073.24,264489365.45,Tesouro Direto,0.26448936545
+Tesouro Prefixado,01/01/2022,Recompra TD,213247.0,207889125.0,Tesouro Direto,0.207889125
+Tesouro Prefixado,01/01/2023,Recompra TD,744071.9,585014004.3,Tesouro Direto,0.5850140043
+Tesouro Prefixado,01/01/2023,Recompra TD,852126.53,752769364.91,Tesouro Direto,0.75276936491
+Tesouro Prefixado,01/01/2023,Recompra TD,970948.3,869523832.86,Tesouro Direto,0.86952383286
+Tesouro Prefixado,01/01/2023,Recompra TD,681930.39,641521653.24,Tesouro Direto,0.64152165324
+Tesouro Prefixado,01/01/2025,Recompra TD,1467545.83,988111452.22,Tesouro Direto,0.9881114522200001
+Tesouro Prefixado,01/01/2025,Recompra TD,1335062.94,996759515.0,Tesouro Direto,0.996759515
+Tesouro Prefixado,01/01/2025,Recompra TD,1060936.4,783515184.22,Tesouro Direto,0.78351518422
+Tesouro Prefixado,01/01/2025,Recompra TD,1239269.41,929505920.1,Tesouro Direto,0.9295059201
+Tesouro Prefixado,01/01/2026,Recompra TD,682965.86,480565727.96,Tesouro Direto,0.48056572795999997
+Tesouro Prefixado,01/01/2026,Recompra TD,1159126.37,779818755.33,Tesouro Direto,0.77981875533
+Tesouro Prefixado,01/01/2026,Recompra TD,1119537.93,745896476.78,Tesouro Direto,0.7458964767799999
+Tesouro Prefixado,01/01/2029,Recompra TD,287239.95,136192288.71,Tesouro Direto,0.13619228871
+Tesouro Prefixado,01/07/2024,Recompra TD,433884.41000000003,333503494.97,Tesouro Direto,0.33350349497000004
+Tesouro Prefixado,01/07/2024,Recompra TD,1043163.0599999999,820306315.48,Tesouro Direto,0.82030631548
+Tesouro Prefixado com Juros Semestrais,01/01/2021,Recompra TD,10978.63,11752461.84,Tesouro Direto,0.01175246184
+Tesouro Prefixado com Juros Semestrais,01/01/2021,Recompra TD,16842.67,17763912.3,Tesouro Direto,0.0177639123
+Tesouro Prefixado com Juros Semestrais,01/01/2023,Recompra TD,16983.79,18787953.07,Tesouro Direto,0.018787953070000002
+Tesouro Prefixado com Juros Semestrais,01/01/2023,Recompra TD,19527.53,22065857.08,Tesouro Direto,0.022065857079999997
+Tesouro Prefixado com Juros Semestrais,01/01/2023,Recompra TD,13261.75,14019823.36,Tesouro Direto,0.01401982336
+Tesouro Prefixado com Juros Semestrais,01/01/2023,Recompra TD,15686.69,15873536.55,Tesouro Direto,0.01587353655
+Tesouro Prefixado com Juros Semestrais,01/01/2025,Recompra TD,29080.05,33019620.8,Tesouro Direto,0.0330196208
+Tesouro Prefixado com Juros Semestrais,01/01/2025,Recompra TD,32938.79,38120040.14,Tesouro Direto,0.03812004014
+Tesouro Prefixado com Juros Semestrais,01/01/2025,Recompra TD,23962.53,25583281.64,Tesouro Direto,0.02558328164
+Tesouro Prefixado com Juros Semestrais,01/01/2025,Recompra TD,19658.26,19072529.18,Tesouro Direto,0.01907252918
+Tesouro Prefixado com Juros Semestrais,01/01/2027,Recompra TD,74439.84,84353110.19,Tesouro Direto,0.08435311019
+Tesouro Prefixado com Juros Semestrais,01/01/2027,Recompra TD,57730.18,67795740.7,Tesouro Direto,0.06779574070000001
+Tesouro Prefixado com Juros Semestrais,01/01/2027,Recompra TD,46665.4,49137674.34,Tesouro Direto,0.04913767434000001
+Tesouro Prefixado com Juros Semestrais,01/01/2027,Recompra TD,34151.31,32522257.19,Tesouro Direto,0.03252225719
+Tesouro Prefixado com Juros Semestrais,01/01/2029,Recompra TD,427613.01,500845132.59,Tesouro Direto,0.50084513259
+Tesouro Prefixado com Juros Semestrais,01/01/2029,Recompra TD,377971.24,444806679.97,Tesouro Direto,0.44480667997
+Tesouro Prefixado com Juros Semestrais,01/01/2029,Recompra TD,172326.2,182419067.16,Tesouro Direto,0.18241906716
+Tesouro Prefixado com Juros Semestrais,01/01/2029,Recompra TD,98338.01,91200122.68,Tesouro Direto,0.09120012268000001
+Tesouro Prefixado com Juros Semestrais,01/01/2031,Recompra TD,199171.62,239714956.31,Tesouro Direto,0.23971495631
+Tesouro Prefixado com Juros Semestrais,01/01/2031,Recompra TD,328942.83,340089857.66,Tesouro Direto,0.34008985766000005
+Tesouro Prefixado com Juros Semestrais,01/01/2031,Recompra TD,267959.8,243515882.76,Tesouro Direto,0.24351588276
+Tesouro Prefixado com Juros Semestrais,01/01/2033,Recompra TD,111357.16,98662166.68,Tesouro Direto,0.09866216668000001
+Tesouro Selic,01/03/2021,Recompra TD,117887.59,1202015368.2,Tesouro Direto,1.2020153682
+Tesouro Selic,01/03/2021,Recompra TD,93424.55,991648751.58,Tesouro Direto,0.99164875158
+Tesouro Selic,01/03/2021,Recompra TD,9422.94,101531801.33,Tesouro Direto,0.10153180133
+Tesouro Selic,01/03/2023,Recompra TD,472975.66,4802736814.3,Tesouro Direto,4.8027368143
+Tesouro Selic,01/03/2023,Recompra TD,272861.44,2892214981.91,Tesouro Direto,2.89221498191
+Tesouro Selic,01/03/2023,Recompra TD,119263.22,1297357628.28,Tesouro Direto,1.29735762828
+Tesouro Selic,01/03/2023,Recompra TD,64952.75,769426564.4,Tesouro Direto,0.7694265644
+Tesouro Selic,01/03/2025,Recompra TD,387781.45,3984681304.42,Tesouro Direto,3.98468130442
+Tesouro Selic,01/03/2025,Recompra TD,891294.04,9444935995.94,Tesouro Direto,9.44493599594
+Tesouro Selic,01/03/2025,Recompra TD,470855.45,5083975642.26,Tesouro Direto,5.08397564226
+Tesouro Selic,01/03/2025,Recompra TD,415583.76,4974515782.35,Tesouro Direto,4.97451578235
+Tesouro Selic,01/03/2027,Recompra TD,130124.14,1410109593.02,Tesouro Direto,1.41010959302
+Tesouro Selic,01/03/2027,Recompra TD,435593.36,5171788308.37,Tesouro Direto,5.17178830837
+Tesouro Selic,01/09/2024,Recompra TD,163878.53,1795003128.7,Tesouro Direto,1.7950031287000001
+Tesouro Selic,01/09/2024,Recompra TD,247793.26,2907626707.85,Tesouro Direto,2.90762670785
+BID1194/OCBR-C,18/05/2021,Vencimento,1.0,76933444.5,Vencimento (estoque Mercado — última posição),0.0769334445
+BIRD7227-BR,15/01/2020,Vencimento,1.0,15201318.65,Vencimento (estoque Mercado — última posição),0.01520131865
+ECTN 0001,01/01/2020,Vencimento,90353.0,384680608.09,Vencimento (estoque Mercado — última posição),0.38468060809
+ECTN 0002,01/02/2020,Vencimento,162919.0,688784060.63,Vencimento (estoque Mercado — última posição),0.68878406063
+ECTN 0003,01/03/2020,Vencimento,263811.0,1111659982.35,Vencimento (estoque Mercado — última posição),1.11165998235
+ECTN 0004,01/04/2020,Vencimento,118326.0,503599005.78,Vencimento (estoque Mercado — última posição),0.5035990057799999
+ECTN 0005,01/05/2020,Vencimento,25448.0,108937798.4,Vencimento (estoque Mercado — última posição),0.10893779840000001
+ECTN 0006,01/06/2020,Vencimento,99038.0,424121321.58,Vencimento (estoque Mercado — última posição),0.42412132158
+ECTN 0007,01/07/2020,Vencimento,309935.0,1335351848.15,Vencimento (estoque Mercado — última posição),1.3353518481500002
+ECTN 0008,01/08/2020,Vencimento,9556.0,41429464.64,Vencimento (estoque Mercado — última posição),0.041429464640000004
+ECTN 0009,01/09/2020,Vencimento,21093.0,91757081.16,Vencimento (estoque Mercado — última posição),0.09175708115999999
+ECTN 0010,01/10/2020,Vencimento,66024.0,296092550.88,Vencimento (estoque Mercado — última posição),0.29609255087999997
+ECTN 0011,01/11/2020,Vencimento,45654.0,210714210.84,Vencimento (estoque Mercado — última posição),0.21071421084
+ECTN 0012,01/12/2020,Vencimento,271718.0,1290905046.2,Vencimento (estoque Mercado — última posição),1.2909050462
+ECTN 0101,01/01/2021,Vencimento,49748.0,237297960.0,Vencimento (estoque Mercado — última posição),0.23729796
+ECTN 0102,01/02/2021,Vencimento,2160.0,10502179.2,Vencimento (estoque Mercado — última posição),0.0105021792
+ECTN 0103,01/03/2021,Vencimento,30247.0,150428010.04,Vencimento (estoque Mercado — última posição),0.15042801004
+ECTN 0104,01/04/2021,Vencimento,10098.0,51383168.1,Vencimento (estoque Mercado — última posição),0.0513831681
+ECTN 0105,01/05/2021,Vencimento,14573.0,74559985.63,Vencimento (estoque Mercado — última posição),0.07455998562999999
+ECTN 0106,01/06/2021,Vencimento,60813.0,320853644.91,Vencimento (estoque Mercado — última posição),0.32085364491
+ECTN 0107,01/07/2021,Vencimento,145141.0,763736296.23,Vencimento (estoque Mercado — última posição),0.7637362962300001
+ECTN 0108,01/08/2021,Vencimento,11788.0,61618823.0,Vencimento (estoque Mercado — última posição),0.061618823
+ECTN 0109,01/09/2021,Vencimento,4650.0,24125176.5,Vencimento (estoque Mercado — última posição),0.0241251765
+ECTN 0110,01/10/2021,Vencimento,6664.0,34263222.56,Vencimento (estoque Mercado — última posição),0.03426322256
+ECTN 0111,01/11/2021,Vencimento,112701.0,576374327.19,Vencimento (estoque Mercado — última posição),0.57637432719
+ECTN 0112,01/12/2021,Vencimento,157189.0,795137412.72,Vencimento (estoque Mercado — última posição),0.79513741272
+ECTN 0201,01/01/2022,Vencimento,57515.0,292742722.75,Vencimento (estoque Mercado — última posição),0.29274272275
+ECTN 0202,01/02/2022,Vencimento,19626.0,101312355.9,Vencimento (estoque Mercado — última posição),0.10131235590000001
+ECTN 0203,01/03/2022,Vencimento,35670.0,187459047.9,Vencimento (estoque Mercado — última posição),0.1874590479
+ECTN 0204,01/04/2022,Vencimento,9683.0,51709543.92,Vencimento (estoque Mercado — última posição),0.05170954392
+ECTN 0205,01/05/2022,Vencimento,11649.0,62767724.25,Vencimento (estoque Mercado — última posição),0.06276772425
+ECTN 0206,01/06/2022,Vencimento,51918.0,278872864.38,Vencimento (estoque Mercado — última posição),0.27887286438
+ECTN 0207,01/07/2022,Vencimento,121293.0,645361239.24,Vencimento (estoque Mercado — última posição),0.64536123924
+ECTN 0208,01/08/2022,Vencimento,18980.0,99308484.6,Vencimento (estoque Mercado — última posição),0.0993084846
+ECTN 0209,01/09/2022,Vencimento,28635.0,145390489.95,Vencimento (estoque Mercado — última posição),0.14539048994999998
+ECTN 0210,01/10/2022,Vencimento,222245.0,1091671884.9,Vencimento (estoque Mercado — última posição),1.0916718849
+ECTN 0211,01/11/2022,Vencimento,183645.0,859989334.05,Vencimento (estoque Mercado — última posição),0.85998933405
+ECTN 0212,01/12/2022,Vencimento,66744.0,295419623.04,Vencimento (estoque Mercado — última posição),0.29541962304
+ECTN 9901,01/01/2019,Vencimento,114408.0,545742177.12,Vencimento (estoque Mercado — última posição),0.54574217712
+ECTN 9902,01/02/2019,Vencimento,180169.0,852049829.73,Vencimento (estoque Mercado — última posição),0.85204982973
+ECTN 9903,01/03/2019,Vencimento,57772.0,265940692.16,Vencimento (estoque Mercado — última posição),0.26594069216
+ECTN 9904,01/04/2019,Vencimento,238549.0,1081636032.27,Vencimento (estoque Mercado — última posição),1.08163603227
+ECTN 9905,01/05/2019,Vencimento,117695.0,534562451.35,Vencimento (estoque Mercado — última posição),0.53456245135
+ECTN 9906,01/06/2019,Vencimento,132001.0,604051096.11,Vencimento (estoque Mercado — última posição),0.60405109611
+ECTN 9907,01/07/2019,Vencimento,93120.0,428113612.8,Vencimento (estoque Mercado — última posição),0.4281136128
+ECTN 9908,01/08/2019,Vencimento,348672.0,1584306293.76,Vencimento (estoque Mercado — última posição),1.58430629376
+ECTN 9909,01/09/2019,Vencimento,56017.0,249149611.75,Vencimento (estoque Mercado — última posição),0.24914961175
+ECTN 9910,01/10/2019,Vencimento,39456.0,172865021.76,Vencimento (estoque Mercado — última posição),0.17286502176
+ECTN 9911,01/11/2019,Vencimento,10056.0,43601810.4,Vencimento (estoque Mercado — última posição),0.043601810399999996
+ECTN 9912,01/12/2019,Vencimento,108481.0,461038825.95,Vencimento (estoque Mercado — última posição),0.46103882595
+ESTI980815,15/01/2022,Vencimento,328662.0,284923661.04,Vencimento (estoque Mercado — última posição),0.28492366104
+Euro 2021,01/04/2021,Vencimento,1000000.0,6883250000.0,Vencimento (estoque Mercado — última posição),6.88325
+Global 2019,14/10/2019,Vencimento,639043.0,2769752951.46,Vencimento (estoque Mercado — última posição),2.76975295146
+Global 2020,15/01/2020,Vencimento,86645.0,369516664.4,Vencimento (estoque Mercado — última posição),0.3695166644
+Global 2021,22/01/2021,Vencimento,2713192.0,14405747187.84,Vencimento (estoque Mercado — última posição),14.40574718784
+Global BRL 2022,05/01/2022,Vencimento,2216399.0,2350956583.29,Vencimento (estoque Mercado — última posição),2.35095658329
+HCFTE51001,01/03/2022,Vencimento,237543.0,10501776.03,Vencimento (estoque Mercado — última posição),0.01050177603
+HSTN A805,15/01/2019,Vencimento,284.0,9635168.6,Vencimento (estoque Mercado — última posição),0.009635168599999999
+HSTN A806,15/02/2019,Vencimento,279.0,9533602.98,Vencimento (estoque Mercado — última posição),0.00953360298
+HSTN A807,15/03/2019,Vencimento,275.0,9552774.0,Vencimento (estoque Mercado — última posição),0.009552774
+HSTN A808,15/04/2019,Vencimento,270.0,9579737.7,Vencimento (estoque Mercado — última posição),0.009579737699999999
+HSTN A809,15/05/2019,Vencimento,266.0,9619858.08,Vencimento (estoque Mercado — última posição),0.00961985808
+HSTN A810,15/06/2019,Vencimento,261.0,9586973.7,Vencimento (estoque Mercado — última posição),0.0095869737
+HSTN A811,15/07/2019,Vencimento,257.0,9582414.62,Vencimento (estoque Mercado — última posição),0.009582414619999998
+HSTN A812,15/08/2019,Vencimento,253.0,9548080.85,Vencimento (estoque Mercado — última posição),0.00954808085
+HSTN A813,15/09/2019,Vencimento,248.0,9427330.64,Vencimento (estoque Mercado — última posição),0.00942733064
+HSTN A814,15/10/2019,Vencimento,244.0,9359556.96,Vencimento (estoque Mercado — última posição),0.009359556960000001
+HSTN A815,15/11/2019,Vencimento,240.0,9343231.2,Vencimento (estoque Mercado — última posição),0.0093432312
+HSTN A816,15/12/2019,Vencimento,236.0,9342956.8,Vencimento (estoque Mercado — última posição),0.009342956800000001
+HSTN A817,15/01/2020,Vencimento,232.0,9394420.08,Vencimento (estoque Mercado — última posição),0.00939442008
+HSTN A818,15/02/2020,Vencimento,228.0,9398531.64,Vencimento (estoque Mercado — última posição),0.00939853164
+HSTN A819,15/03/2020,Vencimento,224.0,9330191.36,Vencimento (estoque Mercado — última posição),0.00933019136
+HSTN A820,15/04/2020,Vencimento,198.0,8396384.04,Vencimento (estoque Mercado — última posição),0.00839638404
+HSTN A821,15/05/2020,Vencimento,5.0,215791.55,Vencimento (estoque Mercado — última posição),0.00021579154999999998
+HSTN A822,15/06/2020,Vencimento,4.0,175354.44,Vencimento (estoque Mercado — última posição),0.00017535444
+HSTN A823,15/07/2020,Vencimento,5.0,223988.45,Vencimento (estoque Mercado — última posição),0.00022398845000000002
+HSTN A824,15/08/2020,Vencimento,4.0,184522.48,Vencimento (estoque Mercado — última posição),0.00018452248
+HSTN A825,15/09/2020,Vencimento,4.0,192186.68,Vencimento (estoque Mercado — última posição),0.00019218668
+HSTN A826,15/10/2020,Vencimento,4.0,200845.32,Vencimento (estoque Mercado — última posição),0.00020084532
+HSTN A827,15/11/2020,Vencimento,4.0,210041.76,Vencimento (estoque Mercado — última posição),0.00021004176
+HSTN A828,15/12/2020,Vencimento,4.0,218402.16,Vencimento (estoque Mercado — última posição),0.00021840216
+HSTN A829,15/01/2021,Vencimento,4.0,224335.48,Vencimento (estoque Mercado — última posição),0.00022433548000000002
+HSTN A830,15/02/2021,Vencimento,4.0,230682.92,Vencimento (estoque Mercado — última posição),0.00023068292000000002
+HSTN A831,15/03/2021,Vencimento,4.0,239069.72,Vencimento (estoque Mercado — última posição),0.00023906972
+HSTN A832,15/04/2021,Vencimento,4.0,247542.72,Vencimento (estoque Mercado — última posição),0.00024754272
+HSTN A833,15/05/2021,Vencimento,4.0,255173.0,Vencimento (estoque Mercado — última posição),0.000255173
+HSTN A834,15/06/2021,Vencimento,4.0,265085.64,Vencimento (estoque Mercado — última posição),0.00026508564
+HSTN A835,15/07/2021,Vencimento,4.0,271991.52,Vencimento (estoque Mercado — última posição),0.00027199152
+HSTN A836,15/08/2021,Vencimento,3.0,207669.66,Vencimento (estoque Mercado — última posição),0.00020766966
+HSTN A837,15/09/2021,Vencimento,3.0,210951.75,Vencimento (estoque Mercado — última posição),0.00021095175
+HSTN A838,15/10/2021,Vencimento,4.0,282974.92,Vencimento (estoque Mercado — última posição),0.00028297492
+HSTN A839,15/11/2021,Vencimento,4.0,287347.64,Vencimento (estoque Mercado — última posição),0.00028734764
+HSTN A840,15/12/2021,Vencimento,3.0,218395.26,Vencimento (estoque Mercado — última posição),0.00021839526000000002
+HSTN A841,15/01/2022,Vencimento,4.0,294991.28,Vencimento (estoque Mercado — última posição),0.00029499128
+HSTN A842,15/02/2022,Vencimento,3.0,227015.13,Vencimento (estoque Mercado — última posição),0.00022701513
+HSTN A843,15/03/2022,Vencimento,3.0,233206.83,Vencimento (estoque Mercado — última posição),0.00023320682999999998
+LFT 010319,01/03/2019,Vencimento,6694890.0,66836035402.01,Vencimento (estoque Mercado — última posição),66.83603540201
+LFT 010320,01/03/2020,Vencimento,9749249.0,102778594510.79,Vencimento (estoque Mercado — última posição),102.77859451078999
+LFT 010321,01/03/2021,Vencimento,12821001.81,138354889650.61,Vencimento (estoque Mercado — última posição),138.35488965060998
+LFT 010322,01/03/2022,Vencimento,23577623.0,268889685094.07,Vencimento (estoque Mercado — última posição),268.88968509407
+LFT 010920,01/09/2020,Vencimento,6743327.0,72103598377.81,Vencimento (estoque Mercado — última posição),72.10359837781
+LFT 010921,01/09/2021,Vencimento,21310802.0,234025387940.5,Vencimento (estoque Mercado — última posição),234.0253879405
+LFT 010922,01/09/2022,Vencimento,15022646.0,181799263373.43,Vencimento (estoque Mercado — última posição),181.79926337343
+LTN 010119,01/01/2019,Vencimento,109255623.79,109202964850.61,Vencimento (estoque Mercado — última posição),109.20296485061
+LTN 010120,01/01/2020,Vencimento,91717785.21,91671689719.28,Vencimento (estoque Mercado — última posição),91.67168971928
+LTN 010121,01/01/2021,Vencimento,1117620.95,1117128820.14,Vencimento (estoque Mercado — última posição),1.11712882014
+LTN 010122,01/01/2022,Vencimento,115662411.93,115628356713.72,Vencimento (estoque Mercado — última posição),115.62835671372
+LTN 010419,01/04/2019,Vencimento,121701511.0,121701511000.0,Vencimento (estoque Mercado — última posição),121.701511
+LTN 010420,01/04/2020,Vencimento,116628881.0,116597310961.45,Vencimento (estoque Mercado — última posição),116.59731096144999
+LTN 010421,01/04/2021,Vencimento,283547580.0,283511892134.48,Vencimento (estoque Mercado — última posição),283.51189213448
+LTN 010422,01/04/2022,Vencimento,126205950.0,126182585744.88,Vencimento (estoque Mercado — última posição),126.18258574488
+LTN 010719,01/07/2019,Vencimento,46596952.0,46596952000.0,Vencimento (estoque Mercado — última posição),46.596952
+LTN 010720,01/07/2020,Vencimento,182074677.0,181999643661.45,Vencimento (estoque Mercado — última posição),181.99964366145002
+LTN 010721,01/07/2021,Vencimento,87745152.0,87713647805.13,Vencimento (estoque Mercado — última posição),87.71364780513001
+LTN 010722,01/07/2022,Vencimento,110946026.0,110912457282.8,Vencimento (estoque Mercado — última posição),110.9124572828
+LTN 011019,01/10/2019,Vencimento,106790750.0,106758383645.9,Vencimento (estoque Mercado — última posição),106.7583836459
+LTN 011020,01/10/2020,Vencimento,92136971.0,92116255844.81,Vencimento (estoque Mercado — última posição),92.11625584481
+LTN 011021,01/10/2021,Vencimento,267708017.0,267673207997.38,Vencimento (estoque Mercado — última posição),267.67320799738
+LTN 011022,01/10/2022,Vencimento,105841709.0,105817398535.38,Vencimento (estoque Mercado — última posição),105.81739853538001
+NTN-B 150519,15/05/2019,Vencimento,22812535.0,75345716695.6,Vencimento (estoque Mercado — última posição),75.3457166956
+NTN-B 150521,15/05/2021,Vencimento,22074104.0,79785904445.38,Vencimento (estoque Mercado — última posição),79.78590444538
+NTN-B 150820,15/08/2020,Vencimento,18730588.48,63557340083.03,Vencimento (estoque Mercado — última posição),63.55734008303
+NTN-B 150822,15/08/2022,Vencimento,42321739.0,173279573113.57,Vencimento (estoque Mercado — última posição),173.27957311357
+NTN-B Principal 150519,15/05/2019,Vencimento,2576008.26,8263454268.95,Vencimento (estoque Mercado — última posição),8.26345426895
+NTN-C 010421,01/04/2021,Vencimento,8276956.64,46870147190.4,Vencimento (estoque Mercado — última posição),46.870147190400004
+NTN-F 010119,01/01/2019,Vencimento,11168201.0,11708420585.75,Vencimento (estoque Mercado — última posição),11.70842058575
+NTN-F 010121,01/01/2021,Vencimento,99710849.67,104528636235.5,Vencimento (estoque Mercado — última posição),104.5286362355
+NTN-I 150119,15/01/2019,Vencimento,9936679.0,66651367.42,Vencimento (estoque Mercado — última posição),0.06665136742
+NTN-I 150120,15/01/2020,Vencimento,8341856.0,60436696.66,Vencimento (estoque Mercado — última posição),0.06043669666
+NTN-I 150121,15/01/2021,Vencimento,6846871.0,66520124.74,Vencimento (estoque Mercado — última posição),0.06652012474
+NTN-I 150122,15/01/2022,Vencimento,5868484.0,63408764.22,Vencimento (estoque Mercado — última posição),0.06340876422
+NTN-I 150219,15/02/2019,Vencimento,9691217.0,62496749.26,Vencimento (estoque Mercado — última posição),0.06249674926
+NTN-I 150220,15/02/2020,Vencimento,7378143.0,56541513.5,Vencimento (estoque Mercado — última posição),0.0565415135
+NTN-I 150221,15/02/2021,Vencimento,5474959.0,56215784.02,Vencimento (estoque Mercado — última posição),0.056215784020000006
+NTN-I 150222,15/02/2022,Vencimento,4918639.0,51530367.41,Vencimento (estoque Mercado — última posição),0.05153036741
+NTN-I 150319,15/03/2019,Vencimento,8914144.0,58031255.72,Vencimento (estoque Mercado — última posição),0.05803125572
+NTN-I 150320,15/03/2020,Vencimento,7173482.0,58363191.3,Vencimento (estoque Mercado — última posição),0.0583631913
+NTN-I 150321,15/03/2021,Vencimento,5993306.0,62322884.77,Vencimento (estoque Mercado — última posição),0.06232288477
+NTN-I 150322,15/03/2022,Vencimento,6223719.0,62277849.55,Vencimento (estoque Mercado — última posição),0.06227784955
+NTN-I 150419,15/04/2019,Vencimento,11349736.0,77293699.71,Vencimento (estoque Mercado — última posição),0.07729369971
+NTN-I 150420,15/04/2020,Vencimento,9249087.0,86565775.38,Vencimento (estoque Mercado — última posição),0.08656577538
+NTN-I 150421,15/04/2021,Vencimento,7252619.0,78853643.16,Vencimento (estoque Mercado — última posição),0.07885364316
+NTN-I 150422,15/04/2022,Vencimento,5877569.0,54517585.21,Vencimento (estoque Mercado — última posição),0.054517585210000004
+NTN-I 150519,15/05/2019,Vencimento,9998053.0,68999843.11,Vencimento (estoque Mercado — última posição),0.06899984311
+NTN-I 150520,15/05/2020,Vencimento,8247158.0,81470861.6,Vencimento (estoque Mercado — última posição),0.0814708616
+NTN-I 150521,15/05/2021,Vencimento,6542900.0,66417370.47,Vencimento (estoque Mercado — última posição),0.06641737047
+NTN-I 150522,15/05/2022,Vencimento,5507977.0,53059642.32,Vencimento (estoque Mercado — última posição),0.05305964232
+NTN-I 150619,15/06/2019,Vencimento,8240970.0,57543141.65,Vencimento (estoque Mercado — última posição),0.05754314165
+NTN-I 150620,15/06/2020,Vencimento,6224314.0,61670702.29,Vencimento (estoque Mercado — última posição),0.06167070229
+NTN-I 150621,15/06/2021,Vencimento,5449746.0,54057856.23,Vencimento (estoque Mercado — última posição),0.05405785623
+NTN-I 150622,15/06/2022,Vencimento,4512063.0,41840901.64,Vencimento (estoque Mercado — última posição),0.04184090164
+NTN-I 150719,15/07/2019,Vencimento,9724327.0,65746515.19,Vencimento (estoque Mercado — última posição),0.06574651519
+NTN-I 150720,15/07/2020,Vencimento,7468734.0,74622959.51,Vencimento (estoque Mercado — última posição),0.07462295951
+NTN-I 150721,15/07/2021,Vencimento,6095894.0,57357699.18,Vencimento (estoque Mercado — última posição),0.05735769918
+NTN-I 150722,15/07/2022,Vencimento,5386207.0,55445016.98,Vencimento (estoque Mercado — última posição),0.05544501698
+NTN-I 150819,15/08/2019,Vencimento,8922808.0,59823198.22,Vencimento (estoque Mercado — última posição),0.05982319822
+NTN-I 150820,15/08/2020,Vencimento,6260914.0,59773628.39,Vencimento (estoque Mercado — última posição),0.05977362839
+NTN-I 150821,15/08/2021,Vencimento,5324316.0,52040806.98,Vencimento (estoque Mercado — última posição),0.05204080698
+NTN-I 150822,15/08/2022,Vencimento,4684388.0,48003514.3,Vencimento (estoque Mercado — última posição),0.048003514299999994
+NTN-I 150919,15/09/2019,Vencimento,7765972.0,57058196.07,Vencimento (estoque Mercado — última posição),0.05705819607
+NTN-I 150920,15/09/2020,Vencimento,6382251.0,64466574.85,Vencimento (estoque Mercado — última posição),0.06446657485
+NTN-I 150921,15/09/2021,Vencimento,6357642.0,63217213.22,Vencimento (estoque Mercado — última posição),0.06321721322
+NTN-I 150922,15/09/2022,Vencimento,5785622.0,58003342.58,Vencimento (estoque Mercado — última posição),0.05800334258
+NTN-I 151019,15/10/2019,Vencimento,10192047.0,75449043.43,Vencimento (estoque Mercado — última posição),0.07544904343
+NTN-I 151020,15/10/2020,Vencimento,7776029.0,81441306.6,Vencimento (estoque Mercado — última posição),0.0814413066
+NTN-I 151021,15/10/2021,Vencimento,6479307.0,67373168.92,Vencimento (estoque Mercado — última posição),0.06737316892
+NTN-I 151022,15/10/2022,Vencimento,5271835.0,56452469.8,Vencimento (estoque Mercado — última posição),0.056452469799999995
+NTN-I 151119,15/11/2019,Vencimento,9192117.0,65958651.4,Vencimento (estoque Mercado — última posição),0.0659586514
+NTN-I 151120,15/11/2020,Vencimento,6587277.0,70658051.26,Vencimento (estoque Mercado — última posição),0.07065805126000001
+NTN-I 151121,15/11/2021,Vencimento,6003053.0,65212845.59,Vencimento (estoque Mercado — última posição),0.06521284559
+NTN-I 151122,15/11/2022,Vencimento,4985763.0,53082077.49,Vencimento (estoque Mercado — última posição),0.053082077490000004
+NTN-I 151219,15/12/2019,Vencimento,7393849.0,55964641.98,Vencimento (estoque Mercado — última posição),0.05596464197999999
+NTN-I 151220,15/12/2020,Vencimento,5818202.0,58011453.59,Vencimento (estoque Mercado — última posição),0.058011453590000005
+NTN-I 151221,15/12/2021,Vencimento,5009766.0,54275248.75,Vencimento (estoque Mercado — última posição),0.05427524875
+NTN-I 151222,15/12/2022,Vencimento,4386680.0,46500799.55,Vencimento (estoque Mercado — última posição),0.04650079955
+NTN-P 010120-010104,01/01/2020,Vencimento,405583.0,1232823.06,Vencimento (estoque Mercado — última posição),0.00123282306
+NTN-P 010121-010105,01/01/2021,Vencimento,38438914.0,114750536.79,Vencimento (estoque Mercado — última posição),0.11475053679000001
+TDA19010200,01/01/2019,Vencimento,11734.0,1180323.06,Vencimento (estoque Mercado — última posição),0.00118032306
+TDA19010300,01/01/2019,Vencimento,4909.0,498558.04,Vencimento (estoque Mercado — última posição),0.00049855804
+TDA19020300,01/02/2019,Vencimento,13.0,1320.28,Vencimento (estoque Mercado — última posição),1.32028e-06
+TDA19030100,01/03/2019,Vencimento,19232.0,1915507.2,Vencimento (estoque Mercado — última posição),0.0019155072
+TDA19030300,01/03/2019,Vencimento,4560.0,463113.6,Vencimento (estoque Mercado — última posição),0.00046311359999999996
+TDA19030600,01/03/2019,Vencimento,96709.0,10107057.59,Vencimento (estoque Mercado — última posição),0.01010705759
+TDA19040300,01/04/2019,Vencimento,1027.0,104322.66,Vencimento (estoque Mercado — última posição),0.00010432266
+TDA19040600,01/04/2019,Vencimento,60926.0,6369204.04,Vencimento (estoque Mercado — última posição),0.00636920404
+TDA19050200,01/05/2019,Vencimento,1312.0,131974.08,Vencimento (estoque Mercado — última posição),0.00013197407999999999
+TDA19050300,01/05/2019,Vencimento,194.0,21995.72,Vencimento (estoque Mercado — última posição),2.199572e-05
+TDA19050600,01/05/2019,Vencimento,40921.0,4276653.71,Vencimento (estoque Mercado — última posição),0.00427665371
+TDA19060100,01/06/2019,Vencimento,9277.0,923989.2,Vencimento (estoque Mercado — última posição),0.0009239891999999999
+TDA19060200,01/06/2019,Vencimento,7925.0,797175.75,Vencimento (estoque Mercado — última posição),0.00079717575
+TDA19060300,01/06/2019,Vencimento,458.0,46514.48,Vencimento (estoque Mercado — última posição),4.651448e-05
+TDA19060600,01/06/2019,Vencimento,44303.0,4630106.53,Vencimento (estoque Mercado — última posição),0.004630106530000001
+TDA19070200,01/07/2019,Vencimento,192.0,19315.2,Vencimento (estoque Mercado — última posição),1.93152e-05
+TDA19070300,01/07/2019,Vencimento,15851.0,1610144.58,Vencimento (estoque Mercado — última posição),0.00161014458
+TDA19070600,01/07/2019,Vencimento,160103.0,16737167.62,Vencimento (estoque Mercado — última posição),0.01673716762
+TDA19080100,01/08/2019,Vencimento,490.0,48804.0,Vencimento (estoque Mercado — última posição),4.8804e-05
+TDA19080200,01/08/2019,Vencimento,5.0,502.95,Vencimento (estoque Mercado — última posição),5.0295e-07
+TDA19080300,01/08/2019,Vencimento,18767.0,1905976.52,Vencimento (estoque Mercado — última posição),0.00190597652
+TDA19080600,01/08/2019,Vencimento,29613.0,3094854.63,Vencimento (estoque Mercado — última posição),0.00309485463
+TDA19090300,01/09/2019,Vencimento,1232.0,125146.56,Vencimento (estoque Mercado — última posição),0.00012514656
+TDA19090600,01/09/2019,Vencimento,2782.0,290830.28,Vencimento (estoque Mercado — última posição),0.00029083028
+TDA19100200,01/10/2019,Vencimento,5764.0,579800.76,Vencimento (estoque Mercado — última posição),0.00057980076
+TDA19100300,01/10/2019,Vencimento,15529.0,1577125.24,Vencimento (estoque Mercado — última posição),0.00157712524
+TDA19100600,01/10/2019,Vencimento,237947.0,24867840.97,Vencimento (estoque Mercado — última posição),0.02486784097
+TDA19110300,01/11/2019,Vencimento,10796.0,1096441.76,Vencimento (estoque Mercado — última posição),0.00109644176
+TDA19110600,01/11/2019,Vencimento,8541.0,892619.91,Vencimento (estoque Mercado — última posição),0.00089261991
+TDA19120100,01/12/2019,Vencimento,2034.0,202606.74,Vencimento (estoque Mercado — última posição),0.00020260674
+TDA19120200,01/12/2019,Vencimento,14090.0,1417454.0,Vencimento (estoque Mercado — última posição),0.001417454
+TDA19120300,01/12/2019,Vencimento,418.0,43793.86,Vencimento (estoque Mercado — última posição),4.379386e-05
+TDA19120600,01/12/2019,Vencimento,184694.0,19307910.76,Vencimento (estoque Mercado — última posição),0.01930791076
+TDA20010300,01/01/2020,Vencimento,2628.0,294912.88,Vencimento (estoque Mercado — última posição),0.00029491288
+TDA20020300,01/02/2020,Vencimento,13.0,1320.28,Vencimento (estoque Mercado — última posição),1.32028e-06
+TDA20030100,01/03/2020,Vencimento,19232.0,1915699.52,Vencimento (estoque Mercado — última posição),0.00191569952
+TDA20030300,01/03/2020,Vencimento,5035.0,511455.3,Vencimento (estoque Mercado — última posição),0.0005114553
+TDA20030600,01/03/2020,Vencimento,96709.0,10109958.86,Vencimento (estoque Mercado — última posição),0.010109958859999999
+TDA20040300,01/04/2020,Vencimento,1027.0,104302.12,Vencimento (estoque Mercado — última posição),0.00010430212
+TDA20040600,01/04/2020,Vencimento,47037.0,4915836.87,Vencimento (estoque Mercado — última posição),0.00491583687
+TDA20050200,01/05/2020,Vencimento,1312.0,131974.08,Vencimento (estoque Mercado — última posição),0.00013197407999999999
+TDA20050300,01/05/2020,Vencimento,3617.0,367342.52,Vencimento (estoque Mercado — última posição),0.00036734252000000003
+TDA20050600,01/05/2020,Vencimento,44232.0,4622686.32,Vencimento (estoque Mercado — última posição),0.0046226863200000004
+TDA20060100,01/06/2020,Vencimento,9266.0,922986.26,Vencimento (estoque Mercado — última posição),0.00092298626
+TDA20060200,01/06/2020,Vencimento,7926.0,797355.6,Vencimento (estoque Mercado — última posição),0.0007973556
+TDA20060300,01/06/2020,Vencimento,6211.0,630913.38,Vencimento (estoque Mercado — última posição),0.00063091338
+TDA20060600,01/06/2020,Vencimento,21664.0,2264754.56,Vencimento (estoque Mercado — última posição),0.0022647545600000003
+TDA20070200,01/07/2020,Vencimento,192.0,19311.36,Vencimento (estoque Mercado — última posição),1.931136e-05
+TDA20070300,01/07/2020,Vencimento,12179.0,1237021.03,Vencimento (estoque Mercado — última posição),0.00123702103
+TDA20070600,01/07/2020,Vencimento,29024.0,3033588.48,Vencimento (estoque Mercado — última posição),0.00303358848
+TDA20080100,01/08/2020,Vencimento,490.0,48804.0,Vencimento (estoque Mercado — última posição),4.8804e-05
+TDA20080200,01/08/2020,Vencimento,5.0,502.95,Vencimento (estoque Mercado — última posição),5.0295e-07
+TDA20080300,01/08/2020,Vencimento,19034.0,1933283.38,Vencimento (estoque Mercado — última posição),0.0019332833799999998
+TDA20080600,01/08/2020,Vencimento,30031.0,3139140.43,Vencimento (estoque Mercado — última posição),0.0031391404300000003
+TDA20090300,01/09/2020,Vencimento,1152.0,117020.16,Vencimento (estoque Mercado — última posição),0.00011702016
+TDA20090600,01/09/2020,Vencimento,981.0,102553.74,Vencimento (estoque Mercado — última posição),0.00010255374
+TDA20100200,01/10/2020,Vencimento,5764.0,579800.76,Vencimento (estoque Mercado — última posição),0.00057980076
+TDA20100300,01/10/2020,Vencimento,7611.0,773125.38,Vencimento (estoque Mercado — última posição),0.00077312538
+TDA20100600,01/10/2020,Vencimento,18253.0,1907986.09,Vencimento (estoque Mercado — última posição),0.00190798609
+TDA20110300,01/11/2020,Vencimento,7584.0,770382.72,Vencimento (estoque Mercado — última posição),0.00077038272
+TDA20110600,01/11/2020,Vencimento,14721.0,1538933.34,Vencimento (estoque Mercado — última posição),0.00153893334
+TDA20120100,01/12/2020,Vencimento,2034.0,202606.74,Vencimento (estoque Mercado — última posição),0.00020260674
+TDA20120200,01/12/2020,Vencimento,14090.0,1417313.1,Vencimento (estoque Mercado — última posição),0.0014173131000000002
+TDA20120300,01/12/2020,Vencimento,53070.0,5390850.6,Vencimento (estoque Mercado — última posição),0.005390850599999999
+TDA20120600,01/12/2020,Vencimento,173392.0,18124665.76,Vencimento (estoque Mercado — última posição),0.018124665760000002
+TDA21010300,01/01/2021,Vencimento,1284.0,130428.72,Vencimento (estoque Mercado — última posição),0.00013042872
+TDA21020300,01/02/2021,Vencimento,13.0,1320.54,Vencimento (estoque Mercado — última posição),1.32054e-06
+TDA21030100,01/03/2021,Vencimento,19232.0,1915507.2,Vencimento (estoque Mercado — última posição),0.0019155072
+TDA21030300,01/03/2021,Vencimento,4868.0,494394.08,Vencimento (estoque Mercado — última posição),0.00049439408
+TDA21030600,01/03/2021,Vencimento,96711.0,10105332.39,Vencimento (estoque Mercado — última posição),0.010105332390000001
+TDA21040300,01/04/2021,Vencimento,1027.0,104322.66,Vencimento (estoque Mercado — última posição),0.00010432266
+TDA21040600,01/04/2021,Vencimento,47037.0,4917247.98,Vencimento (estoque Mercado — última posição),0.004917247980000001
+TDA21050200,01/05/2021,Vencimento,1312.0,131974.08,Vencimento (estoque Mercado — última posição),0.00013197407999999999
+TDA21050300,01/05/2021,Vencimento,3617.0,367414.86,Vencimento (estoque Mercado — última posição),0.00036741485999999997
+TDA21050600,01/05/2021,Vencimento,4490.0,469339.7,Vencimento (estoque Mercado — última posição),0.0004693397
+TDA21060100,01/06/2021,Vencimento,9316.0,927966.76,Vencimento (estoque Mercado — última posição),0.00092796676
+TDA21060300,01/06/2021,Vencimento,6167.0,626443.86,Vencimento (estoque Mercado — última posição),0.00062644386
+TDA21060600,01/06/2021,Vencimento,21666.0,2264963.64,Vencimento (estoque Mercado — última posição),0.00226496364
+TDA21070200,01/07/2021,Vencimento,192.0,19313.28,Vencimento (estoque Mercado — última posição),1.931328e-05
+TDA21070300,01/07/2021,Vencimento,11998.0,1218756.84,Vencimento (estoque Mercado — última posição),0.00121875684
+TDA21080100,01/08/2021,Vencimento,490.0,48808.9,Vencimento (estoque Mercado — última posição),4.88089e-05
+TDA21080200,01/08/2021,Vencimento,5.0,503.0,Vencimento (estoque Mercado — última posição),5.03e-07
+TDA21080300,01/08/2021,Vencimento,19034.0,1933473.72,Vencimento (estoque Mercado — última posição),0.00193347372
+TDA21080600,01/08/2021,Vencimento,26061.0,2724416.94,Vencimento (estoque Mercado — última posição),0.00272441694
+TDA21090300,01/09/2021,Vencimento,1103.0,112042.74,Vencimento (estoque Mercado — última posição),0.00011204274
+TDA21100200,01/10/2021,Vencimento,5764.0,579800.76,Vencimento (estoque Mercado — última posição),0.00057980076
+TDA21100300,01/10/2021,Vencimento,5030.0,510947.4,Vencimento (estoque Mercado — última posição),0.0005109474
+TDA21100600,01/10/2021,Vencimento,4829.0,504775.37,Vencimento (estoque Mercado — última posição),0.00050477537
+TDA21110300,01/11/2021,Vencimento,7938.0,806342.04,Vencimento (estoque Mercado — última posição),0.00080634204
+TDA21110600,01/11/2021,Vencimento,14725.0,1539351.5,Vencimento (estoque Mercado — última posição),0.0015393515
+TDA21120100,01/12/2021,Vencimento,2038.0,203005.18,Vencimento (estoque Mercado — última posição),0.00020300517999999998
+TDA21120200,01/12/2021,Vencimento,14090.0,1417313.1,Vencimento (estoque Mercado — última posição),0.0014173131000000002
+TDA21120300,01/12/2021,Vencimento,50538.0,5133650.04,Vencimento (estoque Mercado — última posição),0.00513365004
+TDA21120600,01/12/2021,Vencimento,24785.0,2590776.05,Vencimento (estoque Mercado — última posição),0.0025907760499999997
+TDA22010300,01/01/2022,Vencimento,1232.0,125208.16,Vencimento (estoque Mercado — última posição),0.00012520816
+TDA22020300,01/02/2022,Vencimento,13.0,1321.84,Vencimento (estoque Mercado — última posição),1.3218399999999998e-06
+TDA22030100,01/03/2022,Vencimento,18253.0,1819641.57,Vencimento (estoque Mercado — última posição),0.00181964157
+TDA22030300,01/03/2022,Vencimento,4868.0,494832.2,Vencimento (estoque Mercado — última posição),0.0004948322
+TDA22040300,01/04/2022,Vencimento,1035.0,105331.95,Vencimento (estoque Mercado — última posição),0.00010533195
+TDA22040600,01/04/2022,Vencimento,17947.0,1879589.31,Vencimento (estoque Mercado — última posição),0.0018795893100000001
+TDA22050200,01/05/2022,Vencimento,1312.0,132288.96,Vencimento (estoque Mercado — última posição),0.00013228896
+TDA22050300,01/05/2022,Vencimento,3617.0,368246.77,Vencimento (estoque Mercado — última posição),0.00036824677000000004
+TDA22050600,01/05/2022,Vencimento,4494.0,470836.38,Vencimento (estoque Mercado — última posição),0.00047083638000000003
+TDA22060300,01/06/2022,Vencimento,246.0,25087.08,Vencimento (estoque Mercado — última posição),2.508708e-05
+TDA22060600,01/06/2022,Vencimento,6534.0,685743.3,Vencimento (estoque Mercado — última posição),0.0006857433
+TDA22070200,01/07/2022,Vencimento,192.0,19415.04,Vencimento (estoque Mercado — última posição),1.9415040000000002e-05
+TDA22070300,01/07/2022,Vencimento,11998.0,1225115.78,Vencimento (estoque Mercado — última posição),0.00122511578
+TDA22080100,01/08/2022,Vencimento,490.0,49151.9,Vencimento (estoque Mercado — última posição),4.91519e-05
+TDA22080200,01/08/2022,Vencimento,5.0,506.5,Vencimento (estoque Mercado — última posição),5.065e-07
+TDA22080300,01/08/2022,Vencimento,16421.0,1679704.09,Vencimento (estoque Mercado — última posição),0.00167970409
+TDA22080600,01/08/2022,Vencimento,413.0,43476.51,Vencimento (estoque Mercado — última posição),4.3476510000000004e-05
+TDA22090300,01/09/2022,Vencimento,869.0,89089.88,Vencimento (estoque Mercado — última posição),8.908988000000001e-05
+TDA22100200,01/10/2022,Vencimento,5764.0,586198.8,Vencimento (estoque Mercado — última posição),0.0005861988000000001
+TDA22100300,01/10/2022,Vencimento,5036.0,517197.2,Vencimento (estoque Mercado — última posição),0.0005171972
+TDA22100600,01/10/2022,Vencimento,4829.0,510328.72,Vencimento (estoque Mercado — última posição),0.0005103287199999999
+TDA22110300,01/11/2022,Vencimento,7584.0,780014.4,Vencimento (estoque Mercado — última posição),0.0007800144
+TDA22110600,01/11/2022,Vencimento,3481.0,368463.85,Vencimento (estoque Mercado — última posição),0.00036846385
+TDA22120200,01/12/2022,Vencimento,14090.0,1437039.1,Vencimento (estoque Mercado — última posição),0.0014370391
+TDA22120300,01/12/2022,Vencimento,50431.0,5193888.69,Vencimento (estoque Mercado — última posição),0.0051938886900000005
+TDA22120600,01/12/2022,Vencimento,24795.0,2627774.1,Vencimento (estoque Mercado — última posição),0.0026277741000000003
+TDAD00H417,01/08/2019,Vencimento,263.0,26194.8,Vencimento (estoque Mercado — última posição),2.61948e-05
+TDAD00H418,01/08/2020,Vencimento,294.0,29282.4,Vencimento (estoque Mercado — última posição),2.9282400000000003e-05
+TDAD00I417,01/09/2019,Vencimento,1388.0,138258.68,Vencimento (estoque Mercado — última posição),0.00013825867999999998
+TDAD00I418,01/09/2020,Vencimento,1417.0,141147.37,Vencimento (estoque Mercado — última posição),0.00014114737
+TDAD00K417,01/11/2019,Vencimento,1276.0,127089.6,Vencimento (estoque Mercado — última posição),0.0001270896
+TDAD00K418,01/11/2020,Vencimento,1301.0,129592.61,Vencimento (estoque Mercado — última posição),0.00012959261
+TDAD00L417,01/12/2019,Vencimento,330.0,32871.3,Vencimento (estoque Mercado — última posição),3.2871300000000005e-05
+TDAD00L418,01/12/2020,Vencimento,331.0,32970.91,Vencimento (estoque Mercado — última posição),3.297091e-05
+TDAD01A416,01/01/2019,Vencimento,151.0,15039.6,Vencimento (estoque Mercado — última posição),1.50396e-05
+TDAD01A417,01/01/2020,Vencimento,145.0,14442.0,Vencimento (estoque Mercado — última posição),1.4442e-05
+TDAD01A418,01/01/2021,Vencimento,155.0,15439.55,Vencimento (estoque Mercado — última posição),1.543955e-05
+TDAD01B340,01/02/2019,Vencimento,2822.0,283864.98,Vencimento (estoque Mercado — última posição),0.00028386498
+TDAD01C416,01/03/2019,Vencimento,347.0,34561.2,Vencimento (estoque Mercado — última posição),3.45612e-05
+TDAD01C417,01/03/2020,Vencimento,347.0,34536.91,Vencimento (estoque Mercado — última posição),3.4536910000000005e-05
+TDAD01C418,01/03/2021,Vencimento,365.0,36335.75,Vencimento (estoque Mercado — última posição),3.633575e-05
+TDAD01D340,01/04/2019,Vencimento,2503.0,251801.8,Vencimento (estoque Mercado — última posição),0.0002518018
+TDAD01D416,01/04/2019,Vencimento,7136.0,710816.96,Vencimento (estoque Mercado — última posição),0.0007108169599999999
+TDAD01D417,01/04/2020,Vencimento,7136.0,710745.6,Vencimento (estoque Mercado — última posição),0.0007107456
+TDAD01D418,01/04/2021,Vencimento,7151.0,712311.11,Vencimento (estoque Mercado — última posição),0.00071231111
+TDAD01E340,01/05/2019,Vencimento,1381.0,138914.79,Vencimento (estoque Mercado — última posição),0.00013891479
+TDAD01E416,01/05/2019,Vencimento,953.0,94918.8,Vencimento (estoque Mercado — última posição),9.49188e-05
+TDAD01E417,01/05/2020,Vencimento,723.0,72010.8,Vencimento (estoque Mercado — última posição),7.20108e-05
+TDAD01E418,01/05/2021,Vencimento,614.0,61160.54,Vencimento (estoque Mercado — última posição),6.116054e-05
+TDAD01G340,01/07/2019,Vencimento,2355.0,236913.0,Vencimento (estoque Mercado — última posição),0.000236913
+TDAD01H340,01/08/2019,Vencimento,443.0,44561.37,Vencimento (estoque Mercado — última posição),4.456137e-05
+TDAD01H416,01/08/2019,Vencimento,68.0,6772.8,Vencimento (estoque Mercado — última posição),6.7728e-06
+TDAD01H417,01/08/2020,Vencimento,68.0,6772.8,Vencimento (estoque Mercado — última posição),6.7728e-06
+TDAD01H418,01/08/2021,Vencimento,83.0,8267.63,Vencimento (estoque Mercado — última posição),8.267629999999999e-06
+TDAD01I340,01/09/2019,Vencimento,2832.0,284899.2,Vencimento (estoque Mercado — última posição),0.00028489920000000004
+TDAD01J340,01/10/2019,Vencimento,2239.0,225221.01,Vencimento (estoque Mercado — última posição),0.00022522101000000002
+TDAD01K340,01/11/2019,Vencimento,3754.0,377614.86,Vencimento (estoque Mercado — última posição),0.00037761486
+TDAD01L340,01/12/2019,Vencimento,1727.0,173736.2,Vencimento (estoque Mercado — última posição),0.0001737362
+TDAD02A339,01/01/2019,Vencimento,1537.0,154606.83,Vencimento (estoque Mercado — última posição),0.00015460683
+TDAD02A340,01/01/2020,Vencimento,1558.0,156719.22,Vencimento (estoque Mercado — última posição),0.00015671922
+TDAD02A415,01/01/2019,Vencimento,24643.0,2454442.8,Vencimento (estoque Mercado — última posição),0.0024544427999999997
+TDAD02A416,01/01/2020,Vencimento,24361.0,2426355.6,Vencimento (estoque Mercado — última posição),0.0024263556
+TDAD02A417,01/01/2021,Vencimento,24591.0,2449509.51,Vencimento (estoque Mercado — última posição),0.0024495095099999996
+TDAD02A418,01/01/2022,Vencimento,12555.0,1251105.75,Vencimento (estoque Mercado — última posição),0.00125110575
+TDAD02C339,01/03/2019,Vencimento,789.0,79365.51,Vencimento (estoque Mercado — última posição),7.936550999999999e-05
+TDAD02C340,01/03/2020,Vencimento,485.0,48791.0,Vencimento (estoque Mercado — última posição),4.8791e-05
+TDAD02C415,01/03/2019,Vencimento,1906.0,189837.6,Vencimento (estoque Mercado — última posição),0.0001898376
+TDAD02C416,01/03/2020,Vencimento,1927.0,191948.47,Vencimento (estoque Mercado — última posição),0.00019194847
+TDAD02C417,01/03/2021,Vencimento,1823.0,181570.8,Vencimento (estoque Mercado — última posição),0.00018157079999999999
+TDAD02C418,01/03/2022,Vencimento,1839.0,183329.91,Vencimento (estoque Mercado — última posição),0.00018332991
+TDAD02H339,01/08/2019,Vencimento,4715.0,474281.85,Vencimento (estoque Mercado — última posição),0.00047428184999999997
+TDAD02H340,01/08/2020,Vencimento,4754.0,478204.86,Vencimento (estoque Mercado — última posição),0.00047820486
+TDAD02H415,01/08/2019,Vencimento,2974.0,296210.4,Vencimento (estoque Mercado — última posição),0.0002962104
+TDAD02H416,01/08/2020,Vencimento,3250.0,323700.0,Vencimento (estoque Mercado — última posição),0.0003237
+TDAD02H417,01/08/2021,Vencimento,3250.0,323732.5,Vencimento (estoque Mercado — última posição),0.0003237325
+TDAD02H418,01/08/2022,Vencimento,3269.0,327913.39,Vencimento (estoque Mercado — última posição),0.00032791339
+TDAD02I339,01/09/2019,Vencimento,1599.0,160859.4,Vencimento (estoque Mercado — última posição),0.0001608594
+TDAD02I340,01/09/2020,Vencimento,1612.0,162167.2,Vencimento (estoque Mercado — última posição),0.00016216720000000002
+TDAD02J339,01/10/2019,Vencimento,4354.0,437968.86,Vencimento (estoque Mercado — última posição),0.00043796886
+TDAD02J340,01/10/2020,Vencimento,4450.0,447625.5,Vencimento (estoque Mercado — última posição),0.0004476255
+TDAD02K339,01/11/2019,Vencimento,1222.0,122920.98,Vencimento (estoque Mercado — última posição),0.00012292097999999998
+TDAD02K340,01/11/2020,Vencimento,1103.0,110961.8,Vencimento (estoque Mercado — última posição),0.0001109618
+TDAD02K415,01/11/2019,Vencimento,738.0,73504.8,Vencimento (estoque Mercado — última posição),7.350480000000001e-05
+TDAD02K416,01/11/2020,Vencimento,738.0,73512.18,Vencimento (estoque Mercado — última posição),7.351218e-05
+TDAD02K417,01/11/2021,Vencimento,738.0,73512.18,Vencimento (estoque Mercado — última posição),7.351218e-05
+TDAD02K418,01/11/2022,Vencimento,767.0,77351.95,Vencimento (estoque Mercado — última posição),7.735195e-05
+TDAD02L415,01/12/2019,Vencimento,464.0,46219.04,Vencimento (estoque Mercado — última posição),4.621904e-05
+TDAD02L416,01/12/2020,Vencimento,473.0,47115.53,Vencimento (estoque Mercado — última posição),4.711553e-05
+TDAD02L417,01/12/2021,Vencimento,467.0,46517.87,Vencimento (estoque Mercado — última posição),4.651787e-05
+TDAD02L418,01/12/2022,Vencimento,421.0,42516.79,Vencimento (estoque Mercado — última posição),4.251679e-05
+TDAD03C338,01/03/2019,Vencimento,4935.0,496411.65,Vencimento (estoque Mercado — última posição),0.00049641165
+TDAD03C339,01/03/2020,Vencimento,4935.0,496461.0,Vencimento (estoque Mercado — última posição),0.000496461
+TDAD03C340,01/03/2021,Vencimento,4970.0,499882.6,Vencimento (estoque Mercado — última posição),0.0004998826
+TDAD03E338,01/05/2019,Vencimento,5384.0,541576.56,Vencimento (estoque Mercado — última posição),0.00054157656
+TDAD03E339,01/05/2020,Vencimento,5384.0,541576.56,Vencimento (estoque Mercado — última posição),0.00054157656
+TDAD03E340,01/05/2021,Vencimento,5385.0,541677.15,Vencimento (estoque Mercado — última posição),0.00054167715
+TDAD03E414,01/05/2019,Vencimento,4319.0,430172.4,Vencimento (estoque Mercado — última posição),0.0004301724
+TDAD03E415,01/05/2020,Vencimento,4335.0,431766.0,Vencimento (estoque Mercado — última posição),0.000431766
+TDAD03E416,01/05/2021,Vencimento,4080.0,406408.8,Vencimento (estoque Mercado — última posição),0.0004064088
+TDAD03E417,01/05/2022,Vencimento,3985.0,397862.4,Vencimento (estoque Mercado — última posição),0.00039786240000000005
+TDAD03H338,01/08/2019,Vencimento,2710.0,272598.9,Vencimento (estoque Mercado — última posição),0.0002725989
+TDAD03H339,01/08/2020,Vencimento,2710.0,272598.9,Vencimento (estoque Mercado — última posição),0.0002725989
+TDAD03H340,01/08/2021,Vencimento,2717.0,273330.2,Vencimento (estoque Mercado — última posição),0.00027333020000000003
+TDAD03I338,01/09/2019,Vencimento,2291.0,230474.6,Vencimento (estoque Mercado — última posição),0.0002304746
+TDAD03I339,01/09/2020,Vencimento,2291.0,230474.6,Vencimento (estoque Mercado — última posição),0.0002304746
+TDAD03I340,01/09/2021,Vencimento,2367.0,238120.2,Vencimento (estoque Mercado — última posição),0.00023812020000000002
+TDAD03I414,01/09/2019,Vencimento,4532.0,451432.52,Vencimento (estoque Mercado — última posição),0.00045143252
+TDAD03I415,01/09/2020,Vencimento,4069.0,405313.09,Vencimento (estoque Mercado — última posição),0.00040531309000000005
+TDAD03I416,01/09/2021,Vencimento,4479.0,446153.19,Vencimento (estoque Mercado — última posição),0.00044615319
+TDAD03I417,01/09/2022,Vencimento,4377.0,440019.81,Vencimento (estoque Mercado — última posição),0.00044001981
+TDAD03J338,01/10/2019,Vencimento,5383.0,541475.97,Vencimento (estoque Mercado — última posição),0.00054147597
+TDAD03J339,01/10/2020,Vencimento,5378.0,540973.02,Vencimento (estoque Mercado — última posição),0.0005409730200000001
+TDAD03J340,01/10/2021,Vencimento,5415.0,544694.85,Vencimento (estoque Mercado — última posição),0.0005446948499999999
+TDAD03J414,01/10/2019,Vencimento,310.0,30876.0,Vencimento (estoque Mercado — última posição),3.0876e-05
+TDAD03J415,01/10/2020,Vencimento,294.0,29285.34,Vencimento (estoque Mercado — última posição),2.9285340000000002e-05
+TDAD03J416,01/10/2021,Vencimento,318.0,31675.98,Vencimento (estoque Mercado — última posição),3.167598e-05
+TDAD03J417,01/10/2022,Vencimento,320.0,32227.2,Vencimento (estoque Mercado — última posição),3.22272e-05
+TDAD03K338,01/11/2019,Vencimento,1575.0,158429.25,Vencimento (estoque Mercado — última posição),0.00015842925
+TDAD03K339,01/11/2020,Vencimento,1539.0,154823.4,Vencimento (estoque Mercado — última posição),0.0001548234
+TDAD03K340,01/11/2021,Vencimento,1291.0,129874.6,Vencimento (estoque Mercado — última posição),0.0001298746
+TDAD03K414,01/11/2019,Vencimento,734.0,73106.4,Vencimento (estoque Mercado — última posição),7.310639999999999e-05
+TDAD03K415,01/11/2020,Vencimento,734.0,73113.74,Vencimento (estoque Mercado — última posição),7.311374e-05
+TDAD03K416,01/11/2021,Vencimento,734.0,73113.74,Vencimento (estoque Mercado — última posição),7.311374e-05
+TDAD03K417,01/11/2022,Vencimento,734.0,74023.9,Vencimento (estoque Mercado — última posição),7.402389999999999e-05
+TDAD03L338,01/12/2019,Vencimento,12514.0,1258908.4,Vencimento (estoque Mercado — última posição),0.0012589084
+TDAD03L339,01/12/2020,Vencimento,12481.0,1255463.79,Vencimento (estoque Mercado — última posição),0.00125546379
+TDAD03L340,01/12/2021,Vencimento,12674.0,1274877.66,Vencimento (estoque Mercado — última posição),0.00127487766
+TDAD03L414,01/12/2019,Vencimento,4952.0,493268.72,Vencimento (estoque Mercado — última posição),0.00049326872
+TDAD03L415,01/12/2020,Vencimento,4952.0,493268.72,Vencimento (estoque Mercado — última posição),0.00049326872
+TDAD03L416,01/12/2021,Vencimento,4952.0,493268.72,Vencimento (estoque Mercado — última posição),0.00049326872
+TDAD03L417,01/12/2022,Vencimento,4952.0,500102.48,Vencimento (estoque Mercado — última posição),0.00050010248
+TDAD04C238,01/03/2019,Vencimento,28585.0,2903092.6,Vencimento (estoque Mercado — última posição),0.0029030926
+TDAD04C337,01/03/2019,Vencimento,1628.0,163760.52,Vencimento (estoque Mercado — última posição),0.00016376052
+TDAD04C338,01/03/2020,Vencimento,1297.0,130478.2,Vencimento (estoque Mercado — última posição),0.0001304782
+TDAD04C339,01/03/2021,Vencimento,1297.0,130452.26,Vencimento (estoque Mercado — última posição),0.00013045226
+TDAD04C340,01/03/2022,Vencimento,1323.0,133186.41,Vencimento (estoque Mercado — última posição),0.00013318641
+TDAD04C413,01/03/2019,Vencimento,875.0,87150.0,Vencimento (estoque Mercado — última posição),8.715e-05
+TDAD04C414,01/03/2020,Vencimento,875.0,87158.75,Vencimento (estoque Mercado — última posição),8.715875e-05
+TDAD04C415,01/03/2021,Vencimento,875.0,87150.0,Vencimento (estoque Mercado — última posição),8.715e-05
+TDAD04C416,01/03/2022,Vencimento,875.0,87228.75,Vencimento (estoque Mercado — última posição),8.722875e-05
+TDAD04D238,01/04/2019,Vencimento,3146.0,319570.68,Vencimento (estoque Mercado — última posição),0.00031957067999999997
+TDAD04D337,01/04/2019,Vencimento,5807.0,584184.2,Vencimento (estoque Mercado — última posição),0.0005841841999999999
+TDAD04D338,01/04/2020,Vencimento,5807.0,584126.13,Vencimento (estoque Mercado — última posição),0.00058412613
+TDAD04D339,01/04/2021,Vencimento,5744.0,577846.4,Vencimento (estoque Mercado — última posição),0.0005778464
+TDAD04D340,01/04/2022,Vencimento,5812.0,585733.36,Vencimento (estoque Mercado — última posição),0.00058573336
+TDAD04D413,01/04/2019,Vencimento,287.0,28588.07,Vencimento (estoque Mercado — última posição),2.858807e-05
+TDAD04D414,01/04/2020,Vencimento,287.0,28585.2,Vencimento (estoque Mercado — última posição),2.8585200000000002e-05
+TDAD04D415,01/04/2021,Vencimento,287.0,28588.07,Vencimento (estoque Mercado — última posição),2.858807e-05
+TDAD04D416,01/04/2022,Vencimento,287.0,28639.73,Vencimento (estoque Mercado — última posição),2.8639729999999998e-05
+TDAD04E238,01/05/2019,Vencimento,8814.0,895149.84,Vencimento (estoque Mercado — última posição),0.0008951498399999999
+TDAD04E337,01/05/2019,Vencimento,3615.0,363632.85,Vencimento (estoque Mercado — última posição),0.00036363285
+TDAD04E338,01/05/2020,Vencimento,3615.0,363632.85,Vencimento (estoque Mercado — última posição),0.00036363285
+TDAD04E339,01/05/2021,Vencimento,3615.0,363632.85,Vencimento (estoque Mercado — última posição),0.00036363285
+TDAD04E340,01/05/2022,Vencimento,3627.0,365710.41,Vencimento (estoque Mercado — última posição),0.00036571041
+TDAD04F238,01/06/2019,Vencimento,603.0,61240.68,Vencimento (estoque Mercado — última posição),6.124068e-05
+TDAD04F337,01/06/2019,Vencimento,349.0,35105.91,Vencimento (estoque Mercado — última posição),3.5105910000000006e-05
+TDAD04F338,01/06/2020,Vencimento,349.0,35109.4,Vencimento (estoque Mercado — última posição),3.51094e-05
+TDAD04F339,01/06/2021,Vencimento,349.0,35109.4,Vencimento (estoque Mercado — última posição),3.51094e-05
+TDAD04F340,01/06/2022,Vencimento,481.0,48576.19,Vencimento (estoque Mercado — última posição),4.8576190000000004e-05
+TDAD04F413,01/06/2019,Vencimento,14759.0,1469996.4,Vencimento (estoque Mercado — última posição),0.0014699963999999998
+TDAD04F414,01/06/2020,Vencimento,14759.0,1470143.99,Vencimento (estoque Mercado — última posição),0.00147014399
+TDAD04F415,01/06/2021,Vencimento,14759.0,1461731.36,Vencimento (estoque Mercado — última posição),0.00146173136
+TDAD04F416,01/06/2022,Vencimento,14759.0,1461731.36,Vencimento (estoque Mercado — última posição),0.00146173136
+TDAD04G238,01/07/2019,Vencimento,21406.0,2174421.48,Vencimento (estoque Mercado — última posição),0.00217442148
+TDAD04G337,01/07/2019,Vencimento,1563.0,157237.8,Vencimento (estoque Mercado — última posição),0.0001572378
+TDAD04G338,01/07/2020,Vencimento,1569.0,157810.02,Vencimento (estoque Mercado — última posição),0.00015781001999999998
+TDAD04G339,01/07/2021,Vencimento,1600.0,160944.0,Vencimento (estoque Mercado — última posição),0.000160944
+TDAD04G340,01/07/2022,Vencimento,1636.0,165432.32,Vencimento (estoque Mercado — última posição),0.00016543232000000002
+TDAD04G413,01/07/2019,Vencimento,1548.0,154196.28,Vencimento (estoque Mercado — última posição),0.00015419628
+TDAD04G414,01/07/2020,Vencimento,1548.0,154180.8,Vencimento (estoque Mercado — última posição),0.0001541808
+TDAD04G415,01/07/2021,Vencimento,1548.0,154196.28,Vencimento (estoque Mercado — última posição),0.00015419628
+TDAD04G416,01/07/2022,Vencimento,1548.0,155001.24,Vencimento (estoque Mercado — última posição),0.00015500123999999998
+TDAD04H238,01/08/2019,Vencimento,8509.0,864174.04,Vencimento (estoque Mercado — última posição),0.00086417404
+TDAD04H337,01/08/2019,Vencimento,519.0,52206.21,Vencimento (estoque Mercado — última posição),5.220621e-05
+TDAD04H338,01/08/2020,Vencimento,519.0,52206.21,Vencimento (estoque Mercado — última posição),5.220621e-05
+TDAD04H339,01/08/2021,Vencimento,519.0,52211.4,Vencimento (estoque Mercado — última posição),5.22114e-05
+TDAD04H340,01/08/2022,Vencimento,533.0,53992.9,Vencimento (estoque Mercado — última posição),5.39929e-05
+TDAD04H413,01/08/2019,Vencimento,27593.0,2748262.8,Vencimento (estoque Mercado — última posição),0.0027482628
+TDAD04H414,01/08/2020,Vencimento,24881.0,2478147.6,Vencimento (estoque Mercado — última posição),0.0024781476
+TDAD04H415,01/08/2021,Vencimento,27676.0,2756806.36,Vencimento (estoque Mercado — última posição),0.00275680636
+TDAD04H416,01/08/2022,Vencimento,26642.0,2672459.02,Vencimento (estoque Mercado — última posição),0.00267245902
+TDAD04I238,01/09/2019,Vencimento,15658.0,1590539.64,Vencimento (estoque Mercado — última posição),0.0015905396399999998
+TDAD04I337,01/09/2019,Vencimento,11478.0,1154686.8,Vencimento (estoque Mercado — última posição),0.0011546868
+TDAD04I338,01/09/2020,Vencimento,10597.0,1066058.2,Vencimento (estoque Mercado — última posição),0.0010660582
+TDAD04I339,01/09/2021,Vencimento,10906.0,1097143.6,Vencimento (estoque Mercado — última posição),0.0010971436
+TDAD04I340,01/09/2022,Vencimento,10769.0,1093376.57,Vencimento (estoque Mercado — última posição),0.00109337657
+TDAD04I413,01/09/2019,Vencimento,14.0,1394.54,Vencimento (estoque Mercado — última posição),1.39454e-06
+TDAD04I414,01/09/2020,Vencimento,27.0,2689.47,Vencimento (estoque Mercado — última posição),2.68947e-06
+TDAD04I415,01/09/2021,Vencimento,23.0,2291.03,Vencimento (estoque Mercado — última posição),2.29103e-06
+TDAD04I416,01/09/2022,Vencimento,27.0,2714.31,Vencimento (estoque Mercado — última posição),2.71431e-06
+TDAD04J337,01/10/2019,Vencimento,187.0,18810.33,Vencimento (estoque Mercado — última posição),1.881033e-05
+TDAD04J338,01/10/2020,Vencimento,185.0,18609.15,Vencimento (estoque Mercado — última posição),1.860915e-05
+TDAD04J339,01/10/2021,Vencimento,187.0,18810.33,Vencimento (estoque Mercado — última posição),1.881033e-05
+TDAD04J340,01/10/2022,Vencimento,192.0,19526.4,Vencimento (estoque Mercado — última posição),1.95264e-05
+TDAD04K238,01/11/2019,Vencimento,4151.0,421575.56,Vencimento (estoque Mercado — última posição),0.00042157556
+TDAD04L238,01/12/2019,Vencimento,42619.0,4329238.02,Vencimento (estoque Mercado — última posição),0.00432923802
+TDAD04L337,01/12/2019,Vencimento,36959.0,3718075.4,Vencimento (estoque Mercado — última posição),0.0037180754
+TDAD04L338,01/12/2020,Vencimento,37146.0,3736516.14,Vencimento (estoque Mercado — última posição),0.00373651614
+TDAD04L339,01/12/2021,Vencimento,36233.0,3644677.47,Vencimento (estoque Mercado — última posição),0.00364467747
+TDAD04L340,01/12/2022,Vencimento,37552.0,3829928.48,Vencimento (estoque Mercado — última posição),0.00382992848
+TDAD04L413,01/12/2019,Vencimento,2650.0,263966.5,Vencimento (estoque Mercado — última posição),0.0002639665
+TDAD04L414,01/12/2020,Vencimento,3053.0,304109.33,Vencimento (estoque Mercado — última posição),0.00030410933000000003
+TDAD04L415,01/12/2021,Vencimento,2798.0,278708.78,Vencimento (estoque Mercado — última posição),0.00027870878000000004
+TDAD04L416,01/12/2022,Vencimento,3120.0,315088.8,Vencimento (estoque Mercado — última posição),0.0003150888
+TDAD05B237,01/02/2019,Vencimento,17340.0,1761050.4,Vencimento (estoque Mercado — última posição),0.0017610503999999998
+TDAD05B238,01/02/2020,Vencimento,16827.0,1708950.12,Vencimento (estoque Mercado — última posição),0.00170895012
+TDAD05B336,01/02/2019,Vencimento,8977.0,902996.43,Vencimento (estoque Mercado — última posição),0.00090299643
+TDAD05B337,01/02/2020,Vencimento,4493.0,451950.87,Vencimento (estoque Mercado — última posição),0.00045195087
+TDAD05B338,01/02/2021,Vencimento,4753.0,478151.8,Vencimento (estoque Mercado — última posição),0.0004781518
+TDAD05B339,01/02/2022,Vencimento,6071.0,611288.99,Vencimento (estoque Mercado — última posição),0.00061128899
+TDAD05B412,01/02/2019,Vencimento,1583.0,157666.8,Vencimento (estoque Mercado — última posição),0.0001576668
+TDAD05B413,01/02/2020,Vencimento,1583.0,157666.8,Vencimento (estoque Mercado — última posição),0.0001576668
+TDAD05B414,01/02/2021,Vencimento,1583.0,157682.63,Vencimento (estoque Mercado — última posição),0.00015768263
+TDAD05B415,01/02/2022,Vencimento,1583.0,157825.1,Vencimento (estoque Mercado — última posição),0.0001578251
+TDAD05C237,01/03/2019,Vencimento,9369.0,951515.64,Vencimento (estoque Mercado — última posição),0.00095151564
+TDAD05C238,01/03/2020,Vencimento,9407.0,955563.06,Vencimento (estoque Mercado — última posição),0.0009555630600000001
+TDAD05C336,01/03/2019,Vencimento,946.0,95158.14,Vencimento (estoque Mercado — última posição),9.515814e-05
+TDAD05C337,01/03/2020,Vencimento,946.0,95167.6,Vencimento (estoque Mercado — última posição),9.516760000000001e-05
+TDAD05C338,01/03/2021,Vencimento,946.0,95148.68,Vencimento (estoque Mercado — última posição),9.514868e-05
+TDAD05C339,01/03/2022,Vencimento,946.0,95233.82,Vencimento (estoque Mercado — última posição),9.523382e-05
+TDAD05D237,01/04/2019,Vencimento,12921.0,1312515.18,Vencimento (estoque Mercado — última posição),0.00131251518
+TDAD05D238,01/04/2020,Vencimento,13340.0,1354810.4,Vencimento (estoque Mercado — última posição),0.0013548103999999998
+TDAD05D336,01/04/2019,Vencimento,7460.0,750476.0,Vencimento (estoque Mercado — última posição),0.000750476
+TDAD05D337,01/04/2020,Vencimento,7392.0,743561.28,Vencimento (estoque Mercado — última posição),0.0007435612800000001
+TDAD05D338,01/04/2021,Vencimento,7155.0,719793.0,Vencimento (estoque Mercado — última posição),0.000719793
+TDAD05D339,01/04/2022,Vencimento,7151.0,720677.78,Vencimento (estoque Mercado — última posição),0.00072067778
+TDAD05D412,01/04/2019,Vencimento,820.0,81680.2,Vencimento (estoque Mercado — última posição),8.168019999999999e-05
+TDAD05D413,01/04/2020,Vencimento,1104.0,109958.4,Vencimento (estoque Mercado — última posição),0.0001099584
+TDAD05D414,01/04/2021,Vencimento,1104.0,109969.44,Vencimento (estoque Mercado — última posição),0.00010996944000000001
+TDAD05D415,01/04/2022,Vencimento,1981.0,197683.99,Vencimento (estoque Mercado — última posição),0.00019768398999999999
+TDAD05E237,01/05/2019,Vencimento,16946.0,1721035.76,Vencimento (estoque Mercado — última posição),0.00172103576
+TDAD05E238,01/05/2020,Vencimento,17310.0,1758003.6,Vencimento (estoque Mercado — última posição),0.0017580036000000002
+TDAD05E336,01/05/2019,Vencimento,714.0,71821.26,Vencimento (estoque Mercado — última posição),7.182126e-05
+TDAD05E337,01/05/2020,Vencimento,714.0,71821.26,Vencimento (estoque Mercado — última posição),7.182126e-05
+TDAD05E338,01/05/2021,Vencimento,714.0,71821.26,Vencimento (estoque Mercado — última posição),7.182126e-05
+TDAD05E339,01/05/2022,Vencimento,714.0,71992.62,Vencimento (estoque Mercado — última posição),7.199262e-05
+TDAD05F237,01/06/2019,Vencimento,10509.0,1067294.04,Vencimento (estoque Mercado — última posição),0.00106729404
+TDAD05F238,01/06/2020,Vencimento,10788.0,1095845.04,Vencimento (estoque Mercado — última posição),0.00109584504
+TDAD05F336,01/06/2019,Vencimento,2093.0,210534.87,Vencimento (estoque Mercado — última posição),0.00021053487
+TDAD05F337,01/06/2020,Vencimento,2142.0,215485.2,Vencimento (estoque Mercado — última posição),0.0002154852
+TDAD05F338,01/06/2021,Vencimento,2231.0,224438.6,Vencimento (estoque Mercado — última posição),0.0002244386
+TDAD05F339,01/06/2022,Vencimento,2231.0,225308.69,Vencimento (estoque Mercado — última posição),0.00022530869
+TDAD05F412,01/06/2019,Vencimento,50173.0,4997230.8,Vencimento (estoque Mercado — última posição),0.0049972307999999995
+TDAD05F413,01/06/2020,Vencimento,50173.0,4997732.53,Vencimento (estoque Mercado — última posição),0.00499773253
+TDAD05F414,01/06/2021,Vencimento,50173.0,4997732.53,Vencimento (estoque Mercado — última posição),0.00499773253
+TDAD05F415,01/06/2022,Vencimento,50173.0,5017300.0,Vencimento (estoque Mercado — última posição),0.0050173
+TDAD05G237,01/07/2019,Vencimento,9112.0,925596.96,Vencimento (estoque Mercado — última posição),0.00092559696
+TDAD05G238,01/07/2020,Vencimento,9304.0,945007.28,Vencimento (estoque Mercado — última posição),0.0009450072800000001
+TDAD05H237,01/08/2019,Vencimento,52913.0,5373844.28,Vencimento (estoque Mercado — última posição),0.005373844280000001
+TDAD05H238,01/08/2020,Vencimento,52949.0,5378029.93,Vencimento (estoque Mercado — última posição),0.00537802993
+TDAD05H336,01/08/2019,Vencimento,1928.0,193937.52,Vencimento (estoque Mercado — última posição),0.00019393752
+TDAD05H337,01/08/2020,Vencimento,2058.0,207014.22,Vencimento (estoque Mercado — última posição),0.00020701422
+TDAD05H338,01/08/2021,Vencimento,2363.0,237717.8,Vencimento (estoque Mercado — última posição),0.00023771779999999998
+TDAD05H339,01/08/2022,Vencimento,2546.0,257909.8,Vencimento (estoque Mercado — última posição),0.0002579098
+TDAD05H412,01/08/2019,Vencimento,454.0,45218.4,Vencimento (estoque Mercado — última posição),4.52184e-05
+TDAD05H413,01/08/2020,Vencimento,454.0,45218.4,Vencimento (estoque Mercado — última posição),4.52184e-05
+TDAD05H414,01/08/2021,Vencimento,454.0,45222.94,Vencimento (estoque Mercado — última posição),4.522294e-05
+TDAD05H415,01/08/2022,Vencimento,454.0,44923.3,Vencimento (estoque Mercado — última posição),4.4923300000000004e-05
+TDAD05I237,01/09/2019,Vencimento,22610.0,2296723.8,Vencimento (estoque Mercado — última posição),0.0022967238
+TDAD05I238,01/09/2020,Vencimento,22887.0,2324861.46,Vencimento (estoque Mercado — última posição),0.00232486146
+TDAD05I336,01/09/2019,Vencimento,6151.0,618790.6,Vencimento (estoque Mercado — última posição),0.0006187906
+TDAD05I337,01/09/2020,Vencimento,5706.0,574023.6,Vencimento (estoque Mercado — última posição),0.0005740236
+TDAD05I338,01/09/2021,Vencimento,5649.0,568289.4,Vencimento (estoque Mercado — última posição),0.0005682894000000001
+TDAD05I339,01/09/2022,Vencimento,5566.0,565115.98,Vencimento (estoque Mercado — última posição),0.00056511598
+TDAD05I412,01/09/2019,Vencimento,246.0,24504.06,Vencimento (estoque Mercado — última posição),2.4504060000000002e-05
+TDAD05I413,01/09/2020,Vencimento,246.0,24504.06,Vencimento (estoque Mercado — última posição),2.4504060000000002e-05
+TDAD05I414,01/09/2021,Vencimento,246.0,24504.06,Vencimento (estoque Mercado — última posição),2.4504060000000002e-05
+TDAD05I415,01/09/2022,Vencimento,246.0,24730.38,Vencimento (estoque Mercado — última posição),2.473038e-05
+TDAD05J237,01/10/2019,Vencimento,20992.0,2131947.52,Vencimento (estoque Mercado — última posição),0.00213194752
+TDAD05J238,01/10/2020,Vencimento,21226.0,2156137.08,Vencimento (estoque Mercado — última posição),0.00215613708
+TDAD05J336,01/10/2019,Vencimento,929.0,93448.11,Vencimento (estoque Mercado — última posição),9.344811e-05
+TDAD05J337,01/10/2020,Vencimento,939.0,94454.01,Vencimento (estoque Mercado — última posição),9.445401e-05
+TDAD05J338,01/10/2021,Vencimento,908.0,91335.72,Vencimento (estoque Mercado — última posição),9.133572e-05
+TDAD05J339,01/10/2022,Vencimento,908.0,92343.6,Vencimento (estoque Mercado — última posição),9.234360000000001e-05
+TDAD05J412,01/10/2019,Vencimento,1491.0,148503.6,Vencimento (estoque Mercado — última posição),0.0001485036
+TDAD05J413,01/10/2020,Vencimento,1491.0,148518.51,Vencimento (estoque Mercado — última posição),0.00014851851
+TDAD05J414,01/10/2021,Vencimento,1491.0,148518.51,Vencimento (estoque Mercado — última posição),0.00014851851
+TDAD05J415,01/10/2022,Vencimento,1491.0,150158.61,Vencimento (estoque Mercado — última posição),0.00015015860999999998
+TDAD05K237,01/11/2019,Vencimento,5048.0,512674.88,Vencimento (estoque Mercado — última posição),0.00051267488
+TDAD05K238,01/11/2020,Vencimento,6051.0,614660.58,Vencimento (estoque Mercado — última posição),0.0006146605799999999
+TDAD05K336,01/11/2019,Vencimento,2354.0,236788.86,Vencimento (estoque Mercado — última posição),0.00023678886
+TDAD05K337,01/11/2020,Vencimento,2354.0,236812.4,Vencimento (estoque Mercado — última posição),0.00023681239999999998
+TDAD05K338,01/11/2021,Vencimento,2354.0,236812.4,Vencimento (estoque Mercado — última posição),0.00023681239999999998
+TDAD05K339,01/11/2022,Vencimento,2354.0,239754.9,Vencimento (estoque Mercado — última posição),0.0002397549
+TDAD05K412,01/11/2019,Vencimento,16771.0,1670391.6,Vencimento (estoque Mercado — última posição),0.0016703916
+TDAD05K413,01/11/2020,Vencimento,17307.0,1723950.27,Vencimento (estoque Mercado — última posição),0.00172395027
+TDAD05K414,01/11/2021,Vencimento,18623.0,1855037.03,Vencimento (estoque Mercado — última posição),0.00185503703
+TDAD05K415,01/11/2022,Vencimento,18092.0,1824578.2,Vencimento (estoque Mercado — última posição),0.0018245782
+TDAD05L237,01/12/2019,Vencimento,9496.0,964603.68,Vencimento (estoque Mercado — última posição),0.0009646036800000001
+TDAD05L238,01/12/2020,Vencimento,9771.0,992538.18,Vencimento (estoque Mercado — última posição),0.00099253818
+TDAD05L336,01/12/2019,Vencimento,1531.0,154018.6,Vencimento (estoque Mercado — última posição),0.0001540186
+TDAD05L337,01/12/2020,Vencimento,1581.0,159032.79,Vencimento (estoque Mercado — última posição),0.00015903279000000002
+TDAD05L338,01/12/2021,Vencimento,1650.0,165973.5,Vencimento (estoque Mercado — última posição),0.0001659735
+TDAD05L339,01/12/2022,Vencimento,1696.0,172975.04,Vencimento (estoque Mercado — última posição),0.00017297504000000002
+TDAD05L412,01/12/2019,Vencimento,28.0,2789.08,Vencimento (estoque Mercado — última posição),2.78908e-06
+TDAD05L413,01/12/2020,Vencimento,30.0,2988.3,Vencimento (estoque Mercado — última posição),2.9883000000000003e-06
+TDAD05L414,01/12/2021,Vencimento,30.0,2988.3,Vencimento (estoque Mercado — última posição),2.9883000000000003e-06
+TDAD05L415,01/12/2022,Vencimento,55.0,5554.45,Vencimento (estoque Mercado — última posição),5.55445e-06
+TDAD06A236,01/01/2019,Vencimento,8411.0,854221.16,Vencimento (estoque Mercado — última posição),0.0008542211600000001
+TDAD06A237,01/01/2020,Vencimento,8411.0,854221.16,Vencimento (estoque Mercado — última posição),0.0008542211600000001
+TDAD06A238,01/01/2021,Vencimento,8539.0,867391.62,Vencimento (estoque Mercado — última posição),0.00086739162
+TDAD06A335,01/01/2019,Vencimento,9835.0,989302.65,Vencimento (estoque Mercado — última posição),0.00098930265
+TDAD06A336,01/01/2020,Vencimento,9835.0,989302.65,Vencimento (estoque Mercado — última posição),0.00098930265
+TDAD06A337,01/01/2021,Vencimento,9835.0,989401.0,Vencimento (estoque Mercado — última posição),0.000989401
+TDAD06A338,01/01/2022,Vencimento,9835.0,989794.4,Vencimento (estoque Mercado — última posição),0.0009897944
+TDAD06B236,01/02/2019,Vencimento,3484.0,353835.04,Vencimento (estoque Mercado — última posição),0.00035383504
+TDAD06B237,01/02/2020,Vencimento,3484.0,353835.04,Vencimento (estoque Mercado — última posição),0.00035383504
+TDAD06B238,01/02/2021,Vencimento,3479.0,353396.82,Vencimento (estoque Mercado — última posição),0.00035339682
+TDAD06B411,01/02/2019,Vencimento,3021.0,300891.6,Vencimento (estoque Mercado — última posição),0.00030089159999999995
+TDAD06B412,01/02/2020,Vencimento,2224.0,221510.4,Vencimento (estoque Mercado — última posição),0.00022151039999999999
+TDAD06B413,01/02/2021,Vencimento,2331.0,232190.91,Vencimento (estoque Mercado — última posição),0.00023219091
+TDAD06B414,01/02/2022,Vencimento,2753.0,274474.1,Vencimento (estoque Mercado — última posição),0.00027447409999999995
+TDAD06C236,01/03/2019,Vencimento,2719.0,276141.64,Vencimento (estoque Mercado — última posição),0.00027614164000000003
+TDAD06C237,01/03/2020,Vencimento,2719.0,276196.02,Vencimento (estoque Mercado — última posição),0.00027619602
+TDAD06C238,01/03/2021,Vencimento,2767.0,281016.52,Vencimento (estoque Mercado — última posição),0.00028101652
+TDAD06C335,01/03/2019,Vencimento,9394.0,944942.46,Vencimento (estoque Mercado — última posição),0.0009449424599999999
+TDAD06C336,01/03/2020,Vencimento,8987.0,904092.2,Vencimento (estoque Mercado — última posição),0.0009040922
+TDAD06C337,01/03/2021,Vencimento,9872.0,992925.76,Vencimento (estoque Mercado — última posição),0.00099292576
+TDAD06C338,01/03/2022,Vencimento,9794.0,985961.98,Vencimento (estoque Mercado — última posição),0.00098596198
+TDAD06D236,01/04/2019,Vencimento,14447.0,1467526.26,Vencimento (estoque Mercado — última posição),0.00146752626
+TDAD06D237,01/04/2020,Vencimento,14946.0,1517915.76,Vencimento (estoque Mercado — última posição),0.00151791576
+TDAD06D238,01/04/2021,Vencimento,15017.0,1525426.86,Vencimento (estoque Mercado — última posição),0.0015254268600000001
+TDAD06D335,01/04/2019,Vencimento,13735.0,1381741.0,Vencimento (estoque Mercado — última posição),0.001381741
+TDAD06D336,01/04/2020,Vencimento,13735.0,1381603.65,Vencimento (estoque Mercado — última posição),0.00138160365
+TDAD06D337,01/04/2021,Vencimento,13735.0,1381741.0,Vencimento (estoque Mercado — última posição),0.001381741
+TDAD06D338,01/04/2022,Vencimento,13735.0,1384213.3,Vencimento (estoque Mercado — última posição),0.0013842133000000001
+TDAD06E236,01/05/2019,Vencimento,5896.0,598797.76,Vencimento (estoque Mercado — última posição),0.00059879776
+TDAD06E237,01/05/2020,Vencimento,5799.0,588946.44,Vencimento (estoque Mercado — última posição),0.0005889464399999999
+TDAD06E238,01/05/2021,Vencimento,5900.0,599322.0,Vencimento (estoque Mercado — última posição),0.000599322
+TDAD06E335,01/05/2019,Vencimento,4949.0,497819.91,Vencimento (estoque Mercado — última posição),0.00049781991
+TDAD06E336,01/05/2020,Vencimento,5133.0,516328.47,Vencimento (estoque Mercado — última posição),0.00051632847
+TDAD06E337,01/05/2021,Vencimento,5051.0,508080.09,Vencimento (estoque Mercado — última posição),0.00050808009
+TDAD06E338,01/05/2022,Vencimento,5118.0,516047.94,Vencimento (estoque Mercado — última posição),0.00051604794
+TDAD06F236,01/06/2019,Vencimento,17166.0,1743378.96,Vencimento (estoque Mercado — última posição),0.00174337896
+TDAD06F237,01/06/2020,Vencimento,17719.0,1799896.02,Vencimento (estoque Mercado — última posição),0.00179989602
+TDAD06F238,01/06/2021,Vencimento,16617.0,1687954.86,Vencimento (estoque Mercado — última posição),0.00168795486
+TDAD06F335,01/06/2019,Vencimento,8269.0,831778.71,Vencimento (estoque Mercado — última posição),0.00083177871
+TDAD06F336,01/06/2020,Vencimento,8290.0,833974.0,Vencimento (estoque Mercado — última posição),0.000833974
+TDAD06F337,01/06/2021,Vencimento,8598.0,864958.8,Vencimento (estoque Mercado — última posição),0.0008649588
+TDAD06F338,01/06/2022,Vencimento,8684.0,876997.16,Vencimento (estoque Mercado — última posição),0.00087699716
+TDAD06F411,01/06/2019,Vencimento,409.0,40736.4,Vencimento (estoque Mercado — última posição),4.07364e-05
+TDAD06F412,01/06/2020,Vencimento,409.0,40740.49,Vencimento (estoque Mercado — última posição),4.074049e-05
+TDAD06F413,01/06/2021,Vencimento,409.0,40740.49,Vencimento (estoque Mercado — última posição),4.074049e-05
+TDAD06F414,01/06/2022,Vencimento,409.0,40900.0,Vencimento (estoque Mercado — última posição),4.09e-05
+TDAD06G236,01/07/2019,Vencimento,3385.0,343848.3,Vencimento (estoque Mercado — última posição),0.0003438483
+TDAD06G237,01/07/2020,Vencimento,3506.0,356104.42,Vencimento (estoque Mercado — última posição),0.00035610442
+TDAD06G238,01/07/2021,Vencimento,3492.0,354717.36,Vencimento (estoque Mercado — última posição),0.00035471735999999997
+TDAD06G335,01/07/2019,Vencimento,3817.0,383990.2,Vencimento (estoque Mercado — última posição),0.00038399020000000003
+TDAD06G336,01/07/2020,Vencimento,3817.0,383913.86,Vencimento (estoque Mercado — última posição),0.00038391386
+TDAD06G337,01/07/2021,Vencimento,3817.0,383952.03,Vencimento (estoque Mercado — última posição),0.00038395203
+TDAD06G338,01/07/2022,Vencimento,3817.0,385975.04,Vencimento (estoque Mercado — última posição),0.00038597504
+TDAD06G411,01/07/2019,Vencimento,14970.0,1491161.7,Vencimento (estoque Mercado — última posição),0.0014911617
+TDAD06G412,01/07/2020,Vencimento,14970.0,1491012.0,Vencimento (estoque Mercado — última posição),0.001491012
+TDAD06G413,01/07/2021,Vencimento,14970.0,1491161.7,Vencimento (estoque Mercado — última posição),0.0014911617
+TDAD06G414,01/07/2022,Vencimento,14952.0,1497143.76,Vencimento (estoque Mercado — última posição),0.00149714376
+TDAD06H236,01/08/2019,Vencimento,20126.0,2043996.56,Vencimento (estoque Mercado — última posição),0.00204399656
+TDAD06H237,01/08/2020,Vencimento,20065.0,2038002.05,Vencimento (estoque Mercado — última posição),0.00203800205
+TDAD06H238,01/08/2021,Vencimento,20149.0,2046735.42,Vencimento (estoque Mercado — última posição),0.00204673542
+TDAD06H335,01/08/2019,Vencimento,553.0,55626.27,Vencimento (estoque Mercado — última posição),5.562627e-05
+TDAD06H336,01/08/2020,Vencimento,553.0,55626.27,Vencimento (estoque Mercado — última posição),5.562627e-05
+TDAD06H337,01/08/2021,Vencimento,574.0,57744.4,Vencimento (estoque Mercado — última posição),5.77444e-05
+TDAD06H338,01/08/2022,Vencimento,553.0,56018.9,Vencimento (estoque Mercado — última posição),5.60189e-05
+TDAD06H411,01/08/2019,Vencimento,595.0,59262.0,Vencimento (estoque Mercado — última posição),5.9262e-05
+TDAD06H412,01/08/2020,Vencimento,595.0,59262.0,Vencimento (estoque Mercado — última posição),5.9262e-05
+TDAD06H413,01/08/2021,Vencimento,595.0,59267.95,Vencimento (estoque Mercado — última posição),5.926795e-05
+TDAD06H414,01/08/2022,Vencimento,595.0,59684.45,Vencimento (estoque Mercado — última posição),5.968445e-05
+TDAD06I236,01/09/2019,Vencimento,16757.0,1702176.06,Vencimento (estoque Mercado — última posição),0.00170217606
+TDAD06I237,01/09/2020,Vencimento,16627.0,1688970.66,Vencimento (estoque Mercado — última posição),0.0016889706599999999
+TDAD06I238,01/09/2021,Vencimento,16211.0,1646713.38,Vencimento (estoque Mercado — última posição),0.00164671338
+TDAD06I335,01/09/2019,Vencimento,19732.0,1985039.2,Vencimento (estoque Mercado — última posição),0.0019850392
+TDAD06I336,01/09/2020,Vencimento,19729.0,1984737.4,Vencimento (estoque Mercado — última posição),0.0019847374
+TDAD06I337,01/09/2021,Vencimento,19732.0,1985039.2,Vencimento (estoque Mercado — última posição),0.0019850392
+TDAD06I338,01/09/2022,Vencimento,19655.0,1995572.15,Vencimento (estoque Mercado — última posição),0.00199557215
+TDAD06J236,01/10/2019,Vencimento,18030.0,1831126.8,Vencimento (estoque Mercado — última posição),0.0018311268
+TDAD06J237,01/10/2020,Vencimento,17133.0,1740370.14,Vencimento (estoque Mercado — última posição),0.0017403701399999999
+TDAD06J238,01/10/2021,Vencimento,17778.0,1805889.24,Vencimento (estoque Mercado — última posição),0.0018058892399999999
+TDAD06J335,01/10/2019,Vencimento,7637.0,768205.83,Vencimento (estoque Mercado — última posição),0.0007682058299999999
+TDAD06J336,01/10/2020,Vencimento,7570.0,761466.3,Vencimento (estoque Mercado — última posição),0.0007614663
+TDAD06J337,01/10/2021,Vencimento,7298.0,734105.82,Vencimento (estoque Mercado — última posição),0.00073410582
+TDAD06J338,01/10/2022,Vencimento,6763.0,687797.1,Vencimento (estoque Mercado — última posição),0.0006877971
+TDAD06J411,01/10/2019,Vencimento,10164.0,1012334.4,Vencimento (estoque Mercado — última posição),0.0010123344
+TDAD06J412,01/10/2020,Vencimento,10164.0,1012436.04,Vencimento (estoque Mercado — última posição),0.00101243604
+TDAD06J413,01/10/2021,Vencimento,10164.0,1012436.04,Vencimento (estoque Mercado — última posição),0.00101243604
+TDAD06J414,01/10/2022,Vencimento,10164.0,1023616.44,Vencimento (estoque Mercado — última posição),0.00102361644
+TDAD06K236,01/11/2019,Vencimento,10021.0,1017732.76,Vencimento (estoque Mercado — última posição),0.00101773276
+TDAD06K237,01/11/2020,Vencimento,10109.0,1026872.22,Vencimento (estoque Mercado — última posição),0.00102687222
+TDAD06K238,01/11/2021,Vencimento,9326.0,947335.08,Vencimento (estoque Mercado — última posição),0.00094733508
+TDAD06K335,01/11/2019,Vencimento,11490.0,1155779.1,Vencimento (estoque Mercado — última posição),0.0011557791
+TDAD06K336,01/11/2020,Vencimento,11490.0,1155894.0,Vencimento (estoque Mercado — última posição),0.001155894
+TDAD06K337,01/11/2021,Vencimento,11490.0,1155894.0,Vencimento (estoque Mercado — última posição),0.001155894
+TDAD06K338,01/11/2022,Vencimento,11490.0,1170256.5,Vencimento (estoque Mercado — última posição),0.0011702565
+TDAD06K411,01/11/2019,Vencimento,4678.0,465928.8,Vencimento (estoque Mercado — última posição),0.0004659288
+TDAD06K412,01/11/2020,Vencimento,4678.0,465975.58,Vencimento (estoque Mercado — última posição),0.00046597558
+TDAD06K413,01/11/2021,Vencimento,4678.0,465975.58,Vencimento (estoque Mercado — última posição),0.00046597558
+TDAD06K414,01/11/2022,Vencimento,4678.0,471776.3,Vencimento (estoque Mercado — última posição),0.00047177629999999997
+TDAD06L236,01/12/2019,Vencimento,10295.0,1045766.1,Vencimento (estoque Mercado — última posição),0.0010457660999999999
+TDAD06L237,01/12/2020,Vencimento,9655.0,980754.9,Vencimento (estoque Mercado — última posição),0.0009807549
+TDAD06L238,01/12/2021,Vencimento,10037.0,1019558.46,Vencimento (estoque Mercado — última posição),0.00101955846
+TDAD06L335,01/12/2019,Vencimento,2449.0,246369.4,Vencimento (estoque Mercado — última posição),0.0002463694
+TDAD06L336,01/12/2020,Vencimento,2449.0,246344.91,Vencimento (estoque Mercado — última posição),0.00024634491
+TDAD06L337,01/12/2021,Vencimento,2449.0,246344.91,Vencimento (estoque Mercado — última posição),0.00024634491
+TDAD06L338,01/12/2022,Vencimento,2449.0,249773.51,Vencimento (estoque Mercado — última posição),0.00024977351000000003
+TDAD07B235,01/02/2019,Vencimento,24504.0,2488626.24,Vencimento (estoque Mercado — última posição),0.00248862624
+TDAD07B236,01/02/2020,Vencimento,23596.0,2396409.76,Vencimento (estoque Mercado — última posição),0.00239640976
+TDAD07B237,01/02/2021,Vencimento,24496.0,2488303.68,Vencimento (estoque Mercado — última posição),0.00248830368
+TDAD07B238,01/02/2022,Vencimento,24267.0,2467468.56,Vencimento (estoque Mercado — última posição),0.00246746856
+TDAD07B334,01/02/2019,Vencimento,5160.0,519044.4,Vencimento (estoque Mercado — última posição),0.0005190444
+TDAD07B335,01/02/2020,Vencimento,5127.0,515724.93,Vencimento (estoque Mercado — última posição),0.00051572493
+TDAD07B336,01/02/2021,Vencimento,5160.0,519096.0,Vencimento (estoque Mercado — última posição),0.000519096
+TDAD07B337,01/02/2022,Vencimento,5160.0,519560.4,Vencimento (estoque Mercado — última posição),0.0005195604
+TDAD07C235,01/03/2019,Vencimento,4226.0,429192.56,Vencimento (estoque Mercado — última posição),0.00042919256
+TDAD07C236,01/03/2020,Vencimento,4993.0,507188.94,Vencimento (estoque Mercado — última posição),0.00050718894
+TDAD07C237,01/03/2021,Vencimento,5164.0,524455.84,Vencimento (estoque Mercado — última posição),0.00052445584
+TDAD07C238,01/03/2022,Vencimento,5348.0,543624.2,Vencimento (estoque Mercado — última posição),0.0005436242
+TDAD07D235,01/04/2019,Vencimento,1869.0,189853.02,Vencimento (estoque Mercado — última posição),0.00018985302
+TDAD07D236,01/04/2020,Vencimento,1869.0,189815.64,Vencimento (estoque Mercado — última posição),0.00018981564000000002
+TDAD07D237,01/04/2021,Vencimento,1606.0,163137.48,Vencimento (estoque Mercado — última posição),0.00016313748
+TDAD07D238,01/04/2022,Vencimento,1968.0,200283.36,Vencimento (estoque Mercado — última posição),0.00020028336
+TDAD07D334,01/04/2019,Vencimento,5190.0,522114.0,Vencimento (estoque Mercado — última posição),0.000522114
+TDAD07D335,01/04/2020,Vencimento,3611.0,363230.49,Vencimento (estoque Mercado — última posição),0.00036323048999999997
+TDAD07D336,01/04/2021,Vencimento,3846.0,386907.6,Vencimento (estoque Mercado — última posição),0.00038690759999999996
+TDAD07D337,01/04/2022,Vencimento,4984.0,502287.52,Vencimento (estoque Mercado — última posição),0.00050228752
+TDAD07D410,01/04/2019,Vencimento,8.0,796.88,Vencimento (estoque Mercado — última posição),7.9688e-07
+TDAD07D411,01/04/2020,Vencimento,8.0,796.8,Vencimento (estoque Mercado — última posição),7.967999999999999e-07
+TDAD07D412,01/04/2021,Vencimento,8.0,796.88,Vencimento (estoque Mercado — última posição),7.9688e-07
+TDAD07D413,01/04/2022,Vencimento,8.0,798.32,Vencimento (estoque Mercado — última posição),7.983200000000001e-07
+TDAD07E235,01/05/2019,Vencimento,6925.0,703303.0,Vencimento (estoque Mercado — última posição),0.000703303
+TDAD07E236,01/05/2020,Vencimento,7034.0,714373.04,Vencimento (estoque Mercado — última posição),0.0007143730400000001
+TDAD07E237,01/05/2021,Vencimento,7010.0,712075.8,Vencimento (estoque Mercado — última posição),0.0007120758
+TDAD07E238,01/05/2022,Vencimento,7096.0,722443.76,Vencimento (estoque Mercado — última posição),0.00072244376
+TDAD07E334,01/05/2019,Vencimento,247.0,24845.73,Vencimento (estoque Mercado — última posição),2.484573e-05
+TDAD07E335,01/05/2020,Vencimento,247.0,24845.73,Vencimento (estoque Mercado — última posição),2.484573e-05
+TDAD07E336,01/05/2021,Vencimento,247.0,24845.73,Vencimento (estoque Mercado — última posição),2.484573e-05
+TDAD07E337,01/05/2022,Vencimento,247.0,24905.01,Vencimento (estoque Mercado — última posição),2.4905009999999997e-05
+TDAD07F235,01/06/2019,Vencimento,20540.0,2086042.4,Vencimento (estoque Mercado — última posição),0.0020860424
+TDAD07F236,01/06/2020,Vencimento,20593.0,2091836.94,Vencimento (estoque Mercado — última posição),0.00209183694
+TDAD07F237,01/06/2021,Vencimento,20620.0,2094579.6,Vencimento (estoque Mercado — última posição),0.0020945796000000003
+TDAD07F238,01/06/2022,Vencimento,20900.0,2131382.0,Vencimento (estoque Mercado — última posição),0.002131382
+TDAD07F334,01/06/2019,Vencimento,10036.0,1009521.24,Vencimento (estoque Mercado — última posição),0.00100952124
+TDAD07F335,01/06/2020,Vencimento,10036.0,1009621.6,Vencimento (estoque Mercado — última posição),0.0010096216
+TDAD07F336,01/06/2021,Vencimento,10036.0,1009621.6,Vencimento (estoque Mercado — última posição),0.0010096216
+TDAD07F337,01/06/2022,Vencimento,9794.0,989096.06,Vencimento (estoque Mercado — última posição),0.00098909606
+TDAD07G235,01/07/2019,Vencimento,5370.0,545484.6,Vencimento (estoque Mercado — última posição),0.0005454845999999999
+TDAD07G236,01/07/2020,Vencimento,5588.0,567573.16,Vencimento (estoque Mercado — última posição),0.00056757316
+TDAD07G237,01/07/2021,Vencimento,5566.0,565394.28,Vencimento (estoque Mercado — última posição),0.0005653942800000001
+TDAD07G238,01/07/2022,Vencimento,5717.0,583762.87,Vencimento (estoque Mercado — última posição),0.00058376287
+TDAD07G410,01/07/2019,Vencimento,2881.0,286976.41,Vencimento (estoque Mercado — última posição),0.00028697640999999997
+TDAD07G411,01/07/2020,Vencimento,1969.0,196112.4,Vencimento (estoque Mercado — última posição),0.0001961124
+TDAD07G412,01/07/2021,Vencimento,1925.0,191749.25,Vencimento (estoque Mercado — última posição),0.00019174925
+TDAD07G413,01/07/2022,Vencimento,2157.0,215980.41,Vencimento (estoque Mercado — última posição),0.00021598041
+TDAD07H235,01/08/2019,Vencimento,6061.0,615555.16,Vencimento (estoque Mercado — última posição),0.0006155551600000001
+TDAD07H236,01/08/2020,Vencimento,6024.0,611857.68,Vencimento (estoque Mercado — última posição),0.00061185768
+TDAD07H237,01/08/2021,Vencimento,5014.0,509322.12,Vencimento (estoque Mercado — última posição),0.00050932212
+TDAD07H238,01/08/2022,Vencimento,2324.0,237721.96,Vencimento (estoque Mercado — última posição),0.00023772196
+TDAD07H334,01/08/2019,Vencimento,196.0,19715.64,Vencimento (estoque Mercado — última posição),1.971564e-05
+TDAD07H335,01/08/2020,Vencimento,196.0,19715.64,Vencimento (estoque Mercado — última posição),1.971564e-05
+TDAD07H336,01/08/2021,Vencimento,196.0,19717.6,Vencimento (estoque Mercado — última posição),1.97176e-05
+TDAD07H337,01/08/2022,Vencimento,196.0,19854.8,Vencimento (estoque Mercado — última posição),1.98548e-05
+TDAD07H410,01/08/2019,Vencimento,1856.0,184857.6,Vencimento (estoque Mercado — última posição),0.0001848576
+TDAD07H411,01/08/2020,Vencimento,1856.0,184857.6,Vencimento (estoque Mercado — última posição),0.0001848576
+TDAD07H412,01/08/2021,Vencimento,1856.0,184876.16,Vencimento (estoque Mercado — última posição),0.00018487616
+TDAD07H413,01/08/2022,Vencimento,1856.0,186175.36,Vencimento (estoque Mercado — última posição),0.00018617535999999998
+TDAD07I235,01/09/2019,Vencimento,5005.0,508407.9,Vencimento (estoque Mercado — última posição),0.0005084079
+TDAD07I236,01/09/2020,Vencimento,5036.0,511556.88,Vencimento (estoque Mercado — última posição),0.00051155688
+TDAD07I237,01/09/2021,Vencimento,5016.0,509525.28,Vencimento (estoque Mercado — última posição),0.00050952528
+TDAD07I238,01/09/2022,Vencimento,4042.0,414385.84,Vencimento (estoque Mercado — última posição),0.00041438584000000003
+TDAD07I334,01/09/2019,Vencimento,1131.0,113778.6,Vencimento (estoque Mercado — última posição),0.00011377860000000001
+TDAD07I335,01/09/2020,Vencimento,1131.0,113778.6,Vencimento (estoque Mercado — última posição),0.00011377860000000001
+TDAD07I336,01/09/2021,Vencimento,1131.0,113778.6,Vencimento (estoque Mercado — última posição),0.00011377860000000001
+TDAD07I337,01/09/2022,Vencimento,1131.0,113778.6,Vencimento (estoque Mercado — última posição),0.00011377860000000001
+TDAD07J235,01/10/2019,Vencimento,538.0,54639.28,Vencimento (estoque Mercado — última posição),5.4639279999999996e-05
+TDAD07J236,01/10/2020,Vencimento,465.0,47234.7,Vencimento (estoque Mercado — última posição),4.72347e-05
+TDAD07J237,01/10/2021,Vencimento,463.0,47031.54,Vencimento (estoque Mercado — última posição),4.703154e-05
+TDAD07J238,01/10/2022,Vencimento,514.0,52787.8,Vencimento (estoque Mercado — última posição),5.27878e-05
+TDAD07K235,01/11/2019,Vencimento,14754.0,1498416.24,Vencimento (estoque Mercado — última posição),0.00149841624
+TDAD07K236,01/11/2020,Vencimento,14041.0,1426284.78,Vencimento (estoque Mercado — última posição),0.00142628478
+TDAD07K237,01/11/2021,Vencimento,14200.0,1442436.0,Vencimento (estoque Mercado — última posição),0.001442436
+TDAD07K238,01/11/2022,Vencimento,14302.0,1470960.7,Vencimento (estoque Mercado — última posição),0.0014709607
+TDAD07K334,01/11/2019,Vencimento,9510.0,956610.9,Vencimento (estoque Mercado — última posição),0.0009566109
+TDAD07K335,01/11/2020,Vencimento,9510.0,956706.0,Vencimento (estoque Mercado — última posição),0.000956706
+TDAD07K336,01/11/2021,Vencimento,9510.0,956706.0,Vencimento (estoque Mercado — última posição),0.000956706
+TDAD07K337,01/11/2022,Vencimento,9510.0,968593.5,Vencimento (estoque Mercado — última posição),0.0009685935
+TDAD07L235,01/12/2019,Vencimento,18401.0,1869173.58,Vencimento (estoque Mercado — última posição),0.00186917358
+TDAD07L236,01/12/2020,Vencimento,18540.0,1883293.2,Vencimento (estoque Mercado — última posição),0.0018832932
+TDAD07L237,01/12/2021,Vencimento,18580.0,1887356.4,Vencimento (estoque Mercado — última posição),0.0018873564
+TDAD07L238,01/12/2022,Vencimento,18240.0,1878537.6,Vencimento (estoque Mercado — última posição),0.0018785376
+TDAD07L334,01/12/2019,Vencimento,11809.0,1187985.4,Vencimento (estoque Mercado — última posição),0.0011879853999999998
+TDAD07L335,01/12/2020,Vencimento,11809.0,1187867.31,Vencimento (estoque Mercado — última posição),0.00118786731
+TDAD07L336,01/12/2021,Vencimento,11809.0,1187867.31,Vencimento (estoque Mercado — última posição),0.00118786731
+TDAD07L337,01/12/2022,Vencimento,11809.0,1204399.91,Vencimento (estoque Mercado — última posição),0.00120439991
+TDAD07L410,01/12/2019,Vencimento,1794.0,178700.34,Vencimento (estoque Mercado — última posição),0.00017870034
+TDAD07L411,01/12/2020,Vencimento,1794.0,178700.34,Vencimento (estoque Mercado — última posição),0.00017870034
+TDAD07L412,01/12/2021,Vencimento,1790.0,178301.9,Vencimento (estoque Mercado — última posição),0.0001783019
+TDAD07L413,01/12/2022,Vencimento,1691.0,170774.09,Vencimento (estoque Mercado — última posição),0.00017077409
+TDAD08A234,01/01/2019,Vencimento,588.0,59717.28,Vencimento (estoque Mercado — última posição),5.971728e-05
+TDAD08A235,01/01/2020,Vencimento,588.0,59717.28,Vencimento (estoque Mercado — última posição),5.971728e-05
+TDAD08A236,01/01/2021,Vencimento,588.0,59729.04,Vencimento (estoque Mercado — última posição),5.972904e-05
+TDAD08A237,01/01/2022,Vencimento,588.0,59758.44,Vencimento (estoque Mercado — última posição),5.975844e-05
+TDAD08B234,01/02/2019,Vencimento,809.0,82162.04,Vencimento (estoque Mercado — última posição),8.216203999999999e-05
+TDAD08B235,01/02/2020,Vencimento,611.0,62053.16,Vencimento (estoque Mercado — última posição),6.205316000000001e-05
+TDAD08B236,01/02/2021,Vencimento,606.0,61557.48,Vencimento (estoque Mercado — última posição),6.155748e-05
+TDAD08B237,01/02/2022,Vencimento,771.0,78395.28,Vencimento (estoque Mercado — última posição),7.839528e-05
+TDAD08C234,01/03/2019,Vencimento,646.0,65607.76,Vencimento (estoque Mercado — última posição),6.560776e-05
+TDAD08C235,01/03/2020,Vencimento,646.0,65620.68,Vencimento (estoque Mercado — última posição),6.562067999999999e-05
+TDAD08C236,01/03/2021,Vencimento,646.0,65607.76,Vencimento (estoque Mercado — última posição),6.560776e-05
+TDAD08C237,01/03/2022,Vencimento,483.0,49096.95,Vencimento (estoque Mercado — última posição),4.909695e-05
+TDAD08D234,01/04/2019,Vencimento,8026.0,815281.08,Vencimento (estoque Mercado — última posição),0.00081528108
+TDAD08D235,01/04/2020,Vencimento,8009.0,813394.04,Vencimento (estoque Mercado — última posição),0.00081339404
+TDAD08D236,01/04/2021,Vencimento,7861.0,798520.38,Vencimento (estoque Mercado — última posição),0.00079852038
+TDAD08D237,01/04/2022,Vencimento,8016.0,815788.32,Vencimento (estoque Mercado — última posição),0.0008157883199999999
+TDAD08D333,01/04/2019,Vencimento,2744.0,276046.4,Vencimento (estoque Mercado — última posição),0.00027604640000000003
+TDAD08D334,01/04/2020,Vencimento,2744.0,276018.96,Vencimento (estoque Mercado — última posição),0.00027601896
+TDAD08D335,01/04/2021,Vencimento,2744.0,276046.4,Vencimento (estoque Mercado — última posição),0.00027604640000000003
+TDAD08D336,01/04/2022,Vencimento,2744.0,276540.32,Vencimento (estoque Mercado — última posição),0.00027654032
+TDAD08D409,01/04/2019,Vencimento,2177.0,216850.97,Vencimento (estoque Mercado — última posição),0.00021685097
+TDAD08D410,01/04/2020,Vencimento,2177.0,216829.2,Vencimento (estoque Mercado — última posição),0.00021682920000000002
+TDAD08D411,01/04/2021,Vencimento,2177.0,216850.97,Vencimento (estoque Mercado — última posição),0.00021685097
+TDAD08D412,01/04/2022,Vencimento,2177.0,217242.83,Vencimento (estoque Mercado — última posição),0.00021724283
+TDAD08E234,01/05/2019,Vencimento,3734.0,379225.04,Vencimento (estoque Mercado — última posição),0.00037922503999999996
+TDAD08E235,01/05/2020,Vencimento,3883.0,394357.48,Vencimento (estoque Mercado — última posição),0.00039435748
+TDAD08E236,01/05/2021,Vencimento,3821.0,388137.18,Vencimento (estoque Mercado — última posição),0.00038813717999999997
+TDAD08E237,01/05/2022,Vencimento,3885.0,395531.85,Vencimento (estoque Mercado — última posição),0.00039553185
+TDAD08E333,01/05/2019,Vencimento,5558.0,559079.22,Vencimento (estoque Mercado — última posição),0.00055907922
+TDAD08E334,01/05/2020,Vencimento,6176.0,621243.84,Vencimento (estoque Mercado — última posição),0.00062124384
+TDAD08E335,01/05/2021,Vencimento,6967.0,700810.53,Vencimento (estoque Mercado — última posição),0.00070081053
+TDAD08E336,01/05/2022,Vencimento,7559.0,762173.97,Vencimento (estoque Mercado — última posição),0.00076217397
+TDAD08F234,01/06/2019,Vencimento,16226.0,1647912.56,Vencimento (estoque Mercado — última posição),0.00164791256
+TDAD08F235,01/06/2020,Vencimento,16220.0,1647627.6,Vencimento (estoque Mercado — última posição),0.0016476276
+TDAD08F236,01/06/2021,Vencimento,16222.0,1647830.76,Vencimento (estoque Mercado — última posição),0.00164783076
+TDAD08F237,01/06/2022,Vencimento,15996.0,1631272.08,Vencimento (estoque Mercado — última posição),0.0016312720800000001
+TDAD08F333,01/06/2019,Vencimento,321.0,32289.39,Vencimento (estoque Mercado — última posição),3.228939e-05
+TDAD08F334,01/06/2020,Vencimento,275.0,27665.0,Vencimento (estoque Mercado — última posição),2.7665e-05
+TDAD08F335,01/06/2021,Vencimento,287.0,28872.2,Vencimento (estoque Mercado — última posição),2.88722e-05
+TDAD08F336,01/06/2022,Vencimento,312.0,31508.88,Vencimento (estoque Mercado — última posição),3.150888e-05
+TDAD08G234,01/07/2019,Vencimento,11931.0,1211950.98,Vencimento (estoque Mercado — última posição),0.00121195098
+TDAD08G235,01/07/2020,Vencimento,11979.0,1216707.03,Vencimento (estoque Mercado — última posição),0.0012167070300000001
+TDAD08G236,01/07/2021,Vencimento,11709.0,1189400.22,Vencimento (estoque Mercado — última posição),0.00118940022
+TDAD08G237,01/07/2022,Vencimento,11567.0,1181106.37,Vencimento (estoque Mercado — última posição),0.0011811063700000002
+TDAD08G333,01/07/2019,Vencimento,1040.0,104624.0,Vencimento (estoque Mercado — última posição),0.000104624
+TDAD08G334,01/07/2020,Vencimento,1028.0,103396.24,Vencimento (estoque Mercado — última posição),0.00010339624
+TDAD08G335,01/07/2021,Vencimento,1096.0,110246.64,Vencimento (estoque Mercado — última posição),0.00011024664
+TDAD08G336,01/07/2022,Vencimento,1238.0,125186.56,Vencimento (estoque Mercado — última posição),0.00012518656
+TDAD08H234,01/08/2019,Vencimento,678.0,68857.68,Vencimento (estoque Mercado — última posição),6.885767999999999e-05
+TDAD08H235,01/08/2020,Vencimento,678.0,68864.46,Vencimento (estoque Mercado — última posição),6.886446e-05
+TDAD08H236,01/08/2021,Vencimento,678.0,68871.24,Vencimento (estoque Mercado — última posição),6.887124e-05
+TDAD08H237,01/08/2022,Vencimento,678.0,69352.62,Vencimento (estoque Mercado — última posição),6.935262e-05
+TDAD08I234,01/09/2019,Vencimento,7146.0,725890.68,Vencimento (estoque Mercado — última posição),0.0007258906800000001
+TDAD08I235,01/09/2020,Vencimento,7146.0,725890.68,Vencimento (estoque Mercado — última posição),0.0007258906800000001
+TDAD08I236,01/09/2021,Vencimento,7146.0,725890.68,Vencimento (estoque Mercado — última posição),0.0007258906800000001
+TDAD08I237,01/09/2022,Vencimento,7089.0,726764.28,Vencimento (estoque Mercado — última posição),0.00072676428
+TDAD08J234,01/10/2019,Vencimento,7389.0,750426.84,Vencimento (estoque Mercado — última posição),0.00075042684
+TDAD08J235,01/10/2020,Vencimento,7239.0,735337.62,Vencimento (estoque Mercado — última posição),0.00073533762
+TDAD08J236,01/10/2021,Vencimento,7213.0,732696.54,Vencimento (estoque Mercado — última posição),0.00073269654
+TDAD08J237,01/10/2022,Vencimento,6674.0,685419.8,Vencimento (estoque Mercado — última posição),0.0006854198
+TDAD08J333,01/10/2019,Vencimento,565.0,56833.35,Vencimento (estoque Mercado — última posição),5.683335e-05
+TDAD08J334,01/10/2020,Vencimento,513.0,51602.67,Vencimento (estoque Mercado — última posição),5.160267e-05
+TDAD08J335,01/10/2021,Vencimento,571.0,57436.89,Vencimento (estoque Mercado — última posição),5.743689e-05
+TDAD08J336,01/10/2022,Vencimento,557.0,56646.9,Vencimento (estoque Mercado — última posição),5.66469e-05
+TDAD08K234,01/11/2019,Vencimento,2859.0,290360.04,Vencimento (estoque Mercado — última posição),0.00029036004
+TDAD08K235,01/11/2020,Vencimento,2873.0,291839.34,Vencimento (estoque Mercado — última posição),0.00029183934
+TDAD08K236,01/11/2021,Vencimento,2746.0,278938.68,Vencimento (estoque Mercado — última posição),0.00027893868
+TDAD08K237,01/11/2022,Vencimento,2816.0,289625.6,Vencimento (estoque Mercado — última posição),0.0002896256
+TDAD08K333,01/11/2019,Vencimento,169.0,16999.71,Vencimento (estoque Mercado — última posição),1.699971e-05
+TDAD08K334,01/11/2020,Vencimento,169.0,17001.4,Vencimento (estoque Mercado — última posição),1.7001400000000003e-05
+TDAD08K335,01/11/2021,Vencimento,169.0,17001.4,Vencimento (estoque Mercado — última posição),1.7001400000000003e-05
+TDAD08K336,01/11/2022,Vencimento,169.0,17212.65,Vencimento (estoque Mercado — última posição),1.7212650000000002e-05
+TDAD08K409,01/11/2019,Vencimento,1042.0,103783.2,Vencimento (estoque Mercado — última posição),0.00010378319999999999
+TDAD08K410,01/11/2020,Vencimento,1144.0,113953.84,Vencimento (estoque Mercado — última posição),0.00011395384
+TDAD08K411,01/11/2021,Vencimento,1038.0,103395.18,Vencimento (estoque Mercado — última posição),0.00010339518
+TDAD08K412,01/11/2022,Vencimento,1099.0,110834.15,Vencimento (estoque Mercado — última posição),0.00011083415
+TDAD09B233,01/02/2019,Vencimento,116.0,11780.96,Vencimento (estoque Mercado — última posição),1.1780959999999998e-05
+TDAD09B234,01/02/2020,Vencimento,116.0,11780.96,Vencimento (estoque Mercado — última posição),1.1780959999999998e-05
+TDAD09B235,01/02/2021,Vencimento,116.0,11783.28,Vencimento (estoque Mercado — última posição),1.1783280000000001e-05
+TDAD09B236,01/02/2022,Vencimento,116.0,11794.88,Vencimento (estoque Mercado — última posição),1.179488e-05
+TDAD09B332,01/02/2019,Vencimento,478.0,48082.02,Vencimento (estoque Mercado — última posição),4.808202e-05
+TDAD09B333,01/02/2020,Vencimento,478.0,48082.02,Vencimento (estoque Mercado — última posição),4.808202e-05
+TDAD09B334,01/02/2021,Vencimento,478.0,48086.8,Vencimento (estoque Mercado — última posição),4.80868e-05
+TDAD09B335,01/02/2022,Vencimento,478.0,48129.82,Vencimento (estoque Mercado — última posição),4.812982e-05
+TDAD09C233,01/03/2019,Vencimento,21395.0,2172876.2,Vencimento (estoque Mercado — última posição),0.0021728762000000003
+TDAD09C234,01/03/2020,Vencimento,20655.0,2098134.9,Vencimento (estoque Mercado — última posição),0.0020981349
+TDAD09C235,01/03/2021,Vencimento,20925.0,2125143.0,Vencimento (estoque Mercado — última posição),0.002125143
+TDAD09C236,01/03/2022,Vencimento,20441.0,2077827.65,Vencimento (estoque Mercado — última posição),0.00207782765
+TDAD09C332,01/03/2019,Vencimento,4063.0,408697.17,Vencimento (estoque Mercado — última posição),0.00040869717
+TDAD09C333,01/03/2020,Vencimento,4149.0,417389.4,Vencimento (estoque Mercado — última posição),0.0004173894
+TDAD09C334,01/03/2021,Vencimento,3574.0,359472.92,Vencimento (estoque Mercado — última posição),0.00035947291999999996
+TDAD09C335,01/03/2022,Vencimento,3418.0,344090.06,Vencimento (estoque Mercado — última posição),0.00034409006
+TDAD09D233,01/04/2019,Vencimento,2377.0,241455.66,Vencimento (estoque Mercado — última posição),0.00024145566
+TDAD09D234,01/04/2020,Vencimento,2364.0,240087.84,Vencimento (estoque Mercado — última posição),0.00024008784
+TDAD09D235,01/04/2021,Vencimento,2345.0,238205.1,Vencimento (estoque Mercado — última posição),0.0002382051
+TDAD09D236,01/04/2022,Vencimento,2200.0,223894.0,Vencimento (estoque Mercado — última posição),0.000223894
+TDAD09E233,01/05/2019,Vencimento,2483.0,252173.48,Vencimento (estoque Mercado — última posição),0.00025217348
+TDAD09E234,01/05/2020,Vencimento,1787.0,181487.72,Vencimento (estoque Mercado — última posição),0.00018148772
+TDAD09E235,01/05/2021,Vencimento,2483.0,252223.14,Vencimento (estoque Mercado — última posição),0.00025222314
+TDAD09E236,01/05/2022,Vencimento,2483.0,252794.23,Vencimento (estoque Mercado — última posição),0.00025279423000000004
+TDAD09F233,01/06/2019,Vencimento,9103.0,924500.68,Vencimento (estoque Mercado — última posição),0.0009245006800000001
+TDAD09F234,01/06/2020,Vencimento,9490.0,963994.2,Vencimento (estoque Mercado — última posição),0.0009639942
+TDAD09F235,01/06/2021,Vencimento,9126.0,927019.08,Vencimento (estoque Mercado — última posição),0.00092701908
+TDAD09F236,01/06/2022,Vencimento,9103.0,928323.94,Vencimento (estoque Mercado — última posição),0.0009283239399999999
+TDAD09H233,01/08/2019,Vencimento,464.0,47123.84,Vencimento (estoque Mercado — última posição),4.7123839999999994e-05
+TDAD09H234,01/08/2020,Vencimento,472.0,47941.04,Vencimento (estoque Mercado — última posição),4.7941040000000003e-05
+TDAD09H235,01/08/2021,Vencimento,412.0,41850.96,Vencimento (estoque Mercado — última posição),4.185096e-05
+TDAD09H236,01/08/2022,Vencimento,400.0,40916.0,Vencimento (estoque Mercado — última posição),4.0916e-05
+TDAD09H332,01/08/2019,Vencimento,8861.0,891327.99,Vencimento (estoque Mercado — última posição),0.00089132799
+TDAD09H333,01/08/2020,Vencimento,8861.0,891327.99,Vencimento (estoque Mercado — última posição),0.00089132799
+TDAD09H334,01/08/2021,Vencimento,8861.0,891416.6,Vencimento (estoque Mercado — última posição),0.0008914166
+TDAD09H335,01/08/2022,Vencimento,8861.0,897619.3,Vencimento (estoque Mercado — última posição),0.0008976193
+TDAD09H408,01/08/2019,Vencimento,98.0,9760.8,Vencimento (estoque Mercado — última posição),9.7608e-06
+TDAD09H409,01/08/2020,Vencimento,98.0,9760.8,Vencimento (estoque Mercado — última posição),9.7608e-06
+TDAD09H410,01/08/2021,Vencimento,98.0,9761.78,Vencimento (estoque Mercado — última posição),9.76178e-06
+TDAD09H411,01/08/2022,Vencimento,98.0,9830.38,Vencimento (estoque Mercado — última posição),9.830379999999999e-06
+TDAD09I233,01/09/2019,Vencimento,11508.0,1168982.64,Vencimento (estoque Mercado — última posição),0.0011689826399999999
+TDAD09I234,01/09/2020,Vencimento,11588.0,1177109.04,Vencimento (estoque Mercado — última posição),0.00117710904
+TDAD09I235,01/09/2021,Vencimento,11161.0,1133734.38,Vencimento (estoque Mercado — última posição),0.00113373438
+TDAD09I236,01/09/2022,Vencimento,11397.0,1168420.44,Vencimento (estoque Mercado — última posição),0.0011684204399999999
+TDAD09I332,01/09/2019,Vencimento,5771.0,580562.6,Vencimento (estoque Mercado — última posição),0.0005805626
+TDAD09I333,01/09/2020,Vencimento,5771.0,580562.6,Vencimento (estoque Mercado — última posição),0.0005805626
+TDAD09I334,01/09/2021,Vencimento,5771.0,580562.6,Vencimento (estoque Mercado — última posição),0.0005805626
+TDAD09I335,01/09/2022,Vencimento,5771.0,585929.63,Vencimento (estoque Mercado — última posição),0.00058592963
+TDAD09I408,01/09/2019,Vencimento,2209.0,220038.49,Vencimento (estoque Mercado — última posição),0.00022003849
+TDAD09I409,01/09/2020,Vencimento,2219.0,221034.59,Vencimento (estoque Mercado — última posição),0.00022103459
+TDAD09I410,01/09/2021,Vencimento,2219.0,221034.59,Vencimento (estoque Mercado — última posição),0.00022103459
+TDAD09I411,01/09/2022,Vencimento,1904.0,191409.12,Vencimento (estoque Mercado — última posição),0.00019140912
+TDAD09J233,01/10/2019,Vencimento,157.0,15944.92,Vencimento (estoque Mercado — última posição),1.594492e-05
+TDAD09J234,01/10/2020,Vencimento,157.0,15948.06,Vencimento (estoque Mercado — última posição),1.5948059999999998e-05
+TDAD09J235,01/10/2021,Vencimento,157.0,15948.06,Vencimento (estoque Mercado — última posição),1.5948059999999998e-05
+TDAD09J236,01/10/2022,Vencimento,157.0,16123.9,Vencimento (estoque Mercado — última posição),1.61239e-05
+TDAD09J332,01/10/2019,Vencimento,110.0,11064.9,Vencimento (estoque Mercado — última posição),1.10649e-05
+TDAD09J333,01/10/2020,Vencimento,110.0,11064.9,Vencimento (estoque Mercado — última posição),1.10649e-05
+TDAD09J334,01/10/2021,Vencimento,106.0,10662.54,Vencimento (estoque Mercado — última posição),1.0662540000000001e-05
+TDAD09J335,01/10/2022,Vencimento,110.0,11187.0,Vencimento (estoque Mercado — última posição),1.1187e-05
+TDAD09J408,01/10/2019,Vencimento,2573.0,256270.8,Vencimento (estoque Mercado — última posição),0.0002562708
+TDAD09J409,01/10/2020,Vencimento,2573.0,256296.53,Vencimento (estoque Mercado — última posição),0.00025629653
+TDAD09J410,01/10/2021,Vencimento,2573.0,256296.53,Vencimento (estoque Mercado — última posição),0.00025629653
+TDAD09J411,01/10/2022,Vencimento,2573.0,259126.83,Vencimento (estoque Mercado — última posição),0.00025912683
+TDAD09K233,01/11/2019,Vencimento,2865.0,290969.4,Vencimento (estoque Mercado — última posição),0.0002909694
+TDAD09K234,01/11/2020,Vencimento,2865.0,291026.7,Vencimento (estoque Mercado — última posição),0.0002910267
+TDAD09K235,01/11/2021,Vencimento,2816.0,286049.28,Vencimento (estoque Mercado — última posição),0.00028604928000000005
+TDAD09K236,01/11/2022,Vencimento,2865.0,294665.25,Vencimento (estoque Mercado — última posição),0.00029466525
+TDAD09K332,01/11/2019,Vencimento,2813.0,282959.67,Vencimento (estoque Mercado — última posição),0.00028295967
+TDAD09K333,01/11/2020,Vencimento,2813.0,282987.8,Vencimento (estoque Mercado — última posição),0.0002829878
+TDAD09K334,01/11/2021,Vencimento,2813.0,282987.8,Vencimento (estoque Mercado — última posição),0.0002829878
+TDAD09K335,01/11/2022,Vencimento,2805.0,285689.25,Vencimento (estoque Mercado — última posição),0.00028568925
+TDAD09L233,01/12/2019,Vencimento,37.0,3758.46,Vencimento (estoque Mercado — última posição),3.75846e-06
+TDAD09L234,01/12/2020,Vencimento,37.0,3758.46,Vencimento (estoque Mercado — última posição),3.75846e-06
+TDAD09L235,01/12/2021,Vencimento,37.0,3758.46,Vencimento (estoque Mercado — última posição),3.75846e-06
+TDAD09L236,01/12/2022,Vencimento,37.0,3810.63,Vencimento (estoque Mercado — última posição),3.81063e-06
+TDAD10A232,01/01/2019,Vencimento,120.0,12187.2,Vencimento (estoque Mercado — última posição),1.21872e-05
+TDAD10A233,01/01/2020,Vencimento,124.0,12593.44,Vencimento (estoque Mercado — última posição),1.259344e-05
+TDAD10A234,01/01/2021,Vencimento,124.0,12595.92,Vencimento (estoque Mercado — última posição),1.259592e-05
+TDAD10A235,01/01/2022,Vencimento,124.0,12602.12,Vencimento (estoque Mercado — última posição),1.260212e-05
+TDAD10B232,01/02/2019,Vencimento,44.0,4468.64,Vencimento (estoque Mercado — última posição),4.46864e-06
+TDAD10B233,01/02/2020,Vencimento,37.0,3757.72,Vencimento (estoque Mercado — última posição),3.7577199999999997e-06
+TDAD10B234,01/02/2021,Vencimento,38.0,3860.04,Vencimento (estoque Mercado — última posição),3.86004e-06
+TDAD10B235,01/02/2022,Vencimento,37.0,3762.16,Vencimento (estoque Mercado — última posição),3.76216e-06
+TDAD10C232,01/03/2019,Vencimento,15570.0,1581289.2,Vencimento (estoque Mercado — última posição),0.0015812892
+TDAD10C233,01/03/2020,Vencimento,15570.0,1581600.6,Vencimento (estoque Mercado — última posição),0.0015816006
+TDAD10C234,01/03/2021,Vencimento,15570.0,1581289.2,Vencimento (estoque Mercado — última posição),0.0015812892
+TDAD10C235,01/03/2022,Vencimento,15515.0,1577099.75,Vencimento (estoque Mercado — última posição),0.00157709975
+TDAD10C331,01/03/2019,Vencimento,1067.0,107329.53,Vencimento (estoque Mercado — última posição),0.00010732953
+TDAD10C332,01/03/2020,Vencimento,1067.0,107340.2,Vencimento (estoque Mercado — última posição),0.0001073402
+TDAD10C333,01/03/2021,Vencimento,1067.0,107318.86,Vencimento (estoque Mercado — última posição),0.00010731886
+TDAD10C334,01/03/2022,Vencimento,1067.0,107414.89,Vencimento (estoque Mercado — última posição),0.00010741488999999999
+TDAD10C407,01/03/2019,Vencimento,5601.0,557859.6,Vencimento (estoque Mercado — última posição),0.0005578596
+TDAD10C408,01/03/2020,Vencimento,5601.0,557915.61,Vencimento (estoque Mercado — última posição),0.00055791561
+TDAD10C409,01/03/2021,Vencimento,5601.0,557859.6,Vencimento (estoque Mercado — última posição),0.0005578596
+TDAD10C410,01/03/2022,Vencimento,5601.0,558363.69,Vencimento (estoque Mercado — última posição),0.0005583636899999999
+TDAD10D232,01/04/2019,Vencimento,20400.0,2072232.0,Vencimento (estoque Mercado — última posição),0.002072232
+TDAD10D233,01/04/2020,Vencimento,20331.0,2064816.36,Vencimento (estoque Mercado — última posição),0.00206481636
+TDAD10D234,01/04/2021,Vencimento,20028.0,2034444.24,Vencimento (estoque Mercado — última posição),0.00203444424
+TDAD10D235,01/04/2022,Vencimento,19890.0,2024205.3,Vencimento (estoque Mercado — última posição),0.0020242053
+TDAD10D331,01/04/2019,Vencimento,7315.0,735889.0,Vencimento (estoque Mercado — última posição),0.000735889
+TDAD10D332,01/04/2020,Vencimento,7315.0,735815.85,Vencimento (estoque Mercado — última posição),0.00073581585
+TDAD10D333,01/04/2021,Vencimento,7315.0,735889.0,Vencimento (estoque Mercado — última posição),0.000735889
+TDAD10D334,01/04/2022,Vencimento,7315.0,737205.7,Vencimento (estoque Mercado — última posição),0.0007372056999999999
+TDAD10E232,01/05/2019,Vencimento,11283.0,1145901.48,Vencimento (estoque Mercado — última posição),0.00114590148
+TDAD10E233,01/05/2020,Vencimento,11283.0,1145901.48,Vencimento (estoque Mercado — última posição),0.00114590148
+TDAD10E234,01/05/2021,Vencimento,11283.0,1146127.14,Vencimento (estoque Mercado — última posição),0.00114612714
+TDAD10E235,01/05/2022,Vencimento,11283.0,1148722.23,Vencimento (estoque Mercado — última posição),0.00114872223
+TDAD10F232,01/06/2019,Vencimento,89.0,9038.84,Vencimento (estoque Mercado — última posição),9.03884e-06
+TDAD10F233,01/06/2020,Vencimento,89.0,9040.62,Vencimento (estoque Mercado — última posição),9.040620000000001e-06
+TDAD10F234,01/06/2021,Vencimento,89.0,9040.62,Vencimento (estoque Mercado — última posição),9.040620000000001e-06
+TDAD10F235,01/06/2022,Vencimento,89.0,9076.22,Vencimento (estoque Mercado — última posição),9.07622e-06
+TDAD10G232,01/07/2019,Vencimento,3109.0,315812.22,Vencimento (estoque Mercado — última posição),0.00031581222
+TDAD10G233,01/07/2020,Vencimento,3109.0,315781.13,Vencimento (estoque Mercado — última posição),0.00031578113
+TDAD10G234,01/07/2021,Vencimento,3109.0,315812.22,Vencimento (estoque Mercado — última posição),0.00031581222
+TDAD10G235,01/07/2022,Vencimento,3109.0,317459.99,Vencimento (estoque Mercado — última posição),0.00031745998999999997
+TDAD10G331,01/07/2019,Vencimento,234.0,23540.4,Vencimento (estoque Mercado — última posição),2.3540400000000003e-05
+TDAD10G332,01/07/2020,Vencimento,234.0,23535.72,Vencimento (estoque Mercado — última posição),2.353572e-05
+TDAD10G333,01/07/2021,Vencimento,234.0,23538.06,Vencimento (estoque Mercado — última posição),2.353806e-05
+TDAD10G334,01/07/2022,Vencimento,234.0,23662.08,Vencimento (estoque Mercado — última posição),2.366208e-05
+TDAD10H232,01/08/2019,Vencimento,532.0,54029.92,Vencimento (estoque Mercado — última posição),5.402992e-05
+TDAD10H233,01/08/2020,Vencimento,532.0,54035.24,Vencimento (estoque Mercado — última posição),5.403524e-05
+TDAD10H234,01/08/2021,Vencimento,532.0,54040.56,Vencimento (estoque Mercado — última posição),5.4040559999999996e-05
+TDAD10H235,01/08/2022,Vencimento,532.0,54418.28,Vencimento (estoque Mercado — última posição),5.441828e-05
+TDAD10I232,01/09/2019,Vencimento,7.0,711.06,Vencimento (estoque Mercado — última posição),7.110599999999999e-07
+TDAD10I233,01/09/2020,Vencimento,7.0,711.06,Vencimento (estoque Mercado — última posição),7.110599999999999e-07
+TDAD10I234,01/09/2021,Vencimento,7.0,711.06,Vencimento (estoque Mercado — última posição),7.110599999999999e-07
+TDAD10I235,01/09/2022,Vencimento,7.0,717.64,Vencimento (estoque Mercado — última posição),7.1764e-07
+TDAD10J232,01/10/2019,Vencimento,478.0,48545.68,Vencimento (estoque Mercado — última posição),4.854568e-05
+TDAD10J233,01/10/2020,Vencimento,478.0,48555.24,Vencimento (estoque Mercado — última posição),4.8555239999999995e-05
+TDAD10J234,01/10/2021,Vencimento,478.0,48555.24,Vencimento (estoque Mercado — última posição),4.8555239999999995e-05
+TDAD10J235,01/10/2022,Vencimento,478.0,49090.6,Vencimento (estoque Mercado — última posição),4.90906e-05
+TDAD10L232,01/12/2019,Vencimento,137.0,13916.46,Vencimento (estoque Mercado — última posição),1.3916459999999999e-05
+TDAD10L233,01/12/2020,Vencimento,137.0,13916.46,Vencimento (estoque Mercado — última posição),1.3916459999999999e-05
+TDAD10L234,01/12/2021,Vencimento,137.0,13916.46,Vencimento (estoque Mercado — última posição),1.3916459999999999e-05
+TDAD10L235,01/12/2022,Vencimento,137.0,14109.63,Vencimento (estoque Mercado — última posição),1.410963e-05
+TDAD11A231,01/01/2019,Vencimento,323.0,32803.88,Vencimento (estoque Mercado — última posição),3.280388e-05
+TDAD11A232,01/01/2020,Vencimento,323.0,32803.88,Vencimento (estoque Mercado — última posição),3.280388e-05
+TDAD11A233,01/01/2021,Vencimento,323.0,32810.34,Vencimento (estoque Mercado — última posição),3.2810339999999996e-05
+TDAD11A234,01/01/2022,Vencimento,323.0,32826.49,Vencimento (estoque Mercado — última posição),3.282649e-05
+TDAD11C231,01/03/2019,Vencimento,473.0,48037.88,Vencimento (estoque Mercado — última posição),4.8037879999999995e-05
+TDAD11C232,01/03/2020,Vencimento,473.0,48047.34,Vencimento (estoque Mercado — última posição),4.804734e-05
+TDAD11C233,01/03/2021,Vencimento,473.0,48037.88,Vencimento (estoque Mercado — última posição),4.8037879999999995e-05
+TDAD11C234,01/03/2022,Vencimento,473.0,48080.45,Vencimento (estoque Mercado — última posição),4.808045e-05
+TDAD11D231,01/04/2019,Vencimento,186.0,18893.88,Vencimento (estoque Mercado — última posição),1.889388e-05
+TDAD11D232,01/04/2020,Vencimento,186.0,18890.16,Vencimento (estoque Mercado — última posição),1.889016e-05
+TDAD11D233,01/04/2021,Vencimento,186.0,18893.88,Vencimento (estoque Mercado — última posição),1.889388e-05
+TDAD11D234,01/04/2022,Vencimento,186.0,18929.22,Vencimento (estoque Mercado — última posição),1.892922e-05
+TDAD11E231,01/05/2019,Vencimento,12501.0,1269601.56,Vencimento (estoque Mercado — última posição),0.0012696015600000001
+TDAD11E232,01/05/2020,Vencimento,12354.0,1254672.24,Vencimento (estoque Mercado — última posição),0.00125467224
+TDAD11E233,01/05/2021,Vencimento,12474.0,1267108.92,Vencimento (estoque Mercado — última posição),0.0012671089199999999
+TDAD11E234,01/05/2022,Vencimento,12500.0,1272625.0,Vencimento (estoque Mercado — última posição),0.001272625
+TDAD11E330,01/05/2019,Vencimento,3929.0,395218.11,Vencimento (estoque Mercado — última posição),0.00039521810999999996
+TDAD11E331,01/05/2020,Vencimento,3929.0,395218.11,Vencimento (estoque Mercado — última posição),0.00039521810999999996
+TDAD11E332,01/05/2021,Vencimento,3929.0,395218.11,Vencimento (estoque Mercado — última posição),0.00039521810999999996
+TDAD11E333,01/05/2022,Vencimento,3929.0,396161.07,Vencimento (estoque Mercado — última posição),0.00039616107
+TDAD11F231,01/06/2019,Vencimento,9520.0,966851.2,Vencimento (estoque Mercado — última posição),0.0009668512
+TDAD11F232,01/06/2020,Vencimento,9520.0,967041.6,Vencimento (estoque Mercado — última posição),0.0009670416
+TDAD11F233,01/06/2021,Vencimento,9520.0,967041.6,Vencimento (estoque Mercado — última posição),0.0009670416
+TDAD11F234,01/06/2022,Vencimento,9520.0,970849.6,Vencimento (estoque Mercado — última posição),0.0009708496
+TDAD11G231,01/07/2019,Vencimento,39821.0,4045017.18,Vencimento (estoque Mercado — última posição),0.00404501718
+TDAD11G232,01/07/2020,Vencimento,39761.0,4038524.77,Vencimento (estoque Mercado — última posição),0.00403852477
+TDAD11G233,01/07/2021,Vencimento,39813.0,4044204.54,Vencimento (estoque Mercado — última posição),0.00404420454
+TDAD11G234,01/07/2022,Vencimento,37155.0,3793897.05,Vencimento (estoque Mercado — última posição),0.00379389705
+TDAD11G330,01/07/2019,Vencimento,9393.0,944935.8,Vencimento (estoque Mercado — última posição),0.0009449358
+TDAD11G331,01/07/2020,Vencimento,9393.0,944747.94,Vencimento (estoque Mercado — última posição),0.0009447479399999999
+TDAD11G332,01/07/2021,Vencimento,9393.0,944841.87,Vencimento (estoque Mercado — última posição),0.00094484187
+TDAD11G333,01/07/2022,Vencimento,9393.0,949820.16,Vencimento (estoque Mercado — última posição),0.00094982016
+TDAD11G406,01/07/2019,Vencimento,17740.0,1767081.4,Vencimento (estoque Mercado — última posição),0.0017670814
+TDAD11G407,01/07/2020,Vencimento,17740.0,1766904.0,Vencimento (estoque Mercado — última posição),0.001766904
+TDAD11G408,01/07/2021,Vencimento,17740.0,1767081.4,Vencimento (estoque Mercado — última posição),0.0017670814
+TDAD11G409,01/07/2022,Vencimento,17740.0,1776306.2,Vencimento (estoque Mercado — última posição),0.0017763062
+TDAD11J231,01/10/2019,Vencimento,605.0,61443.8,Vencimento (estoque Mercado — última posição),6.14438e-05
+TDAD11J232,01/10/2020,Vencimento,605.0,61455.9,Vencimento (estoque Mercado — última posição),6.14559e-05
+TDAD11J233,01/10/2021,Vencimento,605.0,61455.9,Vencimento (estoque Mercado — última posição),6.14559e-05
+TDAD11J234,01/10/2022,Vencimento,605.0,62133.5,Vencimento (estoque Mercado — última posição),6.21335e-05
+TDAD11L231,01/12/2019,Vencimento,38021.0,3862173.18,Vencimento (estoque Mercado — última posição),0.00386217318
+TDAD11L232,01/12/2020,Vencimento,38019.0,3861970.02,Vencimento (estoque Mercado — última posição),0.00386197002
+TDAD11L233,01/12/2021,Vencimento,38012.0,3861258.96,Vencimento (estoque Mercado — última posição),0.00386125896
+TDAD11L234,01/12/2022,Vencimento,36265.0,3734932.35,Vencimento (estoque Mercado — última posição),0.00373493235
+TDAD11L330,01/12/2019,Vencimento,5634.0,566780.4,Vencimento (estoque Mercado — última posição),0.0005667804
+TDAD11L331,01/12/2020,Vencimento,5634.0,566724.06,Vencimento (estoque Mercado — última posição),0.0005667240600000001
+TDAD11L332,01/12/2021,Vencimento,5634.0,566724.06,Vencimento (estoque Mercado — última posição),0.0005667240600000001
+TDAD11L333,01/12/2022,Vencimento,5634.0,574611.66,Vencimento (estoque Mercado — última posição),0.00057461166
+TDAD11L406,01/12/2019,Vencimento,7038.0,701055.18,Vencimento (estoque Mercado — última posição),0.0007010551800000001
+TDAD11L407,01/12/2020,Vencimento,7454.0,742492.94,Vencimento (estoque Mercado — última posição),0.0007424929399999999
+TDAD11L408,01/12/2021,Vencimento,7454.0,742492.94,Vencimento (estoque Mercado — última posição),0.0007424929399999999
+TDAD11L409,01/12/2022,Vencimento,7436.0,750961.64,Vencimento (estoque Mercado — última posição),0.00075096164
+TDAD12A230,01/01/2019,Vencimento,503.0,51084.68,Vencimento (estoque Mercado — última posição),5.108468e-05
+TDAD12A231,01/01/2020,Vencimento,503.0,51084.68,Vencimento (estoque Mercado — última posição),5.108468e-05
+TDAD12A232,01/01/2021,Vencimento,503.0,51094.74,Vencimento (estoque Mercado — última posição),5.109474e-05
+TDAD12A233,01/01/2022,Vencimento,503.0,51119.89,Vencimento (estoque Mercado — última posição),5.111989e-05
+TDAD12C230,01/03/2019,Vencimento,870.0,88357.2,Vencimento (estoque Mercado — última posição),8.83572e-05
+TDAD12C231,01/03/2020,Vencimento,870.0,88374.6,Vencimento (estoque Mercado — última posição),8.83746e-05
+TDAD12C232,01/03/2021,Vencimento,870.0,88357.2,Vencimento (estoque Mercado — última posição),8.83572e-05
+TDAD12C233,01/03/2022,Vencimento,870.0,88435.5,Vencimento (estoque Mercado — última posição),8.84355e-05
+TDAD12C329,01/03/2019,Vencimento,32.0,3218.88,Vencimento (estoque Mercado — última posição),3.21888e-06
+TDAD12C330,01/03/2020,Vencimento,32.0,3219.2,Vencimento (estoque Mercado — última posição),3.2192e-06
+TDAD12C331,01/03/2021,Vencimento,32.0,3218.56,Vencimento (estoque Mercado — última posição),3.21856e-06
+TDAD12C332,01/03/2022,Vencimento,32.0,3221.44,Vencimento (estoque Mercado — última posição),3.22144e-06
+TDAD12D230,01/04/2019,Vencimento,19313.0,1961814.54,Vencimento (estoque Mercado — última posição),0.00196181454
+TDAD12D231,01/04/2020,Vencimento,19313.0,1961428.28,Vencimento (estoque Mercado — última posição),0.00196142828
+TDAD12D232,01/04/2021,Vencimento,19313.0,1961814.54,Vencimento (estoque Mercado — última posição),0.00196181454
+TDAD12D233,01/04/2022,Vencimento,19313.0,1965484.01,Vencimento (estoque Mercado — última posição),0.00196548401
+TDAD12D329,01/04/2019,Vencimento,3068.0,308640.8,Vencimento (estoque Mercado — última posição),0.0003086408
+TDAD12D330,01/04/2020,Vencimento,3068.0,308610.12,Vencimento (estoque Mercado — última posição),0.00030861011999999997
+TDAD12D331,01/04/2021,Vencimento,3068.0,308640.8,Vencimento (estoque Mercado — última posição),0.0003086408
+TDAD12D332,01/04/2022,Vencimento,3068.0,309193.04,Vencimento (estoque Mercado — última posição),0.00030919304
+TDAD12D405,01/04/2019,Vencimento,182.0,18129.02,Vencimento (estoque Mercado — última posição),1.812902e-05
+TDAD12D406,01/04/2020,Vencimento,182.0,18127.2,Vencimento (estoque Mercado — última posição),1.81272e-05
+TDAD12D407,01/04/2021,Vencimento,182.0,18129.02,Vencimento (estoque Mercado — última posição),1.812902e-05
+TDAD12D408,01/04/2022,Vencimento,182.0,18161.78,Vencimento (estoque Mercado — última posição),1.8161779999999998e-05
+TDAD12F230,01/06/2019,Vencimento,2254.0,228916.24,Vencimento (estoque Mercado — última posição),0.00022891623999999998
+TDAD12F231,01/06/2020,Vencimento,2254.0,228961.32,Vencimento (estoque Mercado — última posição),0.00022896132000000001
+TDAD12F232,01/06/2021,Vencimento,2254.0,228961.32,Vencimento (estoque Mercado — última posição),0.00022896132000000001
+TDAD12F233,01/06/2022,Vencimento,2254.0,229862.92,Vencimento (estoque Mercado — última posição),0.00022986292
+TDAD12H230,01/08/2019,Vencimento,14104.0,1432402.24,Vencimento (estoque Mercado — última posição),0.00143240224
+TDAD12H231,01/08/2020,Vencimento,12978.0,1318175.46,Vencimento (estoque Mercado — última posição),0.0013181754599999999
+TDAD12H232,01/08/2021,Vencimento,14104.0,1432684.32,Vencimento (estoque Mercado — última posição),0.00143268432
+TDAD12H233,01/08/2022,Vencimento,14100.0,1442289.0,Vencimento (estoque Mercado — última posição),0.001442289
+TDAD12I230,01/09/2019,Vencimento,1839.0,186805.62,Vencimento (estoque Mercado — última posição),0.00018680562
+TDAD12I231,01/09/2020,Vencimento,1839.0,186805.62,Vencimento (estoque Mercado — última posição),0.00018680562
+TDAD12I232,01/09/2021,Vencimento,1839.0,186805.62,Vencimento (estoque Mercado — última posição),0.00018680562
+TDAD12I233,01/09/2022,Vencimento,1839.0,188534.28,Vencimento (estoque Mercado — última posição),0.00018853428
+TDAD12J230,01/10/2019,Vencimento,11181.0,1135542.36,Vencimento (estoque Mercado — última posição),0.00113554236
+TDAD12J231,01/10/2020,Vencimento,11181.0,1135765.98,Vencimento (estoque Mercado — última posição),0.00113576598
+TDAD12J232,01/10/2021,Vencimento,11181.0,1135765.98,Vencimento (estoque Mercado — última posição),0.00113576598
+TDAD12J233,01/10/2022,Vencimento,11163.0,1146440.1,Vencimento (estoque Mercado — última posição),0.0011464401000000001
+TDAD12J329,01/10/2019,Vencimento,3579.0,360011.61,Vencimento (estoque Mercado — última posição),0.00036001161
+TDAD12J330,01/10/2020,Vencimento,3099.0,311728.41,Vencimento (estoque Mercado — última posição),0.00031172841
+TDAD12J331,01/10/2021,Vencimento,3066.0,308408.94,Vencimento (estoque Mercado — última posição),0.00030840894
+TDAD12J332,01/10/2022,Vencimento,2961.0,301133.7,Vencimento (estoque Mercado — última posição),0.0003011337
+TDAD12J405,01/10/2019,Vencimento,7213.0,718414.8,Vencimento (estoque Mercado — última posição),0.0007184148000000001
+TDAD12J406,01/10/2020,Vencimento,7213.0,718486.93,Vencimento (estoque Mercado — última posição),0.00071848693
+TDAD12J407,01/10/2021,Vencimento,7213.0,718486.93,Vencimento (estoque Mercado — última posição),0.00071848693
+TDAD12J408,01/10/2022,Vencimento,7213.0,726421.23,Vencimento (estoque Mercado — última posição),0.0007264212299999999
+TDAD12K230,01/11/2019,Vencimento,19398.0,1970060.88,Vencimento (estoque Mercado — última posição),0.00197006088
+TDAD12K231,01/11/2020,Vencimento,19269.0,1957345.02,Vencimento (estoque Mercado — última posição),0.00195734502
+TDAD12K232,01/11/2021,Vencimento,19814.0,2012706.12,Vencimento (estoque Mercado — última posição),0.00201270612
+TDAD12K233,01/11/2022,Vencimento,19503.0,2005883.55,Vencimento (estoque Mercado — última posição),0.00200588355
+TDAD12K329,01/11/2019,Vencimento,4110.0,413424.9,Vencimento (estoque Mercado — última posição),0.0004134249
+TDAD12K330,01/11/2020,Vencimento,4110.0,413466.0,Vencimento (estoque Mercado — última posição),0.000413466
+TDAD12K331,01/11/2021,Vencimento,4052.0,407631.2,Vencimento (estoque Mercado — última posição),0.0004076312
+TDAD12K332,01/11/2022,Vencimento,3780.0,384993.0,Vencimento (estoque Mercado — última posição),0.000384993
+TDAD12L230,01/12/2019,Vencimento,27036.0,2746316.88,Vencimento (estoque Mercado — última posição),0.00274631688
+TDAD12L231,01/12/2020,Vencimento,27034.0,2746113.72,Vencimento (estoque Mercado — última posição),0.0027461137200000003
+TDAD12L232,01/12/2021,Vencimento,26866.0,2729048.28,Vencimento (estoque Mercado — última posição),0.0027290482799999997
+TDAD12L233,01/12/2022,Vencimento,19941.0,2053723.59,Vencimento (estoque Mercado — última posição),0.00205372359
+TDAD12L329,01/12/2019,Vencimento,40459.0,4070175.4,Vencimento (estoque Mercado — última posição),0.0040701754
+TDAD12L330,01/12/2020,Vencimento,40459.0,4069770.81,Vencimento (estoque Mercado — última posição),0.00406977081
+TDAD12L331,01/12/2021,Vencimento,40459.0,4069770.81,Vencimento (estoque Mercado — última posição),0.00406977081
+TDAD12L332,01/12/2022,Vencimento,40459.0,4126413.41,Vencimento (estoque Mercado — última posição),0.00412641341
+TDAD13E229,01/05/2019,Vencimento,2364.0,240087.84,Vencimento (estoque Mercado — última posição),0.00024008784
+TDAD13E230,01/05/2020,Vencimento,2364.0,240087.84,Vencimento (estoque Mercado — última posição),0.00024008784
+TDAD13E231,01/05/2021,Vencimento,2364.0,240135.12,Vencimento (estoque Mercado — última posição),0.00024013512
+TDAD13E232,01/05/2022,Vencimento,2364.0,240678.84,Vencimento (estoque Mercado — última posição),0.00024067884
+TDAD13F229,01/06/2019,Vencimento,3917.0,397810.52,Vencimento (estoque Mercado — última posição),0.00039781052
+TDAD13F230,01/06/2020,Vencimento,3917.0,397888.86,Vencimento (estoque Mercado — última posição),0.00039788886
+TDAD13F231,01/06/2021,Vencimento,3917.0,397888.86,Vencimento (estoque Mercado — última posição),0.00039788886
+TDAD13F232,01/06/2022,Vencimento,3917.0,399455.66,Vencimento (estoque Mercado — última posição),0.00039945565999999997
+TDAD13G229,01/07/2019,Vencimento,329.0,33419.82,Vencimento (estoque Mercado — última posição),3.341982e-05
+TDAD13G230,01/07/2020,Vencimento,329.0,33416.53,Vencimento (estoque Mercado — última posição),3.3416529999999996e-05
+TDAD13G231,01/07/2021,Vencimento,329.0,33419.82,Vencimento (estoque Mercado — última posição),3.341982e-05
+TDAD13G232,01/07/2022,Vencimento,329.0,33594.19,Vencimento (estoque Mercado — última posição),3.3594190000000004e-05
+TDAD13H229,01/08/2019,Vencimento,239.0,24272.84,Vencimento (estoque Mercado — última posição),2.427284e-05
+TDAD13H230,01/08/2020,Vencimento,239.0,24275.23,Vencimento (estoque Mercado — última posição),2.427523e-05
+TDAD13H231,01/08/2021,Vencimento,239.0,24277.62,Vencimento (estoque Mercado — última posição),2.4277619999999997e-05
+TDAD13H232,01/08/2022,Vencimento,239.0,24447.31,Vencimento (estoque Mercado — última posição),2.4447310000000003e-05
+TDAD13I229,01/09/2019,Vencimento,515.0,52313.7,Vencimento (estoque Mercado — última posição),5.23137e-05
+TDAD13I230,01/09/2020,Vencimento,515.0,52313.7,Vencimento (estoque Mercado — última posição),5.23137e-05
+TDAD13I231,01/09/2021,Vencimento,515.0,52313.7,Vencimento (estoque Mercado — última posição),5.23137e-05
+TDAD13I232,01/09/2022,Vencimento,515.0,52797.8,Vencimento (estoque Mercado — última posição),5.2797800000000005e-05
+TDAD13J229,01/10/2019,Vencimento,31844.0,3234076.64,Vencimento (estoque Mercado — última posição),0.0032340766400000003
+TDAD13J230,01/10/2020,Vencimento,31844.0,3234713.52,Vencimento (estoque Mercado — última posição),0.00323471352
+TDAD13J231,01/10/2021,Vencimento,31843.0,3234611.94,Vencimento (estoque Mercado — última posição),0.00323461194
+TDAD13J232,01/10/2022,Vencimento,31844.0,3270378.8,Vencimento (estoque Mercado — última posição),0.0032703788
+TDAD13L229,01/12/2019,Vencimento,11183.0,1135969.14,Vencimento (estoque Mercado — última posição),0.00113596914
+TDAD13L230,01/12/2020,Vencimento,11086.0,1126115.88,Vencimento (estoque Mercado — última posição),0.00112611588
+TDAD13L231,01/12/2021,Vencimento,11086.0,1126115.88,Vencimento (estoque Mercado — última posição),0.00112611588
+TDAD13L232,01/12/2022,Vencimento,11086.0,1141747.14,Vencimento (estoque Mercado — última posição),0.00114174714
+TDAD13L328,01/12/2019,Vencimento,7901.0,794840.6,Vencimento (estoque Mercado — última posição),0.0007948406
+TDAD13L329,01/12/2020,Vencimento,7901.0,794761.59,Vencimento (estoque Mercado — última posição),0.00079476159
+TDAD13L330,01/12/2021,Vencimento,7901.0,794761.59,Vencimento (estoque Mercado — última posição),0.00079476159
+TDAD13L331,01/12/2022,Vencimento,7901.0,805822.99,Vencimento (estoque Mercado — última posição),0.00080582299
+TDAE000277,01/02/2019,Vencimento,146.0,15258.46,Vencimento (estoque Mercado — última posição),1.5258459999999999e-05
+TDAE000278,01/02/2020,Vencimento,156.0,16303.56,Vencimento (estoque Mercado — última posição),1.6303559999999998e-05
+TDAE020275,01/02/2019,Vencimento,1410.0,147359.1,Vencimento (estoque Mercado — última posição),0.00014735910000000002
+TDAE020276,01/02/2020,Vencimento,1410.0,147359.1,Vencimento (estoque Mercado — última posição),0.00014735910000000002
+TDAE020277,01/02/2021,Vencimento,1410.0,147401.4,Vencimento (estoque Mercado — última posição),0.0001474014
+TDAE020278,01/02/2022,Vencimento,1420.0,148588.8,Vencimento (estoque Mercado — última posição),0.00014858879999999998
+TDAE040758,01/07/2019,Vencimento,19047.0,1991173.38,Vencimento (estoque Mercado — última posição),0.00199117338
+TDAE040773,01/07/2019,Vencimento,26883.0,2810348.82,Vencimento (estoque Mercado — última posição),0.00281034882
+TDAE040774,01/07/2020,Vencimento,26883.0,2809811.16,Vencimento (estoque Mercado — última posição),0.00280981116
+TDAE040775,01/07/2021,Vencimento,26883.0,2810079.99,Vencimento (estoque Mercado — última posição),0.0028100799900000004
+TDAE040776,01/07/2022,Vencimento,26883.0,2824865.64,Vencimento (estoque Mercado — última posição),0.0028248656400000002
+TDAE041258,01/12/2019,Vencimento,2477.0,258945.58,Vencimento (estoque Mercado — última posição),0.00025894557999999997
+TDAE041273,01/12/2019,Vencimento,5885.0,615217.9,Vencimento (estoque Mercado — última posição),0.0006152179
+TDAE041274,01/12/2020,Vencimento,5885.0,615159.05,Vencimento (estoque Mercado — última posição),0.00061515905
+TDAE041275,01/12/2021,Vencimento,5885.0,615159.05,Vencimento (estoque Mercado — última posição),0.00061515905
+TDAE041276,01/12/2022,Vencimento,5885.0,623692.3,Vencimento (estoque Mercado — última posição),0.0006236923
+TDAE050457,01/04/2019,Vencimento,181.0,18921.74,Vencimento (estoque Mercado — última posição),1.892174e-05
+TDAE050458,01/04/2020,Vencimento,190.0,19856.9,Vencimento (estoque Mercado — última posição),1.9856900000000003e-05
+TDAE050757,01/07/2019,Vencimento,244.0,25507.76,Vencimento (estoque Mercado — última posição),2.5507759999999997e-05
+TDAE050758,01/07/2020,Vencimento,253.0,26443.56,Vencimento (estoque Mercado — última posição),2.6443560000000003e-05
+TDAE050772,01/07/2019,Vencimento,582.0,60842.28,Vencimento (estoque Mercado — última posição),6.084228e-05
+TDAE050773,01/07/2020,Vencimento,92.0,9615.84,Vencimento (estoque Mercado — última posição),9.61584e-06
+TDAE050774,01/07/2021,Vencimento,582.0,60836.46,Vencimento (estoque Mercado — última posição),6.0836459999999997e-05
+TDAE050775,01/07/2022,Vencimento,582.0,61156.56,Vencimento (estoque Mercado — última posição),6.115656e-05
+TDAE070855,01/08/2019,Vencimento,1108.0,115797.08,Vencimento (estoque Mercado — última posição),0.00011579708000000001
+TDAE070856,01/08/2020,Vencimento,222.0,23205.66,Vencimento (estoque Mercado — última posição),2.320566e-05
+TDAE070857,01/08/2021,Vencimento,222.0,23207.88,Vencimento (estoque Mercado — última posição),2.320788e-05
+TDAE070858,01/08/2022,Vencimento,406.0,42739.62,Vencimento (estoque Mercado — última posição),4.273962e-05
+TDAE070955,01/09/2019,Vencimento,5559.0,581137.86,Vencimento (estoque Mercado — última posição),0.0005811378599999999
+TDAE070956,01/09/2020,Vencimento,5559.0,581137.86,Vencimento (estoque Mercado — última posição),0.0005811378599999999
+TDAE070957,01/09/2021,Vencimento,5559.0,581137.86,Vencimento (estoque Mercado — última posição),0.0005811378599999999
+TDAE070958,01/09/2022,Vencimento,5559.0,586530.09,Vencimento (estoque Mercado — última posição),0.00058653009
+TDAE070970,01/09/2019,Vencimento,12035.0,1258138.9,Vencimento (estoque Mercado — última posição),0.0012581388999999999
+TDAE070971,01/09/2020,Vencimento,12035.0,1258138.9,Vencimento (estoque Mercado — última posição),0.0012581388999999999
+TDAE070972,01/09/2021,Vencimento,12035.0,1258138.9,Vencimento (estoque Mercado — última posição),0.0012581388999999999
+TDAE070973,01/09/2022,Vencimento,12035.0,1269812.85,Vencimento (estoque Mercado — última posição),0.00126981285
+TDAE071270,01/12/2019,Vencimento,32930.0,3442502.2,Vencimento (estoque Mercado — última posição),0.0034425022
+TDAE071271,01/12/2020,Vencimento,32930.0,3442172.9,Vencimento (estoque Mercado — última posição),0.0034421728999999997
+TDAE071272,01/12/2021,Vencimento,32930.0,3442172.9,Vencimento (estoque Mercado — última posição),0.0034421728999999997
+TDAE071273,01/12/2022,Vencimento,32930.0,3489921.4,Vencimento (estoque Mercado — última posição),0.0034899213999999997
+TDAE090338,01/03/2019,Vencimento,29404.0,3073012.04,Vencimento (estoque Mercado — última posição),0.0030730120400000002
+TDAE090353,01/03/2019,Vencimento,30811.0,3220057.61,Vencimento (estoque Mercado — última posição),0.00322005761
+TDAE090354,01/03/2020,Vencimento,30811.0,3220981.94,Vencimento (estoque Mercado — última posição),0.00322098194
+TDAE090355,01/03/2021,Vencimento,30811.0,3219441.39,Vencimento (estoque Mercado — última posição),0.00321944139
+TDAE090356,01/03/2022,Vencimento,30811.0,3222522.49,Vencimento (estoque Mercado — última posição),0.00322252249
+TDAE090638,01/06/2019,Vencimento,27638.0,2888447.38,Vencimento (estoque Mercado — última posição),0.00288844738
+TDAE090838,01/08/2019,Vencimento,52409.0,5477264.59,Vencimento (estoque Mercado — última posição),0.00547726459
+TDAE090938,01/09/2019,Vencimento,3735.0,390456.9,Vencimento (estoque Mercado — última posição),0.0003904569
+TDAE100337,01/03/2019,Vencimento,12236.0,1278784.36,Vencimento (estoque Mercado — última posição),0.0012787843600000001
+TDAE100338,01/03/2020,Vencimento,12254.0,1281033.16,Vencimento (estoque Mercado — última posição),0.00128103316
+TDAE100352,01/03/2019,Vencimento,1983.0,207243.33,Vencimento (estoque Mercado — última posição),0.00020724332999999998
+TDAE100353,01/03/2020,Vencimento,1983.0,207302.82,Vencimento (estoque Mercado — última posição),0.00020730282
+TDAE100354,01/03/2021,Vencimento,1983.0,207203.67,Vencimento (estoque Mercado — última posição),0.00020720367000000002
+TDAE100355,01/03/2022,Vencimento,1983.0,207401.97,Vencimento (estoque Mercado — última posição),0.00020740197
+TDAE100367,01/03/2019,Vencimento,991.0,103569.41,Vencimento (estoque Mercado — última posição),0.00010356941
+TDAE100368,01/03/2020,Vencimento,991.0,103599.14,Vencimento (estoque Mercado — última posição),0.00010359914
+TDAE100369,01/03/2021,Vencimento,991.0,103549.59,Vencimento (estoque Mercado — última posição),0.00010354959
+TDAE100370,01/03/2022,Vencimento,991.0,103648.69,Vencimento (estoque Mercado — última posição),0.00010364869
+TDAE100437,01/04/2019,Vencimento,12196.0,1274969.84,Vencimento (estoque Mercado — última posição),0.00127496984
+TDAE100438,01/04/2020,Vencimento,12199.0,1274917.49,Vencimento (estoque Mercado — última posição),0.00127491749
+TDAE110536,01/05/2019,Vencimento,28158.0,2942792.58,Vencimento (estoque Mercado — última posição),0.00294279258
+TDAE110537,01/05/2020,Vencimento,28158.0,2942792.58,Vencimento (estoque Mercado — última posição),0.00294279258
+TDAE110538,01/05/2021,Vencimento,28175.0,2945132.75,Vencimento (estoque Mercado — última posição),0.00294513275
+TDAE110551,01/05/2019,Vencimento,11231.0,1173751.81,Vencimento (estoque Mercado — última posição),0.00117375181
+TDAE110552,01/05/2020,Vencimento,11231.0,1173751.81,Vencimento (estoque Mercado — última posição),0.00117375181
+TDAE110553,01/05/2021,Vencimento,11231.0,1173976.43,Vencimento (estoque Mercado — última posição),0.00117397643
+TDAE110554,01/05/2022,Vencimento,11231.0,1176671.87,Vencimento (estoque Mercado — última posição),0.00117667187
+TDAE110636,01/06/2019,Vencimento,3255.0,340180.05,Vencimento (estoque Mercado — última posição),0.00034018005
+TDAE110637,01/06/2020,Vencimento,3255.0,340277.7,Vencimento (estoque Mercado — última posição),0.0003402777
+TDAE110638,01/06/2021,Vencimento,3263.0,341114.02,Vencimento (estoque Mercado — última posição),0.00034111402000000003
+TDAE110736,01/07/2019,Vencimento,4048.0,423177.92,Vencimento (estoque Mercado — última posição),0.00042317791999999996
+TDAE110737,01/07/2020,Vencimento,4048.0,423096.96,Vencimento (estoque Mercado — última posição),0.00042309696000000004
+TDAE110738,01/07/2021,Vencimento,4077.0,426168.81,Vencimento (estoque Mercado — última posição),0.00042616881
+TDAE111236,01/12/2019,Vencimento,11419.0,1193742.26,Vencimento (estoque Mercado — última posição),0.00119374226
+TDAE111237,01/12/2020,Vencimento,11419.0,1193628.07,Vencimento (estoque Mercado — última posição),0.0011936280700000001
+TDAE111238,01/12/2021,Vencimento,11435.0,1195300.55,Vencimento (estoque Mercado — última posição),0.00119530055
+TDAE120235,01/02/2019,Vencimento,13264.0,1386220.64,Vencimento (estoque Mercado — última posição),0.00138622064
+TDAE120236,01/02/2020,Vencimento,13264.0,1386220.64,Vencimento (estoque Mercado — última posição),0.00138622064
+TDAE120237,01/02/2021,Vencimento,13264.0,1386618.56,Vencimento (estoque Mercado — última posição),0.00138661856
+TDAE120238,01/02/2022,Vencimento,13265.0,1388049.6,Vencimento (estoque Mercado — última posição),0.0013880496000000001
+TDAE120250,01/02/2019,Vencimento,10680.0,1116166.8,Vencimento (estoque Mercado — última posição),0.0011161668
+TDAE120251,01/02/2020,Vencimento,10680.0,1116166.8,Vencimento (estoque Mercado — última posição),0.0011161668
+TDAE120252,01/02/2021,Vencimento,10680.0,1116487.2,Vencimento (estoque Mercado — última posição),0.0011164872
+TDAE120253,01/02/2022,Vencimento,10680.0,1117555.2,Vencimento (estoque Mercado — última posição),0.0011175552
+TDAE120435,01/04/2019,Vencimento,477.0,49865.58,Vencimento (estoque Mercado — última posição),4.9865580000000004e-05
+TDAE120436,01/04/2020,Vencimento,477.0,49851.27,Vencimento (estoque Mercado — última posição),4.985127e-05
+TDAE120437,01/04/2021,Vencimento,477.0,49865.58,Vencimento (estoque Mercado — última posição),4.9865580000000004e-05
+TDAE120438,01/04/2022,Vencimento,482.0,50479.86,Vencimento (estoque Mercado — última posição),5.047986e-05
+TDAE990178,01/01/2019,Vencimento,8774.0,916970.74,Vencimento (estoque Mercado — última posição),0.00091697074
+TDAE990278,01/02/2019,Vencimento,4972.0,519623.72,Vencimento (estoque Mercado — última posição),0.0005196237199999999
+TDAE990378,01/03/2019,Vencimento,4699.0,491092.49,Vencimento (estoque Mercado — última posição),0.00049109249
+TDAE990678,01/06/2019,Vencimento,759.0,79323.09,Vencimento (estoque Mercado — última posição),7.932308999999999e-05
+TDAE990778,01/07/2019,Vencimento,893.0,93354.22,Vencimento (estoque Mercado — última posição),9.335422e-05
+TDAE990878,01/08/2019,Vencimento,5073.0,530179.23,Vencimento (estoque Mercado — última posição),0.0005301792299999999
+TDAE990978,01/09/2019,Vencimento,736.0,76941.44,Vencimento (estoque Mercado — última posição),7.694144e-05
+TDAE991078,01/10/2019,Vencimento,8574.0,896068.74,Vencimento (estoque Mercado — última posição),0.0008960687399999999
+TDAE991178,01/11/2019,Vencimento,4820.0,503738.2,Vencimento (estoque Mercado — última posição),0.0005037382000000001
+TDAE991278,01/12/2019,Vencimento,19043.0,1990755.22,Vencimento (estoque Mercado — última posição),0.00199075522
+TDAH040658,01/06/2019,Vencimento,217.0,22678.67,Vencimento (estoque Mercado — última posição),2.2678669999999998e-05
+TDAH071270,01/12/2019,Vencimento,3041.0,317906.14,Vencimento (estoque Mercado — última posição),0.00031790614
+TDAH071271,01/12/2020,Vencimento,3041.0,317875.73,Vencimento (estoque Mercado — última posição),0.00031787572999999997
+TDAH071272,01/12/2021,Vencimento,3041.0,317875.73,Vencimento (estoque Mercado — última posição),0.00031787572999999997
+TDAH071273,01/12/2022,Vencimento,3041.0,322285.18,Vencimento (estoque Mercado — última posição),0.00032228518
+TDAH080954,01/09/2019,Vencimento,548.0,57287.92,Vencimento (estoque Mercado — última posição),5.728792e-05
+TDAH080955,01/09/2020,Vencimento,548.0,57287.92,Vencimento (estoque Mercado — última posição),5.728792e-05
+TDAH080956,01/09/2021,Vencimento,548.0,57287.92,Vencimento (estoque Mercado — última posição),5.728792e-05
+TDAH080957,01/09/2022,Vencimento,548.0,57819.48,Vencimento (estoque Mercado — última posição),5.781948e-05
+TDAH090338,01/03/2019,Vencimento,4170.0,435806.7,Vencimento (estoque Mercado — última posição),0.00043580670000000003
+TDAH090353,01/03/2019,Vencimento,1026.0,107227.26,Vencimento (estoque Mercado — última posição),0.00010722726
+TDAH090354,01/03/2020,Vencimento,1026.0,107258.04,Vencimento (estoque Mercado — última posição),0.00010725804
+TDAH090355,01/03/2021,Vencimento,1026.0,107206.74,Vencimento (estoque Mercado — última posição),0.00010720674
+TDAH090356,01/03/2022,Vencimento,1026.0,107309.34,Vencimento (estoque Mercado — última posição),0.00010730934
+TDAH090638,01/06/2019,Vencimento,148.0,15467.48,Vencimento (estoque Mercado — última posição),1.546748e-05
+TDAH090838,01/08/2019,Vencimento,676.0,70648.76,Vencimento (estoque Mercado — última posição),7.064875999999999e-05
+TDAH090938,01/09/2019,Vencimento,147.0,15367.38,Vencimento (estoque Mercado — última posição),1.536738e-05
+TDAH100537,01/05/2019,Vencimento,1078.0,112661.78,Vencimento (estoque Mercado — última posição),0.00011266178
+TDAH100538,01/05/2020,Vencimento,1078.0,112661.78,Vencimento (estoque Mercado — última posição),0.00011266178
+TDAH110136,01/01/2019,Vencimento,2286.0,238909.86,Vencimento (estoque Mercado — última posição),0.00023890986
+TDAH110137,01/01/2020,Vencimento,2286.0,238909.86,Vencimento (estoque Mercado — última posição),0.00023890986
+TDAH110138,01/01/2021,Vencimento,2290.0,239396.6,Vencimento (estoque Mercado — última posição),0.0002393966
+TDAH121135,01/11/2019,Vencimento,9892.0,1033812.92,Vencimento (estoque Mercado — última posição),0.00103381292
+TDAH121136,01/11/2020,Vencimento,9892.0,1034109.68,Vencimento (estoque Mercado — última posição),0.00103410968
+TDAH121137,01/11/2021,Vencimento,9892.0,1034109.68,Vencimento (estoque Mercado — última posição),0.00103410968
+TDAH121138,01/11/2022,Vencimento,9893.0,1047174.05,Vencimento (estoque Mercado — última posição),0.0010471740500000001
+TDAJ09CC18,01/03/2019,Vencimento,2088.0,212057.28,Vencimento (estoque Mercado — última posição),0.00021205728
+TDAJ09EC18,01/05/2019,Vencimento,2767.0,281016.52,Vencimento (estoque Mercado — última posição),0.00028101652
+TDAJ09HB18,01/08/2019,Vencimento,623.0,62667.57,Vencimento (estoque Mercado — última posição),6.266757e-05
+TDAJ09IA18,01/09/2019,Vencimento,554.0,55183.94,Vencimento (estoque Mercado — última posição),5.518394e-05
+TDAJ09KC18,01/11/2019,Vencimento,6986.0,709498.16,Vencimento (estoque Mercado — última posição),0.00070949816
+TDAJ10BC17,01/02/2019,Vencimento,1394.0,141574.64,Vencimento (estoque Mercado — última posição),0.00014157464000000001
+TDAJ10BC18,01/02/2020,Vencimento,1404.0,142590.24,Vencimento (estoque Mercado — última posição),0.00014259024
+TDAJ10DC17,01/04/2019,Vencimento,151.0,15338.58,Vencimento (estoque Mercado — última posição),1.533858e-05
+TDAJ10DC18,01/04/2020,Vencimento,151.0,15335.56,Vencimento (estoque Mercado — última posição),1.533556e-05
+TDAJ10EB17,01/05/2019,Vencimento,29.0,2917.11,Vencimento (estoque Mercado — última posição),2.9171100000000003e-06
+TDAJ10EB18,01/05/2020,Vencimento,31.0,3118.29,Vencimento (estoque Mercado — última posição),3.11829e-06
+TDAJ10FC17,01/06/2019,Vencimento,4069.0,413247.64,Vencimento (estoque Mercado — última posição),0.00041324764000000004
+TDAJ10FC18,01/06/2020,Vencimento,4074.0,413836.92,Vencimento (estoque Mercado — última posição),0.00041383692
+TDAJ10GC17,01/07/2019,Vencimento,2556.0,259638.48,Vencimento (estoque Mercado — última posição),0.00025963848
+TDAJ10GC18,01/07/2020,Vencimento,2565.0,260527.05,Vencimento (estoque Mercado — última posição),0.00026052705
+TDAJ10HC17,01/08/2019,Vencimento,888.0,90185.28,Vencimento (estoque Mercado — última posição),9.018528e-05
+TDAJ10HC18,01/08/2020,Vencimento,892.0,90600.44,Vencimento (estoque Mercado — última posição),9.060044e-05
+TDAJ10JB17,01/10/2019,Vencimento,1008.0,101394.72,Vencimento (estoque Mercado — última posição),0.00010139472
+TDAJ10JB18,01/10/2020,Vencimento,1014.0,101998.26,Vencimento (estoque Mercado — última posição),0.00010199826
+TDAJ10JC17,01/10/2019,Vencimento,1418.0,144012.08,Vencimento (estoque Mercado — última posição),0.00014401207999999998
+TDAJ10JC18,01/10/2020,Vencimento,1423.0,144548.34,Vencimento (estoque Mercado — última posição),0.00014454834
+TDAJ10LC17,01/12/2019,Vencimento,1438.0,146072.04,Vencimento (estoque Mercado — última posição),0.00014607204
+TDAJ10LC18,01/12/2020,Vencimento,1408.0,143024.64,Vencimento (estoque Mercado — última posição),0.00014302464000000002
+TDAJ11AC16,01/01/2019,Vencimento,282.0,28639.92,Vencimento (estoque Mercado — última posição),2.8639919999999998e-05
+TDAJ11AC17,01/01/2020,Vencimento,282.0,28639.92,Vencimento (estoque Mercado — última posição),2.8639919999999998e-05
+TDAJ11AC18,01/01/2021,Vencimento,296.0,30067.68,Vencimento (estoque Mercado — última posição),3.006768e-05
+TDAJ11DB16,01/04/2019,Vencimento,282.0,28369.2,Vencimento (estoque Mercado — última posição),2.83692e-05
+TDAJ11DB17,01/04/2020,Vencimento,282.0,28366.38,Vencimento (estoque Mercado — última posição),2.8366380000000002e-05
+TDAJ11DB18,01/04/2021,Vencimento,289.0,29073.4,Vencimento (estoque Mercado — última posição),2.9073400000000002e-05
+TDAJ11EB16,01/05/2019,Vencimento,10826.0,1088987.34,Vencimento (estoque Mercado — última posição),0.0010889873400000002
+TDAJ11EB17,01/05/2020,Vencimento,11336.0,1140288.24,Vencimento (estoque Mercado — última posição),0.00114028824
+TDAJ11EB18,01/05/2021,Vencimento,11675.0,1174388.25,Vencimento (estoque Mercado — última posição),0.00117438825
+TDAJ11IC16,01/09/2019,Vencimento,2863.0,290823.54,Vencimento (estoque Mercado — última posição),0.00029082353999999996
+TDAJ11IC17,01/09/2020,Vencimento,2863.0,290823.54,Vencimento (estoque Mercado — última posição),0.00029082353999999996
+TDAJ11IC18,01/09/2021,Vencimento,2863.0,290823.54,Vencimento (estoque Mercado — última posição),0.00029082353999999996
+TDAJ11LA16,01/12/2019,Vencimento,4844.0,482510.84,Vencimento (estoque Mercado — última posição),0.00048251084
+TDAJ11LA17,01/12/2020,Vencimento,4782.0,476335.02,Vencimento (estoque Mercado — última posição),0.00047633502
+TDAJ11LA18,01/12/2021,Vencimento,5056.0,503628.16,Vencimento (estoque Mercado — última posição),0.00050362816
+TDAJ11LC16,01/12/2019,Vencimento,210.0,21331.8,Vencimento (estoque Mercado — última posição),2.1331799999999998e-05
+TDAJ11LC17,01/12/2020,Vencimento,210.0,21331.8,Vencimento (estoque Mercado — última posição),2.1331799999999998e-05
+TDAJ11LC18,01/12/2021,Vencimento,218.0,22144.44,Vencimento (estoque Mercado — última posição),2.214444e-05
+TDAJ12EC15,01/05/2019,Vencimento,2485.0,252376.6,Vencimento (estoque Mercado — última posição),0.0002523766
+TDAJ12EC16,01/05/2020,Vencimento,2287.0,232267.72,Vencimento (estoque Mercado — última posição),0.00023226772
+TDAJ12EC17,01/05/2021,Vencimento,2765.0,280868.7,Vencimento (estoque Mercado — última posição),0.0002808687
+TDAJ12EC18,01/05/2022,Vencimento,2427.0,247092.87,Vencimento (estoque Mercado — última posição),0.00024709287
+TDAJ12HC15,01/08/2019,Vencimento,695.0,70584.2,Vencimento (estoque Mercado — última posição),7.05842e-05
+TDAJ12HC16,01/08/2020,Vencimento,690.0,70083.3,Vencimento (estoque Mercado — última posição),7.008330000000001e-05
+TDAJ12HC17,01/08/2021,Vencimento,695.0,70598.1,Vencimento (estoque Mercado — última posição),7.059810000000001e-05
+TDAJ12HC18,01/08/2022,Vencimento,700.0,71603.0,Vencimento (estoque Mercado — última posição),7.1603e-05
+TDAJ12JC15,01/10/2019,Vencimento,23.0,2335.88,Vencimento (estoque Mercado — última posição),2.3358800000000002e-06
+TDAJ12JC16,01/10/2020,Vencimento,23.0,2336.34,Vencimento (estoque Mercado — última posição),2.3363400000000002e-06
+TDAJ12JC17,01/10/2021,Vencimento,23.0,2336.34,Vencimento (estoque Mercado — última posição),2.3363400000000002e-06
+TDAJ12JC18,01/10/2022,Vencimento,27.0,2772.9,Vencimento (estoque Mercado — última posição),2.7729e-06
+Tesouro IGPM+ com Juros Semestrais,01/04/2021,Vencimento TD,4644.64,25579657.45,Tesouro Direto,0.025579657449999998
+Tesouro IPCA+,15/05/2019,Vencimento TD,2495874.76,8048934086.56,Tesouro Direto,8.048934086560001
+Tesouro IPCA+ com Juros Semestrais,15/08/2020,Vencimento TD,375481.62,1242899462.76,Tesouro Direto,1.24289946276
+Tesouro Prefixado,01/01/2019,Vencimento TD,976836.79,976836790.0,Tesouro Direto,0.97683679
+Tesouro Prefixado,01/01/2020,Vencimento TD,569285.21,569285210.0,Tesouro Direto,0.56928521
+Tesouro Prefixado,01/01/2021,Vencimento TD,1117620.95,1117620950.0,Tesouro Direto,1.11762095
+Tesouro Prefixado,01/01/2022,Vencimento TD,791182.93,791182930.0,Tesouro Direto,0.79118293
+Tesouro Prefixado com Juros Semestrais,01/01/2021,Vencimento TD,78922.67,78922670.0,Tesouro Direto,0.07892267
+Tesouro Selic,01/03/2021,Vencimento TD,201715.81,2176769728.83,Tesouro Direto,2.17676972883
