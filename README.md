@@ -4,6 +4,9 @@ Gera **fluxos financeiros detalhados** (carência + amortização SAC) e impacto
 a valor de 30/06/2026 das operações indiretas automáticas do BNDES (2009–2010),
 com colunas ContAgil (instituição, taxas compostas, spread) e resumo por agente.
 
+Síntese da política econômica nas Contas do Governo da República (TCU, 1999–2025):
+[`docs/politica_economica_contas_governo_1999_2025.md`](docs/politica_economica_contas_governo_1999_2025.md).
+
 ## Setup
 
 ```bash

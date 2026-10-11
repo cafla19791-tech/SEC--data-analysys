@@ -16,6 +16,7 @@ Arquivos principais:
 - `resumo_fluxos_avancado.xlsx` — workbook ContAgil (Contratos, Por_Ano, Por_Agente, Impacto_Por_Ano, Totais)
 - `resumo_fluxos_polars_final.xlsx` — Polars FINAL (SELIC/TJLP mensais + Totais_Gerais)
 - `RELATORIO_EXECUTIVO.md` / `grafico_interativo.html` / `grafico_top_subsidio.png`
+- `politica_economica_contas_governo_1999_2025.md` — política econômica nas Contas do Governo (TCU, 1999–2025)
 - `amostra_fluxos_detalhados.xlsx` — primeiras parcelas com colunas ContAgil
 - `fluxos_amostra.xlsx` — amostra rápida (20 contratos de exemplo)
 
