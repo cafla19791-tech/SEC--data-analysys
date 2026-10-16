@@ -1,0 +1,214 @@
+{
+  "company": "Petrobras (Petróleo Brasileiro S.A.)",
+  "metric": "Juros pagos em caixa da dívida financeira (US$)",
+  "period": "2002-2026",
+  "unit": "US$ milhões",
+  "definition": "Caixa de juros da dívida financeira no fluxo de caixa (SEC Form 20-F / 6-K USD). Não inclui juros de arrendamento (IFRS 16), desconto de descomissionamento nem variação cambial. 2002–2010: supplemental cash paid for interest (net of capitalized quando disponível). 2011–2018: Repayment of interest. 2019–2026: Repayment of interest - finance debt.",
+  "notes": [
+    "2026 é parcial (jan–jun/2026 = US$ 1.070 mi), fonte 6-K FS USD 2Q26.",
+    "1T26 isolado: US$ 586 mi; logo 2T26 ≈ US$ 484 mi.",
+    "Série histórica completa 2002–2025 alinhada ao trabalho petrobras-divida-juros."
+  ],
+  "rows": [
+    {
+      "year": 2002,
+      "interest_paid_usd_mi": 200.0,
+      "interest_paid_usd_bi": 0.2,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Cash paid for Interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012303007204/y87469e20vf.htm"
+    },
+    {
+      "year": 2003,
+      "interest_paid_usd_mi": 622.0,
+      "interest_paid_usd_bi": 0.622,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Cash paid for Interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312504112315/d20f.htm"
+    },
+    {
+      "year": 2004,
+      "interest_paid_usd_mi": 995.0,
+      "interest_paid_usd_bi": 0.995,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312505135283/d20f.htm"
+    },
+    {
+      "year": 2005,
+      "interest_paid_usd_mi": 1083.0,
+      "interest_paid_usd_bi": 1.083,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012306008263/y22597e20vf.htm"
+    },
+    {
+      "year": 2006,
+      "interest_paid_usd_mi": 877.0,
+      "interest_paid_usd_bi": 0.877,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012307009192/y36368e20vf.htm"
+    },
+    {
+      "year": 2007,
+      "interest_paid_usd_mi": 1684.0,
+      "interest_paid_usd_bi": 1.684,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000136231008002879/c73239e20vf.htm"
+    },
+    {
+      "year": 2008,
+      "interest_paid_usd_mi": 1515.0,
+      "interest_paid_usd_bi": 1.515,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000095012309009383/y76586e20vf.htm"
+    },
+    {
+      "year": 2009,
+      "interest_paid_usd_mi": 3059.0,
+      "interest_paid_usd_bi": 3.059,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281410001665/pbraform20f2009.htm"
+    },
+    {
+      "year": 2010,
+      "interest_paid_usd_mi": 3700.0,
+      "interest_paid_usd_bi": 3.7,
+      "coverage": "full_year",
+      "source": "20-F supplemental: Interest, net of amount capitalized",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281411001552/pbraform20f2010.htm"
+    },
+    {
+      "year": 2011,
+      "interest_paid_usd_mi": 4574.0,
+      "interest_paid_usd_bi": 4.574,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281412000786/pbraform20f_2011.htm"
+    },
+    {
+      "year": 2012,
+      "interest_paid_usd_mi": 4772.0,
+      "interest_paid_usd_bi": 4.772,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281413000928/pbraform20f_2012.htm"
+    },
+    {
+      "year": 2013,
+      "interest_paid_usd_mi": 5066.0,
+      "interest_paid_usd_bi": 5.066,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281414001060/pbraform20f_2013.htm"
+    },
+    {
+      "year": 2014,
+      "interest_paid_usd_mi": 5995.0,
+      "interest_paid_usd_bi": 5.995,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281415001242/pbraform20f_2014.htm"
+    },
+    {
+      "year": 2015,
+      "interest_paid_usd_mi": 6305.0,
+      "interest_paid_usd_bi": 6.305,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281416004364/pbraform20f_2015.htm"
+    },
+    {
+      "year": 2016,
+      "interest_paid_usd_mi": 7308.0,
+      "interest_paid_usd_bi": 7.308,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312517140235/d375139d20f.htm"
+    },
+    {
+      "year": 2017,
+      "interest_paid_usd_mi": 6981.0,
+      "interest_paid_usd_bi": 6.981,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312518120259/d521855d20f.htm"
+    },
+    {
+      "year": 2018,
+      "interest_paid_usd_mi": 5791.0,
+      "interest_paid_usd_bi": 5.791,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312519093231/d692671d20f.htm"
+    },
+    {
+      "year": 2019,
+      "interest_paid_usd_mi": 4501.0,
+      "interest_paid_usd_bi": 4.501,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of finance debt - interest",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000119312520080953/d883642d20f.htm"
+    },
+    {
+      "year": 2020,
+      "interest_paid_usd_mi": 3157.0,
+      "interest_paid_usd_bi": 3.157,
+      "coverage": "full_year",
+      "source": "20-F CF: interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281421001152/pbraform20f_2020.htm"
+    },
+    {
+      "year": 2021,
+      "interest_paid_usd_mi": 2229.0,
+      "interest_paid_usd_bi": 2.229,
+      "coverage": "full_year",
+      "source": "20-F CF: interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281422001285/pbraform20f_2021.htm"
+    },
+    {
+      "year": 2022,
+      "interest_paid_usd_mi": 1850.0,
+      "interest_paid_usd_bi": 1.85,
+      "coverage": "full_year",
+      "source": "20-F CF: interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281423001253/pbrform20f_2022.htm"
+    },
+    {
+      "year": 2023,
+      "interest_paid_usd_mi": 1978.0,
+      "interest_paid_usd_bi": 1.978,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281424001340/pbrform20f_2023.htm"
+    },
+    {
+      "year": 2024,
+      "interest_paid_usd_mi": 1918.0,
+      "interest_paid_usd_bi": 1.918,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281425001352/pbrform20f_2024.htm"
+    },
+    {
+      "year": 2025,
+      "interest_paid_usd_mi": 1836.0,
+      "interest_paid_usd_bi": 1.836,
+      "coverage": "full_year",
+      "source": "20-F CF: Repayment of interest - finance debt",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281426002168/pbrform20f_2025.htm"
+    },
+    {
+      "year": 2026,
+      "interest_paid_usd_mi": 1070.0,
+      "interest_paid_usd_bi": 1.07,
+      "coverage": "YTD 1H2026",
+      "source": "6-K FS USD 2Q26: Repayment of interest - finance debt (Jan–Jun/2026); ano incompleto",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1119639/000129281426004133/pbrfs2q26usd_6k.htm"
+    }
+  ]
+}
