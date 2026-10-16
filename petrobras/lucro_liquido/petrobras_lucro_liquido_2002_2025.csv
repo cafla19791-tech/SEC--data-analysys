@@ -1,0 +1,25 @@
+ano,lucro_liquido_r_milhoes,lucro_liquido_r_bi,norma_contabil_brl,fonte_brl,lucro_liquido_usd_milhoes,lucro_liquido_usd_bi,norma_contabil_usd,fonte_usd
+2002,8098,8.098,BR GAAP,Release/RMF e fato relevante (SEC 6-K / Agência Brasil),2311,2.311,US GAAP 20-F,Net income for the year
+2003,17795,17.795,BR GAAP,RMF 2003 (SEC 6-K),6559,6.559,US GAAP 20-F,Net income for the year (selected financial data)
+2004,17861,17.861,BR GAAP,Demonstrações Financeiras 2004 (SEC 6-K) — R$ 17.860.754 mil,6190,6.19,US GAAP 20-F,Net income for the year
+2005,23725,23.725,BR GAAP,RMF 4T05 BR GAAP (SEC 6-K),10344,10.344,US GAAP 20-F,Net income for the year
+2006,25919,25.919,BR GAAP,RMF 4T06 BR GAAP (SEC 6-K),12826,12.826,US GAAP 20-F,Net income for the year
+2007,21512,21.512,BR GAAP,DFP 2007 (SEC 6-K) — R$ 21.511.789 mil,13138,13.138,US GAAP 20-F,Net income for the year
+2008,32988,32.988,BR GAAP,DFP 2008 (SEC 6-K) — R$ 32.987.792 mil,18879,18.879,US GAAP 20-F,Net income for the year
+2009,30051,30.051,IFRS (CVM DFP),CVM DFP — 3.11.01,15504,15.504,US GAAP 20-F,Net income attributable to Petrobras
+2010,35189,35.189,IFRS (CVM DFP),CVM DFP — 3.11.01,19184,19.184,US GAAP/IFRS 20-F,Net income attributable to Petrobras
+2011,33313,33.313,IFRS (CVM DFP),CVM DFP — 3.11.01,20121,20.121,IFRS 20-F,Net income attributable to shareholders of Petrobras
+2012,21182,21.182,IFRS (CVM DFP),CVM DFP — 3.11.01,11034,11.034,IFRS 20-F,Net income attributable to shareholders of Petrobras
+2013,23570,23.57,IFRS (CVM DFP),CVM DFP — 3.11.01,11094,11.094,IFRS 20-F,Net income attributable to shareholders of Petrobras
+2014,-21587,-21.587,IFRS (CVM DFP),CVM DFP — 3.11.01,-7367,-7.367,IFRS 20-F,Net income (loss) attributable to shareholders of Petrobras
+2015,-34836,-34.836,IFRS (CVM DFP),CVM DFP — 3.11.01,-8450,-8.45,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2016,-14824,-14.824,IFRS (CVM DFP),CVM DFP — 3.11.01,-4838,-4.838,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2017,-446,-0.446,IFRS (CVM DFP),CVM DFP — 3.11.01,-91,-0.091,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2018,25779,25.779,IFRS (CVM DFP),CVM DFP — 3.11.01,7173,7.173,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2019,40137,40.137,IFRS (CVM DFP),CVM DFP — 3.11.01,10151,10.151,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2020,7108,7.108,IFRS (CVM DFP),CVM DFP — 3.11.01,1141,1.141,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2021,106668,106.668,IFRS (CVM DFP),CVM DFP — 3.11.01,19875,19.875,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2022,188328,188.328,IFRS (CVM DFP),CVM DFP — 3.11.01,36623,36.623,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2023,124606,124.606,IFRS (CVM DFP),CVM DFP — 3.11.01,24884,24.884,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2024,36606,36.606,IFRS (CVM DFP),CVM DFP — 3.11.01,7528,7.528,IFRS 20-F,ProfitLossAttributableToOwnersOfParent (CompanyFacts)
+2025,110129,110.129,IFRS (CVM DFP),CVM DFP / Release 4T25 — R$ 110.129 mi,19634,19.634,IFRS 20-F,Net income attributable to shareholders of Petrobras (20-F 2025)
