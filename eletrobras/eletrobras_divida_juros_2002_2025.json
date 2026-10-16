@@ -1,0 +1,258 @@
+{
+  "company": "Eletrobras / AXIA Energia S.A.",
+  "cik": "0001439124",
+  "period": "2002-2025",
+  "currency": "BRL",
+  "notes": [
+    "Dívida bruta = empréstimos + financiamentos + debêntures consolidados (Total loans / Borrowings).",
+    "2016–2025: SEC companyfacts / 20-F (valores reapresentados mais recentes quando houver).",
+    "2005–2015: série histórica de 20-F/releases (aproximada; quebra IFRS 11 em 2013).",
+    "2002–2004: sem série consolidada homogênea de dívida bruta.",
+    "Juros pagos = caixa (InterestPaid / Payment of interests no DFC).",
+    "2015–2025: SEC XBRL; 2009–2014: DFC 20-F; 2005–2008: estimativa; 2002–2004: n/d.",
+    "2020 juros: valor reapresentado no 20-F 2022 (R$ 1.370,7 mi); o 20-F 2020/2021 reportava R$ 1.701,1 mi.",
+    "2023 dívida: valor reapresentado no 20-F 2024 (R$ 59.460 mi); o 20-F 2023 reportava R$ 60.780 mi."
+  ],
+  "rows": [
+    {
+      "year": 2002,
+      "gross_debt_brl_mi": null,
+      "gross_debt_brl_bi": null,
+      "gross_debt_source": "n/d — sem série consolidada homogênea de dívida bruta",
+      "gross_debt_quality": "missing",
+      "interest_paid_brl_mi": null,
+      "interest_paid_source": "n/d",
+      "interest_paid_quality": "missing"
+    },
+    {
+      "year": 2003,
+      "gross_debt_brl_mi": null,
+      "gross_debt_brl_bi": null,
+      "gross_debt_source": "n/d — sem série consolidada homogênea de dívida bruta",
+      "gross_debt_quality": "missing",
+      "interest_paid_brl_mi": null,
+      "interest_paid_source": "n/d",
+      "interest_paid_quality": "missing"
+    },
+    {
+      "year": 2004,
+      "gross_debt_brl_mi": null,
+      "gross_debt_brl_bi": null,
+      "gross_debt_source": "n/d — sem série consolidada homogênea de dívida bruta",
+      "gross_debt_quality": "missing",
+      "interest_paid_brl_mi": null,
+      "interest_paid_source": "n/d",
+      "interest_paid_quality": "missing"
+    },
+    {
+      "year": 2005,
+      "gross_debt_brl_mi": 37300.0,
+      "gross_debt_brl_bi": 37.3,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 2536.0,
+      "interest_paid_source": "estimativa (taxa média × dívida; sem linha DFC comparável)",
+      "interest_paid_quality": "estimated"
+    },
+    {
+      "year": 2006,
+      "gross_debt_brl_mi": 34300.0,
+      "gross_debt_brl_bi": 34.3,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 2343.0,
+      "interest_paid_source": "estimativa (taxa média × dívida; sem linha DFC comparável)",
+      "interest_paid_quality": "estimated"
+    },
+    {
+      "year": 2007,
+      "gross_debt_brl_mi": 24500.0,
+      "gross_debt_brl_bi": 24.5,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 1722.0,
+      "interest_paid_source": "estimativa (taxa média × dívida; sem linha DFC comparável)",
+      "interest_paid_quality": "estimated"
+    },
+    {
+      "year": 2008,
+      "gross_debt_brl_mi": 32600.0,
+      "gross_debt_brl_bi": 32.6,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 2086.0,
+      "interest_paid_source": "estimativa (taxa média × dívida; sem linha DFC comparável)",
+      "interest_paid_quality": "estimated"
+    },
+    {
+      "year": 2009,
+      "gross_debt_brl_mi": 29500.0,
+      "gross_debt_brl_bi": 29.5,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 1104.0,
+      "interest_paid_source": "20-F DFC — Payment of interests / encargos financeiros",
+      "interest_paid_quality": "official_research"
+    },
+    {
+      "year": 2010,
+      "gross_debt_brl_mi": 33100.0,
+      "gross_debt_brl_bi": 33.1,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 1453.0,
+      "interest_paid_source": "20-F DFC — Payment of interests / encargos financeiros",
+      "interest_paid_quality": "official_research"
+    },
+    {
+      "year": 2011,
+      "gross_debt_brl_mi": 42500.0,
+      "gross_debt_brl_bi": 42.5,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado) — antes do IFRS 11",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 1368.0,
+      "interest_paid_source": "20-F DFC — Payment of interests / encargos financeiros",
+      "interest_paid_quality": "official_research"
+    },
+    {
+      "year": 2012,
+      "gross_debt_brl_mi": 50000.0,
+      "gross_debt_brl_bi": 50.0,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado) — antes do IFRS 11",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 1813.0,
+      "interest_paid_source": "20-F DFC — Payment of interests / encargos financeiros",
+      "interest_paid_quality": "official_research"
+    },
+    {
+      "year": 2013,
+      "gross_debt_brl_mi": 32500.0,
+      "gross_debt_brl_bi": 32.5,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado) — após IFRS 11",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 1306.0,
+      "interest_paid_source": "20-F DFC — Payment of interests / encargos financeiros",
+      "interest_paid_quality": "official_research"
+    },
+    {
+      "year": 2014,
+      "gross_debt_brl_mi": 45000.0,
+      "gross_debt_brl_bi": 45.0,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado) — interpolado/aproximado (lacuna na série homogênea)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 1306.0,
+      "interest_paid_source": "20-F DFC — Payment of interests / encargos financeiros",
+      "interest_paid_quality": "official_research"
+    },
+    {
+      "year": 2015,
+      "gross_debt_brl_mi": 47000.0,
+      "gross_debt_brl_bi": 47.0,
+      "gross_debt_source": "20-F/releases (série histórica consolidada; aproximado)",
+      "gross_debt_quality": "approx",
+      "interest_paid_brl_mi": 2805.4,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2018-04-30",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2016,
+      "gross_debt_brl_mi": 45620.4,
+      "gross_debt_brl_bi": 45.62,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2018-04-30)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 3806.2,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2019-04-30",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2017,
+      "gross_debt_brl_mi": 45121.8,
+      "gross_debt_brl_bi": 45.12,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2019-04-30)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 3584.4,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2020-05-19",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2018,
+      "gross_debt_brl_mi": 54841.0,
+      "gross_debt_brl_bi": 54.84,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2022-05-06)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 3183.1,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2021-05-10",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2019,
+      "gross_debt_brl_mi": 47899.6,
+      "gross_debt_brl_bi": 47.9,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2022-05-06)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 3650.6,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2022-05-06",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2020,
+      "gross_debt_brl_mi": 47002.0,
+      "gross_debt_brl_bi": 47.0,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2022-05-06)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 1370.7,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2023-04-20",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2021,
+      "gross_debt_brl_mi": 44015.6,
+      "gross_debt_brl_bi": 44.02,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2023-04-20)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 2176.1,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2024-04-25",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2022,
+      "gross_debt_brl_mi": 59106.5,
+      "gross_debt_brl_bi": 59.11,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2024-04-25)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 3211.3,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2025-04-17",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2023,
+      "gross_debt_brl_mi": 59460.4,
+      "gross_debt_brl_bi": 59.46,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2025-04-17)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 5512.4,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2025-04-17",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2024,
+      "gross_debt_brl_mi": 75620.6,
+      "gross_debt_brl_bi": 75.62,
+      "gross_debt_source": "SEC 20-F Borrowings (filed 2025-04-17)",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 6650.9,
+      "interest_paid_source": "SEC 20-F InterestPaid (operating) filed 2025-04-17",
+      "interest_paid_quality": "official"
+    },
+    {
+      "year": 2025,
+      "gross_debt_brl_mi": 74295.8,
+      "gross_debt_brl_bi": 74.3,
+      "gross_debt_source": "SEC 20-F 2025 — Total loans, financing and debentures",
+      "gross_debt_quality": "official",
+      "interest_paid_brl_mi": 5831.6,
+      "interest_paid_source": "SEC 20-F 2025 — Payment of interests (DFC)",
+      "interest_paid_quality": "official"
+    }
+  ]
+}
