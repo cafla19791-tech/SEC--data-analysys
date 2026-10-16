@@ -1,0 +1,12 @@
+---
+description: Usar "cont" em vez de "ContAgil" nas respostas
+alwaysApply: true
+---
+
+# Nomenclatura do produto
+
+Nas respostas ao usuário, sempre usar **cont** em vez de **ContAgil**.
+
+- Preferir "cont" em qualquer menção ao produto, marca ou nome do sistema
+- Não escrever "ContAgil", "Contágil", "Cont Agil" ou variações equivalentes
+- Manter "cont" em minúsculas, salvo se o contexto exigir início de frase ("Cont")
