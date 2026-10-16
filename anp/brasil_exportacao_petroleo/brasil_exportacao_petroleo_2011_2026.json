@@ -1,0 +1,163 @@
+{
+  "title": "Exportação de petróleo — Brasil (2011–2026)",
+  "sources": [
+    "ANP importacoes-exportacoes-b.xlsx — pivot PETRÓLEO / EXPORTAÇÃO / barris (volumes)",
+    "ANP importacoes-exportacoes-b.xlsx — pivot PETRÓLEO / US$ FOB (receitas de exportação)",
+    "Coerente com ANP Anuário Tabelas 2.51 e 2.52 para 2011–2024"
+  ],
+  "notes": [
+    "Petróleo bruto (não inclui derivados)",
+    "2026 parcial (6 meses / YTD)",
+    "Preço médio = receita ÷ volume"
+  ],
+  "totals": {
+    "volume_barris": 6272828337.858485,
+    "receita_usd": 411774613574.0
+  },
+  "annual": [
+    {
+      "ano": 2011,
+      "volume_barris": 220648303.84255964,
+      "mbpd": 604.5159009385195,
+      "preco_usd_b": 98.73379747593566,
+      "receita_usd": 21785444945.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2012,
+      "volume_barris": 200527638.07888454,
+      "mbpd": 547.8897215270069,
+      "preco_usd_b": 101.26223390220143,
+      "receita_usd": 20305876591.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2013,
+      "volume_barris": 138977408.84490097,
+      "mbpd": 380.7600242326054,
+      "preco_usd_b": 93.2281552065746,
+      "receita_usd": 12956607442.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2014,
+      "volume_barris": 189401384.65285182,
+      "mbpd": 518.9079031584981,
+      "preco_usd_b": 86.36019010093186,
+      "receita_usd": 16356739584.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2015,
+      "volume_barris": 268910390.58365357,
+      "mbpd": 736.7407961195988,
+      "preco_usd_b": 43.81127956576684,
+      "receita_usd": 11781308300.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2016,
+      "volume_barris": 291357120.00251263,
+      "mbpd": 796.0577049248978,
+      "preco_usd_b": 34.575428491032326,
+      "receita_usd": 10073797268.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2017,
+      "volume_barris": 363747540.63797086,
+      "mbpd": 996.5686044875914,
+      "preco_usd_b": 45.7047676139382,
+      "receita_usd": 16624996815.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2018,
+      "volume_barris": 410009540.25817674,
+      "mbpd": 1123.3138089265115,
+      "preco_usd_b": 61.21021790662955,
+      "receita_usd": 25096773303.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2019,
+      "volume_barris": 427926138.68204075,
+      "mbpd": 1172.4003799507964,
+      "preco_usd_b": 56.08989421848405,
+      "receita_usd": 24002331852.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2020,
+      "volume_barris": 500396886.7039365,
+      "mbpd": 1367.2046084807007,
+      "preco_usd_b": 39.19660259318256,
+      "receita_usd": 19613857907.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2021,
+      "volume_barris": 482920534.97285426,
+      "mbpd": 1323.0699588297377,
+      "preco_usd_b": 63.38306084813846,
+      "receita_usd": 30608981653.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2022,
+      "volume_barris": 491181446.35255295,
+      "mbpd": 1345.7025927467205,
+      "preco_usd_b": 86.63552828592876,
+      "receita_usd": 42553764089.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2023,
+      "volume_barris": 581875782.5335723,
+      "mbpd": 1594.1802261193764,
+      "preco_usd_b": 73.23054155384355,
+      "receita_usd": 42611078672.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2024,
+      "volume_barris": 637345964.9073106,
+      "mbpd": 1741.3824177795373,
+      "preco_usd_b": 70.54862036592498,
+      "receita_usd": 44963878520.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2025,
+      "volume_barris": 701840174.3047495,
+      "mbpd": 1922.849792615752,
+      "preco_usd_b": 63.4562676197868,
+      "receita_usd": 44536157927.0,
+      "meses": 12,
+      "ytd": false
+    },
+    {
+      "ano": 2026,
+      "volume_barris": 365762082.4999571,
+      "mbpd": 2002.6395231053277,
+      "preco_usd_b": 76.28734645014296,
+      "receita_usd": 27903018706.0,
+      "meses": 6,
+      "ytd": true
+    }
+  ]
+}

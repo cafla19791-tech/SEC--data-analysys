@@ -1,0 +1,177 @@
+{
+  "title": "Exportação de petróleo bruto — Petrobras (2011–2026)",
+  "volume_source": "Petrobras RI planilhas Produção e Comercialização",
+  "price_source": "ANP Anuário Tabela 2.52 preço médio FOB exportação Brasil; 2025-26 proxy",
+  "revenue_method": "volume Petrobras × preço médio ANP FOB",
+  "notes": [
+    "Petróleo bruto apenas",
+    "2026=1T YTD",
+    "Receita estimada (Petrobras não publica série contínua isolada só de crude export)"
+  ],
+  "totals": {
+    "barris": 2712921250.0,
+    "receita_estimada_usd": 177181916453.99503
+  },
+  "annual": [
+    {
+      "ano": 2011,
+      "trimestres": 4,
+      "export_mbpd": 420.75,
+      "volume_barris": 153573750.0,
+      "preco_medio_fob_usd_b": 98.73,
+      "receita_estimada_usd": 15162336337.5,
+      "brent_usd_b": 111.26,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2012,
+      "trimestres": 4,
+      "export_mbpd": 364.75,
+      "volume_barris": 133498500.0,
+      "preco_medio_fob_usd_b": 101.2620337,
+      "receita_estimada_usd": 13518329605.89945,
+      "brent_usd_b": 111.63,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2013,
+      "trimestres": 4,
+      "export_mbpd": 206.25,
+      "volume_barris": 75281250.0,
+      "preco_medio_fob_usd_b": 93.22797085,
+      "receita_estimada_usd": 7018318180.551563,
+      "brent_usd_b": 108.56,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2014,
+      "trimestres": 4,
+      "export_mbpd": 231.5,
+      "volume_barris": 84497500.0,
+      "preco_medio_fob_usd_b": 86.36001932,
+      "receita_estimada_usd": 7297205732.4917,
+      "brent_usd_b": 98.97,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2015,
+      "trimestres": 4,
+      "export_mbpd": 359.5,
+      "volume_barris": 131217500.0,
+      "preco_medio_fob_usd_b": 43.81,
+      "receita_estimada_usd": 5748638675.0,
+      "brent_usd_b": 52.32,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2016,
+      "trimestres": 4,
+      "export_mbpd": 386.5,
+      "volume_barris": 141459000.0,
+      "preco_medio_fob_usd_b": 34.57536012,
+      "receita_estimada_usd": 4890995867.21508,
+      "brent_usd_b": 43.64,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2017,
+      "trimestres": 4,
+      "export_mbpd": 512.0,
+      "volume_barris": 186880000.0,
+      "preco_medio_fob_usd_b": 45.70476761,
+      "receita_estimada_usd": 8541306970.9567995,
+      "brent_usd_b": 54.13,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2018,
+      "trimestres": 4,
+      "export_mbpd": 428.75,
+      "volume_barris": 156493750.0,
+      "preco_medio_fob_usd_b": 61.21021791,
+      "receita_estimada_usd": 9579016539.053062,
+      "brent_usd_b": 71.34,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2019,
+      "trimestres": 4,
+      "export_mbpd": 535.0,
+      "volume_barris": 195275000.0,
+      "preco_medio_fob_usd_b": 56.08989422,
+      "receita_estimada_usd": 10952954093.8105,
+      "brent_usd_b": 64.3,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2020,
+      "trimestres": 4,
+      "export_mbpd": 713.25,
+      "volume_barris": 261049500.0,
+      "preco_medio_fob_usd_b": 39.19660259,
+      "receita_estimada_usd": 10232253507.818205,
+      "brent_usd_b": 41.96,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2021,
+      "trimestres": 4,
+      "export_mbpd": 574.5,
+      "volume_barris": 209692500.0,
+      "preco_medio_fob_usd_b": 63.38306085,
+      "receita_estimada_usd": 13290952487.288626,
+      "brent_usd_b": 70.86,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2022,
+      "trimestres": 4,
+      "export_mbpd": 512.75,
+      "volume_barris": 187153750.0,
+      "preco_medio_fob_usd_b": 86.63552829,
+      "receita_estimada_usd": 16214164002.704586,
+      "brent_usd_b": 100.93,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2023,
+      "trimestres": 4,
+      "export_mbpd": 594.25,
+      "volume_barris": 216901250.0,
+      "preco_medio_fob_usd_b": 73.23054155,
+      "receita_estimada_usd": 15883796000.371937,
+      "brent_usd_b": 82.49,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2024,
+      "trimestres": 4,
+      "export_mbpd": 601.75,
+      "volume_barris": 220240500.0,
+      "preco_medio_fob_usd_b": 70.54862037,
+      "receita_estimada_usd": 15537663424.598984,
+      "brent_usd_b": 80.52,
+      "fonte_preco": "ANP"
+    },
+    {
+      "ano": 2025,
+      "trimestres": 4,
+      "export_mbpd": 763.5,
+      "volume_barris": 278677500.0,
+      "preco_medio_fob_usd_b": 60.57788887707154,
+      "receita_estimada_usd": 16881694627.540104,
+      "brent_usd_b": 69.14,
+      "fonte_preco": "proxy Brent×ANP/Brent 2024"
+    },
+    {
+      "ano": 2026,
+      "trimestres": 1,
+      "export_mbpd": 888.0,
+      "volume_barris": 81030000.0,
+      "preco_medio_fob_usd_b": 79.38159201770226,
+      "receita_estimada_usd": 6432290401.194414,
+      "brent_usd_b": 90.60142857142857,
+      "fonte_preco": "proxy Brent×ANP/Brent 2024"
+    }
+  ]
+}
